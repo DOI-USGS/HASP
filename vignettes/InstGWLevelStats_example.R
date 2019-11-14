@@ -52,15 +52,6 @@ TableWLChanges <-0 #  The variable TableWaterLevel will be in the que from the p
 rm(TableWLChanges) #  This removes TableWLChanges and will not throw an error code, since the variable does exist given the previous line.
 
 
-#_________________________________________________________________
-# FUNCTION - markerLookup
-# ****************************************************************
-#******************************************************************
-
-
-
-# END FUNCTION - markerLookup
-
 # Load the  site  listing from the InputFiles folder
 InstSites <- read.csv(paste0(MainDir,"InputFiles/2018InstSites.csv"), 
                   header = TRUE, colClasses = c("character", "character","character"))
@@ -309,8 +300,8 @@ if(EnoughData){
   
 # Determine marker for the 5- and 20-year trends
 
-FiveYearSymbol<-markerLookup(TrendTestResults$trend[1])
-TwentyYearSymbol<-markerLookup(TrendTestResults$trend[2])
+FiveYearSymbol <- markerLookup_gw(TrendTestResults$trend[1])
+TwentyYearSymbol <- markerLookup_gw(TrendTestResults$trend[2])
 
 
 

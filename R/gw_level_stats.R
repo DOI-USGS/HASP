@@ -1,11 +1,11 @@
-#' markerLookup
+#' markerLookup_gw
 #' 
 #' Looks up based on GenericMarkerLookupTable.csv
 #' 
 #' @export
 #' @param inputTrend character?
 #' 
-markerLookup <- function(inputTrend){
+markerLookup_gw <- function(inputTrend){
   
   markerLookupSubset <- markerTable %>% 
     filter(Trend == inputTrend)

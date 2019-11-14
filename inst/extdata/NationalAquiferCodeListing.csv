@@ -1,0 +1,68 @@
+Aquifer Name,Code,Valid States,Link to Aquifer Basics site,Valid Date,End Date,Archived GIS coverage of outcrop or extent
+Ada-Vamoosa aquifer,N300ADAVMS,Oklahoma,Ada-Vamoosa aquifer (Oklahoma),20010801,,Metadata Coverage
+Alaska unconsolidated-deposit aquifers,N100AKUNCD,Alaska,Unconsolidated-deposit aquifers (Alaska),20010801,,Metadata Coverage
+Alluvial aquifers,N100ALLUVL,"Arkansas, Colorado, Delaware, Kansas, Kentucky, Louisiana, Maryland, Missouri, Montana, Nebraska, New Jersey, North Dakota, Ohio, Oklahoma, South Dakota, Tennessee, Texas, Utah, Virginia, West Virginia, Wyoming",See note in History,20010801,,Coverage not available
+Arbuckle-Simpson aquifer,N400ABKSMP,Oklahoma,Arbuckle-Simpson aquifer (Oklahoma),20010801,,Metadata Coverage
+Basin and Range basin-fill aquifers,N100BSNRGB,"Arizona, California, Idaho, Nevada, New Mexico, Oregon, Utah",Basin and Range basin-fill aquifers (southwestern U.S.),20010801,,Metadata Coverage
+Basin and Range carbonate-rock aquifers,N400BSNRGC,"Arizona, California, Idaho, Nevada, Utah",Basin and Range carbonate-rock aquifers (southwestern U.S.),20010801,,Metadata Coverage
+Biscayne aquifer,N400BISCYN,Florida,Biscayne aquifer (Florida),20010801,,Metadata Coverage
+Blaine aquifer,N400BLAINE,"Oklahoma, Texas",Blaine aquifer (Oklahoma and Texas),20010801,,Metadata Coverage
+California Coastal Basin aquifers,N100CACSTL,California,California Coastal Basin aquifers,20010801,,Metadata Coverage
+Cambrian-Ordovician aquifer system,S300CAMORD,"Illinois, Iowa, Michigan, Minnesota, Missouri, Wisconsin",Cambrian-Ordovician aquifer system (northern Midwest),20010801,,Metadata Coverage
+Castle Hayne aquifer,N400CSLHYN,North Carolina,Castle Hayne aquifer (North Carolina),20010801,,Metadata Coverage
+Central Oklahoma aquifer,N300CNRLOK,Oklahoma,Central Oklahoma aquifer,20010801,,Metadata Coverage
+Central Valley aquifer system,S100CNRLVL,California,Central Valley aquifer system (California),20010801,,Metadata Coverage
+Coastal lowlands aquifer system,S100CSLLWD,"Alabama, Florida, Louisiana, Mississippi, Texas",Coastal lowlands aquifer system (Gulf Coast),20010801,,Metadata Coverage
+Colorado Plateaus aquifers,N300COPLTS,"Arizona, Colorado, New Mexico, Utah, Wyoming",Colorado Plateaus aquifers,20010801,,Metadata Coverage
+Columbia Plateau basaltic-rock aquifers,N600CMBPLV,"Idaho, Oregon, Washington",Columbia Plateau basaltic-rock aquifers,20010801,,Metadata Coverage
+Columbia Plateau basin-fill aquifers,N100CMBPLB,"Idaho, Oregon, Washington",Columbia Plateau basin-fill aquifers,20010801,,Coverage not available
+Denver Basin aquifer system,S300DNVRBS,Colorado,Denver Basin aquifer system,20010801,,Metadata Coverage
+Early Mesozoic basin aquifers,N300ERLMZC,"Connecticut, Maryland, Massachusetts, New Jersey, New York, North Carolina, Pennsylvania, Virginia",Early Mesozoic basin aquifers (eastern U.S.),20010801,,Metadata Coverage
+Edwards-Trinity aquifer system,S500EDRTRN,"Arkansas, Oklahoma, Texas",Edwards-Trinity aquifer system (Texas and Oklahoma),20010801,,Metadata Coverage
+Floridan aquifer system,S400FLORDN,"Alabama, Florida, Georgia, South Carolina",Floridan aquifer system,20010801,,Metadata Coverage
+Hawaii volcanic-rock aquifers,N600HIVLCC,Hawaii,Hawaiian aquifers (Hawaii),20010801,,Coverage not available
+High Plains aquifer,N100HGHPLN,"Colorado, Kansas, Nebraska, New Mexico, Oklahoma, South Dakota, Texas, Wyoming",High Plains aquifer,20010801,,Metadata Coverage
+Intermediate aquifer system,S500INTRMD,Florida,GW Atlas: Intermediate aquifer system (Florida),20010801,,Coverage not available
+Jacobsville aquifer,N300JCBSVL,"Michigan, Wisconsin",Jacobsville aquifer (Michigan),20010801,,Metadata Coverage
+Kingshill aquifer (Virgin Islands),N400KNGSHL,Virgin Islands,Kingshill aquifer (Virgin Islands),20010801,,Coverage not available
+Lower Cretaceous aquifers,N300LCRTCS,"Iowa, Kansas, Minnesota, Montana, Nebraska, North Dakota, South Dakota, Wyoming",Lower Cretaceous aquifers (northern Great Plains),20010801,,Metadata Coverage
+Lower Tertiary aquifers,N300LTRTRY,"Montana, North Dakota, South Dakota, Wyoming",Lower Tertiary aquifers (northern Great Plains),20010801,,Metadata Coverage
+Marshall aquifer,N300MRSHLL,Michigan,Marshall aquifer (Michigan),20010801,,Metadata Coverage
+Mississippi embayment aquifer system,S100MSEMBM,"Alabama, Arkansas, Illinois, Kentucky, Louisiana, Mississippi, Missouri, Tennessee, Texas",Mississippi embayment aquifer system,20010801,,Metadata Coverage
+Mississippi River Valley alluvial aquifer,N100MSRVVL,"Arkansas, Illinois, Kentucky, Louisiana, Mississippi, Missouri, Tennessee",Mississippi River Valley alluvial aquifer,20010801,,Metadata Coverage
+Mississippian aquifers,N500MSSPPI,"Alabama, Illinois, Indiana, Iowa, Kentucky, Maryland, Missouri, Ohio, Pennsylvania, Tennessee, Virginia, West Virginia",Mississippian aquifers (central and eastern U.S.),20010801,,Metadata Coverage
+New York and New England crystalline-rock aquifers,N600NECRSN,"Connecticut, Maine, Massachusetts, New Hampshire, New York, Rhode Island, Vermont",GW Atlas: Crystalline-rock aquifers (New York and New England),20010801,,Coverage not available
+New York and New England carbonate-rock aquifers,N400NYNECB,"Connecticut, Maine, Massachusetts, New Jersey, New York, Pennsylvania, Vermont",New York and New England carbonate-rock aquifers,20010801,,Metadata Coverage
+New York sandstone aquifers,N300NYSDSN,New York,New York sandstone aquifers,20010801,,Metadata Coverage
+North Coast Limestone aquifer system (Puerto Rico),N400NCSTLM,Puerto Rico,North Coast Limestone aquifer system (Puerto Rico),20010801,,Metadata Coverage
+Northern Atlantic Coastal Plain aquifer system,S100NATLCP,"Delaware, District of Columbia, Maryland, New Jersey, New York, North Carolina, Pennsylvania, Virginia",Northern Atlantic Coastal Plain aquifer system,20010801,,Metadata Coverage
+Northern Great Plains aquifer system (no longer valid),S500NGRTPL,"Montana, North Dakota, South Dakota, Wyoming","(Includes four national aquifers but is not considered a national aquifer itself. The component aquifers are Lower Tertiary, Upper Cretaceous, Lower Cretaceous, and Paleozoic.)",20010801,20050201,Metadata Coverage
+Northern Rocky Mountains Intermontane Basins aquifer systems,S100NRMTIB,"Idaho, Montana, Washington, Wyoming",Northern Rocky Mountains Intermontane Basins aquifer system,20010801,,Metadata Coverage
+Ordovician aquifers,N400ORDVCN,"Kentucky, Tennessee",Ordovician aquifers (Tennessee and Kentucky),20010801,,Metadata Coverage
+Other aquifers,N9999OTHER,All,Other aquifers,20010801,,"No map: Other aquifers is used when a local aquifer is not part of a national aquifer or aquifer system, as listed here"
+Ozark Plateaus aquifer system,S400OZRKPL,"Arkansas, Illinois, Kansas, Missouri, Oklahoma",Ozark Plateaus aquifer system (Missouri),20010801,,Metadata Coverage
+Pacific Northwest basin-fill aquifers,N100PCFNWB,"California, Idaho, Nevada, Oregon, Utah, Washington, Wyoming",Pacific Northwest basin-fill aquifers,20010801,,Metadata Coverage
+Pacific Northwest volcanic-rock aquifers,N100PCFNWV,"California, Idaho, Montana, Nevada, Oregon, Utah, Washington, Wyoming",Pacific Northwest basaltic-rock aquifers,20010801,,Metadata Coverage
+,,,,,,Metadata Coverage
+Paleozoic aquifers,N500PLOZOC,"Minnesota, Montana, North Dakota, South Dakota, Wyoming",Paleozoic aquifers (northern Great Plains),20010801,,Metadata Coverage
+Pecos River Basin alluvial aquifer,N100PCSRVR,"New Mexico, Texas",Pecos River Basin alluvial aquifer (Texas and New Mexico),20010801,,Metadata Coverage
+Pennsylvanian aquifers,N300PNSLVN,"Alabama, Georgia, Illinois, Indiana, Kentucky, Maryland, Michigan, Ohio, Pennsylvania, Tennessee, Virginia, West Virginia",Pennsylvanian aquifers (central and eastern U.S.),20010801,,Metadata Coverage
+Piedmont and Blue Ridge carbonate-rock aquifers,N400PDMBRC,"Maryland, New Jersey, North Carolina, Pennsylvania",Piedmont and Blue Ridge carbonate-rock aquifers (eastern U.S.),20010801,,Metadata Coverage
+Piedmont and Blue Ridge crystalline-rock aquifers,N400PDMBRX,"Alabama, Delaware, District of Columbia, Georgia, Maryland, New Jersey, New York, North Carolina, Pennsylvania, South Carolina, Tennessee, Virginia, West Virginia",Piedmont and Blue Ridge crystalline-rock aquifers (eastern U.S.),20010801,,Coverage not available
+Puget Sound aquifer system,S100PGTSND,Washington,Puget Sound aquifer system (Washington),20010801,,Metadata Coverage
+Rio Grande aquifer system,S100RIOGRD,"Colorado, New Mexico, Texas",Rio Grande aquifer system,20010801,,Metadata Coverage
+Roswell Basin aquifer system,S400RSWLBS,New Mexico,Roswell Basin aquifer system (New Mexico),20010801,,Metadata Coverage
+Rush Springs aquifer,N300RSHSPG,Oklahoma,Rush Springs aquifer (Oklahoma),20010801,,Metadata Coverage
+Sand and gravel aquifers (glaciated regions),N100GLCIAL,"Connecticut, Illinois, Indiana, Iowa, Kansas, Kentucky, Maine, Massachusetts, Michigan, Minnesota, Missouri, Montana, Nebraska, New Hampshire, New Jersey, New York, North Dakota, Ohio, Pennsylvania, Rhode Island, South Dakota, Vermont, Wisconsin",Sand and gravel aquifers of alluvial and glacial origin (North of the line of glaciation),20010801,,"Coverage not available, web graphic"
+Seymour aquifer,N100SYMOUR,Texas,Seymour aquifer (Texas),20010801,,Metadata Coverage
+Silurian-Devonian aquifers,N400SLRDVN,"Illinois, Indiana, Iowa, Kentucky, Michigan, Missouri, Ohio, Tennessee, Wisconsin",Silurian-Devonian aquifers (northern Midwest),20010801,,Metadata Coverage
+Snake River Plain basaltic-rock aquifers,N600SKRVPV,"Idaho, Oregon",Snake River Plain basaltic-rock aquifers (Idaho),20010801,,Coverage not available
+Snake River Plain basin-fill aquifers,N600SKRVPB,"Idaho, Oregon",Snake River Plain basin-fill aquifers (Idaho),20010801,,Coverage not available
+South Coast aquifer (Puerto Rico),N300STHCST,Puerto Rico,South Coast aquifer (Puerto Rico),20010801,,Metadata Coverage
+Southeastern Coastal Plain aquifer system,S100SECSLP,"Alabama, Georgia, Mississippi, South Carolina, Tennessee",Southeastern Coastal Plain aquifer system,20010801,,Metadata Coverage
+Southern Nevada volcanic-rock aquifers,N600SRNVDV,Nevada,Southern Nevada volcanic-rock aquifers,20010801,,Metadata Coverage
+Surficial aquifer system,S100SURFCL,"Alabama, Florida, Georgia, North Carolina, South Carolina",Surficial aquifer system (eastern U.S.),20010801,,Coverage not available
+Texas coastal uplands aquifer system,S100TXCLUP,"Louisiana, Texas",Texas coastal uplands aquifer system,20010801,,Metadata Coverage
+Upper carbonate aquifer,N400UPCRBN,"Iowa, Minnesota",Upper carbonate aquifer (Minnesota and Iowa),20010801,,Metadata Coverage
+Upper Cretaceous aquifers,N300UPCTCS,"Montana, North Dakota, South Dakota, Wyoming",Upper Cretaceous aquifers (northern Great Plains),20010801,,Metadata Coverage
+Valley and Ridge aquifers,N500VLYRDG,"Alabama, Georgia, Maryland, New Jersey, New York, North Carolina, Pennsylvania, Tennessee, Virginia, West Virginia",Valley and Ridge aquifers (eastern U.S.),20010801,,All(or perhaps non-carbonates): Metadata Coverage Carbonates: Metadata Coverage

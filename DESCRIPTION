@@ -28,7 +28,6 @@ Imports:
     openxlsx,
     dataRetrieval,
     xtable,
-    xlsx,
     dplyr,
     EnvStats,
     lubridate,
