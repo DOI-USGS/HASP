@@ -1,0 +1,47 @@
+Package: hasp
+Type: Package
+Title: Hydrologic AnalySis Package
+Version: 0.0.0.0001
+Authors@R: c(person("Scott", "Prinos", 
+                     role = c("aut","cre"),
+                     email = "stprinos@usgs.gov"),
+             person("Laura", "DeCicco", 
+                     role = c("aut"),
+                     email = "ldecicco@usgs.gov",
+                     comment=c(ORCID="0000-0002-3915-9487")),
+             person("Patrick", "Eslick", 
+                     role = c("aut"),
+                     email = "peslick@usgs.gov"),
+             person("Lindsay", "Platt", 
+                     role = c("ctr"),
+                     email = "lplatt@usgs.gov"))
+Description: Provide monitoring site information and the statistical and graphical analyses of USGS hydrologic data.
+License: CC0
+Copyright: This software is in the public domain because it contains materials
+    that originally came from the United States Geological Survey, an agency of
+    the United States Department of Interior. For more information, see the
+    official USGS copyright policy at
+    https://www.usgs.gov/visual-id/credit_usgs.html#copyright
+Depends:
+    R (>= 3.5.0)
+Imports:
+    openxlsx,
+    dataRetrieval,
+    xtable,
+    xlsx,
+    dplyr,
+    EnvStats,
+    lubridate,
+    Kendall,
+    htmlTable,
+    stringr
+Suggests:
+    rmarkdown,
+    testthat,
+    knitr
+BugReports: https://code.usgs.gov/water/stats/hasp/issues
+VignetteBuilder: knitr
+BuildVignettes: true
+LazyLoad: yes
+LazyData: yes
+RoxygenNote: 6.1.1
