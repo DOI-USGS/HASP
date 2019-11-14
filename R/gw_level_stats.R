@@ -15,7 +15,39 @@ markerLookup <- function(inputTrend){
   return(markerDescription)
 }
 
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage(
+    paste(strwrap('IN DEVELOPMENT! No current behavior promised in the future!
+USGS Research Package: 
+https://owi.usgs.gov/R/packages.html#research'),
+          collapse='\n'))
+}
 
+#' HASP data included
+#' 
+#' markerTable raw data
+#'
+#' @aliases markerTable
+#' @name markerTable
+#' @return data frame with columns Trend and MarkerDescription
+#' @docType data
+#' @rdname included_data
+#' @keywords datasets
+#' @export markerTable
+#' @examples
+#' head(markerTable)
+NULL
+
+#' @aliases markerTable2
+#' @name markerTable2
+#' @return data frame with columns Trend and MarkerDescription
+#' @docType data
+#' @rdname included_data
+#' @keywords datasets
+#' @export markerTable2
+#' @examples
+#' head(markerTable2)
+NULL
 
 # To make the sysdata.rda:
 # markerTable <- data.frame(Trend = c("Insufficient data",
