@@ -69,8 +69,3 @@ body <- dashboardBody(
 
 dashboardPage(header, sidebar, body)
 
-
-#####
-# https://stackoverflow.com/questions/34530142/drop-down-checkbox-input-in-shiny
-# func --------------------------------------------------------------------
-

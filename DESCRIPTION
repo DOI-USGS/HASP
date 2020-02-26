@@ -40,7 +40,7 @@ Suggests:
     testthat,
     knitr,
     kableExtra
-BugReports: https://code.usgs.gov/water/hasp/issues
+BugReports: https://code.chs.usgs.gov/water/hasp/issues
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyLoad: yes
