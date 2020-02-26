@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Principle Aquifers</title>
+
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Principle Aquifers</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>More information can be found here: <a href="https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html" class="uri">https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html</a></p>
+<p><a href="https://groundwaterwatch.usgs.gov/composite/help/compositewaterlevels_helpdocument_7-7-2016.htm" class="uri">https://groundwaterwatch.usgs.gov/composite/help/compositewaterlevels_helpdocument_7-7-2016.htm</a></p>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+long_name
+</th>
+<th style="text-align:left;">
+aquiferCd
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Ada-Vamoosa aquifer
+</td>
+<td style="text-align:left;">
+N300ADAVMS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Alaska unconsolidated-deposit aquifers
+</td>
+<td style="text-align:left;">
+N100AKUNCD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Alluvial aquifers
+</td>
+<td style="text-align:left;">
+N100ALLUVL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Arbuckle-Simpson aquifer
+</td>
+<td style="text-align:left;">
+N400ABKSMP
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Basin and Range basin-fill aquifers
+</td>
+<td style="text-align:left;">
+N100BSNRGB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Basin and Range carbonate-rock aquifers
+</td>
+<td style="text-align:left;">
+N400BSNRGC
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Biscayne aquifer
+</td>
+<td style="text-align:left;">
+N400BISCYN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Blaine aquifer
+</td>
+<td style="text-align:left;">
+N400BLAINE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+California Coastal Basin aquifers
+</td>
+<td style="text-align:left;">
+N100CACSTL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Cambrian-Ordovician aquifer system
+</td>
+<td style="text-align:left;">
+S300CAMORD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Castle Hayne aquifer
+</td>
+<td style="text-align:left;">
+N400CSLHYN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Central Oklahoma aquifer
+</td>
+<td style="text-align:left;">
+N300CNRLOK
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Central Valley aquifer system
+</td>
+<td style="text-align:left;">
+S100CNRLVL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Coastal lowlands aquifer system
+</td>
+<td style="text-align:left;">
+S100CSLLWD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Colorado Plateaus aquifers
+</td>
+<td style="text-align:left;">
+N300COPLTS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Columbia Plateau basaltic-rock aquifers
+</td>
+<td style="text-align:left;">
+N600CMBPLV
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Columbia Plateau basin-fill aquifers
+</td>
+<td style="text-align:left;">
+N100CMBPLB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Denver Basin aquifer system
+</td>
+<td style="text-align:left;">
+S300DNVRBS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Early Mesozoic basin aquifers
+</td>
+<td style="text-align:left;">
+N300ERLMZC
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Edwards-Trinity aquifer system
+</td>
+<td style="text-align:left;">
+S500EDRTRN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Floridan aquifer system
+</td>
+<td style="text-align:left;">
+S400FLORDN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Hawaii volcanic-rock aquifers
+</td>
+<td style="text-align:left;">
+N600HIVLCC
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+High Plains aquifer
+</td>
+<td style="text-align:left;">
+N100HGHPLN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Intermediate aquifer system
+</td>
+<td style="text-align:left;">
+S500INTRMD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Jacobsville aquifer
+</td>
+<td style="text-align:left;">
+N300JCBSVL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Kingshill aquifer (Virgin Islands)
+</td>
+<td style="text-align:left;">
+N400KNGSHL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Lower Cretaceous aquifers
+</td>
+<td style="text-align:left;">
+N300LCRTCS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Lower Tertiary aquifers
+</td>
+<td style="text-align:left;">
+N300LTRTRY
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Marshall aquifer
+</td>
+<td style="text-align:left;">
+N300MRSHLL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Mississippi embayment aquifer system
+</td>
+<td style="text-align:left;">
+S100MSEMBM
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Mississippi River Valley alluvial aquifer
+</td>
+<td style="text-align:left;">
+N100MSRVVL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Mississippian aquifers
+</td>
+<td style="text-align:left;">
+N500MSSPPI
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+New England crystalline-rock aquifers
+</td>
+<td style="text-align:left;">
+N600NECRSN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+New York and New England carbonate-rock aquifers
+</td>
+<td style="text-align:left;">
+N400NYNECB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+New York and New England crystalline-rock aquifers
+</td>
+<td style="text-align:left;">
+N600NECRSN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+New York sandstone aquifers
+</td>
+<td style="text-align:left;">
+N300NYSDSN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+North Coast Limestone aquifer system (Puerto Rico)
+</td>
+<td style="text-align:left;">
+N400NCSTLM
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Northern Atlantic Coastal Plain aquifer system
+</td>
+<td style="text-align:left;">
+S100NATLCP
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Northern Rocky Mountains Intermontane Basins aquifer systems
+</td>
+<td style="text-align:left;">
+S100NRMTIB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Ordovician aquifers
+</td>
+<td style="text-align:left;">
+N400ORDVCN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Other aquifers
+</td>
+<td style="text-align:left;">
+N9999OTHER
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Ozark Plateaus aquifer system
+</td>
+<td style="text-align:left;">
+S400OZRKPL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Pacific Northwest basin-fill aquifers
+</td>
+<td style="text-align:left;">
+N100PCFNWB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Pacific Northwest volcanic-rock aquifers
+</td>
+<td style="text-align:left;">
+N100PCFNWV
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Paleozoic aquifers
+</td>
+<td style="text-align:left;">
+N500PLOZOC
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Pecos River Basin alluvial aquifer
+</td>
+<td style="text-align:left;">
+N100PCSRVR
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Pennsylvanian aquifers
+</td>
+<td style="text-align:left;">
+N300PNSLVN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Piedmont and Blue Ridge carbonate-rock aquifers
+</td>
+<td style="text-align:left;">
+N400PDMBRC
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Piedmont and Blue Ridge crystalline-rock aquifers
+</td>
+<td style="text-align:left;">
+N400PDMBRX
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Puget Sound aquifer system
+</td>
+<td style="text-align:left;">
+S100PGTSND
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Rio Grande aquifer system
+</td>
+<td style="text-align:left;">
+S100RIOGRD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Roswell Basin aquifer system
+</td>
+<td style="text-align:left;">
+S400RSWLBS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Rush Springs aquifer
+</td>
+<td style="text-align:left;">
+N300RSHSPG
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Sand and gravel aquifers (glaciated regions)
+</td>
+<td style="text-align:left;">
+N100GLCIAL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Seymour aquifer
+</td>
+<td style="text-align:left;">
+N100SYMOUR
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Silurian-Devonian aquifers
+</td>
+<td style="text-align:left;">
+N400SLRDVN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Snake River Plain basaltic-rock aquifers
+</td>
+<td style="text-align:left;">
+N600SKRVPV
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Snake River Plain basin-fill aquifers
+</td>
+<td style="text-align:left;">
+N600SKRVPB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+South Coast aquifer (Puerto Rico)
+</td>
+<td style="text-align:left;">
+N300STHCST
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Southeastern Coastal Plain aquifer system
+</td>
+<td style="text-align:left;">
+S100SECSLP
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Southern Nevada volcanic-rock aquifers
+</td>
+<td style="text-align:left;">
+N600SRNVDV
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Surficial aquifer system
+</td>
+<td style="text-align:left;">
+S100SURFCL
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Texas coastal uplands aquifer system
+</td>
+<td style="text-align:left;">
+S100TXCLUP
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Upper carbonate aquifer
+</td>
+<td style="text-align:left;">
+N400UPCRBN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Upper Cretaceous aquifers
+</td>
+<td style="text-align:left;">
+N300UPCTCS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Valley and Ridge aquifers
+</td>
+<td style="text-align:left;">
+N500VLYRDG
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Willamette Lowland basin-fill aquifers
+</td>
+<td style="text-align:left;">
+N100WLMLWD
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 50em; ">
+Wyoming Tertiary aquifers
+</td>
+<td style="text-align:left;">
+N300WYTRTR
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
