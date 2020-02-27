@@ -36,6 +36,20 @@ NULL
 #' head(aquifer_data)
 NULL
 
+#' Local Aquifer Code Listing
+#' 
+#' Local aquifer data codes
+#'
+#' @aliases local_aqfr
+#' @name local_aqfr
+#' @return data frame with aqfr_cd, Aqfr_Name_prpr
+#' @docType data
+#' @rdname included_data
+#' @keywords datasets
+#' @export local_aqfr
+#' @examples
+#' head(local_aqfr)
+NULL
 
 #' HASP data included
 #' 
