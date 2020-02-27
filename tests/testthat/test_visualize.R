@@ -1,6 +1,6 @@
 context("Visualize Data")
 
-test_that("Graphs", {
+test_that("Composite Graphs", {
   aquifer_data <- aquifer_data
   sum_col <- "lev_va"
   num_years <- 30
@@ -27,6 +27,15 @@ test_that("Map", {
   
   expect_true(all(class(map) %in% c("leaflet","htmlwidget")))
 
+  
+})
+
+
+test_that("SC Chloride graphs", {
+  site <- '254457080160301'
+  site_data <- dataRetrieval::readNWISqw(site, 
+                                         parameterCd = c("99220","90095"))
+  expect_silent(Sc_Cl_plot(site_data, title = "Hi"))
   
 })
   
