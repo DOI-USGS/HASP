@@ -36,6 +36,27 @@ NULL
 #' head(aquifer_data)
 NULL
 
+
+#' HASP data included
+#' 
+#' markerTable raw data
+#'
+#' @aliases markerTable
+#' @name markerTable
+#' @return data frame with columns Trend and MarkerDescription
+#' @docType data
+#' @rdname included_data
+#' @keywords datasets
+NULL
+
+#' @aliases markerTable2
+#' @name markerTable2
+#' @return data frame with columns trendType, trend, markerDescription, r_lwd
+#' @docType data
+#' @rdname included_data
+#' @keywords datasets
+NULL
+
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     paste(strwrap('USGS Research Package:
