@@ -44,9 +44,9 @@ plot_normalized_data(aquifer_data, sum_col, num_years)
 
 ## Installation
 
-To install the package while the package is still internal, users will need to get a "Personal Access Token" from code.usgs.gov. 
+To install the package while the package is still internal, users will need to get a "Personal Access Token" from code.chs.usgs.gov. 
 
-1. Go to https://code.usgs.gov/profile/personal_access_tokens
+1. Go to https://code.chs.usgs.gov/profile/personal_access_tokens
 2. Create a Personal Access Token and click the "api" scope:
 ![pat](man/figures/pat.png)
 3. After clicking the green "Create personal access token", you will see a screen like this:

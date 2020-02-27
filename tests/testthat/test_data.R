@@ -18,6 +18,20 @@ test_that("Data", {
                       "State",
                       "other_cd")))
   
+  
+  expect_equal(nrow(HASP:::markerTable), 5)
+  expect_equal(ncol(HASP:::markerTable), 2)
+  expect_true(all(names(HASP:::markerTable) %in%
+                    c("Trend",
+                      "MarkerDescription")))
+  expect_equal(nrow(HASP:::markerTable2), 15)
+  expect_equal(ncol(HASP:::markerTable2), 4)
+  expect_true(all(names(HASP:::markerTable2) %in%
+                    c("trendType",
+                      "trend",
+                      "markerDescription",
+                      "r_lwd")))
+  
 })
 
 test_that("Get Data", {
