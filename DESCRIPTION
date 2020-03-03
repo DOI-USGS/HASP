@@ -34,7 +34,9 @@ Imports:
     shiny,
     shinyAce,
     shinycssloaders,
-    shinydashboard
+    shinydashboard,
+    EnvStats,
+    lubridate
 Suggests:
     rmarkdown,
     testthat,
