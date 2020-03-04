@@ -5,7 +5,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.width = 7,
                       fig.height = 7)
 
-library(compHydros)
+library(HASP)
 library(kableExtra)
 library(dplyr)
 

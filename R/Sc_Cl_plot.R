@@ -1,4 +1,4 @@
-#' ScCLPlotTable 
+#' Sc_CL_plot
 #'
 #' Function creates the individual chloride versus specfic conductance plots for each site
 #' as well as the chloride versus specific conductance plot for all sites.
@@ -6,16 +6,15 @@
 #' @param x data frame
 #' @param title character
 #' @export
-#' @import dplyr
-#' @importFrom tidyr pivot_wider
 #' @import graphics
 #' @importFrom dataRetrieval readNWISpCode
 #' @importFrom stats lm
 #' @examples 
 #' 
-#' site <- '254457080160301'
+#' site <- "263819081585801"
+#' parameterCd <- c("00095","90095","00940","99220")
 #' site_data <- dataRetrieval::readNWISqw(site, 
-#'                                        parameterCd = c("99220","90095"))
+#'                                        parameterCd)
 #' Sc_Cl_plot(site_data, title = "Hi")
 Sc_Cl_plot <- function(x, title){
   
@@ -26,20 +25,7 @@ Sc_Cl_plot <- function(x, title){
   Cltitle <- readNWISpCode("99220")[["parameter_nm"]]
   Sctitle <- readNWISpCode("90095")[["parameter_nm"]]
   
-  #different column names depending on whether it is all the data (ClvsSC_all) or not
-  Plotdata <- x %>% 
-    select(Date = sample_dt, 
-           startDateTime,
-           `Station ID` = site_no, 
-           parm_cd, remark_cd, result_va) %>% 
-    pivot_wider(names_from = parm_cd, 
-                values_from = result_va) %>%  
-    rename(cloride = `99220`,
-           sp = `90095`)
-  
-  # Create SC versus chloride plots of the data by station ID and parameter code.
-  
-  # Make sure there is enough data to make a plot and then make the SC vs CL plot
+  Plotdata <- Sc_Cl_table(x)
   
   if(nrow(Plotdata)>1){
     
@@ -86,14 +72,58 @@ Sc_Cl_plot <- function(x, title){
         mar = c(0,0,0,0), 
         new = TRUE) # this sets the legend up
     
-    legend("bottomright", 
-           c("EXPLANATION", "Linear regression", Ftext1, Ftext2), 
-           lty = c(0, 1, 0, 0), 
-           col = c(NA, "black", NA, NA), 
-           xpd = TRUE, 
-           horiz = FALSE, 
+    legend("bottomright",
+           c("EXPLANATION", "Linear regression", Ftext1, Ftext2),
+           lty = c(0, 1, 0, 0),
+           col = c(NA, "black", NA, NA),
+           xpd = TRUE,
+           horiz = FALSE,
            inset = c(0, -0.22))
     
   }
   
 }
+
+
+#' Sc_Cl_table 
+#'
+#' Function creates the individual chloride versus specfic conductance tables for each site
+#' as well as the chloride versus specific conductance plot for all sites.
+#'
+#' @param x data frame
+#' @export
+#' @import dplyr
+#' @importFrom tidyr pivot_wider
+#' @import graphics
+#' @importFrom dataRetrieval readNWISpCode
+#' @examples 
+#' 
+#' site <- "263819081585801"
+#' parameterCd <- c("00095","90095","00940","99220")
+#' site_data <- dataRetrieval::readNWISqw(site, 
+#'                                        parameterCd)
+#' Sc_Cl_table(site_data)
+Sc_Cl_table <- function(x){
+  
+  mean_no_na <- function(x){
+    prettyNum(mean(x, na.rm = TRUE), 
+              big.mark = ",", 
+              scientific = FALSE)
+  }
+  
+  Plotdata <- x %>% 
+    select(Date = sample_dt, 
+           `Station ID` = site_no, 
+           parm_cd, remark_cd, result_va) %>% 
+    mutate(parm_cd = ifelse(parm_cd == "00940", "99220", parm_cd),
+           parm_cd = ifelse(parm_cd == "00095", "90095", parm_cd)) %>% 
+    pivot_wider(names_from = parm_cd, 
+                values_from = result_va,
+                values_fn = list(result_va = mean_no_na)) %>%  
+    mutate(cloride = as.numeric(`99220`),
+           sp = as.numeric(`90095`))
+  
+  return(Plotdata)
+  
+}
+

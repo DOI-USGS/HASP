@@ -10,7 +10,7 @@ library(ggplot2)
 library(leaflet)
 
 ## ----setupData, echo=FALSE----------------------------------------------------
-library(compHydros)
+library(HASP)
 
 aquifer_long_name <- "Basin and Range basin-fill aquifers"
 
@@ -24,7 +24,7 @@ cat("In states: ", paste(states, collapse = ", ") )
 
 
 ## ----dataRetrival-------------------------------------------------------------
-library(compHydros)
+library(HASP)
 end_date <- "2019-12-31"
 state_date <- "1989-12-31"
 
