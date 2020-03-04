@@ -38,7 +38,10 @@ test_that("SC Chloride graphs and table", {
   site <- '263819081585801'
   site_data <- dataRetrieval::readNWISqw(site, 
                                          parameterCd = c("00095","90095","00940","99220"))
-  expect_silent(Sc_Cl_plot(site_data, title = "Hi"))
+  
+  sc_plot <- Sc_Cl_plot(site_data, title = "Hi")
+  expect_true(all(c("Date", "chloride", "sp") %in%
+                    names(sc_plot$data)))
   
   sccl_table <- Sc_Cl_table(site_data)
   expect_true(all(c("Date",   
