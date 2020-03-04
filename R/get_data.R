@@ -102,6 +102,8 @@ get_state_data <- function(state, aquiferCd, startDate, endDate){
 #' site_metadata <- site_summary(siteID)
 site_summary <- function(siteID, markdown = FALSE){
   
+  site_no <- station_nm <- lat_va <- long_va <- state_cd <- county_cd <- huc_cd <- aqfr_cd <- land_net_ds <- well_depth_va <- alt_va <- alt_datum_cd <- ".dplyr"
+  
   site_info <- readNWISsite(siteID)
   
   end_of_line <- ifelse(markdown, "<br/>", "\n")
@@ -163,6 +165,8 @@ site_summary <- function(siteID, markdown = FALSE){
 #' siteID <- "263819081585801"
 #' site_data_available <- data_available(siteID)
 data_available <- function(siteID){
+  
+  begin <- end <- ".dplyr"
   
   data_type_cd <- begin_date <- end_date <- count_nu <- `Data Type` <- parm_cd <- ".dplyr"
   data_info <- whatNWISdata(siteNumber = siteID)

@@ -109,6 +109,7 @@ Sc_Cl_table <- function(x){
   }
   
   sample_dt <- startDateTime <- site_no <- parm_cd <- remark_cd <- result_va <- `90095` <- `99220` <- ".dplyr"
+  chloride <- sp <- ".dplyr"
   
   Plotdata <- x %>% 
     select(Date = sample_dt, 
