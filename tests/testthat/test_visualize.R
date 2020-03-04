@@ -31,11 +31,17 @@ test_that("Map", {
 })
 
 
-test_that("SC Chloride graphs", {
-  site <- '254457080160301'
+test_that("SC Chloride graphs and table", {
+  site <- '263819081585801'
   site_data <- dataRetrieval::readNWISqw(site, 
-                                         parameterCd = c("99220","90095"))
+                                         parameterCd = c("00095","90095","00940","99220"))
   expect_silent(Sc_Cl_plot(site_data, title = "Hi"))
   
+  sccl_table <- Sc_Cl_table(site_data)
+  expect_true(all(c("Date","Station ID","remark_cd","99220", "90095",   
+                    "cloride","sp" ) %in% names(sccl_table)))
+  
 })
+
+
   
