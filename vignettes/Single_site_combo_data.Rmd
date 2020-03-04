@@ -191,7 +191,7 @@ kable(data_info_clean)
 
 ## Salinity Data and Analysis
 
-```{r salityStuff}
+```{r salityStuff, echo=TRUE}
 parameterCd <- c("00095","90095","00940","99220")
 site_data <- readNWISqw(siteID,  parameterCd)
 
