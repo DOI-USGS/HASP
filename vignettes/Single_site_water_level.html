@@ -312,12 +312,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(tidyr)</a>
 <a class="sourceLine" id="cb1-5" title="5"></a>
 <a class="sourceLine" id="cb1-6" title="6">siteID &lt;-<span class="st"> &quot;263819081585801&quot;</span></a>
-<a class="sourceLine" id="cb1-7" title="7">site_info &lt;-<span class="st"> </span><span class="kw">readNWISsite</span>(siteID)</a></code></pre></div>
-<p>263819081585801 L -2701<br />Latitude: 26 ° 38 ’ 19 &quot; <br />Longitude: 81 ° 58 ’ 58 &quot; <br />Lee County , Florida <br />Hydrologic Unit: 03090205 <br />Well depth: 206 feet<br />Land surface altitude: 13 feet above NGVD29 <br />Well completed in : “Intermediate aquifer system” (S500INTRMD) national aquifer.<br />Well completed in : “Hawthorn Limestone Aquifer” (122HTRNN) local aquifer.<br /></p>
+<a class="sourceLine" id="cb1-7" title="7">site_metadata &lt;-<span class="st"> </span><span class="kw">site_summary</span>(siteID, <span class="dt">markdown =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>263819081585801 L -2701 <br />Latitude: 26 deg 38 ’ 19 &quot; <br />Longitude: 81 deg 58 ’ 58 &quot; <br />Lee County , Florida <br />Hydrologic Unit: 03090205 <br />Well depth: 206 feet <br />Land surface altitude: 13 feet above NGVD29 <br />Well completed in : “Intermediate aquifer system” (S500INTRMD) national aquifer.<br />Well completed in : “Hawthorn Limestone Aquifer” (122HTRNN) local aquifer.<br /></p>
 </div>
 <div id="available-data" class="section level2">
 <h2>AVAILABLE DATA</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">data_info &lt;-<span class="st"> </span><span class="kw">whatNWISdata</span>(<span class="dt">siteNumber =</span> siteID)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">data_info &lt;-<span class="st"> </span><span class="kw">data_available</span>(siteID)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">kable</span>(data_info)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">

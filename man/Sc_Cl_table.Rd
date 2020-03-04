@@ -19,5 +19,5 @@ site <- "263819081585801"
 parameterCd <- c("00095","90095","00940","99220")
 site_data <- dataRetrieval::readNWISqw(site, 
                                        parameterCd)
-Sc_Cl_table(site_data)
+sc_cl <- Sc_Cl_table(site_data)
 }

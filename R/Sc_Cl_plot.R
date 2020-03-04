@@ -20,7 +20,6 @@ Sc_Cl_plot <- function(x, title){
   
   # Specify the plot titles using the function getParmCodeDef
   
-  sample_dt <- startDateTime <- site_no <- parm_cd <- remark_cd <- result_va <- `90095` <- `99220` <- ".dplyr"
   
   Cltitle <- readNWISpCode("99220")[["parameter_nm"]]
   Sctitle <- readNWISpCode("90095")[["parameter_nm"]]
@@ -33,7 +32,7 @@ Sc_Cl_plot <- function(x, title){
     par(mar = c(6,4,3,2)+0.1) # Default margin is (5,4,4,2)+0.1 this decreases the margin on the top and bottom so that the 
     # the plot is a little taller which provides room for the longer tic lables with the comma.
     plot(Plotdata$sp, 
-         Plotdata$cloride, 
+         Plotdata$chloride, 
          type = "p", col="blue", 
          main = title, 
          xlab = Sctitle, 
@@ -49,7 +48,7 @@ Sc_Cl_plot <- function(x, title){
     
     # compute a linear regression line and then add it to the plot
     
-    Rline <- lm(Plotdata$cloride ~ Plotdata$sp)
+    Rline <- lm(Plotdata$chloride ~ Plotdata$sp)
     
     if(!is.na(Rline$coefficients[2])){
       abline(Rline)
@@ -102,26 +101,28 @@ Sc_Cl_plot <- function(x, title){
 #' parameterCd <- c("00095","90095","00940","99220")
 #' site_data <- dataRetrieval::readNWISqw(site, 
 #'                                        parameterCd)
-#' Sc_Cl_table(site_data)
+#' sc_cl <- Sc_Cl_table(site_data)
 Sc_Cl_table <- function(x){
   
   mean_no_na <- function(x){
-    prettyNum(mean(x, na.rm = TRUE), 
-              big.mark = ",", 
-              scientific = FALSE)
+    mean(x, na.rm = TRUE)
   }
+  
+  sample_dt <- startDateTime <- site_no <- parm_cd <- remark_cd <- result_va <- `90095` <- `99220` <- ".dplyr"
   
   Plotdata <- x %>% 
     select(Date = sample_dt, 
-           `Station ID` = site_no, 
-           parm_cd, remark_cd, result_va) %>% 
+           parm_cd, 
+           result_va) %>% 
     mutate(parm_cd = ifelse(parm_cd == "00940", "99220", parm_cd),
            parm_cd = ifelse(parm_cd == "00095", "90095", parm_cd)) %>% 
     pivot_wider(names_from = parm_cd, 
                 values_from = result_va,
                 values_fn = list(result_va = mean_no_na)) %>%  
-    mutate(cloride = as.numeric(`99220`),
-           sp = as.numeric(`90095`))
+    rename(chloride = `99220`,
+           sp = `90095`) %>% 
+    filter(!is.na(sp),
+           !is.na(chloride))
   
   return(Plotdata)
   
