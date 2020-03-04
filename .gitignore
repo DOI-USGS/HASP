@@ -4,5 +4,5 @@
 .Ruserdata
 vignettes/*.R
 vignettes/*.html
-
+tests/testthat/Rplots.pdf
 

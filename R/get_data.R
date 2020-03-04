@@ -102,7 +102,8 @@ get_state_data <- function(state, aquiferCd, startDate, endDate){
 #' site_metadata <- site_summary(siteID)
 site_summary <- function(siteID, markdown = FALSE){
   
-  site_no <- station_nm <- lat_va <- long_va <- state_cd <- county_cd <- huc_cd <- aqfr_cd <- land_net_ds <- well_depth_va <- alt_va <- alt_datum_cd <- ".dplyr"
+  site_no <- station_nm <- lat_va <- long_va <- nat_aqfr_cd <- ".dplyr"
+    state_cd <- county_cd <- huc_cd <- aqfr_cd <- land_net_ds <- well_depth_va <- alt_va <- alt_datum_cd <- ".dplyr"
   
   site_info <- readNWISsite(siteID)
   
@@ -154,7 +155,6 @@ site_summary <- function(siteID, markdown = FALSE){
 #' Get station summary information
 #' 
 #' @param siteID character
-#' @param markdown logical. Use markdown formating or console-friendly.
 #' @export
 #' @importFrom dataRetrieval whatNWISdata
 #' @importFrom dataRetrieval stateCdLookup

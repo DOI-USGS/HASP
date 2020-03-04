@@ -8,8 +8,6 @@ data_available(siteID)
 }
 \arguments{
 \item{siteID}{character}
-
-\item{markdown}{logical. Use markdown formating or console-friendly.}
 }
 \description{
 Get station summary information
