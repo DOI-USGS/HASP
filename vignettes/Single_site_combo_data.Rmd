@@ -72,9 +72,6 @@ Sc_Cl_plot(site_data, title = siteID)
 ```
 
 ```{r salityTable, echo=TRUE}
-parameterCd <- c("00095","90095","00940","99220")
-site_data <- readNWISqw(siteID,  parameterCd)
-
 sc_cl <- Sc_Cl_table(site_data)
 
 # only show 10 row:
