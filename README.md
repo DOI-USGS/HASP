@@ -2,6 +2,8 @@
 
 Hydrologic AnalySis Package
 
+Inspiration: <https://fl.water.usgs.gov/mapper/>
+
 ## Sample workflow
 
 ``` r

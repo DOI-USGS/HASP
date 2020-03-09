@@ -13,7 +13,10 @@
 #' @importFrom shinyAce updateAceEditor
 #' @importFrom shinyAce aceEditor
 #' @importFrom shinycssloaders withSpinner
-#' @import shinydashboard
+#' @importFrom shinydashboard dashboardSidebar
+#' @importFrom shinydashboard sidebarMenu
+#' @importFrom shinydashboard dashboardBody
+#' @importFrom shinydashboard dashboardPage
 #' @import ggplot2
 #' @examples 
 #' \donttest{

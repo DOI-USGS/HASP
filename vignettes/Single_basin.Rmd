@@ -1,6 +1,5 @@
 ---
 title: "Composite Hydrograph"
-date: "2/10/2020"
 output: 
   rmarkdown::html_vignette
 editor_options: 
@@ -53,7 +52,7 @@ cat("In states: ", paste(states, collapse = ", ") )
 
 ```
 
-```{r dataRetrival}
+```{r dataRetrival, eval=FALSE}
 library(HASP)
 end_date <- "2019-12-31"
 state_date <- "1989-12-31"
@@ -62,6 +61,10 @@ aquifer_data <- get_aquifer_data(aquiferCd,
                                  state_date, 
                                  end_date)
 
+```
+
+```{r dataRetrival_sample, eval=TRUE, echo=FALSE}
+aquifer_data <- aquifer_data
 ```
 
 ## Map It
