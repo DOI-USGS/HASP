@@ -16,6 +16,7 @@
 #' @return a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
 #' 
 #' @export
+#' @importFrom utils tail
 #' 
 #' @examples 
 #' 

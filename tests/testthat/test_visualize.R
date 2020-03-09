@@ -1,6 +1,6 @@
 context("Visualize Data")
 
-test_that("Graphs", {
+test_that("Composite Graphs", {
   aquifer_data <- aquifer_data
   sum_col <- "lev_va"
   num_years <- 30
@@ -29,4 +29,26 @@ test_that("Map", {
 
   
 })
+
+
+test_that("SC Chloride graphs and table", {
+  
+  skip_on_cran()
+  
+  site <- '263819081585801'
+  site_data <- dataRetrieval::readNWISqw(site, 
+                                         parameterCd = c("00095","90095","00940","99220"))
+  
+  sc_plot <- Sc_Cl_plot(site_data, title = "Hi")
+  expect_true(all(c("Date", "chloride", "sp") %in%
+                    names(sc_plot$data)))
+  
+  sccl_table <- Sc_Cl_table(site_data)
+  expect_true(all(c("Date",   
+                    "chloride",
+                    "sp" ) %in% names(sccl_table)))
+  
+})
+
+
   

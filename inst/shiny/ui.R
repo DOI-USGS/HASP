@@ -28,7 +28,7 @@ sidebar <- dashboardSidebar(
                 multiple = FALSE),
     actionButton("get_data", label = "Get Latest Data"),
     menuItem("Source code", icon = icon("file-code-o"), 
-             href = "https://code.chs.usgs.gov/water/HASP/issues"),
+             href = "https://code.chs.usgs.gov/water/HASP"),
     actionButton("example_data", label = "Load Example Data")
   )
 )

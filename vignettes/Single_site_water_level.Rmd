@@ -1,0 +1,55 @@
+---
+title: "Single Site Water Level"
+output: 
+  rmarkdown::html_vignette
+editor_options: 
+  chunk_output_type: console
+vignette: >
+  %\VignetteIndexEntry{Water Level Single Site Information}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE,
+               warning = FALSE,
+               message = FALSE,
+               fig.width = 7,
+               fig.height = 7)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(HASP)
+
+options(knitr.kable.NA = '')
+```
+
+This vignette shows how to use `HASP` and other R tools to reproduce:
+
+https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801
+
+First, use the `dataRetrieval` package to get site information:
+
+## DESCRIPTION
+
+```{r siteInfo, echo=TRUE, results='asis'}
+library(dataRetrieval)
+library(HASP)
+library(dplyr)
+library(tidyr)
+
+siteID <- "263819081585801"
+site_metadata <- site_summary(siteID, markdown = TRUE)
+```
+
+## AVAILABLE DATA
+
+```{r whatData, echo=TRUE}
+data_info <- data_available(siteID)
+kable(data_info)
+```
+
+## Water Level Data and Analysis
+
+

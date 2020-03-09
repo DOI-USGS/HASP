@@ -58,4 +58,28 @@ test_that("Get Data", {
                                         "year" )))
 })
 
-
+test_that("Get site summaries", {
+  skip_on_cran()
+  
+  siteID <- "263819081585801"
+  
+  site_metadata <- site_summary(siteID)
+  expect_true(all(c("site_no", "station_nm", "lat_va",
+                    "long_va", "state_cd", "county_cd",
+                    "huc_cd", "nat_aqfr_cd", "aqfr_cd",      
+                    "land_net_ds", "well_depth_va", "alt_va",       
+                    "alt_datum_cd", "state", "county",       
+                    "nat_aq", "local_aq", "lat_deg",      
+                    "lat_min", "lat_sec", "long_deg",     
+                    "long_min", "long_sec") %in% names(site_metadata)))
+  
+  expect_equal(nrow(site_metadata), 1)
+  
+  site_data_available <- data_available(siteID)
+  
+  expect_true(all(c("Data Type", "Begin Date", "End Date", "Count") %in%
+                    names(site_data_available)))
+  
+  expect_gte(nrow(site_data_available), 6)
+  
+})
