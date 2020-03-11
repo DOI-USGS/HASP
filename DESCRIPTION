@@ -37,7 +37,8 @@ Imports:
     shinycssloaders,
     shinydashboard,
     EnvStats,
-    lubridate
+    lubridate,
+    purrr
 Suggests:
     rmarkdown,
     testthat,
