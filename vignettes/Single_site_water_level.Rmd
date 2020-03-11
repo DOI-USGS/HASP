@@ -52,4 +52,24 @@ kable(data_info)
 
 ## Water Level Data and Analysis
 
+```{r weeklyFrequency, echo = TRUE}
+
+parameterCd <- "62610"
+statCd <- "00001"
+gw_level_dv <- dataRetrieval::readNWISdv(siteID, parameterCd, statCd = statCd)
+weekly_frequency_plot(gw_level_dv, parameterCd, statCd, 
+                      title = "263819081585801 L -2701 ")
+weekly_freq_table <- weekly_frequency_table(gw_level_dv, parameterCd, statCd) %>%
+  select(week, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
+  rename("Week of the year" = week,
+         "Lowest median" = minMed,
+         "10th percentile" = p10,
+         "25th percentile" = p25,
+         "50th percentile" = p50,
+         "75th percentile" = p75,
+         "Highest median" = maxMed,
+         "Number of years" = nYears)
+kable(weekly_freq_table)
+
+```
 
