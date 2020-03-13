@@ -13,6 +13,7 @@ variables:
   R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   R_LIBS: "$CI_PROJECT_DIR/ci/lib"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
+  NOT_CRAN: "true"
 
 getready:
   stage: .pre
