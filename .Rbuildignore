@@ -1,2 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+LICENSE.md
+.gitlab-ci.yml
+README.Rmd
+all_aqs.Rmd
+all_aqs.pdf
+ci/*
+HASP_*.tar.gz
+orig_scripts/

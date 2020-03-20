@@ -1,5 +1,9 @@
+*.Rproj
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-*.Rproj
+<<<<<<< HEAD
+vignettes/*.R
+vignettes/*.html
+tests/testthat/Rplots.pdf

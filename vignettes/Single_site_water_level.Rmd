@@ -1,0 +1,75 @@
+---
+title: "Single Site Water Level"
+output: 
+  rmarkdown::html_vignette
+editor_options: 
+  chunk_output_type: console
+vignette: >
+  %\VignetteIndexEntry{Water Level Single Site Information}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE,
+               warning = FALSE,
+               message = FALSE,
+               fig.width = 7,
+               fig.height = 7)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(HASP)
+
+options(knitr.kable.NA = '')
+```
+
+This vignette shows how to use `HASP` and other R tools to reproduce:
+
+https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801
+
+First, use the `dataRetrieval` package to get site information:
+
+## DESCRIPTION
+
+```{r siteInfo, echo=TRUE, results='asis'}
+library(dataRetrieval)
+library(HASP)
+library(dplyr)
+library(tidyr)
+
+siteID <- "263819081585801"
+site_metadata <- site_summary(siteID, markdown = TRUE)
+```
+
+## AVAILABLE DATA
+
+```{r whatData, echo=TRUE}
+data_info <- data_available(siteID)
+kable(data_info)
+```
+
+## Water Level Data and Analysis
+
+```{r weeklyFrequency, echo = TRUE}
+
+parameterCd <- "62610"
+statCd <- "00001"
+gw_level_dv <- dataRetrieval::readNWISdv(siteID, parameterCd, statCd = statCd)
+weekly_frequency_plot(gw_level_dv, parameterCd, statCd, 
+                      title = "263819081585801 L -2701 ")
+weekly_freq_table <- weekly_frequency_table(gw_level_dv, parameterCd, statCd) %>%
+  select(week, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
+  rename("Week of the year" = week,
+         "Lowest median" = minMed,
+         "10th percentile" = p10,
+         "25th percentile" = p25,
+         "50th percentile" = p50,
+         "75th percentile" = p75,
+         "Highest median" = maxMed,
+         "Number of years" = nYears)
+kable(weekly_freq_table)
+
+```
+

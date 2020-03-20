@@ -1,4 +1,4 @@
-Package: hasp
+Package: HASP
 Type: Package
 Title: Hydrologic AnalySis Package
 Version: 0.0.0.0001
@@ -15,7 +15,7 @@ Authors@R: c(person("Scott", "Prinos",
              person("Lindsay", "Platt", 
                      role = c("ctr"),
                      email = "lplatt@usgs.gov"))
-Description: Provide monitoring site information and the statistical and graphical analyses of USGS hydrologic data.
+Description: Data aggregation and plotting of USGS groundwater level data.
 License: CC0
 Copyright: This software is in the public domain because it contains materials
     that originally came from the United States Geological Survey, an agency of
@@ -25,22 +25,28 @@ Copyright: This software is in the public domain because it contains materials
 Depends:
     R (>= 3.5.0)
 Imports:
-    openxlsx,
     dataRetrieval,
-    xtable,
     dplyr,
+    tidyr,
+    ggplot2,
+    ggpmisc,
+    leaflet,
+    scales,
+    shiny,
+    shinyAce,
+    shinycssloaders,
+    shinydashboard,
     EnvStats,
     lubridate,
-    Kendall,
-    htmlTable,
-    stringr
+    purrr
 Suggests:
     rmarkdown,
     testthat,
-    knitr
+    knitr,
+    kableExtra
 BugReports: https://code.usgs.gov/water/stats/hasp/issues
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyLoad: yes
 LazyData: yes
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
