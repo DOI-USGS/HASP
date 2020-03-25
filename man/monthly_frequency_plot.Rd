@@ -4,14 +4,20 @@
 \alias{monthly_frequency_plot}
 \title{Plot monthly frequency analysis}
 \usage{
-monthly_frequency_plot(gw_level_data, title = "", date = Sys.Date())
+monthly_frequency_plot(
+  gw_level_data,
+  title = "",
+  range = c("Past year", "Calendar year")
+)
 }
 \arguments{
 \item{gw_level_data}{groundwater level data from \code{readNWISgwl}}
 
 \item{title}{the title to use on the plot}
 
-\item{date}{the reference date to make the plot, defaults to the current date}
+\item{range}{the time frame to use for the plot. Either "Past year" to use the
+last year of data, or "Calendar year" to use the current calendar year, beginning
+in January.}
 }
 \value{
 a ggplot with rectangles representing the historical monthly percentile,
