@@ -71,6 +71,20 @@ NULL
 #' @keywords datasets
 NULL
 
+#' Example groundwater level data
+#' 
+#' Example data from site 263819081585801 L-2701. Data is a named list of
+#' "Daily" for daily groundwater level at the site and "Discrete" for discrete
+#' groundwater level measurements fromt he site
+#' 
+#' @name L2701_example_data
+#' @rdname example_data
+#' @docType data
+#' @examples 
+#' head(L2701_example_data$Daily)
+#' head(L2701_example_data$Discrete)
+NULL
+
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     paste(strwrap('USGS Research Package:

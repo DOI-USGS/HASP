@@ -50,32 +50,29 @@ test_that("SC Chloride graphs and table", {
   
 })
 
-test_that("Monthly frequency", {
+test_that("Monthly frequency plot", {
   
   skip_on_cran()
   
-  site <- "263819081585801"
-  gw_level_data <- dataRetrieval::readNWISgwl(site)
-  plot <- monthly_frequency_plot(gw_level_data)
+  plot <- monthly_frequency_plot(L2701_example_data$Discrete)
   
   plot_data_elements <- purrr::map(plot$layers, "data") %>%
     purrr::map(names) %>%
     unlist()
   
-  expect_true(all(c("plot_month", "x", "y", "ymin", "group", "plot_month_last") %in%
+  expect_true(all(c("plot_month", "x", "y", "ymin", "group") %in%
                 plot_data_elements))
   
 })
 
-test_that("Weekly frequency", {
+test_that("Weekly frequency plot", {
   
   skip_on_cran()
   
   site <- "263819081585801"
   parameterCd <- "62610"
   statCd <- "00001"
-  gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-  plot <- weekly_frequency_plot(gw_level_dv, parameterCd, statCd, title = "Groundwater Level")
+  plot <- weekly_frequency_plot(L2701_example_data$Daily, parameterCd, statCd, title = "Groundwater Level")
   
   plot_data_elements <- purrr::map(plot$layers, "data") %>%
     purrr::map(names) %>%
