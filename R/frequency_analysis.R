@@ -67,7 +67,9 @@ monthly_frequency_table <- function(gw_level_data) {
 #' 
 #' @param gw_level_data groundwater level data from \code{readNWISgwl}
 #' @param title the title to use on the plot
-#' @param date the reference date to make the plot, defaults to the current date
+#' @param range the time frame to use for the plot. Either "Past year" to use the
+#' last year of data, or "Calendar year" to use the current calendar year, beginning
+#' in January.
 #' 
 #' @return a ggplot with rectangles representing the historical monthly percentile,
 #' black triangles representing the hisotorical monthly median, and red diamonds
@@ -88,24 +90,36 @@ monthly_frequency_table <- function(gw_level_data) {
 #' gw_level_data <- dataRetrieval::readNWISgwl(site)
 #' monthly_frequency_plot(gw_level_data, title = "Groundwater level")
 
-monthly_frequency_plot <- function(gw_level_data, title = "",
-                                 date = Sys.Date()) {
+monthly_frequency_plot <- function(gw_level_data, 
+                                   title = "",
+                                   range = c("Past year",
+                                             "Calendar year")) {
   
   lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
     plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
     ymax <- x <- y <- ".dplyr"
   
+  range <- match.arg(range)
+  
+  date <- Sys.Date()
+  
   # Calculate the percentiles
   site_statistics <- monthly_frequency_table(gw_level_data)
   
-  # Find the bounds of the plot. The plot runs from the last day of the current
-  # month to 1 year prior to that
-  plot_end <- last_day(date) + 1
-  plot_start <- first_day(plot_end - 363)
+  # Find the bounds of the plot.
+  if(range == "Past year") {
+    plot_end <- last_day(date) + 1
+    plot_start <- first_day(plot_end - 363)
+  } else if(range == "Calendar year") {
+    calendar_year <- as.character(date, format = "%Y")
+    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
+    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
+  }
   
   # The last year of groundwater level measurements will plot
   gw_level_data <- filter(gw_level_data,
-                          lev_dt >= plot_start)
+                          lev_dt >= plot_start,
+                          lev_dt <= plot_end)
   
   # Add the first day of the month to the site_statistics table for plotting
   plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
@@ -280,7 +294,9 @@ weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
 #' @param parameterCd the parameter code used
 #' @param statCd the statistic code used
 #' @param title the title to use on the plot
-#' @param date the reference date to make the plot, defaults to the current date
+#' @param range the time frame to use for the plot. Either "Past year" to use the
+#' last year of data, or "Calendar year" to use the current calendar year, beginning
+#' in January.
 #' 
 #' @return a ggplot object with rectangles representing the historical weekly percentiles,
 #' and points representing the historical median and daily values
@@ -303,12 +319,20 @@ weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
 #' weekly_frequency_plot(gw_level_dv, parameterCd, statCd, title = "Groundwater Level")
 #' 
 
-weekly_frequency_plot <- function(gw_level_dv, parameterCd, statCd,
-                                  title = "", date = Sys.Date()) {
+weekly_frequency_plot <- function(gw_level_dv, 
+                                  parameterCd, 
+                                  statCd,
+                                  title = "", 
+                                  range = c("Past year",
+                                            "Calendar year")) {
   
   Date <- nYears <- minMed <- maxMed <- name <- value <- group <-
     plot_week_med <- p50 <- gw_code <- gw_level <- x <- y <- 
     plot_week_last <- ymin <- ymax <- ".dplyr"
+  
+  range <- match.arg(range)
+  
+  date <- Sys.Date()
   
   dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
   dv_heading_cd <- paste0(dv_heading, "_cd")
@@ -316,13 +340,18 @@ weekly_frequency_plot <- function(gw_level_dv, parameterCd, statCd,
   # Calculate the percentiles
   site_statistics <- weekly_frequency_table(gw_level_dv, parameterCd, statCd)
   
-  # Find the bounds of the plot. The plot runs from the last day of the current
-  # month to 1 year prior to that
-  plot_end <- last_day(date) + 1
-  plot_start <- first_day(plot_end - 363)
+  # Find the bounds of the plot
+  if(range == "Past year") {
+    plot_end <- last_day(date) + 1
+    plot_start <- first_day(plot_end - 363)
+  } else if(range == "Calendar year") {
+    calendar_year <- as.character(date, format = "%Y")
+    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
+    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
+  }
   
   # The last year of groundwater level measurements will plot
-  gw_level_dv <- gw_level_dv %>%
+  gw_level_plot <- gw_level_dv %>%
     rename(gw_level = dv_heading,
            gw_code = dv_heading_cd) %>%
     filter(Date >= plot_start)
@@ -363,7 +392,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameterCd, statCd,
            group = "Historical weekly median") %>%
     select(plot_week_med, p50, group) %>%
     rename(x = plot_week_med, y = p50)
-  data_points <- gw_level_dv %>%
+  data_points <- gw_level_plot %>%
     mutate(gw_code = ifelse(grepl("A", gw_code), "Approved", "Provisional"),
            group = sprintf("%s daily value", gw_code)) %>%
     rename(x = Date, y = gw_level) %>%

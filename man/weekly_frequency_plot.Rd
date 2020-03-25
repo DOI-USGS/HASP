@@ -9,7 +9,7 @@ weekly_frequency_plot(
   parameterCd,
   statCd,
   title = "",
-  date = Sys.Date()
+  range = c("Past year", "Calendar year")
 )
 }
 \arguments{
@@ -22,7 +22,9 @@ from readNWISdv}
 
 \item{title}{the title to use on the plot}
 
-\item{date}{the reference date to make the plot, defaults to the current date}
+\item{range}{the time frame to use for the plot. Either "Past year" to use the
+last year of data, or "Calendar year" to use the current calendar year, beginning
+in January.}
 }
 \value{
 a ggplot object with rectangles representing the historical weekly percentiles,
