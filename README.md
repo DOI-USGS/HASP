@@ -30,16 +30,16 @@ plot_normalized_data(aquifer_data, sum_col, num_years)
 
 <p align="center">
 
-<img src="https://code.chs.usgs.gov/water/HASP/raw/master/man/figures/app.gif" alt="app_demo">
+<img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo">
 
 </p>
 
 ## Installation
 
 To install the package while the package is still internal, users will
-need to get a “Personal Access Token” from code.chs.usgs.gov.
+need to get a “Personal Access Token” from code.usgs.gov.
 
-1.  Go to <https://code.chs.usgs.gov/profile/personal_access_tokens>
+1.  Go to <https://code.usgs.gov/profile/personal_access_tokens>
 2.  Create a Personal Access Token and click the “api” scope:
     ![pat](man/figures/pat.png)
 3.  After clicking the green “Create personal access token”, you will
@@ -51,8 +51,8 @@ need to get a “Personal Access Token” from code.chs.usgs.gov.
 <!-- end list -->
 
 ``` r
-remotes::install_gitlab("water/HASP", 
-                        host = "code.chs.usgs.gov", 
+remotes::install_gitlab("water/stats/HASP", 
+                        host = "code.usgs.gov", 
                         auth_token = "abc123",
                         build_vignettes = TRUE, 
                         build_opts = c("--no-resave-data",
