@@ -16,7 +16,7 @@
 #' 
 #' @examples 
 #' 
-#' site <- "261802081354801"
+#' site <- "263819081585801"
 #' gw_level_data <- dataRetrieval::readNWISgwl(site)
 #' monthly_frequency <- monthly_frequency_table(gw_level_data)
 
@@ -86,7 +86,7 @@ monthly_frequency_table <- function(gw_level_data) {
 #'
 #' @examples
 #' 
-#' site <- "261802081354801"
+#' site <- "263819081585801"
 #' gw_level_data <- dataRetrieval::readNWISgwl(site)
 #' monthly_frequency_plot(gw_level_data, title = "Groundwater level")
 

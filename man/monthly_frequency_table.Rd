@@ -20,7 +20,7 @@ Create a table of monthly frequency analysis
 }
 \examples{
 
-site <- "261802081354801"
+site <- "263819081585801"
 gw_level_data <- dataRetrieval::readNWISgwl(site)
 monthly_frequency <- monthly_frequency_table(gw_level_data)
 }
