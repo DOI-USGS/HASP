@@ -21,7 +21,8 @@ Funtion to create the periodic groundwater data plot.
 
 site <- "263819081585801"
 gwl_data <- dataRetrieval::readNWISgwl(site)
-gwl_plot_periodic(gwl_data)
+title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+gwl_plot_periodic(gwl_data, title = title)
 site <- "263819081585801"
 gw_gwl_data <- dataRetrieval::readNWISgwl(site)
 }

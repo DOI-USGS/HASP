@@ -51,7 +51,7 @@ Sc_Cl_plot <- function(x, title){
                        labels = scales::comma) +
     scale_x_continuous(Sctitle, 
                        labels = scales::comma) +
-    labs(caption = paste("Plot created:", Sys.Date())) 
+    labs(caption = paste("Plot created:", Sys.Date())) +
     ggtitle(title, subtitle = "U.S. Geological Survey") 
   
   return(plot_out)

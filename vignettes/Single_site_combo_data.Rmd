@@ -61,7 +61,8 @@ kable(data_info)
 
 ```{r periodicPlot}
 gwl_data <- dataRetrieval::readNWISgwl(siteID)
-gwl_plot_periodic(gwl_data)
+title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+gwl_plot_periodic(gwl_data, title)
 ```
 
 ## Period of Record - All Data Types
@@ -72,7 +73,7 @@ gwl_plot_periodic(gwl_data)
 parameterCd <- c("00095","90095","00940","99220")
 site_data <- readNWISqw(siteID,  parameterCd)
 
-Sc_Cl_plot(site_data, title = siteID)
+Sc_Cl_plot(site_data, title = title)
 
 ```
 

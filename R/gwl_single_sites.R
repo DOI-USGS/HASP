@@ -12,7 +12,8 @@
 #' 
 #' site <- "263819081585801"
 #' gwl_data <- dataRetrieval::readNWISgwl(site)
-#' gwl_plot_periodic(gwl_data)
+#' title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+#' gwl_plot_periodic(gwl_data, title = title)
 gwl_plot_periodic <- function(x, title = ""){
   
   if(!all(c("lev_dateTime", "sl_lev_va", "lev_age_cd") %in% names(x))){
