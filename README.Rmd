@@ -3,10 +3,12 @@ title: "README"
 output:
   md_document:
     variant: gfm
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(echo = FALSE,
+knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
                       fig.width = 7,
@@ -26,8 +28,15 @@ https://fl.water.usgs.gov/mapper/
 
 ## Sample workflow
 
-```{r example, echo=TRUE}
+### Single site workflows:
+```{r singleSite}
 library(HASP)
+
+```
+
+### Composite workflows:
+```{r example}
+
 #included sample data:
 
 aquifer_data <- aquifer_data
@@ -56,7 +65,7 @@ To install the package while the package is still internal, users will need to g
 ![pat](man/figures/save_pat.png)
 4. Save your token in a safe place (KeyPass for instance) so you don't need to constantly regenerate tokens. 
 5. In R, you can will need the `remotes` package to install:
-```{r install, eval=FALSE, echo=TRUE}
+```{r install, eval=FALSE}
 remotes::install_gitlab("water/stats/HASP", 
                         host = "code.usgs.gov", 
                         auth_token = "abc123",

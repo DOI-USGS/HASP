@@ -30,6 +30,6 @@ Plot monthly frequency analysis
 \examples{
 
 site <- "263819081585801"
-gw_level_data <- dataRetrieval::readNWISgwl(site)
-monthly_frequency_plot(gw_level_data, title = "Groundwater level")
+gwl_data <- dataRetrieval::readNWISgwl(site)
+monthly_frequency_plot(gwl_data, title = "Groundwater level")
 }

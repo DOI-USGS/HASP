@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 library(knitr)
-opts_chunk$set(echo = FALSE,
+opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
                fig.width = 7,
@@ -36,7 +36,7 @@ First, use the `dataRetrieval` package to get site information:
 
 ## DESCRIPTION
 
-```{r siteInfo, echo=TRUE, results='asis'}
+```{r siteInfo, results='asis'}
 library(dataRetrieval)
 library(HASP)
 library(dplyr)
@@ -48,7 +48,7 @@ site_metadata <- site_summary(siteID, markdown = TRUE)
 
 ## AVAILABLE DATA
 
-```{r whatData, echo=TRUE}
+```{r whatData}
 data_info <- data_available(siteID)
 kable(data_info)
 ```
@@ -59,11 +59,16 @@ kable(data_info)
 
 ## Periodic Groundwater Data
 
+```{r periodicPlot}
+gwl_data <- dataRetrieval::readNWISgwl(siteID)
+gwl_plot_periodic(gwl_data)
+```
+
 ## Period of Record - All Data Types
 
 ## Salinity Data and Analysis
 
-```{r salityPlot, echo=TRUE}
+```{r salityPlot}
 parameterCd <- c("00095","90095","00940","99220")
 site_data <- readNWISqw(siteID,  parameterCd)
 
