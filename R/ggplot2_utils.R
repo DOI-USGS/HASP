@@ -24,6 +24,3 @@ theme_gwl <- function(base_family = "", ...){
       plot.caption = element_text(hjust = 1)
     )
 }
-
-#' @export
-#' @rdname themes

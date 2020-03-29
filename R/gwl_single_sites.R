@@ -19,7 +19,7 @@ gwl_plot_periodic <- function(x, title = ""){
     stop("data frame x doesn't include all mandatory columns")
   }
   
-  lev_dateTime <- sl_lev_va <- ".dplyr"
+  lev_dateTime <- sl_lev_va <- lev_age_cd <- ".dplyr"
   datum <- unique(x$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   
