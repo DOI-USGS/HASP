@@ -3,7 +3,7 @@
 #' Function creates the individual chloride versus specfic conductance plots and tables for each site
 #' as well as the chloride versus specific conductance plot for all sites.
 #'
-#' @param x data frame returned from dataRetrieval::readNWISqw,
+#' @param qw_data data frame returned from dataRetrieval::readNWISqw,
 #' must include columns sample_dt, parm_cd, result_va
 #' @param title character
 #' @rdname sc_cl
@@ -19,10 +19,10 @@
 #' # site_data <- dataRetrieval::readNWISqw(site, 
 #' #                                        parameterCd)
 #' # Using package example data:
-#' site_data <- L2701_example_data$QW
-#' title <- paste(attr(site_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-#' Sc_Cl_plot(site_data, title = title)
-Sc_Cl_plot <- function(x, title){
+#' qw_data <- L2701_example_data$QW
+#' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+#' Sc_Cl_plot(qw_data, title = title)
+Sc_Cl_plot <- function(qw_data, title){
   
   chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
   
@@ -34,7 +34,7 @@ Sc_Cl_plot <- function(x, title){
   Sctitle <- gsub(", water", "", Sctitle)
   Sctitle <- gsub(", laboratory", "", Sctitle)
   
-  Plotdata <- Sc_Cl_table(x)
+  Plotdata <- Sc_Cl_table(qw_data)
   
   if(nrow(Plotdata) == 0){
     stop("No data to make plot")
@@ -66,26 +66,22 @@ Sc_Cl_plot <- function(x, title){
 #' @import dplyr
 #' @importFrom tidyr pivot_wider
 #' @examples 
-#' 
-#' site <- "263819081585801"
-#' parameterCd <- c("00095","90095","00940","99220")
-#' site_data <- dataRetrieval::readNWISqw(site, 
-#'                                        parameterCd)
-#' sc_cl <- Sc_Cl_table(site_data)
-Sc_Cl_table <- function(x){
+#'
+#' sc_cl <- Sc_Cl_table(qw_data)
+Sc_Cl_table <- function(qw_data){
   
   mean_no_na <- function(x){
     mean(x, na.rm = TRUE)
   }
   
-  if(!all(c("sample_dt", "parm_cd", "result_va") %in% names(x))){
-    stop("data frame x doesn't include all mandatory columns")
+  if(!all(c("sample_dt", "parm_cd", "result_va") %in% names(qw_data))){
+    stop("data frame qw_data doesn't include all mandatory columns")
   }
   
   sample_dt <- startDateTime <- site_no <- parm_cd <- remark_cd <- result_va <- `90095` <- `99220` <- ".dplyr"
   chloride <- sp <- ".dplyr"
   
-  Plotdata <- x %>% 
+  Plotdata <- qw_data %>% 
     select(Date = sample_dt, 
            parm_cd, 
            result_va) %>% 
@@ -103,3 +99,43 @@ Sc_Cl_table <- function(x){
   
 }
 
+#' @rdname sc_cl
+#' @param pcode character pcode to plot
+#' @export
+#' @examples
+#' title <- attr(qw_data, "siteInfo")[["station_nm"]]
+#' qw_plot(qw_data, title, pcode = c("00095", "90095"))
+#' qw_plot(qw_data, title, pcode = c("00940","99220"))
+qw_plot <- function(qw_data, title,
+                    pcode = c("00095", "90095")){
+  
+  if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
+    stop("data frame gwl doesn't include all mandatory columns")
+  }
+  
+  sample_dt <- result_va <- remark_cd <- parm_cd <- ".dplyr"
+  
+  qw_data <- qw_data %>% 
+    filter(parm_cd %in% pcode)
+  
+  y_label <- gsub(", unfiltered", "",readNWISpCode(pcode[1])[["parameter_nm"]])
+  y_label <- gsub(", water", "", y_label)
+
+  plot_out <- ggplot() +
+    geom_point(data = qw_data,
+               aes(x = sample_dt, y = result_va),
+               size = 1.5, color = "blue") +
+    theme_gwl() +
+    labs(caption = paste("Plot created:", Sys.Date()), 
+         y = y_label, x = "Date") +
+    expand_limits(y = 0) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+
+    ggtitle(title, 
+            subtitle = "U.S. Geological Survey") +
+    theme(legend.position = "bottom",
+          legend.direction = "vertical")
+  
+  return(plot_out)
+  
+}

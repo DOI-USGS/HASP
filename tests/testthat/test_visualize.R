@@ -44,6 +44,12 @@ test_that("SC Chloride graphs and table", {
                     "chloride",
                     "sp" ) %in% names(sccl_table)))
   
+  qw_plot_out <- qw_plot(site_data, "hi!")
+  expect_true(all(c(c("data", "layers", "scales",     
+                      "mapping", "theme", "coordinates",
+                      "facet","plot_env", "labels")) %in%
+                    names(qw_plot_out)))
+  
 })
 
 test_that("Monthly frequency plot", {
@@ -93,7 +99,7 @@ test_that("Periodic gwl plot", {
   
   expect_true(all(c("data", "layers", "scales",     
                     "mapping", "theme", "coordinates",
-                    "facet","plot_env", "labels"   ) %in%
+                    "facet","plot_env", "labels") %in%
                     names(plot2)))
   
 })

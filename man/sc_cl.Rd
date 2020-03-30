@@ -3,17 +3,22 @@
 \name{Sc_Cl_plot}
 \alias{Sc_Cl_plot}
 \alias{Sc_Cl_table}
+\alias{qw_plot}
 \title{Specific conductance and chloride}
 \usage{
-Sc_Cl_plot(x, title)
+Sc_Cl_plot(qw_data, title)
 
-Sc_Cl_table(x)
+Sc_Cl_table(qw_data)
+
+qw_plot(qw_data, title, pcode = c("00095", "90095"))
 }
 \arguments{
-\item{x}{data frame returned from dataRetrieval::readNWISqw,
+\item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
 must include columns sample_dt, parm_cd, result_va}
 
 \item{title}{character}
+
+\item{pcode}{character pcode to plot}
 }
 \description{
 Function creates the individual chloride versus specfic conductance plots and tables for each site
@@ -26,13 +31,12 @@ as well as the chloride versus specific conductance plot for all sites.
 # site_data <- dataRetrieval::readNWISqw(site, 
 #                                        parameterCd)
 # Using package example data:
-site_data <- L2701_example_data$QW
-title <- paste(attr(site_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-Sc_Cl_plot(site_data, title = title)
+qw_data <- L2701_example_data$QW
+title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+Sc_Cl_plot(qw_data, title = title)
 
-site <- "263819081585801"
-parameterCd <- c("00095","90095","00940","99220")
-site_data <- dataRetrieval::readNWISqw(site, 
-                                       parameterCd)
-sc_cl <- Sc_Cl_table(site_data)
+sc_cl <- Sc_Cl_table(qw_data)
+title <- attr(qw_data, "siteInfo")[["station_nm"]]
+qw_plot(qw_data, title, pcode = c("00095", "90095"))
+qw_plot(qw_data, title, pcode = c("00940","99220"))
 }
