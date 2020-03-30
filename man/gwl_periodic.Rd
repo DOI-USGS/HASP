@@ -2,17 +2,19 @@
 % Please edit documentation in R/gwl_single_sites.R
 \name{gwl_plot_periodic}
 \alias{gwl_plot_periodic}
-\alias{gwl_summary_periodic}
+\alias{gwl_plot_all}
 \title{Single site groundwater level plots and tables}
 \usage{
-gwl_plot_periodic(x, title = "")
+gwl_plot_periodic(gwl, title = "")
 
-gwl_summary_periodic(x)
+gwl_plot_all(dv, gwl, title = "")
 }
 \arguments{
-\item{x}{data frame returned from dataRetrieval::readNWISgwl}
+\item{gwl}{data frame returned from dataRetrieval::readNWISgwl}
 
 \item{title}{character}
+
+\item{dv}{daily value groundwater levels. Must include columns}
 }
 \description{
 Funtion to create the periodic groundwater data plot.
@@ -24,5 +26,9 @@ gwl_data <- dataRetrieval::readNWISgwl(site)
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 gwl_plot_periodic(gwl_data, title = title)
 site <- "263819081585801"
-gw_gwl_data <- dataRetrieval::readNWISgwl(site)
+parameterCd <- "62610"
+statCd <- "00001"
+dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+
+gwl_plot_all(dv, gwl_data)
 }

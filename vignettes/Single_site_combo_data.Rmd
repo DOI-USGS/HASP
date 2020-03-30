@@ -67,6 +67,17 @@ gwl_plot_periodic(gwl_data, title)
 
 ## Period of Record - All Data Types
 
+```{r dvPlot}
+parameterCd <- "62610"
+statCd <- "00001"
+dv <- dataRetrieval::readNWISdv(siteID, 
+                                parameterCd, 
+                                statCd = statCd)
+
+gwl_plot_all(dv, gwl_data, title)
+```
+
+
 ## Salinity Data and Analysis
 
 ```{r salityPlot}
