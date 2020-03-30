@@ -31,23 +31,28 @@ qw_data <- dataRetrieval::readNWISqw(site,
 ```
 
 ``` r
-
-gwl_plot_periodic(gwl_data, "L2701_example_data")
+monthly_frequency_plot(gwl_data, "L2701_example_data")
 ```
 
 ![](man/figures/graphs-1.png)<!-- -->
 
 ``` r
-gwl_plot_all(dv, gwl_data, "L2701_example_data")
+gwl_plot_periodic(gwl_data, "L2701_example_data")
 ```
 
 ![](man/figures/graphs-2.png)<!-- -->
 
 ``` r
-Sc_Cl_plot(qw_data, "L2701_example_data")
+gwl_plot_all(dv, gwl_data, "L2701_example_data")
 ```
 
 ![](man/figures/graphs-3.png)<!-- -->
+
+``` r
+Sc_Cl_plot(qw_data, "L2701_example_data")
+```
+
+![](man/figures/graphs-4.png)<!-- -->
 
 ### Composite workflows:
 

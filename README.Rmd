@@ -63,7 +63,7 @@ qw_data <- L2701_example_data$QW
 ```
 
 ```{r graphs, echo=TRUE, eval=TRUE}
-
+monthly_frequency_plot(gwl_data, "L2701_example_data")
 gwl_plot_periodic(gwl_data, "L2701_example_data")
 gwl_plot_all(dv, gwl_data, "L2701_example_data")
 Sc_Cl_plot(qw_data, "L2701_example_data")
