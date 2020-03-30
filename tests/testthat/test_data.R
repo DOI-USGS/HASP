@@ -40,7 +40,7 @@ test_that("Data", {
   
   expect_equal(nrow(L2701_example_data[["Daily"]]), 14440)
   expect_equal(nrow(L2701_example_data[["Discrete"]]), 446)
-  expect_equal(nrow(L2701_example_data[["QW"]]), 446)
+  expect_equal(nrow(L2701_example_data[["QW"]]), 466)
   
   expect_equal(ncol(L2701_example_data[["Daily"]]), 5)
   expect_equal(ncol(L2701_example_data[["Discrete"]]), 18)

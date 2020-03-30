@@ -83,7 +83,7 @@ NULL
 #' @examples 
 #' head(L2701_example_data$Daily)
 #' head(L2701_example_data$Discrete)
-#' head(L2701_example$QW)
+#' head(L2701_example_data$QW)
 NULL
 
 # library(dataRetrieval)
