@@ -9,6 +9,7 @@
 #' @param \dots additional arguments
 #' @examples 
 #' 
+#' ggplot2::ggplot() + theme_gwl()
 #' 
 #' 
 theme_gwl <- function(base_family = "", ...){

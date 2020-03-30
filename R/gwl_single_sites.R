@@ -10,8 +10,11 @@
 #' 
 #' @examples
 #' 
-#' site <- "263819081585801"
-#' gwl_data <- dataRetrieval::readNWISgwl(site)
+#' # site <- "263819081585801"
+#' # gwl_data <- dataRetrieval::readNWISgwl(site)
+#' 
+#' # Using package example data:
+#' gwl_data <- L2701_example_data$Discrete
 #' title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 #' gwl_plot_periodic(gwl_data, title = title)
 gwl_plot_periodic <- function(gwl, title = ""){
@@ -52,11 +55,12 @@ gwl_plot_periodic <- function(gwl, title = ""){
 #' @export
 #' @param dv daily value groundwater levels. Must include columns 
 #' @examples 
-#' site <- "263819081585801"
-#' parameterCd <- "62610"
-#' statCd <- "00001"
-#' dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-#' 
+#' # site <- "263819081585801"
+#' # parameterCd <- "62610"
+#' # statCd <- "00001"
+#' # dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # Using package example data:
+#' dv <- L2701_example_data$Daily
 #' gwl_plot_all(dv, gwl_data)
 gwl_plot_all <- function(dv, gwl, title = ""){
   
@@ -77,7 +81,7 @@ gwl_plot_all <- function(dv, gwl, title = ""){
   val_cols <- names(dv)[val_cols]
   remark_col <- names(dv)[remark_col]
   
-  lev_dateTime <- sl_lev_va <- lev_age_cd <- ".dplyr"
+  lev_dt <- sl_lev_va <- lev_age_cd <- ".dplyr"
   datum <- unique(gwl$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   

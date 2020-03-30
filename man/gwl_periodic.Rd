@@ -21,14 +21,18 @@ Funtion to create the periodic groundwater data plot.
 }
 \examples{
 
-site <- "263819081585801"
-gwl_data <- dataRetrieval::readNWISgwl(site)
+# site <- "263819081585801"
+# gwl_data <- dataRetrieval::readNWISgwl(site)
+
+# Using package example data:
+gwl_data <- L2701_example_data$Discrete
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 gwl_plot_periodic(gwl_data, title = title)
-site <- "263819081585801"
-parameterCd <- "62610"
-statCd <- "00001"
-dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-
+# site <- "263819081585801"
+# parameterCd <- "62610"
+# statCd <- "00001"
+# dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+# Using package example data:
+dv <- L2701_example_data$Daily
 gwl_plot_all(dv, gwl_data)
 }

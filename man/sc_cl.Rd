@@ -21,10 +21,12 @@ as well as the chloride versus specific conductance plot for all sites.
 }
 \examples{
 
-site <- "263819081585801"
-parameterCd <- c("00095","90095","00940","99220")
-site_data <- dataRetrieval::readNWISqw(site, 
+# site <- "263819081585801"
+# parameterCd <- c("00095","90095","00940","99220")
+# site_data <- dataRetrieval::readNWISqw(site, 
                                        parameterCd)
+# Using package example data:
+site_data <- L2701_example_data$QW
 title <- paste(attr(site_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
 Sc_Cl_plot(site_data, title = title)
 

@@ -16,6 +16,7 @@ Themes and other useful graphing utilities for the HASP package
 }
 \examples{
 
+ggplot2::ggplot() + theme_gwl()
 
 
 }

@@ -60,7 +60,10 @@ kable(data_info)
 ## Periodic Groundwater Data
 
 ```{r periodicPlot}
-gwl_data <- dataRetrieval::readNWISgwl(siteID)
+# Get data:
+# gwl_data <- dataRetrieval::readNWISgwl(siteID)
+# Use package sample data:
+gwl_data <- L2701_example_data$Discrete
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 gwl_plot_periodic(gwl_data, title)
 ```
@@ -68,11 +71,14 @@ gwl_plot_periodic(gwl_data, title)
 ## Period of Record - All Data Types
 
 ```{r dvPlot}
-parameterCd <- "62610"
-statCd <- "00001"
-dv <- dataRetrieval::readNWISdv(siteID, 
-                                parameterCd, 
-                                statCd = statCd)
+# Get data:
+# parameterCd <- "62610"
+# statCd <- "00001"
+# dv <- dataRetrieval::readNWISdv(siteID, 
+#                                 parameterCd, 
+#                                 statCd = statCd)
+# Use package sample data:
+dv <- L2701_example_data$Daily
 
 gwl_plot_all(dv, gwl_data, title)
 ```
@@ -81,9 +87,12 @@ gwl_plot_all(dv, gwl_data, title)
 ## Salinity Data and Analysis
 
 ```{r salityPlot}
-parameterCd <- c("00095","90095","00940","99220")
-site_data <- readNWISqw(siteID,  parameterCd)
+# Get data:
+# parameterCd <- c("00095","90095","00940","99220")
+# site_data <- readNWISqw(siteID,  parameterCd)
 
+# Use package sample data:
+site_data <- L2701_example_data$QW
 Sc_Cl_plot(site_data, title = title)
 
 ```
