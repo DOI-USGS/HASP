@@ -29,9 +29,44 @@ https://fl.water.usgs.gov/mapper/
 ## Sample workflow
 
 ### Single site workflows:
-```{r singleSite}
+```{r singleSiteShow, echo=TRUE, eval=FALSE}
+library(HASP)
+library(dataRetrieval)
+site <- "263819081585801"
+
+#Periodic data:
+gwl_data <- dataRetrieval::readNWISgwl(site)
+
+
+# Daily data:
+parameterCd <- "62610"
+statCd <- "00001"
+dv <- dataRetrieval::readNWISdv(site,
+                                parameterCd,
+                                statCd = statCd)
+
+# Water Quality data:
+parameterCd <- c("00095","90095","00940","99220")
+qw_data <- dataRetrieval::readNWISqw(site,
+                                     parameterCd)
+
+
+```
+
+```{r singleSite, echo=FALSE, eval=TRUE}
 library(HASP)
 
+gwl_data <- L2701_example_data$Discrete
+dv <- L2701_example_data$Daily
+qw_data <- L2701_example_data$QW
+
+```
+
+```{r graphs, echo=TRUE, eval=TRUE}
+
+gwl_plot_periodic(gwl_data, "L2701_example_data")
+gwl_plot_all(dv, gwl_data, "L2701_example_data")
+Sc_Cl_plot(qw_data, "L2701_example_data")
 ```
 
 ### Composite workflows:
