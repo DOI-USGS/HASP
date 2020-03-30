@@ -3,7 +3,6 @@
 .Rhistory
 .RData
 .Ruserdata
-<<<<<<< HEAD
 vignettes/*.R
 vignettes/*.html
 tests/testthat/Rplots.pdf
