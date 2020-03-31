@@ -37,3 +37,14 @@ test_that("Monthly frequency table", {
   expect_equal(tail(mft$maxMed, 6), c(-16.7, -12.3, -15.3, -4.83, -10.8, -16.2), tolerance = 0.05)
   
 })
+
+test_that("Daily summary table", {
+  
+  daily_summary_table <- daily_gwl_summary(L2701_example_data$Daily, "62610", "00001")
+  expect_equal(nrow(daily_summary_table), 1)
+  expect_equal(daily_summary_table$percent_complete, 95)
+  expect_equal(daily_summary_table$begin_date, as.Date("1978-10-01"))
+  expect_equal(daily_summary_table$p25, -28.56, tolerance = 0.005)
+  expect_equal(daily_summary_table$highest_level, -2.81, tolerance = 0.05)
+  
+})

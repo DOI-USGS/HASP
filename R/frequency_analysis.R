@@ -162,7 +162,7 @@ monthly_frequency_plot <- function(gw_level_data,
     select(lev_dt, sl_lev_va, group) %>%
     rename(x = lev_dt, y = sl_lev_va) %>%
     bind_rows(site_statistics_med)
-    
+  
   # Assign colors and shapes
   rectangle_colors <- c("5 - 10" = "firebrick4",
                         "10 - 25" = "orange2",
@@ -212,7 +212,7 @@ monthly_frequency_plot <- function(gw_level_data,
     theme(axis.ticks.x = element_blank(),
           legend.position = "bottom",
           legend.box = "vertical")
-
+  
   return(plot)
 }
 
@@ -414,7 +414,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   point_colors <- c("Historical weekly median" = "springgreen4",
                     "Provisional daily value" = "red",
                     "Approved daily value" = "black")
-
+  
   
   # Create the plot labels
   if(year(plot_start) == year(plot_end)) {
@@ -451,8 +451,9 @@ weekly_frequency_plot <- function(gw_level_dv,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
-    ylab(y_label) + xlab(x_label) + ggtitle(title) +
-    theme_bw() +
+    ylab(y_label) + xlab(x_label) +
+    ggtitle(title, subtitle = "U.S. Geological Survey") +
+    theme_gwl() +
     theme(panel.grid = element_blank(),
           plot.title = element_text(hjust = 0.5),
           axis.ticks.x = element_blank(),
@@ -460,6 +461,194 @@ weekly_frequency_plot <- function(gw_level_dv,
           legend.box = "vertical")
   
   return(plot)
+  
+}
+
+#' Plot the last two years of daily data
+#'
+#' @param gw_level_dv daily groundwater level data
+#' from readNWISdv
+#' @param parameterCd the parameter code used
+#' @param statCd the statistic code used
+#' @param title the title to use on the plot
+#' @return a ggplot object with a ribbon indicating the historical daily range,
+#' green line representing the historical daily median, and approved and provisional
+#' daily data for the last two years
+#' 
+#' @export
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @importFrom tidyr pivot_longer
+#' @importFrom dataRetrieval readNWISpCode
+#'
+#' @examples
+#' 
+#' site <- "263819081585801"
+#' parameterCd <- "62610"
+#' statCd <- "00001"
+#' gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' daily_gwl_2yr_plot(gwl_data, parameterCd, statCd, title = "Groundwater Level")
+#' 
+
+daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, title = "") {
+  
+  Date <- gw_level_cd <- J <- gw_level <- name <- group <- value <- gw_level_cd <- 
+    ".dplyr"
+  
+  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading_cd <- paste0(dv_heading, "_cd")
+  
+  if(!all(c(dv_heading, dv_heading_cd, "Date") %in% names(gw_level_dv))) {
+    stop(sprintf("expected columns %s, %s, and Date in gw_level_dv", 
+                 dv_heading, dv_heading_cd))
+  }
+  
+  # Calculate the historical max/min/median for each day
+  
+  gw_level_dv <- gw_level_dv %>%
+    mutate(J = as.numeric(as.character(Date, format = "%j"))) %>%
+    rename(gw_level = dv_heading,
+           gw_level_cd = dv_heading_cd)
+  
+  historical_stats <- gw_level_dv %>%
+    filter(grepl("A", gw_level_cd)) %>%
+    group_by(J) %>%
+    summarize(max = max(gw_level, na.rm = TRUE),
+              median = median(gw_level, na.rm = TRUE),
+              min = min(gw_level, na.rm = TRUE))
+  
+  # Pull the last two years of data & join with the historical data
+  
+  most_recent <- max(gw_level_dv$Date, na.rm = TRUE)
+  plot_start_year <- as.numeric(as.character(most_recent, format = "%Y")) - 2
+  plot_start <- as.Date(paste0(plot_start_year, "-01-01"))
+  
+  # The plot has a ~3 month buffer following the most recent value
+  plot_end <- most_recent + as.difftime(90, units = "days")
+  buffer_dates <- seq.Date(most_recent, plot_end, by = "day")[-1]
+  buffer_j <- as.numeric(as.character(buffer_dates, "%j"))
+  buffer <- data.frame(Date = buffer_dates, J = buffer_j)
+  
+  plot_data <- gw_level_dv %>%
+    filter(Date >= plot_start,
+           Date <= most_recent) %>%
+    bind_rows(buffer) %>%
+    left_join(historical_stats, by = "J") %>%
+    mutate(group = "Approved Daily Min & Max")
+  
+  line_data <- plot_data %>%
+    select(Date, gw_level_cd, gw_level, median) %>%
+    pivot_longer(-Date:-gw_level_cd) %>%
+    mutate(group = ifelse(name == "gw_level",
+                          ifelse(gw_level_cd == "A", "Approved daily value", "Provisional daily value"),
+                          "Historical median")) %>%
+    select(-gw_level_cd, -name) %>%
+    filter(!is.na(value))
+  
+  line_data$group <- ordered(line_data$group, 
+                             levels = c("Approved daily value", 
+                                        "Provisional daily value",
+                                        "Historical median"))
+  
+  # Create the plot
+  
+  line_colors <- c("Historical median" = "limegreen",
+                   "Provisional daily value" = "red",
+                   "Approved daily value" = "navy")
+  ribbon_colors <- c("Approved Daily Min & Max" = "lightskyblue1")
+  
+  x_label <- "Date"
+  y_label <- readNWISpCode(parameterCd)$parameter_nm
+  
+  x_breaks <- seq.Date(plot_start, most_recent, by = "year") 
+  x_labels <- as.character(x_breaks, format = "%Y")
+  
+  plot <- ggplot() +
+    geom_ribbon(data = plot_data, aes(x = Date, ymin = min, ymax = max, fill = group)) +
+    geom_line(data = line_data, aes(x = Date, y = value, color = group)) +
+    scale_color_manual(values = line_colors, name = "") +
+    scale_fill_manual(values = ribbon_colors, name = "") +
+    scale_x_date(limits = c(plot_start, plot_end), expand = c(0,0),
+                 breaks = x_breaks, labels = x_labels) +
+    scale_y_continuous() +
+    xlab(x_label) + ylab(y_label) +
+    ggtitle(title, subtitle = "U.S. Geological Survey") +
+    theme_gwl() +
+    theme(panel.grid = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          legend.position = "bottom",
+          legend.box = "vertical")
+  
+  return(plot)
+  
+}
+
+#' Summary table of daily data
+#' 
+#' @param gw_level_dv daily groundwater level data
+#' from readNWISdv
+#' @param parameterCd the parameter code used
+#' @param statCd the statistic code used
+#' @return a summary table giving the period of record, completeness
+#' and percentile values
+#' 
+#' @export
+#' 
+#' @import dplyr
+#'
+#' @examples
+#' 
+#' site <- "263819081585801"
+#' parameterCd <- "62610"
+#' statCd <- "00001"
+#' gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' daily_gwl_summary(gwl_data, parameterCd, statCd)
+#' 
+
+daily_gwl_summary <- function(gw_level_dv, parameterCd, statCd) {
+  
+  gw_level <- gw_level_cd <- ".dplyr"
+  
+  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading_cd <- paste0(dv_heading, "_cd")
+  
+  if(!all(c(dv_heading, dv_heading_cd, "Date") %in% names(gw_level_dv))) {
+    stop(sprintf("expected columns %s, %s, and Date in gw_level_dv", 
+                 dv_heading, dv_heading_cd))
+  }
+  
+  gw_level_dv <- gw_level_dv %>%
+    rename(gw_level = dv_heading,
+           gw_level_cd = dv_heading_cd) %>%
+    filter(grepl("A", gw_level_cd))
+  
+  begin_date <- min(gw_level_dv$Date, na.rm = TRUE)
+  end_date <- max(gw_level_dv$Date, na.rm = TRUE)
+  days <- nrow(gw_level_dv)
+  percent_complete <- round(days/length(seq.Date(begin_date, end_date, by = "day")) * 100, 0)
+  lowest_level <- min(gw_level_dv$gw_level, na.rm = TRUE)
+  highest_level <- max(gw_level_dv$gw_level, na.rm = TRUE)
+  quant <- quantile(gw_level_dv$gw_level, 
+                    probs = c(0.05, 0.1, 0.25, 0.5, 0.75, 0.90, 0.95),
+                    na.rm = TRUE)
+  dv_summary <- data.frame(
+    begin_date = begin_date,
+    end_date = end_date,
+    days = days,
+    percent_complete = percent_complete,
+    lowest_level = lowest_level,
+    p5 = quant[1],
+    p10 = quant[2],
+    p25 = quant[3],
+    p50 = quant[4],
+    p75 = quant[5],
+    p90 = quant[6],
+    p95 = quant[7],
+    highest_level = highest_level,
+    row.names = NULL)
+  
+  return(dv_summary)
   
 }
 
