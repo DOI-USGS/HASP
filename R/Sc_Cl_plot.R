@@ -1,7 +1,7 @@
 #' Specific conductance and chloride
 #'
-#' Function creates the individual chloride versus specfic conductance plots and tables for each site
-#' as well as the chloride versus specific conductance plot for all sites.
+#' Functions to create the individual chloride, specific conductance, 
+#' and combination plots and tables for a single site.
 #'
 #' @param qw_data data frame returned from dataRetrieval::readNWISqw,
 #' must include columns sample_dt, parm_cd, result_va
@@ -28,11 +28,8 @@ Sc_Cl_plot <- function(qw_data, title){
   
   # Specify the plot titles using the function getParmCodeDef
   
-  Cltitle <- gsub(", unfiltered", "",readNWISpCode("99220")[["parameter_nm"]])
-  Cltitle <- gsub(", water", "", Cltitle)
-  Sctitle <- gsub(", unfiltered", "",readNWISpCode("90095")[["parameter_nm"]])
-  Sctitle <- gsub(", water", "", Sctitle)
-  Sctitle <- gsub(", laboratory", "", Sctitle)
+  Cltitle <- trimmed_name("99220")
+  Sctitle <- trimmed_name("90095")
   
   Plotdata <- Sc_Cl_table(qw_data)
   
@@ -118,8 +115,7 @@ qw_plot <- function(qw_data, title,
   qw_data <- qw_data %>% 
     filter(parm_cd %in% pcode)
   
-  y_label <- gsub(", unfiltered", "",readNWISpCode(pcode[1])[["parameter_nm"]])
-  y_label <- gsub(", water", "", y_label)
+  y_label <- trimmed_name(pcode[1])
 
   plot_out <- ggplot() +
     geom_point(data = qw_data,
@@ -227,4 +223,15 @@ qw_summary <- function(qw_data, pcode,
   
   return(df_return)
   
+}
+
+
+trimmed_name <- function(pcode){
+  
+  lab_trimmed <- gsub(", unfiltered", "",readNWISpCode(pcode[1])[["parameter_nm"]])
+  lab_trimmed <- gsub(", filtered", "", lab_trimmed)
+  lab_trimmed <- gsub(", water", "", lab_trimmed)
+  lab_trimmed <- gsub(", laboratory", "", lab_trimmed)
+  
+  return(lab_trimmed)
 }

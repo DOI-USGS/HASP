@@ -26,8 +26,8 @@ must include columns sample_dt, parm_cd, result_va}
 \item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
 }
 \description{
-Function creates the individual chloride versus specfic conductance plots and tables for each site
-as well as the chloride versus specific conductance plot for all sites.
+Functions to create the individual chloride, specific conductance, 
+and combination plots and tables for a single site.
 }
 \examples{
 
