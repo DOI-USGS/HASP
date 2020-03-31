@@ -162,7 +162,7 @@ monthly_frequency_plot <- function(gw_level_data,
     select(lev_dt, sl_lev_va, group) %>%
     rename(x = lev_dt, y = sl_lev_va) %>%
     bind_rows(site_statistics_med)
-    
+  
   # Assign colors and shapes
   rectangle_colors <- c("5 - 10" = "firebrick4",
                         "10 - 25" = "orange2",
@@ -212,7 +212,7 @@ monthly_frequency_plot <- function(gw_level_data,
     theme(axis.ticks.x = element_blank(),
           legend.position = "bottom",
           legend.box = "vertical")
-
+  
   return(plot)
 }
 
@@ -414,7 +414,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   point_colors <- c("Historical weekly median" = "springgreen4",
                     "Provisional daily value" = "red",
                     "Approved daily value" = "black")
-
+  
   
   # Create the plot labels
   if(year(plot_start) == year(plot_end)) {
@@ -479,13 +479,14 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' @import dplyr
 #' @import ggplot2
 #' @importFrom tidyr pivot_longer
+#' @importFrom dataRetrieval readNWISpCode
 #'
 #' @examples
 #' 
 #' site <- "263819081585801"
 #' parameterCd <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 #' daily_2yr_plot(gwl_data, parameterCd, statCd, title = "Groundwater Level")
 #' 
 
@@ -545,15 +546,25 @@ daily_2yr_plot <- function(gw_level_dv, parameterCd, statCd, title = "") {
                    "Approved daily value" = "navy")
   ribbon_colors <- c("Approved Daily Min & Max" = "lightskyblue1")
   
+  x_label <- "Date"
+  y_label <- readNWISpCode(parameterCd)$parameter_nm
+  
+  x_breaks <- seq.Date(plot_start, most_recent, by = "year") 
+  x_labels <- as.character(x_breaks, format = "%Y")
+  x_minor <- seq.Date(plot_start, most_recent, by = "month")
+  
   plot <- ggplot() +
     geom_ribbon(data = plot_data, aes(x = Date, ymin = min, ymax = max, fill = group)) +
     geom_line(data = line_data, aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    theme_bw() +
+    scale_x_date(breaks = x_breaks, labels = x_labels, minor_breaks = x_minor) +
+    scale_y_continuous() +
+    xlab(x_label) + ylab(y_label) +
+    ggtitle(title) +
+    theme_gwl() +
     theme(panel.grid = element_blank(),
           plot.title = element_text(hjust = 0.5),
-          axis.ticks.x = element_blank(),
           legend.position = "bottom",
           legend.box = "vertical")
   
