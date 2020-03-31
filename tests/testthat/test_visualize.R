@@ -52,9 +52,7 @@ test_that("Monthly frequency plot", {
   
   plot <- monthly_frequency_plot(L2701_example_data$Discrete)
   
-  plot_data_elements <- purrr::map(plot$layers, "data") %>%
-    purrr::map(names) %>%
-    unlist()
+  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("plot_month", "x", "y", "ymin", "group") %in%
                 plot_data_elements))
@@ -70,9 +68,7 @@ test_that("Weekly frequency plot", {
   statCd <- "00001"
   plot <- weekly_frequency_plot(L2701_example_data$Daily, parameterCd, statCd, title = "Groundwater Level")
   
-  plot_data_elements <- purrr::map(plot$layers, "data") %>%
-    purrr::map(names) %>%
-    unlist()
+  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("plot_week", "x", "y", "ymin", "group", "plot_week_last") %in%
                     plot_data_elements))
@@ -95,6 +91,20 @@ test_that("Periodic gwl plot", {
                     "mapping", "theme", "coordinates",
                     "facet","plot_env", "labels"   ) %in%
                     names(plot2)))
+  
+})
+
+test_that("Daily gwl plot", {
+  
+  gwl_data <- L2701_example_data$Daily
+  title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+  
+  plot <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", title)
+  
+  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("Date", "median", "min", "max", "gw_level") %in%
+                    plot_data_elements))
   
 })
 
