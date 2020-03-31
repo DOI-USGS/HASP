@@ -225,4 +225,6 @@ qw_summary <- function(qw_data, pcode,
                           Result, 
                           stringsAsFactors = FALSE)
   
+  return(df_return)
+  
 }

@@ -55,9 +55,9 @@ kable(data_info)
 
 ## Site Statistics
 
-## Daily Groundwater Data
+## Groundwater Data
 
-## Periodic Groundwater Data
+### Periodic
 
 ```{r periodicPlot}
 # Get data:
@@ -68,7 +68,7 @@ title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 gwl_plot_periodic(gwl_data, title)
 ```
 
-## Period of Record - All Data Types
+### Period of Record - All Data Types
 
 ```{r dvPlot}
 # Get data:
@@ -86,7 +86,7 @@ gwl_plot_all(dv, gwl_data, title)
 
 ## Salinity Data and Analysis
 
-```{r qwplot1}
+```{r get_qw_data}
 # Get data:
 # parameterCd <- c("00095","90095","00940","99220")
 # site_data <- readNWISqw(siteID,  parameterCd)
@@ -94,6 +94,22 @@ gwl_plot_all(dv, gwl_data, title)
 # Use package sample data:
 qw_data <- L2701_example_data$QW
 
+```
+
+### Chloride
+
+```{r chloride_table}
+chl_table <- qw_summary(qw_data, 
+                       pcode = c("00940","99220"),
+                       norm_range = c(225,999))
+kable(chl_table)
+
+```
+
+
+### Specific Conductance
+
+```{r qwplot1}
 qw_plot(qw_data, "Specific Conductance", 
         pcode = c("00095", "90095"))
 
@@ -106,6 +122,8 @@ sc_table <- qw_summary(qw_data,
 kable(sc_table)
 
 ```
+
+### Specific Conductance vs Chloride
 
 ```{r salityPlot}
 
