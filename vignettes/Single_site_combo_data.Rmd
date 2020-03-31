@@ -55,7 +55,58 @@ kable(data_info)
 
 ## Site Statistics
 
+```{r monthlyFrequencyPlot}
+gwl_data <- L2701_example_data$Discrete
+title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+monthly_frequency_plot(gwl_data, title, "Past year")
+```
+
+```{r monthlyFrequencyTable}
+gwl_data <- L2701_example_data$Discrete
+monthly_freq_table <- monthly_frequency_table(gwl_data) %>%
+  select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
+  mutate(month = month.abb[month]) %>%
+  rename("Month" = month,
+         "Lowest median" = minMed,
+         "10th percentile" = p10,
+         "25th percentile" = p25,
+         "50th percentile" = p50,
+         "75th percentile" = p75,
+         "Highest median" = maxMed,
+         "Number of years" = nYears)
+kable(monthly_freq_table)
+```
+
 ## Daily Groundwater Data
+
+```{r dailyPlot}
+gwl_daily <- L2701_example_data$Daily
+parameterCd <- "62610"
+statCd <- "00001"
+title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+daily_gwl_2yr_plot(gwl_daily, parameterCd, statCd, title)
+```
+
+```{r dailySummary}
+gwl_daily <- L2701_example_data$Daily
+parameterCd <- "62610"
+statCd <- "00001"
+daily_summary_table <- daily_gwl_summary(gwl_daily, parameterCd, statCd) %>%
+  rename("Begin Date" = begin_date,
+         "End Date" = end_date,
+         "Days" = days,
+         "% Complete" = percent_complete,
+         "Lowest Level" = lowest_level,
+         "5th %ile" = p5,
+         "10th %ile" = p10,
+         "25th %ile" = p25,
+         "50th %ile" = p50,
+         "75th %ile" = p75,
+         "90th %ile" = p90,
+         "95th %ile" = p95,
+         "Highest Level" = highest_level)
+kable(daily_summary_table)
+```
 
 ## Periodic Groundwater Data
 
