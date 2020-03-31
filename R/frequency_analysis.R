@@ -465,6 +465,102 @@ weekly_frequency_plot <- function(gw_level_dv,
   
 }
 
+#' Plot the last two years of daily data
+#'
+#' @param gw_level_dv daily groundwater level data
+#' from readNWISdv
+#' @param parameterCd the parameter code used
+#' @param statCd the statistic code used
+#' @param title the title to use on the plot
+#' @return a ggplot object with a ribbon indicating the historical daily range,
+#' green line representing the historical daily median, and approved and provisional
+#' daily data for the last two years
+#' 
+#' @export
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @importFrom tidyr pivot_longer
+#'
+#' @examples
+#' 
+#' site <- "263819081585801"
+#' parameterCd <- "62610"
+#' statCd <- "00001"
+#' gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' daily_2yr_plot(gwl_data, parameterCd, statCd, title = "Groundwater Level")
+#' 
+
+daily_2yr_plot <- function(gw_level_dv, parameterCd, statCd, title = "") {
+  
+  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading_cd <- paste0(dv_heading, "_cd")
+  
+  if(!all(c(dv_heading, dv_heading_cd, "Date") %in% names(gw_level_dv))) {
+    stop(sprintf("expected columns %s, %s, and Date in gw_level_dv", 
+                 dv_heading, dv_heading_cd))
+  }
+  
+  # Calculate the historical max/min/median for each day
+  
+  gw_level_dv <- gw_level_dv %>%
+    mutate(J = as.numeric(as.character(Date, format = "%j"))) %>%
+    rename(gw_level = dv_heading,
+           gw_level_cd = dv_heading_cd)
+  
+  historical_stats <- gw_level_dv %>%
+    filter(grepl("A", gw_level_cd)) %>%
+    group_by(J) %>%
+    summarize(max = max(gw_level, na.rm = TRUE),
+              median = median(gw_level, na.rm = TRUE),
+              min = min(gw_level, na.rm = TRUE))
+  
+  # Pull the last two years of data & join with the historical data
+  
+  most_recent <- max(gw_level_dv$Date, na.rm = TRUE)
+  plot_start_year <- as.numeric(as.character(most_recent, format = "%Y")) - 2
+  plot_start <- as.Date(paste0(plot_start_year, "-01-01"))
+  
+  plot_data <- gw_level_dv %>%
+    filter(Date >= plot_start,
+           Date <= most_recent) %>%
+    left_join(historical_stats, by = "J") %>%
+    mutate(group = "Approved Daily Min & Max")
+  
+  line_data <- plot_data %>%
+    select(Date, gw_level_cd, gw_level, median) %>%
+    pivot_longer(-Date:-gw_level_cd) %>%
+    mutate(group = ifelse(name == "gw_level",
+                          ifelse(gw_level_cd == "A", "Approved daily value", "Provisional daily value"),
+                          "Historical median")) %>%
+    select(-gw_level_cd, -name)
+  
+  line_data$group <- ordered(line_data$group, 
+                             levels = c("Approved daily value", 
+                                        "Provisional daily value",
+                                        "Historical median"))
+  
+  # Create the plot
+  
+  line_colors <- c("Historical median" = "limegreen",
+                   "Provisional daily value" = "red",
+                   "Approved daily value" = "navy")
+  ribbon_colors <- c("Approved Daily Min & Max" = "lightskyblue1")
+  
+  plot <- ggplot() +
+    geom_ribbon(data = plot_data, aes(x = Date, ymin = min, ymax = max, fill = group)) +
+    geom_line(data = line_data, aes(x = Date, y = value, color = group)) +
+    scale_color_manual(values = line_colors, name = "") +
+    scale_fill_manual(values = ribbon_colors, name = "") +
+    theme_bw() +
+    theme(panel.grid = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          axis.ticks.x = element_blank(),
+          legend.position = "bottom",
+          legend.box = "vertical")
+  
+}
+
 #' Find the first day of the month for a given date
 #' 
 #' @param date a vector of dates
