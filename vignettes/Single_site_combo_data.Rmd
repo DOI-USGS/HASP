@@ -94,7 +94,16 @@ gwl_plot_all(dv, gwl_data, title)
 # Use package sample data:
 qw_data <- L2701_example_data$QW
 
-qw_plot(qw_data, "Specific Conductance", pcode = c("00095", "90095"))
+qw_plot(qw_data, "Specific Conductance", 
+        pcode = c("00095", "90095"))
+
+```
+
+```{r sc_table}
+sc_table <- qw_summary(qw_data, 
+                       pcode = c("00095","90095"),
+                       norm_range = NA)
+kable(sc_table)
 
 ```
 

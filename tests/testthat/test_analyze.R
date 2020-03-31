@@ -24,6 +24,9 @@ test_that("Site summaries", {
 })
 
 test_that("QW summaries", {
+  
+  qw_data <- L2701_example_data$QW
+  
   x <- qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
   
   expect_true(all(x$Analysis == c("Date of first sample",                           
