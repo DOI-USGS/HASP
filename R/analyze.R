@@ -1,9 +1,10 @@
 
-#' all_year_summaries
+#' site_data_summary
 #'
-#' Get site summaries
+#' Get summaries of data by site. Requires a column site_no, and will
+#' take the summaries on the user-defined column based on the sum_col argument.
 #' 
-#' @param x aquifer data
+#' @param x data frame
 #' @param sum_col column name
 #' 
 #' @return data frame with 10 columns 
@@ -15,8 +16,8 @@
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' sum_col <- "lev_va"
-#' summary_info <- all_year_summaries(aquifer_data, sum_col)
-all_year_summaries <- function(x, sum_col){
+#' summary_info <- site_data_summary(aquifer_data, sum_col)
+site_data_summary <- function(x, sum_col){
 
   site_no <- ".dplyr"
   
@@ -32,6 +33,7 @@ all_year_summaries <- function(x, sum_col){
                          mean_site = mean(!!sym(sum_col), na.rm = TRUE),
                          p10 = quantile(!!sym(sum_col), probs = 0.1, na.rm = TRUE),
                          p25 = quantile(!!sym(sum_col), probs = 0.25, na.rm = TRUE),
+                         p50 = quantile(!!sym(sum_col), probs = 0.5, na.rm = TRUE),
                          p75 = quantile(!!sym(sum_col), probs = 0.75, na.rm = TRUE),
                          p90 = quantile(!!sym(sum_col), probs = 0.90, na.rm = TRUE),
                          count = n())
@@ -206,7 +208,7 @@ normalized_data <- function(x, sum_col, num_years){
   x <- filter_sites(x, sum_col, num_years)
   n_sites <- length(unique(x$site_no))
   
-  year_summaries <- all_year_summaries(x, sum_col)
+  year_summaries <- site_data_summary(x, sum_col)
   
   norm_composite <- x %>% 
     left_join(year_summaries, by = "site_no") %>% 

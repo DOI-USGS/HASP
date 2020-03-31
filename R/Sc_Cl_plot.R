@@ -110,7 +110,7 @@ qw_plot <- function(qw_data, title,
                     pcode = c("00095", "90095")){
   
   if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
-    stop("data frame gwl doesn't include all mandatory columns")
+    stop("data frame qw_data doesn't include all mandatory columns")
   }
   
   sample_dt <- result_va <- remark_cd <- parm_cd <- ".dplyr"
@@ -137,5 +137,92 @@ qw_plot <- function(qw_data, title,
           legend.direction = "vertical")
   
   return(plot_out)
+  
+}
+
+#' @rdname sc_cl
+#' @param norm_range a numerical range to potentially group the data. If NA, no grouping is shown.
+#' @export
+#' @examples
+#' 
+#' qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
+#' qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)
+qw_summary <- function(qw_data, pcode, 
+                       norm_range = NA){
+  
+  if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
+    stop("data frame qw_data doesn't include all mandatory columns")
+  }
+
+  p_code_info <- dataRetrieval::readNWISpCode(pcode)
+  unit_meas <- p_code_info$parameter_units[1]
+  
+  sample_dt <- result_va <- remark_cd <- parm_cd <- ".dplyr"
+  
+  qw_sub <- qw_data %>% 
+    filter(parm_cd %in% pcode) %>% 
+    arrange(sample_dt)
+  
+  qw_info <- data.frame(
+        first_sample = min(qw_sub$sample_dt, na.rm = TRUE),
+        first_sample_result = qw_sub$result_va[1],
+        last_sample = max(qw_sub$sample_dt, na.rm = TRUE),
+        last_sample_result = qw_sub$result_va[nrow(qw_sub)]
+      ) %>%  
+    bind_cols(site_data_summary(qw_sub, "result_va"))
+  
+  Analysis = c("Date of first sample",
+               paste0("First sample result (",unit_meas,")"),
+               "Date of last sample",
+               paste0("Last sample result (",unit_meas,")"),
+               ifelse(all(is.na(norm_range)), "", paste("Date of first sample within ", 
+                     norm_range[1],"to", norm_range[2], unit_meas)),
+               ifelse(all(is.na(norm_range)), "", paste("Date of first sample with ", 
+                     norm_range[2] + 1, unit_meas, "or greater")),
+               paste0("Minimum (", unit_meas, ")"),
+               paste0("Maximum (", unit_meas, ")"),
+               paste0("Mean (", unit_meas, ")"),
+               paste0("First quartile (", unit_meas, ")"),
+               paste0("Median (", unit_meas, ")"),
+               paste0("Third quartile (", unit_meas, ")"),
+               "Number of samples")
+  
+  Result = c(as.character(qw_info$first_sample),
+             signif(qw_info$first_sample_result, 3),
+             as.character(qw_info$last_sample),
+             signif(qw_info$last_sample_result, 3),
+             "",
+             "",
+             signif(qw_info$min_site, 3),
+             signif(qw_info$max_site, 3),
+             signif(qw_info$mean_site, 3),
+             signif(qw_info$p25, 3),
+             signif(qw_info$p50, 3),
+             signif(qw_info$p75, 3),
+             as.integer(qw_info$count)
+             )
+  
+  if(!all(is.na(norm_range))){
+     first_day_mid <- qw_sub$sample_dt[qw_sub$result_va >= norm_range[1] & 
+                                   qw_sub$result_va <= norm_range[2]]
+    
+     if(length(first_day_mid) != 0){
+       Result[5] <- first_day_mid
+     }
+     
+     first_day_max <- qw_sub$sample_dt[qw_sub$result_va >= norm_range[2]]
+     
+     if(length(first_day_max) != 0){
+       Result[6] <- first_day_max
+     }
+    
+  } else {
+    Analysis <- Analysis[-5:-6]
+    Result <- Result[-5:-6]
+  }
+  
+  df_return <- data.frame(Analysis, 
+                          Result, 
+                          stringsAsFactors = FALSE)
   
 }

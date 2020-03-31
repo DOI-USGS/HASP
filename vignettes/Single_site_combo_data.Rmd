@@ -86,19 +86,26 @@ gwl_plot_all(dv, gwl_data, title)
 
 ## Salinity Data and Analysis
 
-```{r salityPlot}
+```{r qwplot1}
 # Get data:
 # parameterCd <- c("00095","90095","00940","99220")
 # site_data <- readNWISqw(siteID,  parameterCd)
 
 # Use package sample data:
-site_data <- L2701_example_data$QW
-Sc_Cl_plot(site_data, title = title)
+qw_data <- L2701_example_data$QW
+
+qw_plot(qw_data, "Specific Conductance", pcode = c("00095", "90095"))
+
+```
+
+```{r salityPlot}
+
+Sc_Cl_plot(qw_data, title = title)
 
 ```
 
 ```{r salityTable, echo=TRUE}
-sc_cl <- Sc_Cl_table(site_data)
+sc_cl <- Sc_Cl_table(qw_data)
 
 # only show 10 row:
 kable(head(sc_cl, 10), 
