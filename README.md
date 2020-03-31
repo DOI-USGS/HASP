@@ -6,8 +6,58 @@ Inspiration: <https://fl.water.usgs.gov/mapper/>
 
 ## Sample workflow
 
+### Single site workflows:
+
 ``` r
 library(HASP)
+library(dataRetrieval)
+site <- "263819081585801"
+
+#Periodic data:
+gwl_data <- dataRetrieval::readNWISgwl(site)
+
+
+# Daily data:
+parameterCd <- "62610"
+statCd <- "00001"
+dv <- dataRetrieval::readNWISdv(site,
+                                parameterCd,
+                                statCd = statCd)
+
+# Water Quality data:
+parameterCd <- c("00095","90095","00940","99220")
+qw_data <- dataRetrieval::readNWISqw(site,
+                                     parameterCd)
+```
+
+``` r
+monthly_frequency_plot(gwl_data, "L2701_example_data")
+```
+
+![](man/figures/graphs-1.png)<!-- -->
+
+``` r
+gwl_plot_periodic(gwl_data, "L2701_example_data")
+```
+
+![](man/figures/graphs-2.png)<!-- -->
+
+``` r
+gwl_plot_all(dv, gwl_data, "L2701_example_data")
+```
+
+![](man/figures/graphs-3.png)<!-- -->
+
+``` r
+Sc_Cl_plot(qw_data, "L2701_example_data")
+```
+
+![](man/figures/graphs-4.png)<!-- -->
+
+### Composite workflows:
+
+``` r
+
 #included sample data:
 
 aquifer_data <- aquifer_data

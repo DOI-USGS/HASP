@@ -16,7 +16,7 @@
 #' 
 #' @examples 
 #' 
-#' site <- "261802081354801"
+#' site <- "263819081585801"
 #' gw_level_data <- dataRetrieval::readNWISgwl(site)
 #' monthly_frequency <- monthly_frequency_table(gw_level_data)
 
@@ -86,10 +86,9 @@ monthly_frequency_table <- function(gw_level_data) {
 #'
 #' @examples
 #' 
-#' site <- "261802081354801"
-#' gw_level_data <- dataRetrieval::readNWISgwl(site)
-#' monthly_frequency_plot(gw_level_data, title = "Groundwater level")
-
+#' site <- "263819081585801"
+#' gwl_data <- dataRetrieval::readNWISgwl(site)
+#' monthly_frequency_plot(gwl_data, title = "Groundwater level")
 monthly_frequency_plot <- function(gw_level_data, 
                                    title = "",
                                    range = c("Past year",
@@ -207,11 +206,10 @@ monthly_frequency_plot <- function(gw_level_data,
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[month(plot_month)]) +
-    ylab(y_label) + xlab(x_label) + ggtitle(title) +
-    theme_bw() +
-    theme(panel.grid = element_blank(),
-          plot.title = element_text(hjust = 0.5),
-          axis.ticks.x = element_blank(),
+    ylab(y_label) + xlab(x_label) + 
+    ggtitle(title, subtitle = "U.S. Geological Survey") +
+    theme_gwl() +
+    theme(axis.ticks.x = element_blank(),
           legend.position = "bottom",
           legend.box = "vertical")
 

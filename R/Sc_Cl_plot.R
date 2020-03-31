@@ -1,10 +1,12 @@
-#' Sc_CL_plot
+#' Specific conductance and chloride
 #'
-#' Function creates the individual chloride versus specfic conductance plots for each site
+#' Function creates the individual chloride versus specfic conductance plots and tables for each site
 #' as well as the chloride versus specific conductance plot for all sites.
 #'
-#' @param x data frame
+#' @param x data frame returned from dataRetrieval::readNWISqw,
+#' must include columns sample_dt, parm_cd, result_va
 #' @param title character
+#' @rdname sc_cl
 #' @export
 #' @import ggplot2
 #' @importFrom scales comma
@@ -12,11 +14,14 @@
 #' @importFrom dataRetrieval readNWISpCode
 #' @examples 
 #' 
-#' site <- "263819081585801"
-#' parameterCd <- c("00095","90095","00940","99220")
-#' site_data <- dataRetrieval::readNWISqw(site, 
-#'                                        parameterCd)
-#' Sc_Cl_plot(site_data, title = "Hi")
+#' # site <- "263819081585801"
+#' # parameterCd <- c("00095","90095","00940","99220")
+#' # site_data <- dataRetrieval::readNWISqw(site, 
+#' #                                        parameterCd)
+#' # Using package example data:
+#' site_data <- L2701_example_data$QW
+#' title <- paste(attr(site_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+#' Sc_Cl_plot(site_data, title = title)
 Sc_Cl_plot <- function(x, title){
   
   chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
@@ -40,7 +45,7 @@ Sc_Cl_plot <- function(x, title){
     geom_point(color = "blue") +
     stat_smooth(method = "lm", color = "black", 
                 formula = y ~ x , se = FALSE) +
-    theme_bw() +
+    theme_gwl() +
     stat_poly_eq(formula = y ~ x,
                  aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
                  parse = TRUE) +
@@ -48,30 +53,18 @@ Sc_Cl_plot <- function(x, title){
                        labels = scales::comma) +
     scale_x_continuous(Sctitle, 
                        labels = scales::comma) +
-    geom_text(inherit.aes = FALSE, data = data.frame(),
-              hjust = 0, vjust = -0.3, size = 3, color = "darkgreen",
-              aes(x = -Inf, y = Inf, label = "U.S. Geological Survey")) +
-    coord_cartesian(clip = 'off') +
-    ggtitle(title) +
-    theme(plot.title = element_text(hjust = 0.5))
+    labs(caption = paste("Plot created:", Sys.Date())) +
+    ggtitle(title, subtitle = "U.S. Geological Survey") 
   
   return(plot_out)
   
   
 }
 
-
-#' Sc_Cl_table 
-#'
-#' Function creates the individual chloride versus specfic conductance tables for each site
-#' as well as the chloride versus specific conductance plot for all sites.
-#'
-#' @param x data frame
+#' @rdname sc_cl
 #' @export
 #' @import dplyr
 #' @importFrom tidyr pivot_wider
-#' @import graphics
-#' @importFrom dataRetrieval readNWISpCode
 #' @examples 
 #' 
 #' site <- "263819081585801"
@@ -83,6 +76,10 @@ Sc_Cl_table <- function(x){
   
   mean_no_na <- function(x){
     mean(x, na.rm = TRUE)
+  }
+  
+  if(!all(c("sample_dt", "parm_cd", "result_va") %in% names(x))){
+    stop("data frame x doesn't include all mandatory columns")
   }
   
   sample_dt <- startDateTime <- site_no <- parm_cd <- remark_cd <- result_va <- `90095` <- `99220` <- ".dplyr"

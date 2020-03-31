@@ -3,10 +3,12 @@ title: "README"
 output:
   md_document:
     variant: gfm
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(echo = FALSE,
+knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       message = FALSE,
                       fig.width = 7,
@@ -26,8 +28,50 @@ https://fl.water.usgs.gov/mapper/
 
 ## Sample workflow
 
-```{r example, echo=TRUE}
+### Single site workflows:
+```{r singleSiteShow, echo=TRUE, eval=FALSE}
 library(HASP)
+library(dataRetrieval)
+site <- "263819081585801"
+
+#Periodic data:
+gwl_data <- dataRetrieval::readNWISgwl(site)
+
+
+# Daily data:
+parameterCd <- "62610"
+statCd <- "00001"
+dv <- dataRetrieval::readNWISdv(site,
+                                parameterCd,
+                                statCd = statCd)
+
+# Water Quality data:
+parameterCd <- c("00095","90095","00940","99220")
+qw_data <- dataRetrieval::readNWISqw(site,
+                                     parameterCd)
+
+
+```
+
+```{r singleSite, echo=FALSE, eval=TRUE}
+library(HASP)
+
+gwl_data <- L2701_example_data$Discrete
+dv <- L2701_example_data$Daily
+qw_data <- L2701_example_data$QW
+
+```
+
+```{r graphs, echo=TRUE, eval=TRUE}
+monthly_frequency_plot(gwl_data, "L2701_example_data")
+gwl_plot_periodic(gwl_data, "L2701_example_data")
+gwl_plot_all(dv, gwl_data, "L2701_example_data")
+Sc_Cl_plot(qw_data, "L2701_example_data")
+```
+
+### Composite workflows:
+```{r example}
+
 #included sample data:
 
 aquifer_data <- aquifer_data
@@ -56,7 +100,7 @@ To install the package while the package is still internal, users will need to g
 ![pat](man/figures/save_pat.png)
 4. Save your token in a safe place (KeyPass for instance) so you don't need to constantly regenerate tokens. 
 5. In R, you can will need the `remotes` package to install:
-```{r install, eval=FALSE, echo=TRUE}
+```{r install, eval=FALSE}
 remotes::install_gitlab("water/stats/HASP", 
                         host = "code.usgs.gov", 
                         auth_token = "abc123",

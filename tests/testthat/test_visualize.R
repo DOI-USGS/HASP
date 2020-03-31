@@ -32,12 +32,8 @@ test_that("Map", {
 
 
 test_that("SC Chloride graphs and table", {
-  
-  skip_on_cran()
-  
-  site <- '263819081585801'
-  site_data <- dataRetrieval::readNWISqw(site, 
-                                         parameterCd = c("00095","90095","00940","99220"))
+
+  site_data <- L2701_example_data$QW
   
   sc_plot <- Sc_Cl_plot(site_data, title = "Hi")
   expect_true(all(c("Date", "chloride", "sp") %in%
@@ -80,6 +76,25 @@ test_that("Weekly frequency plot", {
   
   expect_true(all(c("plot_week", "x", "y", "ymin", "group", "plot_week_last") %in%
                     plot_data_elements))
+  
+})
+
+test_that("Periodic gwl plot", {
+  
+  gwl_data <- L2701_example_data$Discrete
+  title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+  plot_out <- gwl_plot_periodic(gwl_data, title)
+  
+  dv <- L2701_example_data$Daily
+  plot2 <- gwl_plot_all(dv, gwl_data, "title")
+  
+  expect_true(all(c("lev_dt", "sl_lev_va", "lev_age_cd") %in%
+                    names(plot_out[["data"]])))
+  
+  expect_true(all(c("data", "layers", "scales",     
+                    "mapping", "theme", "coordinates",
+                    "facet","plot_env", "labels"   ) %in%
+                    names(plot2)))
   
 })
 

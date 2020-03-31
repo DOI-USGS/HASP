@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 library(knitr)
-opts_chunk$set(echo = FALSE,
+opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
                fig.width = 7,
@@ -36,7 +36,7 @@ First, use the `dataRetrieval` package to get site information:
 
 ## DESCRIPTION
 
-```{r siteInfo, echo=TRUE, results='asis'}
+```{r siteInfo, results='asis'}
 library(dataRetrieval)
 library(HASP)
 library(dplyr)
@@ -48,7 +48,7 @@ site_metadata <- site_summary(siteID, markdown = TRUE)
 
 ## AVAILABLE DATA
 
-```{r whatData, echo=TRUE}
+```{r whatData}
 data_info <- data_available(siteID)
 kable(data_info)
 ```
@@ -59,15 +59,41 @@ kable(data_info)
 
 ## Periodic Groundwater Data
 
+```{r periodicPlot}
+# Get data:
+# gwl_data <- dataRetrieval::readNWISgwl(siteID)
+# Use package sample data:
+gwl_data <- L2701_example_data$Discrete
+title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+gwl_plot_periodic(gwl_data, title)
+```
+
 ## Period of Record - All Data Types
+
+```{r dvPlot}
+# Get data:
+# parameterCd <- "62610"
+# statCd <- "00001"
+# dv <- dataRetrieval::readNWISdv(siteID, 
+#                                 parameterCd, 
+#                                 statCd = statCd)
+# Use package sample data:
+dv <- L2701_example_data$Daily
+
+gwl_plot_all(dv, gwl_data, title)
+```
+
 
 ## Salinity Data and Analysis
 
-```{r salityPlot, echo=TRUE}
-parameterCd <- c("00095","90095","00940","99220")
-site_data <- readNWISqw(siteID,  parameterCd)
+```{r salityPlot}
+# Get data:
+# parameterCd <- c("00095","90095","00940","99220")
+# site_data <- readNWISqw(siteID,  parameterCd)
 
-Sc_Cl_plot(site_data, title = siteID)
+# Use package sample data:
+site_data <- L2701_example_data$QW
+Sc_Cl_plot(site_data, title = title)
 
 ```
 

@@ -83,7 +83,25 @@ NULL
 #' @examples 
 #' head(L2701_example_data$Daily)
 #' head(L2701_example_data$Discrete)
+#' head(L2701_example_data$QW)
 NULL
+
+# library(dataRetrieval)
+# site <- "263819081585801"
+# parameterCd <- c("00095","90095","00940","99220")
+# site_data <- dataRetrieval::readNWISqw(site, 
+#                                        parameterCd)
+# gwl_data <- dataRetrieval::readNWISgwl(site)
+# parameterCd <- "62610"
+# statCd <- "00001"
+# dv <- dataRetrieval::readNWISdv(site,
+#                                 parameterCd,
+#                                 statCd = statCd)
+# 
+# L2701_example_data <- list("Daily" = dv,
+#                            "Discrete" = gwl_data,
+#                            "QW" = site_data)
+# save(L2701_example_data, file = "data/L2701_example_data.RData")
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
