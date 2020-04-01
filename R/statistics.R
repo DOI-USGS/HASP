@@ -9,10 +9,11 @@
 #' 
 #' @param gwl data frame that must include a numeric column defined by "value_col",
 #'  and a Date or POSIXct column defined by "date_col"
-#' @param date_col name of date column
-#' @param value_col name of value column
-#' @param enough_5 number per year
-#' @param enough_20 numbr per year
+#' @param date_col name of date column.
+#' @param value_col name of value column.
+#' @param seasonal logical. Use a seasonal kendall test or not seasonal. Default is \code{TRUE}.
+#' @param enough_5 number per year. Default is 10.
+#' @param enough_20 numbr per year. Default is 6.
 #' @param alpha the confidence level to use for statistical significance
 #' @param include_current_year a logical indicating whether to include data from
 #' the current calendar year in the test.

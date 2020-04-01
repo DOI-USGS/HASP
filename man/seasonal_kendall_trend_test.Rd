@@ -19,15 +19,17 @@ seasonal_kendall_trend_test(
 \item{gwl}{data frame that must include a numeric column defined by "value_col",
 and a Date or POSIXct column defined by "date_col"}
 
-\item{date_col}{name of date column}
+\item{date_col}{name of date column.}
 
-\item{value_col}{name of value column}
+\item{value_col}{name of value column.}
 
 \item{alpha}{the confidence level to use for statistical significance}
 
-\item{enough_5}{number per year}
+\item{seasonal}{logical. Use a seasonal kendall test or not seasonal. Default is \code{TRUE}.}
 
-\item{enough_20}{numbr per year}
+\item{enough_5}{number per year. Default is 10.}
+
+\item{enough_20}{numbr per year. Default is 6.}
 
 \item{include_current_year}{a logical indicating whether to include data from
 the current calendar year in the test.}

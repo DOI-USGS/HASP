@@ -36,7 +36,7 @@ trend_plot <- function(qw_data, title,
   }
   
   sample_dt <- condition <- result_va <- remark_cd <- parm_cd <- ".dplyr"
-  
+  x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
   qw_sub <- qw_data %>% 
     filter(parm_cd %in% pcode) %>% 
     arrange(sample_dt)

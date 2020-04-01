@@ -114,5 +114,13 @@ test_that("Daily gwl plot", {
   
 })
 
-
+test_that("Chloride trend graph", {
+  qw_data <- L2701_example_data$QW
+  title <- "Hi"
+  plot_out <- trend_plot(qw_data, title = title)
+  plot_data_elements <- unlist(lapply(plot_out$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("sample_dt", "result_va", "condition", "x1", "x2", "y1",       
+                    "y2", "trend", "y") %in% plot_data_elements))
+})
   

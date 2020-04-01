@@ -21,6 +21,16 @@ test_that("Kendall Seasonal Trend", {
   expect_true(102 == signif(test1$intercept[2], digits = 3))
   expect_true("Not significant" == test1$trend[2])
   
+  test3 <- seasonal_kendall_trend_test(gw_level_data, seasonal = FALSE)
+  expect_true(0.0625 == signif(test3$tau[2], digits = 3))
+  
+  qw_data <- L2701_example_data$QW
+  test4 <- seasonal_kendall_trend_test(qw_data, seasonal = FALSE, 
+                                       enough_5 = 1, enough_20 = 1,
+                                       date_col = "sample_dt", value_col = "result_va")
+  expect_true(0.0658 == signif(test4$slope[1], digits = 3))
+  expect_true(0.014 == signif(test4$slope[2], digits = 3))
+  
 })
 
 test_that("Weekly frequency table", {
