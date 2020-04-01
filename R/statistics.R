@@ -11,6 +11,8 @@
 #'  and a Date or POSIXct column defined by "date_col"
 #' @param date_col name of date column
 #' @param value_col name of value column
+#' @param enough_5 number per year
+#' @param enough_20 numbr per year
 #' @param alpha the confidence level to use for statistical significance
 #' @param include_current_year a logical indicating whether to include data from
 #' the current calendar year in the test.
@@ -32,6 +34,8 @@ seasonal_kendall_trend_test <- function(gwl,
                                         date_col = "lev_dt",
                                         value_col = "sl_lev_va",
                                         alpha = 0.95,
+                                        seasonal = TRUE,
+                                        enough_5 = 10, enough_20 = 6,
                                         include_current_year = FALSE) {
   
   year <- month <- ".dplyr"
@@ -49,11 +53,16 @@ seasonal_kendall_trend_test <- function(gwl,
   }
 
   latest_measured_year <- max(gwl$year, na.rm = TRUE)
+  if(seasonal){
+    form <- as.formula(paste(value_col, " ~ month + year"))
+  } else {
+    form <- as.formula(paste(value_col, " ~ as.numeric(", date_col, ")" ))
+  }
   
-  enough_data_5yr <- enough_data(gwl, date_col = date_col) # 80% of monthly data
+  enough_data_5yr <- enough_data(gwl, date_col = date_col, required_per_year = enough_5) 
   enough_data_20yr <- enough_data(gwl, date_col = date_col, 
                                   n_years = 20, 
-                                  required_per_year = 6) # 50% of monthly data
+                                  required_per_year = enough_20) # 50% of monthly data
 
   test <- vector()
   tau <- vector()
@@ -62,15 +71,19 @@ seasonal_kendall_trend_test <- function(gwl,
   intercept <- vector()
   trend <- vector()
   
-  form <- as.formula(paste(value_col, " ~ month + year"))
-  
   if(enough_data_5yr) {
     # Don't assume the tail is bringing back all years:
     last_5 <- dplyr::filter(gwl, year >= latest_measured_year - 5)
     
-    test_5yr <- 
-      EnvStats::kendallSeasonalTrendTest(form, 
-                                         data = last_5)
+    if(seasonal){
+      test_5yr <- 
+        EnvStats::kendallSeasonalTrendTest(form, 
+                                           data = last_5)      
+    } else {
+      test_5yr <- EnvStats::kendallTrendTest(form, 
+                                             data = last_5)
+    }
+
     test[length(test) + 1] <- "5-year trend"
     tau[length(tau) + 1] <- test_5yr$estimate['tau']
     pValue[length(pValue) + 1] <- test_5yr$p.value['z (Trend)']
@@ -87,9 +100,15 @@ seasonal_kendall_trend_test <- function(gwl,
   if(enough_data_20yr) {
     last_20 <- dplyr::filter(gwl, year >= latest_measured_year - 20)
     
-    test_20yr <- 
-      EnvStats::kendallSeasonalTrendTest(form, 
-                                         data = last_20)
+    if(seasonal){
+      test_20yr <- 
+        EnvStats::kendallSeasonalTrendTest(form, 
+                                           data = last_20)      
+    } else {
+      test_20yr <- EnvStats::kendallTrendTest(form, 
+                                             data = last_20)
+    }
+
     test[length(test) + 1] <- "20-year trend"
     tau[length(tau) + 1] <- test_20yr$estimate['tau']
     pValue[length(pValue) + 1] <- test_20yr$p.value['z (Trend)']
@@ -103,7 +122,7 @@ seasonal_kendall_trend_test <- function(gwl,
     intercept[length(intercept) + 1] <- NA
   }
   
-  test_results <- data.frame(test, tau, pValue, slope, intercept)
+  test_results <- data.frame(test, tau, pValue, slope, intercept, stringsAsFactors = FALSE)
   test_results <- dplyr::mutate(test_results,
                                 trend = ifelse(pValue < (1 - alpha),
                                                ifelse(slope > 0,
