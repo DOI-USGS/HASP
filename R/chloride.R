@@ -67,12 +67,16 @@ trend_plot <- function(qw_data, title,
   y_label <- trimmed_name(pcode[1])
   
   latest_sample <- qw_sub$sample_dt[nrow(qw_sub)]
+  five_ago <- latest_sample - as.difftime(5*365+1, units = "days")
+  twenty_ago <- latest_sample - as.difftime(20*365+5, units = "days")
   
   ggplot(data = qw_sub) +
     geom_point(aes(x = sample_dt, y = result_va,
                    shape = condition, 
                    color = condition)) +
     theme_gwl() +
+    expand_limits(y = 0) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
     labs(caption = paste("Plot created:", Sys.Date()), 
          y = y_label, x = "Date") +
     scale_color_manual(name = "EXPLANATION", 

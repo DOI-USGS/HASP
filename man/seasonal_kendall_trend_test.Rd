@@ -5,14 +5,20 @@
 \title{Seasonal Kendall Trend Test}
 \usage{
 seasonal_kendall_trend_test(
-  gw_level_data,
+  gwl,
+  date_col = "lev_dt",
+  value_col = "sl_lev_va",
   alpha = 0.95,
   include_current_year = FALSE
 )
 }
 \arguments{
-\item{gw_level_data}{groundwater level data from the \code{readNWISgwl} from
-the dataRetrieval package}
+\item{gwl}{data frame that must include a numeric column defined by "value_col",
+and a Date or POSIXct column defined by "date_col"}
+
+\item{date_col}{name of date column}
+
+\item{value_col}{name of value column}
 
 \item{alpha}{the confidence level to use for statistical significance}
 
@@ -33,8 +39,11 @@ for the 20-year test. The current calendar year is excluded by default.
 }
 \examples{
 
-site <- "260041080093102"
-gw_level_data <- dataRetrieval::readNWISgwl(site)
-seasonal_kendall_trend_test(gw_level_data)
+# site <- "260041080093102"
+# gw_level_data <- dataRetrieval::readNWISgwl(site)
+
+# Using package example data:
+gwl_data <- L2701_example_data$Discrete
+seasonal_kendall_trend_test(gwl_data)
 
 }

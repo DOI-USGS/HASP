@@ -15,6 +15,11 @@ test_that("Kendall Seasonal Trend", {
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test2)))
   
   expect_true(all(is.na(c(test2$tau, test2$pValue, test2$slope, test2$intercept, test2$trend))))
+  expect_true(-0.0411 == signif(test1$tau[2], digits = 3))
+  expect_true(0.489 == signif(test1$pValue[2], digits = 3))
+  expect_true(-0.0560 == signif(test1$slope[2], digits = 3))
+  expect_true(102 == signif(test1$intercept[2], digits = 3))
+  expect_true("Not significant" == test1$trend[2])
   
 })
 

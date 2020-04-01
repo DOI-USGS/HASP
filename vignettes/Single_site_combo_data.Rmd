@@ -154,6 +154,10 @@ qw_data <- L2701_example_data$QW
 
 ### Chloride
 
+```{r chloride_plot}
+trend_plot(qw_data, title = title)
+```
+
 ```{r chloride_table}
 chl_table <- qw_summary(qw_data, 
                        pcode = c("00940","99220"),
