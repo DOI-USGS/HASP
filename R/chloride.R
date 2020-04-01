@@ -41,8 +41,6 @@ trend_plot <- function(qw_data, title,
     filter(parm_cd %in% pcode) %>% 
     arrange(sample_dt)
   
-
-  
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"
     col_values <- c("medium")
@@ -69,13 +67,17 @@ trend_plot <- function(qw_data, title,
   y_label <- trimmed_name(pcode[1])
 
   seg_df <- create_segs(qw_sub)
+  linetype = c('solid', 'dashed')
   
-  ggplot(data = qw_sub) +
-    geom_point(aes(x = sample_dt, y = result_va,
+  plot_out <- ggplot() +
+    geom_point(data = qw_sub,
+               aes(x = sample_dt, y = result_va,
                    shape = condition, 
                    color = condition)) +
-    geom_segment(aes(x = five_ago, xend = latest_sample, y = 0, yend = 100)) +
-    geom_segment(aes(x = twenty_ago, xend = latest_sample, y = 0, yend = 100))
+    geom_segment(data = seg_df, color = "blue", 
+                 aes(x = x1, xend = x2, 
+                     y = y1, yend = y2,
+                     group = trend, linetype = trend)) +
     theme_gwl() +
     expand_limits(y = 0) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
@@ -89,8 +91,14 @@ trend_plot <- function(qw_data, title,
                        breaks = col_values,
                        labels = col_labels,
                        values = c(24, 23, 22)) +
+    scale_linetype_manual("Trend", 
+                          values = linetype,
+                          breaks = c("5-year trend", "20-year trend"),
+                          labels = c("5 year", "20 year"))
     ggtitle(title, 
             subtitle = "U.S. Geological Survey") 
+    
+    return(plot_out)
   
 }
 
@@ -100,20 +108,28 @@ create_segs <- function(x, trend_results){
                                                enough_5 = 1, enough_20 = 1,
                                                date_col = "sample_dt", 
                                                value_col = "result_va")
-  df_seg <- data.frame(matrix(NA, nrow = 1, ncol = 6))
-  names(df_seg) <- c("five_ago","twenty_ago",
-                     "five_ago_val_1","five_ago_val_2",
-                     "twenty_ago_val_1","twenty_ago_val_2")
   
-  df_seg$latest_sample <- x$sample_dt[nrow(x)]
-  df_seg$five_ago <- latest_sample - as.difftime(5*365+1, units = "days")
-  df_seg$twenty_ago <- latest_sample - as.difftime(20*365+5, units = "days")
+  df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
+                       x2 = as.Date(c(NA, NA)),
+                       y1 = c(NA, NA),
+                       y2 = c(NA, NA),
+                       trend = c("",""), 
+                       stringsAsFactors = FALSE)
   
-  df_seg$five_ago_val_1 <- as.numeric(five_ago)*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
-  df_seg$five_ago_val_2 <- as.numeric(latest_sample)*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
   
-  df_seg$twenty_ago_val_1 <- as.numeric(twenty_ago)*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
-  df_seg$twenty_ago_val_2 <- as.numeric(latest_sample)*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
+  names(df_seg) <- c("x1", "x2", "y1", "y2", "trend")
+  
+  df_seg$x2 <- x$sample_dt[nrow(x)]
+  df_seg$x1[1] <- as.Date(df_seg$x2[1] - as.difftime(5*365+1, units = "days"), origin = "1970-01-01")
+  df_seg$x1[2] <- as.Date(df_seg$x2[2] - as.difftime(20*365+5, units = "days"), origin = "1970-01-01")
+  
+  df_seg$y1[1] <- as.numeric(df_seg$x1[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
+  df_seg$y2[1] <- as.numeric(df_seg$x2[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
+  df_seg$trend[1] <- "5-year trend"
+  
+  df_seg$y1[2] <- as.numeric(df_seg$x1[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
+  df_seg$y2[2] <- as.numeric(df_seg$x2[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
+  df_seg$trend[2] <- "20-year trend"
   
   return(df_seg)
   

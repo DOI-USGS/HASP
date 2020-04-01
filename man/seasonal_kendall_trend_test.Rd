@@ -9,6 +9,9 @@ seasonal_kendall_trend_test(
   date_col = "lev_dt",
   value_col = "sl_lev_va",
   alpha = 0.95,
+  seasonal = TRUE,
+  enough_5 = 10,
+  enough_20 = 6,
   include_current_year = FALSE
 )
 }
@@ -21,6 +24,10 @@ and a Date or POSIXct column defined by "date_col"}
 \item{value_col}{name of value column}
 
 \item{alpha}{the confidence level to use for statistical significance}
+
+\item{enough_5}{number per year}
+
+\item{enough_20}{numbr per year}
 
 \item{include_current_year}{a logical indicating whether to include data from
 the current calendar year in the test.}
