@@ -6,17 +6,26 @@
 \title{Single site groundwater level plots and tables}
 \usage{
 gwl_plot_periodic(
-  gwl,
+  gwl_data,
   plot_title = "",
   date_col = "lev_dt",
   value_col = "sl_lev_va",
   approved_col = "lev_age_cd"
 )
 
-gwl_plot_all(dv, gwl, plot_title = "", add_trend = FALSE)
+gwl_plot_all(
+  gw_level_dv,
+  gwl_data,
+  plot_title = "",
+  date_col = "lev_dt",
+  value_col = "sl_lev_va",
+  approved_col = "lev_age_cd",
+  p_code_dv = "62610",
+  add_trend = FALSE
+)
 }
 \arguments{
-\item{gwl}{data frame returned from dataRetrieval::readNWISgwl}
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl}
 
 \item{plot_title}{character}
 
@@ -27,7 +36,9 @@ gwl_plot_all(dv, gwl, plot_title = "", add_trend = FALSE)
 \item{approved_col}{name of column to get provisional/approved status.
 Default is "lev_age_cd".}
 
-\item{dv}{daily value groundwater levels. Must include columns}
+\item{gw_level_dv}{daily value groundwater levels. Must include columns}
+
+\item{p_code_dv}{daily parameter code. Default is "62610".}
 
 \item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
 }
@@ -44,10 +55,10 @@ gwl_data <- L2701_example_data$Discrete
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 gwl_plot_periodic(gwl_data, plot_title = title)
 # site <- "263819081585801"
-# parameterCd <- "62610"
+parameterCd <- "62610"
 # statCd <- "00001"
-# dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 # Using package example data:
-dv <- L2701_example_data$Daily
-gwl_plot_all(dv, gwl_data)
+gw_level_dv <- L2701_example_data$Daily
+gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
 }

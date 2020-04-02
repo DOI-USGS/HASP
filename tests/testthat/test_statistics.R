@@ -36,7 +36,7 @@ test_that("Kendall Seasonal Trend", {
 test_that("Weekly frequency table", {
   
   wft <- weekly_frequency_table(L2701_example_data$Daily, 
-                                parameterCd = "62610",
+                                p_code_dv = "62610",
                                 statCd = "00001")
   expect_equal(head(wft$p25, 6), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
   expect_equal(head(wft$nYears, 6), c(40, 41, 41, 41, 42, 42))

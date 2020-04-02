@@ -4,13 +4,13 @@
 \alias{daily_gwl_2yr_plot}
 \title{Plot the last two years of daily data}
 \usage{
-daily_gwl_2yr_plot(gw_level_dv, parameterCd, statCd, plot_title = "")
+daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, plot_title = "")
 }
 \arguments{
 \item{gw_level_dv}{daily groundwater level data
 from readNWISdv}
 
-\item{parameterCd}{the parameter code used}
+\item{p_code_dv}{the parameter code used}
 
 \item{statCd}{the statistic code used}
 
@@ -27,10 +27,10 @@ Plot the last two years of daily data
 \examples{
 
 # site <- "263819081585801"
-parameterCd <- "62610"
+p_code_dv <- "62610"
 statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
-daily_gwl_2yr_plot(gw_level_dv, parameterCd, statCd, plot_title = "Groundwater Level")
+daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, plot_title = "Groundwater Level")
 
 }

@@ -16,8 +16,8 @@
 #' 
 #' @examples 
 #' 
-#' #site <- "263819081585801"
-#' #gwl_data <- dataRetrieval::readNWISgwl(site)
+#' # site <- "263819081585801"
+#' # gwl_data <- dataRetrieval::readNWISgwl(site)
 #' gwl_data <- L2701_example_data$Discrete
 #' monthly_frequency <- monthly_frequency_table(gwl_data)
 monthly_frequency_table <- function(gwl_data) {
@@ -86,8 +86,8 @@ monthly_frequency_table <- function(gwl_data) {
 #'
 #' @examples
 #' 
-#' #site <- "263819081585801"
-#' #gwl_data <- dataRetrieval::readNWISgwl(site)
+#' # site <- "263819081585801"
+#' # gwl_data <- dataRetrieval::readNWISgwl(site)
 #' gwl_data <- L2701_example_data$Discrete
 #' monthly_frequency_plot(gwl_data, plot_title = "Groundwater level")
 monthly_frequency_plot <- function(gwl_data, 
@@ -223,7 +223,7 @@ monthly_frequency_plot <- function(gwl_data,
 #' 
 #' @param gw_level_dv daily groundwater level data
 #' from readNWISdv
-#' @param parameterCd the parameter code used
+#' @param p_code_dv the parameter code used
 #' @param statCd the statistic code used
 #' 
 #' @return a data frame of weekly frequency analysis
@@ -238,17 +238,17 @@ monthly_frequency_plot <- function(gwl_data,
 #' @examples 
 #' 
 #' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
-#' weekly_frequency <- weekly_frequency_table(gw_level_dv, parameterCd, statCd)
+#' weekly_frequency <- weekly_frequency_table(gw_level_dv, p_code_dv, statCd)
 #' 
-weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
+weekly_frequency_table <- function(gw_level_dv, p_code_dv, statCd) {
   
   Date <- gw_level <- ".dplyr"
   
-  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading <- sprintf("X_%s_%s", p_code_dv, statCd)
   dv_heading_cd <- paste0(dv_heading, "_cd")
   
   if(!all(c(dv_heading, dv_heading_cd, "Date") %in% names(gw_level_dv))) {
@@ -290,7 +290,7 @@ weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
 #' 
 #' @param gw_level_dv daily groundwater level data
 #' from readNWISdv
-#' @param parameterCd the parameter code used
+#' @param p_code_dv the parameter code used
 #' @param statCd the statistic code used
 #' @param plot_title the title to use on the plot
 #' @param range the time frame to use for the plot. Either "Past year" to use the
@@ -312,14 +312,14 @@ weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
 #' @examples
 #' 
 #' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
-#' weekly_frequency_plot(gw_level_dv, parameterCd, statCd, plot_title = "Groundwater Level")
+#' weekly_frequency_plot(gw_level_dv, p_code_dv, statCd, plot_title = "Groundwater Level")
 #' 
 weekly_frequency_plot <- function(gw_level_dv, 
-                                  parameterCd, 
+                                  p_code_dv, 
                                   statCd,
                                   plot_title = "", 
                                   range = c("Past year",
@@ -333,11 +333,11 @@ weekly_frequency_plot <- function(gw_level_dv,
   
   date <- Sys.Date()
   
-  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading <- sprintf("X_%s_%s", p_code_dv, statCd)
   dv_heading_cd <- paste0(dv_heading, "_cd")
   
   # Calculate the percentiles
-  site_statistics <- weekly_frequency_table(gw_level_dv, parameterCd, statCd)
+  site_statistics <- weekly_frequency_table(gw_level_dv, p_code_dv, statCd)
   
   # Find the bounds of the plot
   if(range == "Past year") {
@@ -423,7 +423,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   } else {
     x_label <- paste(year(plot_start), year(plot_end), sep = " - ")
   }
-  y_label <- readNWISpCode(parameterCd)$parameter_nm
+  y_label <- readNWISpCode(p_code_dv)$parameter_nm
   
   # Create the month breaks
   month_start <- seq(as.Date(plot_start), length = 12, by = "1 month")
@@ -469,7 +469,7 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'
 #' @param gw_level_dv daily groundwater level data
 #' from readNWISdv
-#' @param parameterCd the parameter code used
+#' @param p_code_dv the parameter code used
 #' @param statCd the statistic code used
 #' @param plot_title the title to use on the plot
 #' @return a ggplot object with a ribbon indicating the historical daily range,
@@ -486,19 +486,19 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' @examples
 #' 
 #' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
-#' daily_gwl_2yr_plot(gw_level_dv, parameterCd, statCd, plot_title = "Groundwater Level")
+#' daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, plot_title = "Groundwater Level")
 #' 
 
-daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, plot_title = "") {
+daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, plot_title = "") {
   
   Date <- gw_level_cd <- J <- gw_level <- name <- group <- value <- gw_level_cd <- 
     ".dplyr"
   
-  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading <- sprintf("X_%s_%s", p_code_dv, statCd)
   dv_heading_cd <- paste0(dv_heading, "_cd")
   
   if(!all(c(dv_heading, dv_heading_cd, "Date") %in% names(gw_level_dv))) {
@@ -561,7 +561,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, plot_title = ""
   ribbon_colors <- c("Approved Daily Min & Max" = "lightskyblue1")
   
   x_label <- "Date"
-  y_label <- readNWISpCode(parameterCd)$parameter_nm
+  y_label <- readNWISpCode(p_code_dv)$parameter_nm
   
   x_breaks <- seq.Date(plot_start, most_recent, by = "year") 
   x_labels <- as.character(x_breaks, format = "%Y")
@@ -590,7 +590,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, plot_title = ""
 #' 
 #' @param gw_level_dv daily groundwater level data
 #' from readNWISdv
-#' @param parameterCd the parameter code used
+#' @param p_code_dv the parameter code used
 #' @param statCd the statistic code used
 #' @return a summary table giving the period of record, completeness
 #' and percentile values
@@ -602,18 +602,18 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, plot_title = ""
 #' @examples
 #' 
 #' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
-#' daily_gwl_summary(gw_level_dv, parameterCd, statCd)
+#' daily_gwl_summary(gw_level_dv, p_code_dv, statCd)
 #' 
 
-daily_gwl_summary <- function(gw_level_dv, parameterCd, statCd) {
+daily_gwl_summary <- function(gw_level_dv, p_code_dv, statCd) {
   
   gw_level <- gw_level_cd <- ".dplyr"
   
-  dv_heading <- sprintf("X_%s_%s", parameterCd, statCd)
+  dv_heading <- sprintf("X_%s_%s", p_code_dv, statCd)
   dv_heading_cd <- paste0(dv_heading, "_cd")
   
   if(!all(c(dv_heading, dv_heading_cd, "Date") %in% names(gw_level_dv))) {
