@@ -3,21 +3,31 @@
 \name{Sc_Cl_plot}
 \alias{Sc_Cl_plot}
 \alias{Sc_Cl_table}
+\alias{qw_plot}
+\alias{qw_summary}
 \title{Specific conductance and chloride}
 \usage{
-Sc_Cl_plot(x, title)
+Sc_Cl_plot(qw_data, plot_title)
 
-Sc_Cl_table(x)
+Sc_Cl_table(qw_data)
+
+qw_plot(qw_data, plot_title, pcode = c("00095", "90095"))
+
+qw_summary(qw_data, pcode, norm_range = NA)
 }
 \arguments{
-\item{x}{data frame returned from dataRetrieval::readNWISqw,
+\item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
 must include columns sample_dt, parm_cd, result_va}
 
-\item{title}{character}
+\item{plot_title}{character}
+
+\item{pcode}{character pcode to plot}
+
+\item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
 }
 \description{
-Function creates the individual chloride versus specfic conductance plots and tables for each site
-as well as the chloride versus specific conductance plot for all sites.
+Functions to create the individual chloride, specific conductance, 
+and combination plots and tables for a single site.
 }
 \examples{
 
@@ -26,13 +36,15 @@ as well as the chloride versus specific conductance plot for all sites.
 # site_data <- dataRetrieval::readNWISqw(site, 
 #                                        parameterCd)
 # Using package example data:
-site_data <- L2701_example_data$QW
-title <- paste(attr(site_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-Sc_Cl_plot(site_data, title = title)
+qw_data <- L2701_example_data$QW
+title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+Sc_Cl_plot(qw_data, plot_title = title)
 
-site <- "263819081585801"
-parameterCd <- c("00095","90095","00940","99220")
-site_data <- dataRetrieval::readNWISqw(site, 
-                                       parameterCd)
-sc_cl <- Sc_Cl_table(site_data)
+sc_cl <- Sc_Cl_table(qw_data)
+title <- attr(qw_data, "siteInfo")[["station_nm"]]
+qw_plot(qw_data, title, pcode = c("00095", "90095"))
+qw_plot(qw_data, title, pcode = c("00940","99220"))
+
+qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
+qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)
 }

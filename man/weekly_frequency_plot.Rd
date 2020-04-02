@@ -6,9 +6,9 @@
 \usage{
 weekly_frequency_plot(
   gw_level_dv,
-  parameterCd,
+  p_code_dv,
   statCd,
-  title = "",
+  plot_title = "",
   range = c("Past year", "Calendar year")
 )
 }
@@ -16,11 +16,11 @@ weekly_frequency_plot(
 \item{gw_level_dv}{daily groundwater level data
 from readNWISdv}
 
-\item{parameterCd}{the parameter code used}
+\item{p_code_dv}{the parameter code used}
 
 \item{statCd}{the statistic code used}
 
-\item{title}{the title to use on the plot}
+\item{plot_title}{the title to use on the plot}
 
 \item{range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
@@ -35,10 +35,11 @@ The weekly frequency analysis is based on daily data
 }
 \examples{
 
-site <- "263819081585801"
-parameterCd <- "62610"
+# site <- "263819081585801"
+p_code_dv <- "62610"
 statCd <- "00001"
-gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-weekly_frequency_plot(gw_level_dv, parameterCd, statCd, title = "Groundwater Level")
+# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gw_level_dv <- L2701_example_data$Daily
+weekly_frequency_plot(gw_level_dv, p_code_dv, statCd, plot_title = "Groundwater Level")
 
 }

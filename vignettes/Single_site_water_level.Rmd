@@ -56,9 +56,11 @@ kable(data_info)
 
 parameterCd <- "62610"
 statCd <- "00001"
-gw_level_dv <- dataRetrieval::readNWISdv(siteID, parameterCd, statCd = statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(siteID, parameterCd, statCd = statCd)
+# Use package sample data:
+gw_level_dv <- L2701_example_data$Daily
 weekly_frequency_plot(gw_level_dv, parameterCd, statCd, 
-                      title = "263819081585801 L -2701 ")
+                      plot_title = "263819081585801 L -2701 ")
 weekly_freq_table <- weekly_frequency_table(gw_level_dv, parameterCd, statCd) %>%
   select(week, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
   rename("Week of the year" = week,

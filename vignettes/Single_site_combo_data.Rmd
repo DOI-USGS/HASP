@@ -55,6 +55,11 @@ kable(data_info)
 
 ## Site Statistics
 
+
+## Groundwater Data
+
+### Frequency
+
 ```{r monthlyFrequencyPlot}
 gwl_data <- L2701_example_data$Discrete
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
@@ -77,7 +82,7 @@ monthly_freq_table <- monthly_frequency_table(gwl_data) %>%
 kable(monthly_freq_table)
 ```
 
-## Daily Groundwater Data
+## Daily 2 year plot
 
 ```{r dailyPlot}
 gwl_daily <- L2701_example_data$Daily
@@ -119,7 +124,7 @@ title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 gwl_plot_periodic(gwl_data, title)
 ```
 
-## Period of Record - All Data Types
+### Period of Record - All Data Types
 
 ```{r dvPlot}
 # Get data:
@@ -137,19 +142,67 @@ gwl_plot_all(dv, gwl_data, title)
 
 ## Salinity Data and Analysis
 
-```{r salityPlot}
+```{r get_qw_data}
 # Get data:
 # parameterCd <- c("00095","90095","00940","99220")
 # site_data <- readNWISqw(siteID,  parameterCd)
 
 # Use package sample data:
-site_data <- L2701_example_data$QW
-Sc_Cl_plot(site_data, title = title)
+qw_data <- L2701_example_data$QW
+
+```
+
+### Chloride
+
+```{r chloride_plot}
+trend_plot(qw_data, plot_title = title)
+```
+
+```{r chloride_trend}
+cl_trend <- kendell_test_5_20_years(qw_data, 
+                     seasonal = FALSE,
+                     enough_5 = 1,
+                     enough_20 = 1,
+                     date_col = "sample_dt",
+                     value_col = "result_va")
+kable(cl_trend, digits = 3)
+```
+
+```{r chloride_table}
+chl_table <- qw_summary(qw_data, 
+                       pcode = c("00940","99220"),
+                       norm_range = c(225,999))
+kable(chl_table)
+
+```
+
+
+### Specific Conductance
+
+```{r qwplot1}
+qw_plot(qw_data, "Specific Conductance", 
+        pcode = c("00095", "90095"))
+
+```
+
+```{r sc_table}
+sc_table <- qw_summary(qw_data, 
+                       pcode = c("00095","90095"),
+                       norm_range = NA)
+kable(sc_table)
+
+```
+
+### Specific Conductance vs Chloride
+
+```{r salityPlot}
+
+Sc_Cl_plot(qw_data, plot_title = title)
 
 ```
 
 ```{r salityTable, echo=TRUE}
-sc_cl <- Sc_Cl_table(site_data)
+sc_cl <- Sc_Cl_table(qw_data)
 
 # only show 10 row:
 kable(head(sc_cl, 10), 

@@ -2,8 +2,12 @@
 #' 
 #' Funtion to create the periodic groundwater data plot.
 #' @export
-#' @param gwl data frame returned from dataRetrieval::readNWISgwl
-#' @param title character
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl
+#' @param plot_title character
+#' @param date_col name of date column. Default is "lev_dt".
+#' @param value_col name of value column. Default is "sl_lev_va".
+#' @param approved_col name of column to get provisional/approved status.
+#' Default is "lev_age_cd".
 #' @import ggplot2
 #' @import dplyr
 #' @rdname gwl_periodic
@@ -16,21 +20,23 @@
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
 #' title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' gwl_plot_periodic(gwl_data, title = title)
-gwl_plot_periodic <- function(gwl, title = ""){
+#' gwl_plot_periodic(gwl_data, plot_title = title)
+gwl_plot_periodic <- function(gwl_data, plot_title = "",
+                              date_col = "lev_dt",
+                              value_col = "sl_lev_va",
+                              approved_col = "lev_age_cd"){
   
-  if(!all(c("lev_dt", "sl_lev_va", "lev_age_cd", "sl_datum_cd") %in% names(gwl))){
-    stop("data frame gwl doesn't include all mandatory columns")
+  if(!all(c(date_col, value_col, approved_col, "sl_datum_cd") %in% names(gwl_data))){
+    stop("data frame gwl_data doesn't include all mandatory columns")
   }
-  
-  lev_dt <- sl_lev_va <- lev_age_cd <- ".dplyr"
-  datum <- unique(gwl$sl_datum_cd)
+
+  datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   
-  plot_out <- ggplot(data = gwl,
-         aes(x = lev_dt, y = sl_lev_va)) +
+  plot_out <- ggplot(data = gwl_data,
+         aes_string(x = date_col, y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
-    geom_point(aes(color = lev_age_cd), size = 1) +
+    geom_point(aes_string(color = approved_col), size = 1) +
     theme_gwl() +
     labs(caption = paste("Plot created:", Sys.Date()), 
          y = y_label, x = "Years") +
@@ -40,7 +46,7 @@ gwl_plot_periodic <- function(gwl, title = ""){
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved water-level measurement",
                                   "P" = "Provisional water-level measurement")) +
-    ggtitle(title, 
+    ggtitle(plot_title, 
             subtitle = "U.S. Geological Survey") +
     theme(legend.position = "bottom",
           legend.direction = "vertical",
@@ -53,44 +59,52 @@ gwl_plot_periodic <- function(gwl, title = ""){
 
 #' @rdname gwl_periodic
 #' @export
-#' @param dv daily value groundwater levels. Must include columns 
+#' @param gw_level_dv daily value groundwater levels. Must include columns 
+#' @param p_code_dv daily parameter code. Default is "62610".
+#' @param add_trend logical. Uses \code{kendell_test_5_20_years}.
 #' @examples 
 #' # site <- "263819081585801"
-#' # parameterCd <- "62610"
+#' parameterCd <- "62610"
 #' # statCd <- "00001"
-#' # dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 #' # Using package example data:
-#' dv <- L2701_example_data$Daily
-#' gwl_plot_all(dv, gwl_data)
-gwl_plot_all <- function(dv, gwl, title = ""){
+#' gw_level_dv <- L2701_example_data$Daily
+#' gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
+gwl_plot_all <- function(gw_level_dv, gwl_data, 
+                         plot_title = "",
+                         date_col = "lev_dt",
+                         value_col = "sl_lev_va",
+                         approved_col = "lev_age_cd",
+                         p_code_dv = "62610",
+                         add_trend = FALSE){
   
-  if(!all(c("lev_dt", "sl_lev_va", "lev_age_cd") %in% names(gwl))){
-    stop("data frame gwl doesn't include all mandatory columns")
+  if(!all(c(date_col, value_col, approved_col) %in% names(gwl_data))){
+    stop("data frame gwl_data doesn't include all mandatory columns")
   }
 
-  if(!all(c("Date") %in% names(dv))){
-    stop("data frame dv doesn't include all mandatory columns")
+  if(!all(c("Date") %in% names(gw_level_dv))){
+    stop("data frame gw_level_dv doesn't include all mandatory columns")
   }
   
-  val_cols <- grep("62610", names(dv))
-  remark_col <- grep("_cd", names(dv))
+  val_cols <- grep(p_code_dv, names(gw_level_dv))
+  remark_col <- grep("_cd", names(gw_level_dv))
   remark_col <- remark_col[remark_col %in% val_cols]
   
-  
   val_cols <- val_cols[!val_cols %in% remark_col]
-  val_cols <- names(dv)[val_cols]
-  remark_col <- names(dv)[remark_col]
+  val_cols <- names(gw_level_dv)[val_cols]
+  remark_col <- names(gw_level_dv)[remark_col]
   
-  lev_dt <- sl_lev_va <- lev_age_cd <- ".dplyr"
-  datum <- unique(gwl$sl_datum_cd)
+  # seg_df <- create_segs(qw_sub)
+
+  datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   
   plot_out <- ggplot() +
-    geom_line(data = dv,
+    geom_line(data = gw_level_dv,
               aes_string(x = "Date", y = val_cols, color = remark_col),
               linetype = "dashed") +
-    geom_point(data = gwl,
-               aes(x = lev_dt, y = sl_lev_va, fill = lev_age_cd),
+    geom_point(data = gwl_data,
+               aes_string(x = date_col, y = value_col, fill = approved_col),
                size = 1.5, shape = 21, color = "transparent") +
     theme_gwl() +
     labs(caption = paste("Plot created:", Sys.Date()), 
@@ -105,7 +119,7 @@ gwl_plot_all <- function(dv, gwl, title = ""){
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved",
                                   "P" = "Provisional")) +
-    ggtitle(title, 
+    ggtitle(plot_title, 
             subtitle = "U.S. Geological Survey") +
     theme(legend.position = "bottom",
           legend.direction = "vertical")

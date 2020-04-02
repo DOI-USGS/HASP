@@ -1,15 +1,15 @@
 context("Analyze Data")
 
-test_that("Year summaries", {
+test_that("Site summaries", {
   aquifer_data <- aquifer_data
 
-  summary_info2 <- all_year_summaries(aquifer_data, "lev_va")
+  summary_info2 <- site_data_summary(aquifer_data, "lev_va")
   expect_type(summary_info2, "list")
   
   expect_true(all(names(summary_info2) %in% 
                     c("site_no", "min_site",
                       "max_site",  "mean_site",
-                      "p10", "p25", "p75",      
+                      "p10", "p25", "p75", "p50",     
                       "p90",  "count")))
   
   expect_equal(round(summary_info2$min_site[1], digits = 2), 3.26)
@@ -23,6 +23,45 @@ test_that("Year summaries", {
   
 })
 
+test_that("QW summaries", {
+  
+  qw_data <- L2701_example_data$QW
+  
+  x <- qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
+  
+  expect_true(all(x$Analysis == c("Date of first sample",                           
+                                     "First sample result (mg/l)",                     
+                                     "Date of last sample",                            
+                                     "Last sample result (mg/l)",                      
+                                     "Date of first sample within  225 to 999 mg/l",   
+                                     "Date of first sample with  1000 mg/l or greater",
+                                     "Minimum (mg/l)",                                 
+                                     "Maximum (mg/l)",                                 
+                                     "Mean (mg/l)",                                    
+                                     "First quartile (mg/l)",                          
+                                     "Median (mg/l)",                                  
+                                     "Third quartile (mg/l)",                          
+                                     "Number of samples")))
+  
+  expect_true(all(x$Result == c("1978-09-06", "52", "2019-04-17", "113", "",          
+                                  "", "14", "113", "59.3", "54",        
+                                  "58", "67.5", "78")))
+  
+  y <- qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)
+  
+  expect_true(all(y$Analysis == c("Date of first sample", "First sample result (uS/cm @25C)",
+                                   "Date of last sample", "Last sample result (uS/cm @25C)", 
+                                   "Minimum (uS/cm @25C)", "Maximum (uS/cm @25C)",            
+                                   "Mean (uS/cm @25C)", "First quartile (uS/cm @25C)",     
+                                   "Median (uS/cm @25C)", "Third quartile (uS/cm @25C)",     
+                                   "Number of samples")))
+  
+  expect_true(all(y$Result == c("1979-05-09", "580", "2019-04-17", "748", "176",       
+                                "785", "550", "543", "560", "568",       
+                                "388")))
+  
+  
+})
 
 test_that("Map info", {
   aquifer_data <- aquifer_data

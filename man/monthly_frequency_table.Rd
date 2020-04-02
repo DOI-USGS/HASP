@@ -4,10 +4,10 @@
 \alias{monthly_frequency_table}
 \title{Create a table of monthly frequency analysis}
 \usage{
-monthly_frequency_table(gw_level_data)
+monthly_frequency_table(gwl_data)
 }
 \arguments{
-\item{gw_level_data}{groundwater level data from \code{readNWISgwl}}
+\item{gwl_data}{groundwater level data from \code{readNWISgwl}}
 }
 \value{
 a data frame of monthly groundwater level statistics including the
@@ -20,7 +20,8 @@ Create a table of monthly frequency analysis
 }
 \examples{
 
-site <- "263819081585801"
-gw_level_data <- dataRetrieval::readNWISgwl(site)
-monthly_frequency <- monthly_frequency_table(gw_level_data)
+# site <- "263819081585801"
+# gwl_data <- dataRetrieval::readNWISgwl(site)
+gwl_data <- L2701_example_data$Discrete
+monthly_frequency <- monthly_frequency_table(gwl_data)
 }

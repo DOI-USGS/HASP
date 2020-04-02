@@ -4,13 +4,13 @@
 \alias{daily_gwl_summary}
 \title{Summary table of daily data}
 \usage{
-daily_gwl_summary(gw_level_dv, parameterCd, statCd)
+daily_gwl_summary(gw_level_dv, p_code_dv, statCd)
 }
 \arguments{
 \item{gw_level_dv}{daily groundwater level data
 from readNWISdv}
 
-\item{parameterCd}{the parameter code used}
+\item{p_code_dv}{the parameter code used}
 
 \item{statCd}{the statistic code used}
 }
@@ -23,10 +23,11 @@ Summary table of daily data
 }
 \examples{
 
-site <- "263819081585801"
-parameterCd <- "62610"
+# site <- "263819081585801"
+p_code_dv <- "62610"
 statCd <- "00001"
-gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-daily_gwl_summary(gwl_data, parameterCd, statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gw_level_dv <- L2701_example_data$Daily
+daily_gwl_summary(gw_level_dv, p_code_dv, statCd)
 
 }

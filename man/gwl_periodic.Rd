@@ -5,16 +5,42 @@
 \alias{gwl_plot_all}
 \title{Single site groundwater level plots and tables}
 \usage{
-gwl_plot_periodic(gwl, title = "")
+gwl_plot_periodic(
+  gwl_data,
+  plot_title = "",
+  date_col = "lev_dt",
+  value_col = "sl_lev_va",
+  approved_col = "lev_age_cd"
+)
 
-gwl_plot_all(dv, gwl, title = "")
+gwl_plot_all(
+  gw_level_dv,
+  gwl_data,
+  plot_title = "",
+  date_col = "lev_dt",
+  value_col = "sl_lev_va",
+  approved_col = "lev_age_cd",
+  p_code_dv = "62610",
+  add_trend = FALSE
+)
 }
 \arguments{
-\item{gwl}{data frame returned from dataRetrieval::readNWISgwl}
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl}
 
-\item{title}{character}
+\item{plot_title}{character}
 
-\item{dv}{daily value groundwater levels. Must include columns}
+\item{date_col}{name of date column. Default is "lev_dt".}
+
+\item{value_col}{name of value column. Default is "sl_lev_va".}
+
+\item{approved_col}{name of column to get provisional/approved status.
+Default is "lev_age_cd".}
+
+\item{gw_level_dv}{daily value groundwater levels. Must include columns}
+
+\item{p_code_dv}{daily parameter code. Default is "62610".}
+
+\item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
 }
 \description{
 Funtion to create the periodic groundwater data plot.
@@ -27,12 +53,12 @@ Funtion to create the periodic groundwater data plot.
 # Using package example data:
 gwl_data <- L2701_example_data$Discrete
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-gwl_plot_periodic(gwl_data, title = title)
+gwl_plot_periodic(gwl_data, plot_title = title)
 # site <- "263819081585801"
-# parameterCd <- "62610"
+parameterCd <- "62610"
 # statCd <- "00001"
-# dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 # Using package example data:
-dv <- L2701_example_data$Daily
-gwl_plot_all(dv, gwl_data)
+gw_level_dv <- L2701_example_data$Daily
+gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
 }
