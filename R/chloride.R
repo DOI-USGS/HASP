@@ -37,10 +37,11 @@ trend_plot <- function(qw_data, title,
   
   sample_dt <- condition <- result_va <- remark_cd <- parm_cd <- ".dplyr"
   x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
+  
   qw_sub <- qw_data %>% 
     filter(parm_cd %in% pcode) %>% 
     arrange(sample_dt)
-  
+
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"
     col_values <- c("medium")
@@ -94,9 +95,12 @@ trend_plot <- function(qw_data, title,
     scale_linetype_manual("Trend", 
                           values = linetype,
                           breaks = c("5-year trend", "20-year trend"),
-                          labels = c("5 year", "20 year"))
+                          labels = c("5 year", "20 year")) +
     ggtitle(title, 
-            subtitle = "U.S. Geological Survey") 
+            subtitle = "U.S. Geological Survey") +
+    guides(shape = guide_legend(order = 1),
+           color = guide_legend(order = 1),
+           linetype = guide_legend(order = 2))
     
     return(plot_out)
   
