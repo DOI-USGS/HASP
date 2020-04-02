@@ -128,8 +128,8 @@ gwl_plot_periodic(gwl_data, title)
 
 ```{r dvPlot}
 # Get data:
-# parameterCd <- "62610"
-# statCd <- "00001"
+parameterCd <- "62610"
+statCd <- "00001"
 # dv <- dataRetrieval::readNWISdv(siteID, 
 #                                 parameterCd, 
 #                                 statCd = statCd)

@@ -70,6 +70,10 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 #' # Using package example data:
 #' gw_level_dv <- L2701_example_data$Daily
 #' gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
+#' 
+#' gwl_plot_all(gw_level_dv, gwl_data, add_trend = TRUE,
+#'              p_code_dv = parameterCd)
+#' 
 gwl_plot_all <- function(gw_level_dv, gwl_data, 
                          plot_title = "",
                          date_col = "lev_dt",
@@ -86,6 +90,8 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
     stop("data frame gw_level_dv doesn't include all mandatory columns")
   }
   
+  x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
+  
   val_cols <- grep(p_code_dv, names(gw_level_dv))
   remark_col <- grep("_cd", names(gw_level_dv))
   remark_col <- remark_col[remark_col %in% val_cols]
@@ -94,10 +100,15 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
   val_cols <- names(gw_level_dv)[val_cols]
   remark_col <- names(gw_level_dv)[remark_col]
   
-  # seg_df <- create_segs(qw_sub)
+  if(add_trend){
+    seg_df <- create_segs(gw_level_dv, 
+                          date_col = "Date",
+                          value_col = val_cols)
+  }
 
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
+  linetype = c('solid', 'dashed')
   
   plot_out <- ggplot() +
     geom_line(data = gw_level_dv,
@@ -120,9 +131,26 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
                        labels = c("A" = "Approved",
                                   "P" = "Provisional")) +
     ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
-    theme(legend.position = "bottom",
-          legend.direction = "vertical")
+            subtitle = "U.S. Geological Survey")
+  
+  if(add_trend){
+    plot_out <- plot_out +
+      geom_segment(data = seg_df, color = "darkgreen", size = 1,
+                   aes(x = x1, xend = x2, 
+                       y = y1, yend = y2,
+                       group = trend, linetype = trend)) +
+      scale_linetype_manual("Trend", 
+                            values = linetype,
+                            breaks = c("5-year trend", "20-year trend"),
+                            labels = c("5 year", "20 year")) +
+      guides(fill = guide_legend(order = 1),
+             color = guide_legend(order = 2),
+             linetype = guide_legend(order = 3))
+  } else {
+    plot_out <- plot_out +
+      guides(fill = guide_legend(order = 1),
+             color = guide_legend(order = 2))
+  }
   
   return(plot_out)
   

@@ -61,7 +61,10 @@ statCd <- "00001"
 gw_level_dv <- L2701_example_data$Daily
 weekly_frequency_plot(gw_level_dv, parameterCd, statCd, 
                       plot_title = "263819081585801 L -2701 ")
-weekly_freq_table <- weekly_frequency_table(gw_level_dv, parameterCd, statCd) %>%
+
+weekly_freq_table <- weekly_frequency_table(gw_level_dv,
+                                            parameterCd,
+                                            statCd) %>%
   select(week, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
   rename("Week of the year" = week,
          "Lowest median" = minMed,
@@ -75,3 +78,24 @@ kable(weekly_freq_table)
 
 ```
 
+### Water level trends
+
+```{r trend_dv}
+# gwl_data <- dataRetrieval::readNWISgwl(siteID)
+# Use package sample data:
+gwl_data <- L2701_example_data$Discrete
+
+gwl_plot_all(gw_level_dv, 
+             gwl_data, add_trend = TRUE,
+             p_code_dv = parameterCd)
+```
+
+```{r gwl_trend_table}
+gwl_trend <- kendell_test_5_20_years(gw_level_dv, 
+                     seasonal = FALSE,
+                     enough_5 = 1,
+                     enough_20 = 1,
+                     date_col = "Date",
+                     value_col = "X_62610_00001")
+kable(gwl_trend, digits = 3)
+```
