@@ -5,15 +5,15 @@
 \title{Plot monthly frequency analysis}
 \usage{
 monthly_frequency_plot(
-  gw_level_data,
-  title = "",
+  gwl_data,
+  plot_title = "",
   range = c("Past year", "Calendar year")
 )
 }
 \arguments{
-\item{gw_level_data}{groundwater level data from \code{readNWISgwl}}
+\item{gwl_data}{groundwater level data from \code{readNWISgwl}}
 
-\item{title}{the title to use on the plot}
+\item{plot_title}{the title to use on the plot}
 
 \item{range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
@@ -29,7 +29,8 @@ Plot monthly frequency analysis
 }
 \examples{
 
-site <- "263819081585801"
-gwl_data <- dataRetrieval::readNWISgwl(site)
-monthly_frequency_plot(gwl_data, title = "Groundwater level")
+#site <- "263819081585801"
+#gwl_data <- dataRetrieval::readNWISgwl(site)
+gwl_data <- L2701_example_data$Discrete
+monthly_frequency_plot(gwl_data, plot_title = "Groundwater level")
 }

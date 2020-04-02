@@ -6,7 +6,7 @@
 #' must include columns sample_dt, parm_cd, result_va
 #' @param pcode character pcode to plot
 #' @param norm_range a numerical range to potentially group the data. If NA, no grouping is shown.
-#' @param title character
+#' @param plot_title character
 #' @rdname chloridetrend
 #' @export
 #' @import ggplot2
@@ -22,8 +22,8 @@
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
 #' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
-#' trend_plot(qw_data, title = title)
-trend_plot <- function(qw_data, title, 
+#' trend_plot(qw_data, plot_title = title)
+trend_plot <- function(qw_data, plot_title, 
                           pcode = c("00940","99220"),
                           norm_range = c(225,999)){
   
@@ -96,7 +96,7 @@ trend_plot <- function(qw_data, title,
                           values = linetype,
                           breaks = c("5-year trend", "20-year trend"),
                           labels = c("5 year", "20 year")) +
-    ggtitle(title, 
+    ggtitle(plot_title, 
             subtitle = "U.S. Geological Survey") +
     guides(shape = guide_legend(order = 1),
            color = guide_legend(order = 1),

@@ -5,7 +5,7 @@
 #'
 #' @param qw_data data frame returned from dataRetrieval::readNWISqw,
 #' must include columns sample_dt, parm_cd, result_va
-#' @param title character
+#' @param plot_title character
 #' @rdname sc_cl
 #' @export
 #' @import ggplot2
@@ -21,8 +21,8 @@
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
 #' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-#' Sc_Cl_plot(qw_data, title = title)
-Sc_Cl_plot <- function(qw_data, title){
+#' Sc_Cl_plot(qw_data, plot_title = title)
+Sc_Cl_plot <- function(qw_data, plot_title){
   
   chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
   
@@ -51,7 +51,7 @@ Sc_Cl_plot <- function(qw_data, title){
     scale_x_continuous(Sctitle, 
                        labels = scales::comma) +
     labs(caption = paste("Plot created:", Sys.Date())) +
-    ggtitle(title, subtitle = "U.S. Geological Survey") 
+    ggtitle(plot_title, subtitle = "U.S. Geological Survey") 
   
   return(plot_out)
   
@@ -103,7 +103,7 @@ Sc_Cl_table <- function(qw_data){
 #' title <- attr(qw_data, "siteInfo")[["station_nm"]]
 #' qw_plot(qw_data, title, pcode = c("00095", "90095"))
 #' qw_plot(qw_data, title, pcode = c("00940","99220"))
-qw_plot <- function(qw_data, title,
+qw_plot <- function(qw_data, plot_title,
                     pcode = c("00095", "90095")){
   
   if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
@@ -127,7 +127,7 @@ qw_plot <- function(qw_data, title,
     expand_limits(y = 0) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
 
-    ggtitle(title, 
+    ggtitle(plot_title, 
             subtitle = "U.S. Geological Survey") +
     theme(legend.position = "bottom",
           legend.direction = "vertical")

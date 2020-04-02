@@ -6,7 +6,7 @@
 \usage{
 trend_plot(
   qw_data,
-  title,
+  plot_title,
   pcode = c("00940", "99220"),
   norm_range = c(225, 999)
 )
@@ -15,7 +15,7 @@ trend_plot(
 \item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
 must include columns sample_dt, parm_cd, result_va}
 
-\item{title}{character}
+\item{plot_title}{character}
 
 \item{pcode}{character pcode to plot}
 
@@ -33,5 +33,5 @@ Function creates the cloride over time plot with trends.
 # Using package example data:
 qw_data <- L2701_example_data$QW
 title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
-trend_plot(qw_data, title = title)
+trend_plot(qw_data, plot_title = title)
 }

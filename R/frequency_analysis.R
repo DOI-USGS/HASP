@@ -1,6 +1,6 @@
 #' Create a table of monthly frequency analysis
 #' 
-#' @param gw_level_data groundwater level data from \code{readNWISgwl}
+#' @param gwl_data groundwater level data from \code{readNWISgwl}
 #' 
 #' @return a data frame of monthly groundwater level statistics including the
 #' 5th, 10th, 25th, 75th, 90th, and 95th percentiles; the number of
@@ -16,38 +16,38 @@
 #' 
 #' @examples 
 #' 
-#' site <- "263819081585801"
-#' gw_level_data <- dataRetrieval::readNWISgwl(site)
-#' monthly_frequency <- monthly_frequency_table(gw_level_data)
-
-monthly_frequency_table <- function(gw_level_data) {
+#' #site <- "263819081585801"
+#' #gwl_data <- dataRetrieval::readNWISgwl(site)
+#' gwl_data <- L2701_example_data$Discrete
+#' monthly_frequency <- monthly_frequency_table(gwl_data)
+monthly_frequency_table <- function(gwl_data) {
   
   year <- lev_dt <- month <- week <- sl_lev_va <- ".dplyr"
   
-  if(!all(c("lev_dt", "sl_lev_va") %in% names(gw_level_data))) {
-    stop("gw_level_data should include 'sl_lev_va' and 'lev_dt' columns")
+  if(!all(c("lev_dt", "sl_lev_va") %in% names(gwl_data))) {
+    stop("gwl_data should include 'sl_lev_va' and 'lev_dt' columns")
   }
   
-  datums <- unique(gw_level_data$sl_datum_cd)
+  datums <- unique(gwl_data$sl_datum_cd)
   if(length(datums) > 1) {
     datums <- paste(datums, collapse = ", ")
     datums <- sprintf("(%s)", datums)
     stop(paste("Data has measurements using multiple vertical datums", datums))
   }
   
-  gw_level_data <- gw_level_data %>%
+  gwl_data <- gwl_data %>%
     mutate(year = year(lev_dt),
            month = month(lev_dt),
            week = week(lev_dt))
   
-  annual_stats <- gw_level_data %>%
+  annual_stats <- gwl_data %>%
     group_by(year, month) %>%
     summarize(median = median(sl_lev_va)) %>%
     group_by(month) %>%
     summarize(minMed = min(median, na.rm = TRUE),
               maxMed = max(median, na.rm = TRUE))
   
-  monthly_stats <- gw_level_data %>%
+  monthly_stats <- gwl_data %>%
     group_by(month) %>%
     summarize(p5 = quantile(sl_lev_va, probs=0.05, na.rm=TRUE),
               p10 = quantile(sl_lev_va, probs=0.1, na.rm=TRUE),
@@ -65,8 +65,8 @@ monthly_frequency_table <- function(gw_level_data) {
 
 #' Plot monthly frequency analysis
 #' 
-#' @param gw_level_data groundwater level data from \code{readNWISgwl}
-#' @param title the title to use on the plot
+#' @param gwl_data groundwater level data from \code{readNWISgwl}
+#' @param plot_title the title to use on the plot
 #' @param range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
@@ -86,11 +86,12 @@ monthly_frequency_table <- function(gw_level_data) {
 #'
 #' @examples
 #' 
-#' site <- "263819081585801"
-#' gwl_data <- dataRetrieval::readNWISgwl(site)
-#' monthly_frequency_plot(gwl_data, title = "Groundwater level")
-monthly_frequency_plot <- function(gw_level_data, 
-                                   title = "",
+#' #site <- "263819081585801"
+#' #gwl_data <- dataRetrieval::readNWISgwl(site)
+#' gwl_data <- L2701_example_data$Discrete
+#' monthly_frequency_plot(gwl_data, plot_title = "Groundwater level")
+monthly_frequency_plot <- function(gwl_data, 
+                                   plot_title = "",
                                    range = c("Past year",
                                              "Calendar year")) {
   
@@ -103,7 +104,7 @@ monthly_frequency_plot <- function(gw_level_data,
   date <- Sys.Date()
   
   # Calculate the percentiles
-  site_statistics <- monthly_frequency_table(gw_level_data)
+  site_statistics <- monthly_frequency_table(gwl_data)
   
   # Find the bounds of the plot.
   if(range == "Past year") {
@@ -116,9 +117,9 @@ monthly_frequency_plot <- function(gw_level_data,
   }
   
   # The last year of groundwater level measurements will plot
-  gw_level_data <- filter(gw_level_data,
-                          lev_dt >= plot_start,
-                          lev_dt <= plot_end)
+  gwl_data <- filter(gwl_data,
+                      lev_dt >= plot_start,
+                      lev_dt <= plot_end)
   
   # Add the first day of the month to the site_statistics table for plotting
   plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
@@ -157,7 +158,7 @@ monthly_frequency_plot <- function(gw_level_data,
     select(plot_month_med, p50, group) %>%
     rename(x = plot_month_med, y = p50)
   
-  points_plot <- gw_level_data %>%
+  points_plot <- gwl_data %>%
     mutate(group = "Data point") %>%
     select(lev_dt, sl_lev_va, group) %>%
     rename(x = lev_dt, y = sl_lev_va) %>%
@@ -180,7 +181,7 @@ monthly_frequency_plot <- function(gw_level_data,
   } else {
     x_label <- paste(year(plot_start), year(plot_end), sep = " - ")
   }
-  datum <- unique(gw_level_data$sl_datum_cd)
+  datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Groundwater level above %s, in feet", datum)
   
   # Plot
@@ -207,7 +208,7 @@ monthly_frequency_plot <- function(gw_level_data,
                  breaks = mid_month(plot_month),
                  labels = month.abb[month(plot_month)]) +
     ylab(y_label) + xlab(x_label) + 
-    ggtitle(title, subtitle = "U.S. Geological Survey") +
+    ggtitle(plot_title, subtitle = "U.S. Geological Survey") +
     theme_gwl() +
     theme(axis.ticks.x = element_blank(),
           legend.position = "bottom",
@@ -236,13 +237,13 @@ monthly_frequency_plot <- function(gw_level_data,
 #' 
 #' @examples 
 #' 
-#' site <- "263819081585801"
+#' # site <- "263819081585801"
 #' parameterCd <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' gw_level_dv <- L2701_example_data$Daily
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv, parameterCd, statCd)
 #' 
-
 weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
   
   Date <- gw_level <- ".dplyr"
@@ -291,7 +292,7 @@ weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
 #' from readNWISdv
 #' @param parameterCd the parameter code used
 #' @param statCd the statistic code used
-#' @param title the title to use on the plot
+#' @param plot_title the title to use on the plot
 #' @param range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
@@ -310,17 +311,17 @@ weekly_frequency_table <- function(gw_level_dv, parameterCd, statCd) {
 #'
 #' @examples
 #' 
-#' site <- "263819081585801"
+#' # site <- "263819081585801"
 #' parameterCd <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-#' weekly_frequency_plot(gw_level_dv, parameterCd, statCd, title = "Groundwater Level")
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' gw_level_dv <- L2701_example_data$Daily
+#' weekly_frequency_plot(gw_level_dv, parameterCd, statCd, plot_title = "Groundwater Level")
 #' 
-
 weekly_frequency_plot <- function(gw_level_dv, 
                                   parameterCd, 
                                   statCd,
-                                  title = "", 
+                                  plot_title = "", 
                                   range = c("Past year",
                                             "Calendar year")) {
   
@@ -452,7 +453,7 @@ weekly_frequency_plot <- function(gw_level_dv,
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
     ylab(y_label) + xlab(x_label) +
-    ggtitle(title, subtitle = "U.S. Geological Survey") +
+    ggtitle(plot_title, subtitle = "U.S. Geological Survey") +
     theme_gwl() +
     theme(panel.grid = element_blank(),
           plot.title = element_text(hjust = 0.5),
@@ -470,7 +471,7 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' from readNWISdv
 #' @param parameterCd the parameter code used
 #' @param statCd the statistic code used
-#' @param title the title to use on the plot
+#' @param plot_title the title to use on the plot
 #' @return a ggplot object with a ribbon indicating the historical daily range,
 #' green line representing the historical daily median, and approved and provisional
 #' daily data for the last two years
@@ -484,14 +485,15 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'
 #' @examples
 #' 
-#' site <- "263819081585801"
+#' # site <- "263819081585801"
 #' parameterCd <- "62610"
 #' statCd <- "00001"
-#' gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-#' daily_gwl_2yr_plot(gwl_data, parameterCd, statCd, title = "Groundwater Level")
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' gw_level_dv <- L2701_example_data$Daily
+#' daily_gwl_2yr_plot(gw_level_dv, parameterCd, statCd, plot_title = "Groundwater Level")
 #' 
 
-daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, title = "") {
+daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, plot_title = "") {
   
   Date <- gw_level_cd <- J <- gw_level <- name <- group <- value <- gw_level_cd <- 
     ".dplyr"
@@ -573,7 +575,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, title = "") {
                  breaks = x_breaks, labels = x_labels) +
     scale_y_continuous() +
     xlab(x_label) + ylab(y_label) +
-    ggtitle(title, subtitle = "U.S. Geological Survey") +
+    ggtitle(plot_title, subtitle = "U.S. Geological Survey") +
     theme_gwl() +
     theme(panel.grid = element_blank(),
           plot.title = element_text(hjust = 0.5),
@@ -599,11 +601,12 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameterCd, statCd, title = "") {
 #'
 #' @examples
 #' 
-#' site <- "263819081585801"
+#' # site <- "263819081585801"
 #' parameterCd <- "62610"
 #' statCd <- "00001"
-#' gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-#' daily_gwl_summary(gwl_data, parameterCd, statCd)
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+#' gw_level_dv <- L2701_example_data$Daily
+#' daily_gwl_summary(gw_level_dv, parameterCd, statCd)
 #' 
 
 daily_gwl_summary <- function(gw_level_dv, parameterCd, statCd) {

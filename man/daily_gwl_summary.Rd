@@ -23,10 +23,11 @@ Summary table of daily data
 }
 \examples{
 
-site <- "263819081585801"
+# site <- "263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
-gwl_data <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-daily_gwl_summary(gwl_data, parameterCd, statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+gw_level_dv <- L2701_example_data$Daily
+daily_gwl_summary(gw_level_dv, parameterCd, statCd)
 
 }

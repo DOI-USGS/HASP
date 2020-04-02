@@ -155,7 +155,7 @@ qw_data <- L2701_example_data$QW
 ### Chloride
 
 ```{r chloride_plot}
-trend_plot(qw_data, title = title)
+trend_plot(qw_data, plot_title = title)
 ```
 
 ```{r chloride_trend}
@@ -197,7 +197,7 @@ kable(sc_table)
 
 ```{r salityPlot}
 
-Sc_Cl_plot(qw_data, title = title)
+Sc_Cl_plot(qw_data, plot_title = title)
 
 ```
 

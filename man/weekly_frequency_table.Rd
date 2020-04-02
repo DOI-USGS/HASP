@@ -22,10 +22,11 @@ The weekly frequency analysis is based on daily values
 }
 \examples{
 
-site <- "263819081585801"
+# site <- "263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
-gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
+gw_level_dv <- L2701_example_data$Daily
 weekly_frequency <- weekly_frequency_table(gw_level_dv, parameterCd, statCd)
 
 }

@@ -55,7 +55,7 @@ Sc_Cl_plot(qw_data, "L2701_example_data")
 ![](man/figures/graphs-4.png)<!-- -->
 
 ``` r
-trend_plot(qw_data, title = "L2701_example_data")
+trend_plot(qw_data, plot_title = "L2701_example_data")
 ```
 
 ![](man/figures/graphs-5.png)<!-- -->

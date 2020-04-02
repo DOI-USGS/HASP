@@ -7,11 +7,11 @@
 \alias{qw_summary}
 \title{Specific conductance and chloride}
 \usage{
-Sc_Cl_plot(qw_data, title)
+Sc_Cl_plot(qw_data, plot_title)
 
 Sc_Cl_table(qw_data)
 
-qw_plot(qw_data, title, pcode = c("00095", "90095"))
+qw_plot(qw_data, plot_title, pcode = c("00095", "90095"))
 
 qw_summary(qw_data, pcode, norm_range = NA)
 }
@@ -19,7 +19,7 @@ qw_summary(qw_data, pcode, norm_range = NA)
 \item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
 must include columns sample_dt, parm_cd, result_va}
 
-\item{title}{character}
+\item{plot_title}{character}
 
 \item{pcode}{character pcode to plot}
 
@@ -38,7 +38,7 @@ and combination plots and tables for a single site.
 # Using package example data:
 qw_data <- L2701_example_data$QW
 title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-Sc_Cl_plot(qw_data, title = title)
+Sc_Cl_plot(qw_data, plot_title = title)
 
 sc_cl <- Sc_Cl_table(qw_data)
 title <- attr(qw_data, "siteInfo")[["station_nm"]]

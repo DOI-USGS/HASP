@@ -35,7 +35,7 @@ test_that("SC Chloride graphs and table", {
 
   site_data <- L2701_example_data$QW
   
-  sc_plot <- Sc_Cl_plot(site_data, title = "Hi")
+  sc_plot <- Sc_Cl_plot(site_data, plot_title = "Hi")
   expect_true(all(c("Date", "chloride", "sp") %in%
                     names(sc_plot$data)))
   
@@ -72,7 +72,7 @@ test_that("Weekly frequency plot", {
   site <- "263819081585801"
   parameterCd <- "62610"
   statCd <- "00001"
-  plot <- weekly_frequency_plot(L2701_example_data$Daily, parameterCd, statCd, title = "Groundwater Level")
+  plot <- weekly_frequency_plot(L2701_example_data$Daily, parameterCd, statCd, plot_title = "Groundwater Level")
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
@@ -84,8 +84,8 @@ test_that("Weekly frequency plot", {
 test_that("Periodic gwl plot", {
   
   gwl_data <- L2701_example_data$Discrete
-  title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-  plot_out <- gwl_plot_periodic(gwl_data, title)
+  plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+  plot_out <- gwl_plot_periodic(gwl_data, plot_title)
   
   dv <- L2701_example_data$Daily
   plot2 <- gwl_plot_all(dv, gwl_data, "title")
@@ -103,9 +103,9 @@ test_that("Periodic gwl plot", {
 test_that("Daily gwl plot", {
   
   gwl_data <- L2701_example_data$Daily
-  title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+  plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
   
-  plot <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", title)
+  plot <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", plot_title)
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
@@ -117,7 +117,7 @@ test_that("Daily gwl plot", {
 test_that("Chloride trend graph", {
   qw_data <- L2701_example_data$QW
   title <- "Hi"
-  plot_out <- trend_plot(qw_data, title = title)
+  plot_out <- trend_plot(qw_data, plot_title = title)
   plot_data_elements <- unlist(lapply(plot_out$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("sample_dt", "result_va", "condition", "x1", "x2", "y1",       
