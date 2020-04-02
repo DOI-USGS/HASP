@@ -29,15 +29,15 @@
 #' 
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
-#' seasonal_kendall_trend_test(gwl_data)
+#' kendell_test_5_20_years(gwl_data)
 #' 
-seasonal_kendall_trend_test <- function(gwl, 
-                                        date_col = "lev_dt",
-                                        value_col = "sl_lev_va",
-                                        alpha = 0.95,
-                                        seasonal = TRUE,
-                                        enough_5 = 10, enough_20 = 6,
-                                        include_current_year = FALSE) {
+kendell_test_5_20_years <- function(gwl, 
+                                    date_col = "lev_dt",
+                                    value_col = "sl_lev_va",
+                                    alpha = 0.95,
+                                    seasonal = TRUE,
+                                    enough_5 = 10, enough_20 = 6,
+                                    include_current_year = FALSE) {
   
   year <- month <- ".dplyr"
   
@@ -87,7 +87,7 @@ seasonal_kendall_trend_test <- function(gwl,
 
     test[length(test) + 1] <- "5-year trend"
     tau[length(tau) + 1] <- test_5yr$estimate['tau']
-    pValue[length(pValue) + 1] <- test_5yr$p.value['z (Trend)']
+    pValue[length(pValue) + 1] <- test_5yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
     slope[length(slope) + 1] <- test_5yr$estimate['slope']
     intercept[length(intercept) + 1] <- test_5yr$estimate['intercept']
   } else {
@@ -112,7 +112,7 @@ seasonal_kendall_trend_test <- function(gwl,
 
     test[length(test) + 1] <- "20-year trend"
     tau[length(tau) + 1] <- test_20yr$estimate['tau']
-    pValue[length(pValue) + 1] <- test_20yr$p.value['z (Trend)']
+    pValue[length(pValue) + 1] <- test_20yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
     slope[length(slope) + 1] <- test_20yr$estimate['slope']
     intercept[length(intercept) + 1] <- test_20yr$estimate['intercept']
   } else {

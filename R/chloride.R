@@ -108,11 +108,11 @@ trend_plot <- function(qw_data, title,
 
 create_segs <- function(x, trend_results){
   
-  trend_results <- seasonal_kendall_trend_test(x, seasonal = FALSE,
-                                               enough_5 = 1, enough_20 = 1,
-                                               date_col = "sample_dt", 
-                                               value_col = "result_va")
-  
+  trend_results <- kendell_test_5_20_years(x, seasonal = FALSE,
+                                           enough_5 = 1, enough_20 = 1,
+                                           date_col = "sample_dt", 
+                                           value_col = "result_va")
+
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
                        x2 = as.Date(c(NA, NA)),
                        y1 = c(NA, NA),

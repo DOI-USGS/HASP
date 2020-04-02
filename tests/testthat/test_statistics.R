@@ -8,8 +8,8 @@ test_that("Kendall Seasonal Trend", {
                              lev_dt > as.Date("2010-01-01"),
                              lev_dt < as.Date("2014-01-01"))
   
-  test1 <- seasonal_kendall_trend_test(gw_level_data)
-  test2 <- expect_message(seasonal_kendall_trend_test(less_data))
+  test1 <- kendell_test_5_20_years(gw_level_data)
+  test2 <- expect_message(kendell_test_5_20_years(less_data))
   
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test1)))
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test2)))
@@ -21,11 +21,11 @@ test_that("Kendall Seasonal Trend", {
   expect_true(102 == signif(test1$intercept[2], digits = 3))
   expect_true("Not significant" == test1$trend[2])
   
-  test3 <- seasonal_kendall_trend_test(gw_level_data, seasonal = FALSE)
+  test3 <- kendell_test_5_20_years(gw_level_data, seasonal = FALSE)
   expect_true(0.0625 == signif(test3$tau[2], digits = 3))
   
   qw_data <- L2701_example_data$QW
-  test4 <- seasonal_kendall_trend_test(qw_data, seasonal = FALSE, 
+  test4 <- kendell_test_5_20_years(qw_data, seasonal = FALSE, 
                                        enough_5 = 1, enough_20 = 1,
                                        date_col = "sample_dt", value_col = "result_va")
   expect_true(0.0658 == signif(test4$slope[1], digits = 3))

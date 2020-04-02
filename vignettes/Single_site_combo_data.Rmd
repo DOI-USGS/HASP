@@ -158,6 +158,16 @@ qw_data <- L2701_example_data$QW
 trend_plot(qw_data, title = title)
 ```
 
+```{r chloride_trend}
+cl_trend <- kendell_test_5_20_years(qw_data, 
+                     seasonal = FALSE,
+                     enough_5 = 1,
+                     enough_20 = 1,
+                     date_col = "sample_dt",
+                     value_col = "result_va")
+kable(cl_trend, digits = 3)
+```
+
 ```{r chloride_table}
 chl_table <- qw_summary(qw_data, 
                        pcode = c("00940","99220"),
