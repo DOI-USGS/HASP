@@ -90,7 +90,7 @@ kendell_test_5_20_years <- function(gwl,
 
     test[length(test) + 1] <- "5-year trend"
     tau[length(tau) + 1] <- test_5yr$estimate['tau']
-    pValue[length(pValue) + 1] <- test_5yr$p.value[2]
+    pValue[length(pValue) + 1] <- test_5yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
     slope[length(slope) + 1] <- test_5yr$estimate['slope']
     intercept[length(intercept) + 1] <- test_5yr$estimate['intercept']
   } else {
@@ -115,7 +115,7 @@ kendell_test_5_20_years <- function(gwl,
 
     test[length(test) + 1] <- "20-year trend"
     tau[length(tau) + 1] <- test_20yr$estimate['tau']
-    pValue[length(pValue) + 1] <- test_20yr$p.value[2]
+    pValue[length(pValue) + 1] <- test_20yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
     slope[length(slope) + 1] <- test_20yr$estimate['slope']
     intercept[length(intercept) + 1] <- test_20yr$estimate['intercept']
   } else {
