@@ -35,7 +35,7 @@ kendell_test_5_20_years <- function(gwl,
                                     date_col = "lev_dt",
                                     value_col = "sl_lev_va",
                                     alpha = 0.95,
-                                    seasonal = TRUE,
+                                    seasonal = TRUE, 
                                     enough_5 = 10, enough_20 = 6,
                                     include_current_year = FALSE) {
   
@@ -44,27 +44,30 @@ kendell_test_5_20_years <- function(gwl,
   if(!all(c(date_col, value_col) %in% names(gwl))) {
     stop("gwl should include ", date_col, " and ", value_col, " columns")
   }
-  
   gwl$year <- as.numeric(format(gwl[[date_col]], "%Y"))
-  gwl$month <- as.numeric(format(gwl[[date_col]], "%m"))
-
+  
   if(!include_current_year) {
     current_year <- as.numeric(format(Sys.Date(), "%Y"))
     gwl <- gwl[gwl$year != current_year, ]
   }
 
   latest_measured_year <- max(gwl$year, na.rm = TRUE)
-  if(seasonal){
-    form <- as.formula(paste(value_col, " ~ month + year"))
-  } else {
-    form <- as.formula(paste(value_col, " ~ as.numeric(", date_col, ")" ))
-  }
   
-  enough_data_5yr <- enough_data(gwl, date_col = date_col, required_per_year = enough_5) 
+  
+  enough_data_5yr <- enough_data(gwl, date_col = date_col, 
+                                 required_per_year = enough_5) 
   enough_data_20yr <- enough_data(gwl, date_col = date_col, 
                                   n_years = 20, 
                                   required_per_year = enough_20) # 50% of monthly data
 
+  if(seasonal){
+    gwl$month <- as.numeric(format(gwl[[date_col]], "%m"))
+    form <- as.formula(paste(value_col, " ~ month + year"))
+  } else {
+    gwl[date_col] <- as.numeric(gwl[[date_col]])
+    form <- as.formula(paste(value_col, " ~ ", date_col ))
+  }
+  
   test <- vector()
   tau <- vector()
   pValue <- vector()
@@ -134,7 +137,53 @@ kendell_test_5_20_years <- function(gwl,
   
 }
 
-enough_data <- function(x, date_col = "lev_dt",
+#' Monthly mean
+#' 
+#' Take the mean of each month, filter if there's not at least 15 days, 
+#' and create a new date that is the midpoint of each month.
+#' 
+#' @param x data.frame
+#' @param date_col character name of date column
+#' @param value_col character name of value column
+#' @export
+#' @examples 
+#' 
+#' # site <- "263819081585801"
+#' parameterCd <- "62610"
+#' # statCd <- "00001"
+#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, 
+#' #                                           statCd = statCd)
+#' # Using package example data:
+#' gw_level_dv <- L2701_example_data$Daily
+#' gw_monthly <- monthly_mean(gw_level_dv)
+#' 
+#' kendell_test_5_20_years(gw_monthly, seasonal = TRUE, 
+#'                         date_col = "mid_date", value_col = "mean_va")
+#' 
+monthly_mean <- function(x,
+                         date_col = "Date",
+                         value_col = "X_62610_00001"){
+  
+  year <- month <- n_days <- mean_va <- ".dplyr"
+  
+  days_in_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+  
+  monthly_mean <- x %>% 
+    mutate(month = as.numeric(format(!!sym(date_col), "%m")),
+           year = as.numeric(format(!!sym(date_col), "%Y"))) %>% 
+    group_by(year, month) %>% 
+    summarize(mean_va = mean(!!sym(value_col), na.rm = TRUE),
+              n_days = n()) %>% 
+    filter(n_days > 14) %>% 
+    ungroup() %>% 
+    mutate(mid_date = as.Date(paste(year, month, 15, sep = "-")))
+    
+  return(monthly_mean)
+  
+}
+
+enough_data <- function(x, 
+                        date_col = "lev_dt",
                         n_years = 5, 
                         required_per_year = 10){
   
@@ -148,8 +197,6 @@ enough_data <- function(x, date_col = "lev_dt",
   
   yearly_count <- count(x, year)
  
-  # Need at least 80% complete monthly data for the last 5 years to procede with the 5 year test
-  # And 50% for the 20 year test
   if(nrow(yearly_count) < n_years) {
     message("Total data time span is less than ", n_years," years")
     enough_data <- FALSE

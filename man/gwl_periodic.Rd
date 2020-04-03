@@ -61,4 +61,9 @@ parameterCd <- "62610"
 # Using package example data:
 gw_level_dv <- L2701_example_data$Daily
 gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
+
+gwl_plot_all(gw_level_dv, gwl_data, add_trend = TRUE,
+             p_code_dv = parameterCd)
+
+gwl_plot_all(NULL, gwl_data, p_code_dv = parameterCd)
 }

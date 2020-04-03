@@ -39,6 +39,7 @@ site_data_summary <- function(x, sum_col){
                          count = n())
   
   summaries <- ungroup(summaries)
+  return(summaries)
   
 }
 

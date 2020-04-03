@@ -106,12 +106,15 @@ trend_plot <- function(qw_data, plot_title,
   
 }
 
-create_segs <- function(x, trend_results){
+create_segs <- function(x, 
+                        date_col = "sample_dt", 
+                        value_col = "result_va",
+                        enough_5 = 1, enough_20 = 1){
   
   trend_results <- kendell_test_5_20_years(x, seasonal = FALSE,
-                                           enough_5 = 1, enough_20 = 1,
-                                           date_col = "sample_dt", 
-                                           value_col = "result_va")
+                                           enough_5 = enough_5, enough_20 = enough_20,
+                                           date_col = date_col, 
+                                           value_col = value_col)
 
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
                        x2 = as.Date(c(NA, NA)),
@@ -123,7 +126,7 @@ create_segs <- function(x, trend_results){
   
   names(df_seg) <- c("x1", "x2", "y1", "y2", "trend")
   
-  df_seg$x2 <- x$sample_dt[nrow(x)]
+  df_seg$x2 <- x[[date_col]][nrow(x)]
   df_seg$x1[1] <- as.Date(df_seg$x2[1] - as.difftime(5*365+1, units = "days"), origin = "1970-01-01")
   df_seg$x1[2] <- as.Date(df_seg$x2[2] - as.difftime(20*365+5, units = "days"), origin = "1970-01-01")
   
