@@ -17,14 +17,19 @@ opts_chunk$set(echo = TRUE,
                message = FALSE,
                fig.width = 7,
                fig.height = 7)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(HASP)
 
 options(knitr.kable.NA = '')
+library(dplyr)
 ```
 
+<style>
+
+body {
+    max-width: 1600px;
+    margin-left:10px;
+    padding-left:10px;
+}
+</style>
 
 This vignette shows how to use `HASP` and other R tools to reproduce:
 
@@ -32,134 +37,266 @@ https://fl.water.usgs.gov/mapper/site_info.php?site=263819081585801&stationType=
 
 This page merges information from USGS Groundwater Watch website and USGS Water Science Centers.
 
-First, use the `dataRetrieval` package to get site information:
+## Site Information
 
-## DESCRIPTION
+<table>
+<tr><td>
 
 ```{r siteInfo, results='asis'}
-library(dataRetrieval)
 library(HASP)
-library(dplyr)
-library(tidyr)
 
 siteID <- "263819081585801"
 site_metadata <- site_summary(siteID, markdown = TRUE)
 ```
 
-## AVAILABLE DATA
+</td><td>
 
 ```{r whatData}
 data_info <- data_available(siteID)
 kable(data_info)
 ```
 
-## Site Statistics
+</td></tr> </table>
+
+## Get data using dataRetrieval
+
+
+<table>
+<tr><td>
+
+Using `dataRetrieval` code to get the data for this site:
+
+```{r getData, eval=FALSE}
+library(dataRetrieval)
+siteID <- "263819081585801"
+parameterCd <- "62610"
+statCd <- "00001"
+# Daily data:
+gw_level_dv <- readNWISdv(siteID,
+                          parameterCd,
+                          statCd = statCd)
+
+# Periodically measured:
+gwl_data <- readNWISgwl(siteID)
+
+# Water quality data:
+pcodes_cl_sc <- c("00095","90095","00940","99220")
+qw_data <- readNWISqw(siteID,  pcodes_cl_sc)
+
+```
+
+</td><td>
+
+Using the example data provided in the package:
+
+```{r getDataReal}
+siteID <- "263819081585801"
+parameterCd <- "62610"
+statCd <- "00001"
+
+# Daily
+gw_level_dv <-  L2701_example_data$Daily
+# Periodic
+gwl_data <- L2701_example_data$Discrete
+# QW:
+qw_data <- L2701_example_data$QW
+
+plot_title <- "263819081585801 L -2701 "
+
+```
+
+</td></tr> </table>
 
 
 ## Groundwater Data
 
-### Frequency
+### Monthly Frequency
 
-```{r monthlyFrequencyPlot}
-gwl_data <- L2701_example_data$Discrete
-title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-monthly_frequency_plot(gwl_data, plot_title = title, plot_range = "Past year")
+```{r monthlyFrequencyPlot, eval=FALSE}
+
+monthly_frequency_plot(gwl_data, 
+                       plot_title = plot_title,
+                       plot_range = "Past year")
+
+monthly_frequency_table(gwl_data)
 ```
 
-```{r monthlyFrequencyTable}
-gwl_data <- L2701_example_data$Discrete
+
+<table>
+<tr><td>
+
+```{r monthlyFreqPlot, echo = FALSE}
+monthly_frequency_plot(gwl_data, 
+                       plot_title = plot_title,
+                       plot_range = "Past year")
+```
+
+</td><td>
+
+```{r monthlyFreqTable, echo = FALSE}
 monthly_freq_table <- monthly_frequency_table(gwl_data) %>%
   select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
   mutate(month = month.abb[month]) %>%
   rename("Month" = month,
          "Lowest median" = minMed,
-         "10th percentile" = p10,
-         "25th percentile" = p25,
-         "50th percentile" = p50,
-         "75th percentile" = p75,
+         "10th" = p10,
+         "25th" = p25,
+         "50th" = p50,
+         "75th" = p75,
          "Highest median" = maxMed,
          "Number of years" = nYears)
 kable(monthly_freq_table)
 ```
 
+
+</td></tr> </table>
+
+
 ## Daily 2 year plot
 
-```{r dailyPlot}
-gwl_daily <- L2701_example_data$Daily
-parameterCd <- "62610"
-statCd <- "00001"
-title <- attr(gwl_daily, "siteInfo")[["station_nm"]]
-daily_gwl_2yr_plot(gwl_daily, parameterCd, statCd, 
-                   plot_title = title, month_breaks = FALSE, historical_stat = "median")
+```{r dailyPlot, eval = FALSE}
+
+daily_gwl_2yr_plot(gw_level_dv, 
+                   parameterCd, 
+                   statCd, 
+                   plot_title = plot_title, 
+                   month_breaks = FALSE, 
+                   historical_stat = "median")
+
+daily_gwl_summary(gw_level_dv, parameterCd, statCd)
 ```
 
-```{r dailySummary}
-gwl_daily <- L2701_example_data$Daily
-parameterCd <- "62610"
-statCd <- "00001"
-daily_summary_table <- daily_gwl_summary(gwl_daily, parameterCd, statCd) %>%
-  rename("Begin Date" = begin_date,
+<table>
+<tr><td>
+
+```{r dailyPlotShow, echo = FALSE}
+
+daily_gwl_2yr_plot(gw_level_dv, 
+                   parameterCd, 
+                   statCd, 
+                   plot_title = plot_title, 
+                   month_breaks = FALSE, 
+                   historical_stat = "median")
+```
+
+
+</td><td>
+
+```{r dailySummary, echo=FALSE}
+daily_summary_table <- daily_gwl_summary(gw_level_dv, parameterCd, statCd) %>%
+  select("Begin Date" = begin_date,
          "End Date" = end_date,
          "Days" = days,
          "% Complete" = percent_complete,
          "Lowest Level" = lowest_level,
-         "5th %ile" = p5,
-         "10th %ile" = p10,
-         "25th %ile" = p25,
-         "50th %ile" = p50,
-         "75th %ile" = p75,
-         "90th %ile" = p90,
-         "95th %ile" = p95,
+         "25th" = p25,
+         "50th" = p50,
+         "75th" = p75,
          "Highest Level" = highest_level)
 kable(daily_summary_table)
 ```
 
+</td></tr> </table>
+
+
+
 ## Periodic Groundwater Data
 
-```{r periodicPlot}
-# Get data:
-# gwl_data <- dataRetrieval::readNWISgwl(siteID)
-# Use package sample data:
-gwl_data <- L2701_example_data$Discrete
-title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-gwl_plot_periodic(gwl_data, title)
+```{r periodicPlotDisplay, eval=FALSE}
+gwl_plot_periodic(gwl_data, plot_title)
+
+site_data_summary(gwl_data, "sl_lev_va")
 ```
+
+<table>
+<tr><td>
+
+```{r periodicPlot, echo=FALSE}
+gwl_plot_periodic(gwl_data, plot_title)
+```
+
+</td><td>
+
+```{r periodicTable, echo=FALSE}
+sitePeriodic <- site_data_summary(gwl_data, 
+                                  "sl_lev_va") %>% 
+  select(Minimum = min_site, 	
+         `1st` = p25, 
+         Median = p50,
+         Mean = mean_site,
+         `3rd` = p75,
+         Maximum = max_site)
+
+kable(sitePeriodic, digits = 1)
+
+```
+
+</td></tr> </table>
+
 
 ### Period of Record - All Data Types
 
-```{r dvPlot}
-# Get data:
-parameterCd <- "62610"
-statCd <- "00001"
-# dv <- dataRetrieval::readNWISdv(siteID, 
-#                                 parameterCd, 
-#                                 statCd = statCd)
-# Use package sample data:
-dv <- L2701_example_data$Daily
+```{r dvPlotDisplay, eval=FALSE}
+gwl_plot_all(gw_level_dv, gwl_data, plot_title)
 
-gwl_plot_all(dv, gwl_data, title)
+site_data_summary(gw_level_dv, "X_62610_00001")
 ```
 
+<table>
+<tr><td>
+
+```{r dvPlot, echo=FALSE}
+gwl_plot_all(gw_level_dv, gwl_data, plot_title)
+```
+
+</td><td>
+
+```{r dailyTable, echo=FALSE}
+siteDaily <- site_data_summary(gw_level_dv, 
+                               "X_62610_00001") %>% 
+  select(Minimum = min_site, 	
+         `1st` = p25, 
+         Median = p50,
+         Mean = mean_site,
+         `3rd` = p75,
+         Maximum = max_site)
+
+kable(siteDaily, digits = 1)
+
+```
+
+</td></tr> </table>
 
 ## Salinity Data and Analysis
 
-```{r get_qw_data}
-# Get data:
-# parameterCd <- c("00095","90095","00940","99220")
-# site_data <- readNWISqw(siteID,  parameterCd)
-
-# Use package sample data:
-qw_data <- L2701_example_data$QW
-
-```
 
 ### Chloride
 
-```{r chloride_plot}
-trend_plot(qw_data, plot_title = title)
+```{r chloride_plot, eval=FALSE}
+trend_plot(qw_data, plot_title = plot_title)
+
+kendell_test_5_20_years(qw_data, 
+                       seasonal = FALSE,
+                       enough_5 = 1,
+                       enough_20 = 1,
+                       date_col = "sample_dt",
+                       value_col = "result_va")
+
+qw_summary(qw_data, 
+           pcode = c("00940","99220"),
+           norm_range = c(225,999))
 ```
 
-```{r chloride_trend}
+<table>
+<tr><td>
+
+```{r chloride_plotSHOW, echo=FALSE}
+trend_plot(qw_data, plot_title = plot_title)
+```
+
+</td><td>
+
+```{r chloride_trend, echo=FALSE}
 cl_trend <- kendell_test_5_20_years(qw_data, 
                      seasonal = FALSE,
                      enough_5 = 1,
@@ -169,7 +306,7 @@ cl_trend <- kendell_test_5_20_years(qw_data,
 kable(cl_trend, digits = 3)
 ```
 
-```{r chloride_table}
+```{r chloride_table, echo=FALSE}
 chl_table <- qw_summary(qw_data, 
                        pcode = c("00940","99220"),
                        norm_range = c(225,999))
@@ -178,15 +315,31 @@ kable(chl_table)
 ```
 
 
+
+</td></tr> </table>
+
 ### Specific Conductance
 
-```{r qwplot1}
+```{r qwplot1, eval=FALSE}
 qw_plot(qw_data, "Specific Conductance", 
         pcode = c("00095", "90095"))
-
+qw_summary(qw_data, 
+           pcode = c("00095","90095"),
+           norm_range = NA)
 ```
 
-```{r sc_table}
+
+<table>
+<tr><td>
+
+```{r qwplotReal, echo=FALSE}
+qw_plot(qw_data, "Specific Conductance", 
+        pcode = c("00095", "90095"))
+```
+
+</td><td>
+
+```{r sc_table, echo=FALSE}
 sc_table <- qw_summary(qw_data, 
                        pcode = c("00095","90095"),
                        norm_range = NA)
@@ -194,15 +347,30 @@ kable(sc_table)
 
 ```
 
+
+</td></tr> </table>
+
+
 ### Specific Conductance vs Chloride
 
-```{r salityPlot}
+```{r salityPlot, eval=FALSE}
+Sc_Cl_plot(qw_data, plot_title = plot_title)
 
-Sc_Cl_plot(qw_data, plot_title = title)
+Sc_Cl_table(qw_data)
+```
+
+<table>
+<tr><td>
+
+```{r salityPlotDisplay, echo=FALSE}
+Sc_Cl_plot(qw_data, plot_title = plot_title)
 
 ```
 
-```{r salityTable, echo=TRUE}
+
+</td><td>
+
+```{r salityTable, echo=FALSE}
 sc_cl <- Sc_Cl_table(qw_data)
 
 # only show 10 row:
@@ -211,4 +379,8 @@ kable(head(sc_cl, 10),
                     "Chloride [mg/L]",
                     "Specific conductance [µS/L]"))
 ```
+
+
+</td></tr> </table>
+
 

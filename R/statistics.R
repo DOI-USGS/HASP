@@ -90,7 +90,7 @@ kendell_test_5_20_years <- function(gwl,
 
     test[length(test) + 1] <- "5-year trend"
     tau[length(tau) + 1] <- test_5yr$estimate['tau']
-    pValue[length(pValue) + 1] <- test_5yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
+    pValue[length(pValue) + 1] <- test_5yr$p.value[2]
     slope[length(slope) + 1] <- test_5yr$estimate['slope']
     intercept[length(intercept) + 1] <- test_5yr$estimate['intercept']
   } else {
@@ -115,7 +115,7 @@ kendell_test_5_20_years <- function(gwl,
 
     test[length(test) + 1] <- "20-year trend"
     tau[length(tau) + 1] <- test_20yr$estimate['tau']
-    pValue[length(pValue) + 1] <- test_20yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
+    pValue[length(pValue) + 1] <- test_20yr$p.value[2]
     slope[length(slope) + 1] <- test_20yr$estimate['slope']
     intercept[length(intercept) + 1] <- test_20yr$estimate['intercept']
   } else {
@@ -152,7 +152,7 @@ kendell_test_5_20_years <- function(gwl,
 #' parameterCd <- "62610"
 #' # statCd <- "00001"
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, 
-#'                                            statCd = statCd)
+#' #                                           statCd = statCd)
 #' # Using package example data:
 #' gw_level_dv <- L2701_example_data$Daily
 #' gw_monthly <- monthly_mean(gw_level_dv)
@@ -164,7 +164,7 @@ monthly_mean <- function(x,
                          date_col = "Date",
                          value_col = "X_62610_00001"){
   
-  year <- month <- ".dplyr"
+  year <- month <- n_days <- mean_va <- ".dplyr"
   
   days_in_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
   

@@ -74,6 +74,7 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 #' gwl_plot_all(gw_level_dv, gwl_data, add_trend = TRUE,
 #'              p_code_dv = parameterCd)
 #' 
+#' gwl_plot_all(NULL, gwl_data, p_code_dv = parameterCd)
 gwl_plot_all <- function(gw_level_dv, gwl_data, 
                          plot_title = "",
                          date_col = "lev_dt",
@@ -85,48 +86,49 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
   if(!all(c(date_col, value_col, approved_col) %in% names(gwl_data))){
     stop("data frame gwl_data doesn't include all mandatory columns")
   }
-
-  if(!all(c("Date") %in% names(gw_level_dv))){
-    stop("data frame gw_level_dv doesn't include all mandatory columns")
-  }
   
   x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
   
-  val_cols <- grep(p_code_dv, names(gw_level_dv))
-  remark_col <- grep("_cd", names(gw_level_dv))
-  remark_col <- remark_col[remark_col %in% val_cols]
-  
-  val_cols <- val_cols[!val_cols %in% remark_col]
-  val_cols <- names(gw_level_dv)[val_cols]
-  remark_col <- names(gw_level_dv)[remark_col]
-  
-  if(add_trend){
-    seg_df <- create_segs(gw_level_dv, 
-                          date_col = "Date",
-                          value_col = val_cols)
-  }
-
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   linetype = c('solid', 'dashed')
   
   plot_out <- ggplot() +
-    geom_line(data = gw_level_dv,
-              aes_string(x = "Date", y = val_cols, color = remark_col),
-              linetype = "dashed") +
     geom_point(data = gwl_data,
                aes_string(x = date_col, y = value_col, fill = approved_col),
-               size = 1.5, shape = 21, color = "transparent") +
+               size = 1.5, shape = 21, color = "transparent") 
+    
+  if(!all(is.null(gw_level_dv))){
+    
+    if(!all(c("Date") %in% names(gw_level_dv))){
+      stop("data frame gw_level_dv doesn't include all mandatory columns")
+    }
+    
+    val_cols <- grep(p_code_dv, names(gw_level_dv))
+    remark_col <- grep("_cd", names(gw_level_dv))
+    remark_col <- remark_col[remark_col %in% val_cols]
+    
+    val_cols <- val_cols[!val_cols %in% remark_col]
+    val_cols <- names(gw_level_dv)[val_cols]
+    remark_col <- names(gw_level_dv)[remark_col]
+    
+    plot_out <- plot_out +
+      geom_line(data = gw_level_dv,
+                aes_string(x = "Date", y = val_cols, color = remark_col),
+                linetype = "dashed") +
+      scale_color_manual("Daily Data",
+                         values = c("A" = "blue", "P" = "red"), 
+                         labels = c("A" = "Approved",
+                                    "P" = "Provisional"))
+  } 
+  
+  plot_out <- plot_out +
     theme_gwl() +
     labs(caption = paste("Plot created:", Sys.Date()), 
          y = y_label, x = "Years") +
     expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0.05, 0))) +
-    scale_color_manual("Daily Data",
-                       values = c("A" = "blue", "P" = "red"), 
-                       labels = c("A" = "Approved",
-                                  "P" = "Provisional")) +
-    scale_fill_manual("Water-Level Measurement",
+    scale_y_continuous(expand = expansion(mult = c(0.05, 0)))  +
+    scale_fill_manual("Water-Level\nMeasurement",
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved",
                                   "P" = "Provisional")) +
@@ -134,6 +136,15 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
             subtitle = "U.S. Geological Survey")
   
   if(add_trend){
+    
+    gw_monthly <- monthly_mean(gw_level_dv, 
+                               date_col = "Date", 
+                               value_col = val_cols)
+    
+    seg_df <- create_segs(gw_monthly, 
+                          date_col = "mid_date",
+                          value_col = "mean_va")
+    
     plot_out <- plot_out +
       geom_segment(data = seg_df, color = "forestgreen", size = 1,
                    aes(x = x1, xend = x2, 

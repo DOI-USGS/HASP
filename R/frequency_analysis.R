@@ -107,14 +107,17 @@ monthly_frequency_table <- function(gwl_data,
 #' monthly_frequency_plot(gwl_data, plot_title = "Groundwater level")
 monthly_frequency_plot <- function(gwl_data, 
                                    plot_title = "",
-                                   range = c("Past year",
-                                             "Calendar year")) {
+                                   plot_range = c("Past year"),
+                                   date_col = "lev_dt", 
+                                   value_col = "sl_lev_va", 
+                                   approved_col = "lev_age_cd",
+                                   datum_col = "sl_datum_cd") {
   
   lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
     plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
     ymax <- x <- y <- ".dplyr"
   
-  range <- match.arg(range)
+  plot_range <- match.arg(plot_range)
   
   date <- Sys.Date()
   
@@ -122,10 +125,10 @@ monthly_frequency_plot <- function(gwl_data,
   site_statistics <- monthly_frequency_table(gwl_data)
   
   # Find the bounds of the plot.
-  if(range == "Past year") {
+  if(plot_range == "Past year") {
     plot_end <- last_day(date) + 1
     plot_start <- first_day(plot_end - 363)
-  } else if(range == "Calendar year") {
+  } else if(plot_range == "Calendar year") {
     calendar_year <- as.character(date, format = "%Y")
     plot_end <- as.Date(paste0(calendar_year, "-12-31"))
     plot_start <- as.Date(paste0(calendar_year, "-01-01"))
@@ -133,8 +136,8 @@ monthly_frequency_plot <- function(gwl_data,
   
   # The last year of groundwater level measurements will plot
   gwl_data <- filter(gwl_data,
-                      lev_dt >= plot_start,
-                      lev_dt <= plot_end)
+                      !!sym(date_col) >= plot_start,
+                     !!sym(date_col) <= plot_end)
   
   # Add the first day of the month to the site_statistics table for plotting
   plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
