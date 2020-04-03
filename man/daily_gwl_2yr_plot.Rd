@@ -4,7 +4,15 @@
 \alias{daily_gwl_2yr_plot}
 \title{Plot the last two years of daily data}
 \usage{
-daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, plot_title = "")
+daily_gwl_2yr_plot(
+  gw_level_dv,
+  p_code_dv,
+  statCd,
+  date_col = "Date",
+  plot_title = "",
+  historical_stat = c("mean", "median"),
+  month_breaks = FALSE
+)
 }
 \arguments{
 \item{gw_level_dv}{daily groundwater level data
@@ -14,11 +22,18 @@ from readNWISdv}
 
 \item{statCd}{the statistic code used}
 
+\item{date_col}{name of date column. Default is "Date"}
+
 \item{plot_title}{the title to use on the plot}
+
+\item{historical_stat}{the summary statstic to use for middle line of the plot. Either
+"mean" or "median."}
+
+\item{month_breaks}{a logical indicating whether to use monthly breaks for the plot}
 }
 \value{
 a ggplot object with a ribbon indicating the historical daily range,
-green line representing the historical daily median, and approved and provisional
+the historical daily mean or median, and approved and provisional
 daily data for the last two years
 }
 \description{
@@ -31,6 +46,7 @@ p_code_dv <- "62610"
 statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
-daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, plot_title = "Groundwater Level")
+daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, 
+                   plot_title = "Groundwater Level", historical_stat = "median")
 
 }

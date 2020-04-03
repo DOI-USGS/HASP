@@ -6,16 +6,28 @@
 \usage{
 monthly_frequency_plot(
   gwl_data,
+  date_col = "lev_dt",
+  value_col = "sl_lev_va",
+  approved_col = "lev_age_cd",
+  datum_col = "sl_datum_cd",
   plot_title = "",
-  range = c("Past year", "Calendar year")
+  plot_range = c("Past year", "Calendar year")
 )
 }
 \arguments{
 \item{gwl_data}{groundwater level data from \code{readNWISgwl}}
 
+\item{date_col}{name of date column. Default is "lev_dt".}
+
+\item{value_col}{name of value column. Default is "sl_lev_va".}
+
+\item{approved_col}{name of column to get provisional/approved status. Default is "lev_age_cd".}
+
+\item{datum_col}{name of column giving the measurement datum. Default is "sl_datum_cd"}
+
 \item{plot_title}{the title to use on the plot}
 
-\item{range}{the time frame to use for the plot. Either "Past year" to use the
+\item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
 in January.}
 }

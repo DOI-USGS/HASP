@@ -8,8 +8,9 @@ weekly_frequency_plot(
   gw_level_dv,
   p_code_dv,
   statCd,
+  date_col = "Date",
   plot_title = "",
-  range = c("Past year", "Calendar year")
+  plot_range = c("Past year", "Calendar year")
 )
 }
 \arguments{
@@ -20,9 +21,11 @@ from readNWISdv}
 
 \item{statCd}{the statistic code used}
 
+\item{date_col}{name of date column. Default is "Date".}
+
 \item{plot_title}{the title to use on the plot}
 
-\item{range}{the time frame to use for the plot. Either "Past year" to use the
+\item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
 in January.}
 }
