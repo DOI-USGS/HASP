@@ -105,11 +105,24 @@ test_that("Daily gwl plot", {
   gwl_data <- L2701_example_data$Daily
   plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
   
-  plot <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", plot_title)
+  plot1 <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", 
+                             historical_stat = "mean",
+                             month_breaks = TRUE,
+                             plot_title = plot_title)
   
-  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
+  plot_data_elements <- unlist(lapply(plot1$layers, function(x) {names(x$data)}))
   
-  expect_true(all(c("Date", "median", "min", "max", "gw_level") %in%
+  expect_true(all(c("Date", "middle", "min", "max") %in%
+                    plot_data_elements))
+  
+  plot2 <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", 
+                              historical_stat = "median",
+                              month_breaks = FALSE,
+                              plot_title = plot_title)
+  
+  plot_data_elements <- unlist(lapply(plot2$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
   
 })

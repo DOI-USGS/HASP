@@ -63,3 +63,12 @@ test_that("Daily summary table", {
   expect_equal(daily_summary_table$highest_level, -2.81, tolerance = 0.05)
   
 })
+
+test_that("Daily frequency table", {
+  
+  daily_frequency_table <- daily_frequency_table(L2701_example_data$Daily, "62610", "00001")
+  expect_equal(daily_frequency_table$max[1], -5.29, tolerance = 0.005)
+  expect_equal(daily_frequency_table$min[365], -42.2, tolerance = 0.05)
+  expect_equal(daily_frequency_table$mean[183], -24.3, tolerance = 0.05)
+  
+})
