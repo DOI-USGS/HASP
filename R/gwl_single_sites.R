@@ -135,7 +135,7 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
   
   if(add_trend){
     plot_out <- plot_out +
-      geom_segment(data = seg_df, color = "darkgreen", size = 1,
+      geom_segment(data = seg_df, color = "forestgreen", size = 1,
                    aes(x = x1, xend = x2, 
                        y = y1, yend = y2,
                        group = trend, linetype = trend)) +

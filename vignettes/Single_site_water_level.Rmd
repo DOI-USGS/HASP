@@ -91,11 +91,33 @@ gwl_plot_all(gw_level_dv,
 ```
 
 ```{r gwl_trend_table}
-gwl_trend <- kendell_test_5_20_years(gw_level_dv, 
+dv_trend <- kendell_test_5_20_years(gw_level_dv, 
+                     seasonal = FALSE,
+                     enough_5 = 6,
+                     enough_20 = 10,
+                     date_col = "Date",
+                     value_col = "X_62610_00001")
+
+dv_trend_sea <- kendell_test_5_20_years(gw_level_dv, 
+                     seasonal = TRUE,
+                     enough_5 = 6,
+                     enough_20 = 10,
+                     date_col = "Date",
+                     value_col = "X_62610_00001")
+
+gwl_trend_sea <- kendell_test_5_20_years(gwl_data, 
+                     seasonal = TRUE,
+                     enough_5 = 1,
+                     enough_20 = 1,
+                     date_col = "lev_dt",
+                     value_col = "sl_lev_va")
+
+gwl_trend_not_sea <- kendell_test_5_20_years(gwl_data, 
                      seasonal = FALSE,
                      enough_5 = 1,
                      enough_20 = 1,
-                     date_col = "Date",
-                     value_col = "X_62610_00001")
+                     date_col = "lev_dt",
+                     value_col = "sl_lev_va")
+
 kable(gwl_trend, digits = 3)
 ```
