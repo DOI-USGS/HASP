@@ -74,7 +74,28 @@ weekly_freq_table <- weekly_frequency_table(gw_level_dv,
          "75th percentile" = p75,
          "Highest median" = maxMed,
          "Number of years" = nYears)
-kable(weekly_freq_table)
+kable(head(weekly_freq_table, 10))
+
+```
+
+```{r dailyPlot}
+parameterCd <- "62610"
+statCd <- "00001"
+# gw_level_dv <- dataRetrieval::readNWISdv(siteID, parameterCd, statCd = statCd)
+# Use package sample data:
+gw_level_dv <- L2701_example_data$Daily
+daily_gwl_2yr_plot(gw_level_dv, p_code_dv = parameterCd, statCd = statCd,
+                   plot_title = "263819081585801 L -2701",
+                   historical_stat = "mean",
+                   month_breaks = TRUE)
+
+daily_table <- daily_frequency_table(gw_level_dv, p_code_dv = parameterCd, statCd = statCd) %>%
+  rename("Day of year" = DOY,
+         "Maximum" = max,
+         "Mean" = mean,
+         "Minimum" = min,
+         "Available points" = points)
+kable(head(daily_table, 10))
 
 ```
 

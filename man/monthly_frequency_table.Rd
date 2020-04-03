@@ -4,10 +4,26 @@
 \alias{monthly_frequency_table}
 \title{Create a table of monthly frequency analysis}
 \usage{
-monthly_frequency_table(gwl_data)
+monthly_frequency_table(
+  gwl_data,
+  date_col = "lev_dt",
+  value_col = "sl_lev_va",
+  approved_col = "lev_age_cd",
+  datum_col = "sl_datum_cd"
+)
 }
 \arguments{
 \item{gwl_data}{groundwater level data from \code{readNWISgwl}}
+
+\item{date_col}{name of date column. Default is "lev_dt".}
+
+\item{value_col}{name of value column. Default is "sl_lev_va".}
+
+\item{approved_col}{name of column to get provisional/approved status.
+Default is "lev_age_cd".}
+
+\item{datum_col}{name of column giving the measurement datum. Default is 
+"sl_datum_cd"}
 }
 \value{
 a data frame of monthly groundwater level statistics including the

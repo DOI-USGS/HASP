@@ -63,7 +63,7 @@ kable(data_info)
 ```{r monthlyFrequencyPlot}
 gwl_data <- L2701_example_data$Discrete
 title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-monthly_frequency_plot(gwl_data, title, "Past year")
+monthly_frequency_plot(gwl_data, plot_title = title, plot_range = "Past year")
 ```
 
 ```{r monthlyFrequencyTable}
@@ -88,8 +88,9 @@ kable(monthly_freq_table)
 gwl_daily <- L2701_example_data$Daily
 parameterCd <- "62610"
 statCd <- "00001"
-title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-daily_gwl_2yr_plot(gwl_daily, parameterCd, statCd, title)
+title <- attr(gwl_daily, "siteInfo")[["station_nm"]]
+daily_gwl_2yr_plot(gwl_daily, parameterCd, statCd, 
+                   plot_title = title, month_breaks = FALSE, historical_stat = "median")
 ```
 
 ```{r dailySummary}
