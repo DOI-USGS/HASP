@@ -20,8 +20,8 @@
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
-#' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-#' Sc_Cl_plot(qw_data, plot_title = title)
+#' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+#' Sc_Cl_plot(qw_data, plot_title)
 Sc_Cl_plot <- function(qw_data, plot_title){
   
   chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
@@ -42,7 +42,9 @@ Sc_Cl_plot <- function(qw_data, plot_title){
     geom_point(color = "blue") +
     stat_smooth(method = "lm", color = "black", 
                 formula = y ~ x , se = FALSE) +
-    hasp_framework(Cltitle, Sctitle, plot_title, zero_on_top = FALSE) +
+    hasp_framework(Cltitle, Sctitle, plot_title, zero_on_top = NA) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
     stat_poly_eq(formula = y ~ x,
                  aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
                  parse = TRUE) 
@@ -94,9 +96,9 @@ Sc_Cl_table <- function(qw_data){
 #' @param pcode character pcode to plot
 #' @export
 #' @examples
-#' title <- attr(qw_data, "siteInfo")[["station_nm"]]
-#' qw_plot(qw_data, title, pcode = c("00095", "90095"))
-#' qw_plot(qw_data, title, pcode = c("00940","99220"))
+#' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
+#' qw_plot(qw_data, plot_title, pcode = c("00095", "90095"))
+#' qw_plot(qw_data, plot_title, pcode = c("00940","99220"))
 qw_plot <- function(qw_data, plot_title,
                     pcode = c("00095", "90095")){
   
@@ -104,18 +106,22 @@ qw_plot <- function(qw_data, plot_title,
     stop("data frame qw_data doesn't include all mandatory columns")
   }
   
-  sample_dt <- result_va <- remark_cd <- parm_cd <- ".dplyr"
+  sample_dt <- result_va <- remark_cd <- parm_cd <- year <- ".dplyr"
   
   qw_data <- qw_data %>% 
-    filter(parm_cd %in% pcode)
+    filter(parm_cd %in% pcode) %>% 
+    mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
   
   y_label <- trimmed_name(pcode[1])
 
   plot_out <- ggplot() +
-    geom_point(data = qw_data,
-               aes(x = sample_dt, y = result_va),
+    geom_point(data = qw_data ,
+               aes(x = year, y = result_va),
                size = 1.5, color = "blue") +
-    hasp_framework("Date", y_label, plot_title, zero_on_top = FALSE) 
+    hasp_framework(x_label = "Date", y_label = y_label, 
+                   plot_title = plot_title, zero_on_top = FALSE) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL))
   
   return(plot_out)
   

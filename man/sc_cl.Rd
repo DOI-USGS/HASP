@@ -37,13 +37,13 @@ and combination plots and tables for a single site.
 #                                        parameterCd)
 # Using package example data:
 qw_data <- L2701_example_data$QW
-title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-Sc_Cl_plot(qw_data, plot_title = title)
+plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+Sc_Cl_plot(qw_data, plot_title)
 
 sc_cl <- Sc_Cl_table(qw_data)
-title <- attr(qw_data, "siteInfo")[["station_nm"]]
-qw_plot(qw_data, title, pcode = c("00095", "90095"))
-qw_plot(qw_data, title, pcode = c("00940","99220"))
+plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
+qw_plot(qw_data, plot_title, pcode = c("00095", "90095"))
+qw_plot(qw_data, plot_title, pcode = c("00940","99220"))
 
 qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
 qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)

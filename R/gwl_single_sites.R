@@ -29,19 +29,26 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
   if(!all(c(date_col, value_col, approved_col, "sl_datum_cd") %in% names(gwl_data))){
     stop("data frame gwl_data doesn't include all mandatory columns")
   }
+  
+  year <- ".dplyr"
 
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   
+  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
+    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
+  
   plot_out <- ggplot(data = gwl_data,
-         aes_string(x = date_col, y = value_col)) +
+         aes_string(x = "year", y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
     geom_point(aes_string(color = approved_col), size = 1) +
     hasp_framework("Years", y_label, plot_title, zero_on_top = TRUE) +
-    scale_color_manual("EXPLANATION\nWater-level measurement",
+    scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved",
                                   "P" = "Provisional")) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
     theme(legend.direction = "vertical")
 
   return(plot_out)
@@ -67,7 +74,8 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 #'              p_code_dv = parameterCd)
 #' 
 #' gwl_plot_all(NULL, gwl_data, p_code_dv = parameterCd)
-gwl_plot_all <- function(gw_level_dv, gwl_data, 
+gwl_plot_all <- function(gw_level_dv, 
+                         gwl_data, 
                          plot_title = "",
                          date_col = "lev_dt",
                          value_col = "sl_lev_va",
@@ -79,15 +87,20 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
     stop("data frame gwl_data doesn't include all mandatory columns")
   }
   
-  x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
+  x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
   
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   linetype = c('solid', 'dashed')
   
+  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
+    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
+  
   plot_out <- ggplot() +
     geom_point(data = gwl_data,
-               aes_string(x = date_col, y = value_col, fill = approved_col),
+               aes_string(x = "year", 
+                          y = value_col, 
+                          fill = approved_col),
                size = 1.5, shape = 21, color = "transparent") 
     
   if(!all(is.null(gw_level_dv))){
@@ -104,9 +117,14 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
     val_cols <- names(gw_level_dv)[val_cols]
     remark_col <- names(gw_level_dv)[remark_col]
     
+    gw_level_dv$year <- as.numeric(format(gw_level_dv[["Date"]], "%Y")) + 
+      as.numeric(as.character(gw_level_dv[["Date"]], "%j"))/365
+    
+    gw_level_dv[remark_col] <- ifelse(grepl(pattern = "A",x =  gw_level_dv[[remark_col]]), "A", "P")
+    
     plot_out <- plot_out +
       geom_line(data = gw_level_dv,
-                aes_string(x = "Date", y = val_cols, color = remark_col),
+                aes_string(x = "year", y = val_cols, color = remark_col),
                 linetype = "dashed") +
       scale_color_manual("Daily Data",
                          values = c("A" = "blue", "P" = "red"), 
@@ -117,9 +135,11 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
   plot_out <- plot_out +
     hasp_framework("Years", y_label, plot_title, zero_on_top = TRUE) +
     scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
-                       values = c("A" = "blue", "P" = "red"), 
+                       values = c("A" = "navy", "P" = "red"), 
                        labels = c("A" = "Approved",
-                                  "P" = "Provisional")) 
+                                  "P" = "Provisional")) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) 
   
   if(add_trend){
     

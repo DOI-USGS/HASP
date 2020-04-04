@@ -48,7 +48,9 @@ theme_gwl <- function(base_family = "", ...){
 hasp_framework <- function(x_label, y_label, 
                            plot_title, zero_on_top = TRUE){
   
-  if(zero_on_top) {
+  if(is.na(zero_on_top)) {
+    expand_lims <- c(0.05, 0.05)
+  } else if (zero_on_top){
     expand_lims <- c(0.05, 0)
   } else {
     expand_lims <- c(0, 0.05)
@@ -59,7 +61,7 @@ hasp_framework <- function(x_label, y_label,
                               y = y_label, x = x_label),
                          expand_limits(y = 0),
                          scale_y_continuous(expand = expansion(mult = expand_lims),
-                                            sec.axis = dup_axis(label = NULL,
+                                            sec.axis = dup_axis(labels =  NULL,
                                                                 name = NULL)),
                          ggtitle(plot_title, 
                                  subtitle = "U.S. Geological Survey"))

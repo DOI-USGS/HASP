@@ -24,8 +24,8 @@
 #' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
 #' trend_plot(qw_data, plot_title = title)
 trend_plot <- function(qw_data, plot_title, 
-                          pcode = c("00940","99220"),
-                          norm_range = c(225,999)){
+                        pcode = c("00940","99220"),
+                        norm_range = c(225,999)){
   
   if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
@@ -36,11 +36,12 @@ trend_plot <- function(qw_data, plot_title,
   }
   
   sample_dt <- condition <- result_va <- remark_cd <- parm_cd <- ".dplyr"
-  x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
+  x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
   
   qw_sub <- qw_data %>% 
     filter(parm_cd %in% pcode) %>% 
-    arrange(sample_dt)
+    arrange(sample_dt) %>% 
+    mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
 
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"
@@ -56,7 +57,7 @@ trend_plot <- function(qw_data, plot_title,
         result_va >= norm_range[1] & 
           result_va <= norm_range[2] ~ "medium",
         result_va > norm_range[2] ~ "high")) %>% 
-      select(sample_dt, result_va, condition)
+      select(sample_dt, year, result_va, condition)
     
     col_values <- c("low", "medium", "high")
     col_labels <- c(paste0("<", norm_range[1]), 
@@ -72,14 +73,17 @@ trend_plot <- function(qw_data, plot_title,
   
   plot_out <- ggplot() +
     geom_point(data = qw_sub,
-               aes(x = sample_dt, y = result_va,
+               aes(x = year, y = result_va,
                    shape = condition, 
                    color = condition)) +
     geom_segment(data = seg_df, color = "blue", 
                  aes(x = x1, xend = x2, 
                      y = y1, yend = y2,
                      group = trend, linetype = trend)) +
-    hasp_framework("Date", y_label, plot_title, zero_on_top = TRUE) +
+    hasp_framework("Date", y_label, plot_title, 
+                   zero_on_top = FALSE) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
     scale_color_manual(name = "EXPLANATION", 
                        breaks = col_values,
                        labels = col_labels,
@@ -124,6 +128,7 @@ create_segs <- function(x,
   df_seg$x1[1] <- as.Date(df_seg$x2[1] - as.difftime(5*365+1, units = "days"), origin = "1970-01-01")
   df_seg$x1[2] <- as.Date(df_seg$x2[2] - as.difftime(20*365+5, units = "days"), origin = "1970-01-01")
   
+  
   df_seg$y1[1] <- as.numeric(df_seg$x1[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
   df_seg$y2[1] <- as.numeric(df_seg$x2[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
   df_seg$trend[1] <- "5-year trend"
@@ -132,6 +137,8 @@ create_segs <- function(x,
   df_seg$y2[2] <- as.numeric(df_seg$x2[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
   df_seg$trend[2] <- "20-year trend"
   
+  df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
+  df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))
   return(df_seg)
   
 }
