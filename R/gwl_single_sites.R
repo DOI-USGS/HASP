@@ -37,20 +37,12 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
          aes_string(x = date_col, y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
     geom_point(aes_string(color = approved_col), size = 1) +
-    theme_gwl() +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Years") +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0.05, 0))) +
-    scale_color_manual("",
+    hasp_framework("Years", y_label, plot_title, zero_on_top = TRUE) +
+    scale_color_manual("EXPLANATION\nWater-level measurement",
                        values = c("A" = "blue", "P" = "red"), 
-                       labels = c("A" = "Approved water-level measurement",
-                                  "P" = "Provisional water-level measurement")) +
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
-    theme(legend.position = "bottom",
-          legend.direction = "vertical",
-          legend.title = element_blank())
+                       labels = c("A" = "Approved",
+                                  "P" = "Provisional")) +
+    theme(legend.direction = "vertical")
 
   return(plot_out)
   
@@ -123,17 +115,11 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
   } 
   
   plot_out <- plot_out +
-    theme_gwl() +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Years") +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0.05, 0)))  +
-    scale_fill_manual("Water-Level\nMeasurement",
+    hasp_framework("Years", y_label, plot_title, zero_on_top = TRUE) +
+    scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved",
-                                  "P" = "Provisional")) +
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey")
+                                  "P" = "Provisional")) 
   
   if(add_trend){
     

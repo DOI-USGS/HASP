@@ -47,6 +47,8 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, 
-                   plot_title = "Groundwater Level", historical_stat = "median")
+                   plot_title = "Groundwater Level", 
+                   month_breaks = TRUE,
+                   historical_stat = "median")
 
 }

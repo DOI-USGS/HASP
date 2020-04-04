@@ -79,11 +79,7 @@ trend_plot <- function(qw_data, plot_title,
                  aes(x = x1, xend = x2, 
                      y = y1, yend = y2,
                      group = trend, linetype = trend)) +
-    theme_gwl() +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Date") +
+    hasp_framework("Date", y_label, plot_title, zero_on_top = TRUE) +
     scale_color_manual(name = "EXPLANATION", 
                        breaks = col_values,
                        labels = col_labels,
@@ -96,8 +92,6 @@ trend_plot <- function(qw_data, plot_title,
                           values = linetype,
                           breaks = c("5-year trend", "20-year trend"),
                           labels = c("5 year", "20 year")) +
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
     guides(shape = guide_legend(order = 1),
            color = guide_legend(order = 1),
            linetype = guide_legend(order = 2))

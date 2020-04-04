@@ -2,14 +2,25 @@
 % Please edit documentation in R/ggplot2_utils.R
 \name{theme_gwl}
 \alias{theme_gwl}
+\alias{hasp_framework}
 \title{ggplot2 themes and accesories for package}
 \usage{
 theme_gwl(base_family = "", ...)
+
+hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE)
 }
 \arguments{
 \item{base_family}{character base font family}
 
 \item{\dots}{additional arguments}
+
+\item{x_label}{character}
+
+\item{y_label}{character}
+
+\item{plot_title}{character}
+
+\item{zero_on_top}{logical}
 }
 \description{
 Themes and other useful graphing utilities for the HASP package
@@ -19,4 +30,8 @@ Themes and other useful graphing utilities for the HASP package
 ggplot2::ggplot() + theme_gwl()
 
 
+
+ggplot2::ggplot() + 
+     theme_gwl() +
+     hasp_framework()
 }

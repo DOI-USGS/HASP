@@ -101,7 +101,7 @@ gwl_data <- L2701_example_data$Discrete
 # QW:
 qw_data <- L2701_example_data$QW
 
-plot_title <- "263819081585801 L -2701 "
+plot_title <- "L -2701\n263819081585801 "
 
 ```
 

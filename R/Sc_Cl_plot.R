@@ -42,16 +42,10 @@ Sc_Cl_plot <- function(qw_data, plot_title){
     geom_point(color = "blue") +
     stat_smooth(method = "lm", color = "black", 
                 formula = y ~ x , se = FALSE) +
-    theme_gwl() +
+    hasp_framework(Cltitle, Sctitle, plot_title, zero_on_top = FALSE) +
     stat_poly_eq(formula = y ~ x,
                  aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
-                 parse = TRUE) +
-    scale_y_continuous(Cltitle, 
-                       labels = scales::comma) +
-    scale_x_continuous(Sctitle, 
-                       labels = scales::comma) +
-    labs(caption = paste("Plot created:", Sys.Date())) +
-    ggtitle(plot_title, subtitle = "U.S. Geological Survey") 
+                 parse = TRUE) 
   
   return(plot_out)
   
@@ -121,16 +115,7 @@ qw_plot <- function(qw_data, plot_title,
     geom_point(data = qw_data,
                aes(x = sample_dt, y = result_va),
                size = 1.5, color = "blue") +
-    theme_gwl() +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Date") +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
-    theme(legend.position = "bottom",
-          legend.direction = "vertical")
+    hasp_framework("Date", y_label, plot_title, zero_on_top = FALSE) 
   
   return(plot_out)
   

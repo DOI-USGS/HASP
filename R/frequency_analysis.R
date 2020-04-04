@@ -448,7 +448,6 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
   
   # Plot
   plot <- ggplot() +
-    geom_vline(xintercept = month_start, color = "grey70") +
     geom_rect(data = site_statistics_plot,
               aes(xmin = plot_week,
                   xmax = plot_week_last,
@@ -456,26 +455,29 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
                   ymax = ymax, 
                   fill = group)) +
     geom_vline(xintercept = plot_week, color = "gray90") +
-    geom_point(data = point_data,
-               aes(x = x,
-                   y = y,
-                   shape = group,
-                   color = group),
-               size = 1) +
-    scale_color_manual(values = point_colors, name = NULL) +
-    scale_shape_manual(values = point_shapes, name = NULL) +
+    geom_point(data = dplyr::filter(point_data, group == "Historical weekly median"),
+               aes(x = x, y = y),
+               size = 1, color = "springgreen4", shape = 17) +
+    geom_line(data = dplyr::filter(point_data, 
+                                   group != "Historical weekly median"),
+               aes(x = x, y = y, color = group), size = 1) +
+    geom_vline(xintercept = month_start, color = "grey70") +
+    scale_color_manual(values = point_colors, name = "EXPLANATION") +
+    scale_shape_manual(values = "", name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
-    ylab(y_label) + xlab(x_label) +
-    ggtitle(plot_title, subtitle = "U.S. Geological Survey") +
-    theme_gwl() +
-    theme(panel.grid = element_blank(),
-          plot.title = element_text(hjust = 0.5),
-          axis.ticks.x = element_blank(),
-          legend.position = "bottom",
-          legend.box = "vertical")
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE) +
+    guides(color = guide_legend(order = 1, ),
+           shape = guide_legend(order = 1),
+           fill = guide_legend(order = 2)) +
+    theme(axis.ticks.x = element_blank(),
+          aspect.ratio = NULL,
+          # legend.position = "bottom",
+          legend.direction="vertical",
+          legend.box = "horoizontal",
+          legend.spacing.y = unit(0.15, "cm"))
   
   return(plot)
   
@@ -512,7 +514,9 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' daily_gwl_2yr_plot(gw_level_dv, p_code_dv, statCd, 
-#'                    plot_title = "Groundwater Level", historical_stat = "median")
+#'                    plot_title = "Groundwater Level", 
+#'                    month_breaks = TRUE,
+#'                    historical_stat = "median")
 #' 
 
 daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date",
@@ -608,18 +612,17 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
   y_label <- readNWISpCode(p_code_dv)$parameter_nm
   
   plot <- ggplot() +
-    geom_ribbon(data = plot_data, aes(x = Date, ymin = min, ymax = max, fill = group)) +
-    geom_line(data = line_data, aes(x = Date, y = value, color = group)) +
+    geom_ribbon(data = plot_data, 
+                aes(x = Date, ymin = min, ymax = max, fill = group)) +
+    geom_line(data = line_data, 
+              aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    scale_y_continuous() +
-    xlab(x_label) + ylab(y_label) +
-    ggtitle(plot_title, subtitle = "U.S. Geological Survey") +
-    theme_gwl() +
-    theme(panel.grid = element_blank(),
-          plot.title = element_text(hjust = 0.5),
-          legend.position = "bottom",
-          legend.box = "vertical")
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE) +
+    theme(#legend.position = "bottom",
+          legend.direction="vertical",
+          legend.box = "horoizontal",
+          legend.spacing.y = unit(0.15, "cm"))
   
   if(month_breaks) {
     plot <- plot +
@@ -628,9 +631,9 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
       scale_x_date(limits = c(plot_start, plot_end), expand = c(0,0),
                    breaks = x_breaks, labels = x_tick_labels) +
       theme(axis.ticks.x = element_blank())
-      
+    
   } else {
-    plot <- plot  +
+    plot <- plot +
       scale_x_date(limits = c(plot_start, plot_end), expand = c(0,0),
                    breaks = x_breaks, labels = x_tick_labels)
   }
