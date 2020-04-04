@@ -225,12 +225,8 @@ monthly_frequency_plot <- function(gwl_data,
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[month(plot_month)]) +
-    ylab(y_label) + xlab(x_label) + 
-    ggtitle(plot_title, subtitle = "U.S. Geological Survey") +
-    theme_gwl() +
-    theme(axis.ticks.x = element_blank(),
-          legend.position = "bottom",
-          legend.box = "vertical")
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE) +
+    theme(axis.ticks.x = element_blank())
   
   return(plot)
 }
