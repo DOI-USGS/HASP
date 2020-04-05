@@ -121,7 +121,7 @@ qw_plot <- function(qw_data, plot_title,
     geom_point(data = qw_data ,
                aes(x = year, y = result_va),
                size = 1.5, color = "blue") +
-    hasp_framework(x_label = "Date", y_label = y_label, 
+    hasp_framework(x_label = "Date", y_label = y_label, include_y_scale = TRUE,
                    plot_title = plot_title, zero_on_top = on_top) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL))

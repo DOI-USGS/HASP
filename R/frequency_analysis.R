@@ -480,7 +480,7 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_label, plot_title, 
+    hasp_framework(x_label, y_label, plot_title, include_y_scale = TRUE,
                    zero_on_top = on_top) +
     guides(color = guide_legend(order = 1, 
                                 override.aes = list(shape = c(NA, NA, 17),
@@ -629,7 +629,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
               aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "EXPLANATION") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
+    hasp_framework(x_label, y_label, include_y_scale = TRUE,
+                   plot_title, zero_on_top = on_top) +
     theme(aspect.ratio = NULL) +
     scale_x_date(limits = c(plot_start, plot_end), 
                  expand = c(0,0),
