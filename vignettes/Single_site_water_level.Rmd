@@ -176,7 +176,7 @@ head(daily_table, n = 10)
 <table>
 <tr><td>
 
-```{r dailyDo, echo=FALSE}
+```{r dailyDo, echo=FALSE, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
                    p_code_dv = parameterCd, 
                    statCd = statCd,

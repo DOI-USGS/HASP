@@ -475,7 +475,8 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
+    hasp_framework(x_label, y_label, plot_title, 
+                   zero_on_top = on_top) +
     guides(color = guide_legend(order = 1, 
                                 override.aes = list(shape = c(NA, NA, 17),
                                                     linetype = c("solid", "solid", "blank"))),
@@ -523,7 +524,6 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
 #'                    month_breaks = TRUE,
 #'                    historical_stat = "median")
 #' 
-
 daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date",
                                plot_title = "",
                                historical_stat = c("mean", "median"), 
@@ -577,7 +577,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
            !!sym(date_col) <= most_recent) %>%
     bind_rows(buffer) %>%
     left_join(historical_stats, by = "J") %>%
-    mutate(group = "Approved Daily Min & Max")
+    mutate(group = "Approved Daily\nMin & Max")
   
   line_data <- plot_data %>%
     rename(Date = !!date_col, gw_level = !!dv_heading, gw_level_cd = !!dv_heading_cd) %>%
@@ -600,7 +600,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
                    "Provisional daily value" = "red",
                    "Approved daily value" = "navy")
   names(line_colors)[1] <- historical_name
-  ribbon_colors <- c("Approved Daily Min & Max" = "lightskyblue1")
+  ribbon_colors <- c("Approved Daily\nMin & Max" = "lightskyblue1")
   
   if(month_breaks) {
     x_label <- paste(as.character(plot_start, "%B %Y"), 
@@ -622,26 +622,23 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
                 aes(x = Date, ymin = min, ymax = max, fill = group)) +
     geom_line(data = line_data, 
               aes(x = Date, y = value, color = group)) +
-    scale_color_manual(values = line_colors, name = "") +
+    scale_color_manual(values = line_colors, name = "EXPLANATION") +
     scale_fill_manual(values = ribbon_colors, name = "") +
     hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
-    theme(legend.direction="vertical",
-          legend.box = "horoizontal",
-          legend.spacing.y = unit(0.15, "cm"))
+    theme(aspect.ratio = NULL) +
+    scale_x_date(limits = c(plot_start, plot_end), 
+                 expand = c(0,0),
+                 breaks = x_breaks, labels = x_tick_labels) +
+    guides(color = guide_legend(order = 1),
+           fill = guide_legend(order = 2)) 
   
   if(month_breaks) {
     plot <- plot +
       geom_vline(xintercept = seq.Date(plot_start, plot_end, by = "month"),
                  color = "grey80") +
-      scale_x_date(limits = c(plot_start, plot_end), expand = c(0,0),
-                   breaks = x_breaks, labels = x_tick_labels) +
       theme(axis.ticks.x = element_blank())
     
-  } else {
-    plot <- plot +
-      scale_x_date(limits = c(plot_start, plot_end), expand = c(0,0),
-                   breaks = x_breaks, labels = x_tick_labels)
-  }
+  } 
   
   return(plot)
   

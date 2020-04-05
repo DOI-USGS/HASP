@@ -169,7 +169,7 @@ daily_gwl_summary(gw_level_dv, parameterCd, statCd)
 <table>
 <tr><td>
 
-```{r dailyPlotShow, echo = FALSE}
+```{r dailyPlotShow, echo = FALSE, fig.width=9}
 
 daily_gwl_2yr_plot(gw_level_dv, 
                    parameterCd, 
