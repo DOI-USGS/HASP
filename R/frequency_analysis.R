@@ -220,15 +220,20 @@ monthly_frequency_plot <- function(gwl_data,
                    color = group),
                size = 2.5) +
     geom_vline(xintercept = plot_month) +
-    scale_color_manual(values = point_colors, name = NULL) +
-    scale_shape_manual(values = point_shapes, name = NULL) +
+    scale_color_manual(values = point_colors, name = "EXPLANATION") +
+    scale_shape_manual(values = point_shapes, name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[month(plot_month)]) +
     hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
-    theme(axis.ticks.x = element_blank())
+    theme(axis.ticks.x = element_blank()) +
+    guides(color = guide_legend(order = 1, 
+                                override.aes = list(shape = point_shapes,
+                                                    color = point_colors)),
+           shape = FALSE,
+           fill = guide_legend(order = 2)) 
   
   return(plot)
 }
