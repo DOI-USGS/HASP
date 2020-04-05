@@ -21,8 +21,8 @@
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
-#' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
-#' trend_plot(qw_data, plot_title = title)
+#' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
+#' trend_plot(qw_data, plot_title)
 trend_plot <- function(qw_data, plot_title, 
                         pcode = c("00940","99220"),
                         norm_range = c(225,999)){
@@ -67,7 +67,8 @@ trend_plot <- function(qw_data, plot_title,
   }
   
   y_label <- trimmed_name(pcode[1])
-
+  on_top <- zero_on_top(qw_sub$result_va)
+  
   seg_df <- create_segs(qw_sub)
   linetype = c('solid', 'dashed')
   
@@ -81,7 +82,7 @@ trend_plot <- function(qw_data, plot_title,
                      y = y1, yend = y2,
                      group = trend, linetype = trend)) +
     hasp_framework("Date", y_label, plot_title, 
-                   zero_on_top = FALSE) +
+                   zero_on_top = on_top) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
     scale_color_manual(name = "EXPLANATION", 

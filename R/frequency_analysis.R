@@ -91,7 +91,7 @@ monthly_frequency_table <- function(gwl_data,
 #' showing the last year of groundwater level measurements.
 #' 
 #' @import ggplot2
-#' @import tidyr
+#' @importFrom tidyr pivot_longer
 #' @import dplyr
 #' @importFrom lubridate year
 #' @importFrom lubridate month
@@ -442,6 +442,8 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
   month_breaks <- mid_month(month_start)
   month_labels <- month.abb[month(month_breaks)]
   
+  on_top <- zero_on_top(point_data$y)
+  
   # Plot
   plot <- ggplot() +
     geom_rect(data = site_statistics_plot,
@@ -464,13 +466,12 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE) +
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
     guides(color = guide_legend(order = 1, ),
            shape = guide_legend(order = 1),
            fill = guide_legend(order = 2)) +
     theme(axis.ticks.x = element_blank(),
           aspect.ratio = NULL,
-          # legend.position = "bottom",
           legend.direction="vertical",
           legend.box = "horoizontal",
           legend.spacing.y = unit(0.15, "cm"))
@@ -606,6 +607,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
   }
   
   y_label <- readNWISpCode(p_code_dv)$parameter_nm
+  on_top <- zero_on_top(line_data$value)
   
   plot <- ggplot() +
     geom_ribbon(data = plot_data, 
@@ -614,9 +616,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Date"
               aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE) +
-    theme(#legend.position = "bottom",
-          legend.direction="vertical",
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
+    theme(legend.direction="vertical",
           legend.box = "horoizontal",
           legend.spacing.y = unit(0.15, "cm"))
   

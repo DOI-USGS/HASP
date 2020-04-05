@@ -52,18 +52,19 @@ Funtion to create the periodic groundwater data plot.
 
 # Using package example data:
 gwl_data <- L2701_example_data$Discrete
-title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-gwl_plot_periodic(gwl_data, plot_title = title)
+plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+gwl_plot_periodic(gwl_data, plot_title)
 # site <- "263819081585801"
 parameterCd <- "62610"
 # statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 # Using package example data:
 gw_level_dv <- L2701_example_data$Daily
-gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
+plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+gwl_plot_all(gw_level_dv, gwl_data, plot_title, p_code_dv = parameterCd)
 
-gwl_plot_all(gw_level_dv, gwl_data, add_trend = TRUE,
+gwl_plot_all(gw_level_dv, gwl_data, plot_title, add_trend = TRUE,
              p_code_dv = parameterCd)
 
-gwl_plot_all(NULL, gwl_data, p_code_dv = parameterCd)
+gwl_plot_all(NULL, gwl_data, plot_title, p_code_dv = parameterCd)
 }

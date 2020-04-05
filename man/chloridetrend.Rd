@@ -32,6 +32,6 @@ Function creates the cloride over time plot with trends.
 #                                        parameterCd)
 # Using package example data:
 qw_data <- L2701_example_data$QW
-title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
-trend_plot(qw_data, plot_title = title)
+plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
+trend_plot(qw_data, plot_title)
 }

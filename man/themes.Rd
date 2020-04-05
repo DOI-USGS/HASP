@@ -31,7 +31,12 @@ ggplot2::ggplot() + theme_gwl()
 
 
 
+x_label <- "Date"
+y_label <- "Level"
+plot_title <- "Super Site"
+
 ggplot2::ggplot() + 
-     theme_gwl() +
-     hasp_framework()
+     hasp_framework(x_label, 
+                    y_label, 
+                    plot_title)
 }

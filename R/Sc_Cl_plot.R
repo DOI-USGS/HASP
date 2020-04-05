@@ -113,13 +113,14 @@ qw_plot <- function(qw_data, plot_title,
     mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
   
   y_label <- trimmed_name(pcode[1])
-
+  on_top <- zero_on_top(qw_data$result_va)
+  
   plot_out <- ggplot() +
     geom_point(data = qw_data ,
                aes(x = year, y = result_va),
                size = 1.5, color = "blue") +
     hasp_framework(x_label = "Date", y_label = y_label, 
-                   plot_title = plot_title, zero_on_top = FALSE) +
+                   plot_title = plot_title, zero_on_top = on_top) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL))
   

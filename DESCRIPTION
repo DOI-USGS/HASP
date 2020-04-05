@@ -29,6 +29,7 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
+    rlang,
     ggpmisc,
     leaflet,
     scales,

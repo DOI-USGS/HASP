@@ -42,9 +42,14 @@ theme_gwl <- function(base_family = "", ...){
 #' @param zero_on_top logical
 #' @examples 
 #' 
+#' x_label <- "Date"
+#' y_label <- "Level"
+#' plot_title <- "Super Site"
+#' 
 #' ggplot2::ggplot() + 
-#'      theme_gwl() +
-#'      hasp_framework()
+#'      hasp_framework(x_label, 
+#'                     y_label, 
+#'                     plot_title)
 hasp_framework <- function(x_label, y_label, 
                            plot_title, zero_on_top = TRUE){
   
