@@ -202,6 +202,8 @@ monthly_frequency_plot <- function(gwl_data,
   datum <- unique(gwl_data[,datum_col])
   y_label <- sprintf("Groundwater level above %s, in feet", datum)
   
+  on_top <- zero_on_top(c(points_plot$y, site_statistics_plot$ymax))
+  
   # Plot
   plot <- ggplot() +
     geom_rect(data = site_statistics_plot,
@@ -225,7 +227,7 @@ monthly_frequency_plot <- function(gwl_data,
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[month(plot_month)]) +
-    hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE) +
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
     theme(axis.ticks.x = element_blank())
   
   return(plot)
@@ -424,9 +426,9 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
   point_shapes <- c("Historical weekly median" = 17,
                     "Provisional daily value" = 16,
                     "Approved daily value" = 16)
-  point_colors <- c("Historical weekly median" = "springgreen4",
+  point_colors <- c("Approved daily value" = "black",
                     "Provisional daily value" = "red",
-                    "Approved daily value" = "black")
+                    "Historical weekly median" = "springgreen4")
   
   
   # Create the plot labels
@@ -444,6 +446,12 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
   
   on_top <- zero_on_top(point_data$y)
   
+  order_groups <- c("Approved daily value",
+                    "Provisional daily value",
+                    "Historical weekly median")
+  
+  point_data$group <- factor(point_data$group, 
+                             levels = order_groups)
   # Plot
   plot <- ggplot() +
     geom_rect(data = site_statistics_plot,
@@ -454,27 +462,27 @@ weekly_frequency_plot <- function(gw_level_dv, p_code_dv, statCd, date_col = "Da
                   fill = group)) +
     geom_vline(xintercept = plot_week, color = "gray90") +
     geom_point(data = dplyr::filter(point_data, group == "Historical weekly median"),
-               aes(x = x, y = y),
-               size = 1, color = "springgreen4", shape = 17) +
+               aes(x = x, y = y, color = group),
+               size = 1, shape = 17) +
     geom_line(data = dplyr::filter(point_data, 
                                    group != "Historical weekly median"),
                aes(x = x, y = y, color = group), size = 1) +
     geom_vline(xintercept = month_start, color = "grey70") +
-    scale_color_manual(values = point_colors, name = "EXPLANATION") +
-    scale_shape_manual(values = "", name = "EXPLANATION") +
+    scale_color_manual(values = point_colors, breaks = order_groups,
+                       name = "EXPLANATION") +
+    scale_shape_manual(values = c(17, NA, NA), name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
     hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
-    guides(color = guide_legend(order = 1, ),
-           shape = guide_legend(order = 1),
+    guides(color = guide_legend(order = 1, 
+                                override.aes = list(shape = c(NA, NA, 17),
+                                                    linetype = c("solid", "solid", "blank"))),
+           shape = FALSE,
            fill = guide_legend(order = 2)) +
     theme(axis.ticks.x = element_blank(),
-          aspect.ratio = NULL,
-          legend.direction="vertical",
-          legend.box = "horoizontal",
-          legend.spacing.y = unit(0.15, "cm"))
+          aspect.ratio = NULL)
   
   return(plot)
   

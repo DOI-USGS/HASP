@@ -29,6 +29,9 @@ theme_gwl <- function(base_family = "", ...){
       axis.title.y = element_text(margin=unit(spacing_2, units = "cm")),
       aspect.ratio = 1,
       plot.caption = element_text(hjust = 1, size = 8),
+      legend.direction="vertical",
+      legend.box = "horoizontal",
+      legend.spacing.y = unit(0.15, "cm"),
       legend.margin = margin(unit(0, units = "cm")),
       legend.box.margin = margin(unit(0, units = "cm"))
     )
