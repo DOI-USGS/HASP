@@ -82,7 +82,7 @@ trend_plot <- function(qw_data, plot_title,
                      y = y1, yend = y2,
                      group = trend, linetype = trend)) +
     hasp_framework("Date", y_label, plot_title, 
-                   zero_on_top = on_top) +
+                   zero_on_top = on_top, include_y_scale = TRUE) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
     scale_color_manual(name = "EXPLANATION", 
@@ -140,6 +140,9 @@ create_segs <- function(x,
   
   df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
   df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))
+  
+  
+  
   return(df_seg)
   
 }

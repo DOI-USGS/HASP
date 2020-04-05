@@ -227,7 +227,7 @@ monthly_frequency_plot <- function(gwl_data,
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[month(plot_month)]) +
-    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top) +
+    hasp_framework(x_label, y_label, plot_title, zero_on_top = on_top, include_y_scale = TRUE) +
     theme(axis.ticks.x = element_blank()) +
     guides(color = guide_legend(order = 1, 
                                 override.aes = list(shape = point_shapes,

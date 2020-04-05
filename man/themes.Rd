@@ -7,7 +7,13 @@
 \usage{
 theme_gwl(base_family = "", ...)
 
-hasp_framework(x_label, y_label, plot_title, zero_on_top = TRUE)
+hasp_framework(
+  x_label,
+  y_label,
+  include_y_scale = TRUE,
+  plot_title,
+  zero_on_top = TRUE
+)
 }
 \arguments{
 \item{base_family}{character base font family}

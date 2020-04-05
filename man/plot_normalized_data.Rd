@@ -4,7 +4,7 @@
 \alias{plot_normalized_data}
 \title{Plot normalized composite hydrograph data}
 \usage{
-plot_normalized_data(x, sum_col, num_years)
+plot_normalized_data(x, sum_col, num_years, plot_title = "")
 }
 \arguments{
 \item{x}{aquifer data}
@@ -12,6 +12,8 @@ plot_normalized_data(x, sum_col, num_years)
 \item{sum_col}{column name}
 
 \item{num_years}{integer number of years required}
+
+\item{plot_title}{character}
 }
 \value{
 ggplot2 object

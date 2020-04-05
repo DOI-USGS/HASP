@@ -53,7 +53,7 @@ theme_gwl <- function(base_family = "", ...){
 #'      hasp_framework(x_label, 
 #'                     y_label, 
 #'                     plot_title)
-hasp_framework <- function(x_label, y_label, 
+hasp_framework <- function(x_label, y_label, include_y_scale = TRUE,
                            plot_title, zero_on_top = TRUE){
   
   if(is.na(zero_on_top)) {
@@ -64,16 +64,26 @@ hasp_framework <- function(x_label, y_label,
     expand_lims <- c(0, 0.05)
   }
   
-  basic_elements <- list(theme_gwl(),
-                         labs(caption = paste("Plot created:", Sys.Date()), 
-                              y = y_label, x = x_label),
-                         expand_limits(y = 0),
-                         scale_y_continuous(expand = expansion(mult = expand_lims),
-                                            sec.axis = dup_axis(labels =  NULL,
-                                                                name = NULL)),
-                         ggtitle(plot_title, 
-                                 subtitle = "U.S. Geological Survey"))
+
   
+  if(include_y_scale){
+    basic_elements <- list(theme_gwl(),
+                           labs(caption = paste("Plot created:", Sys.Date()), 
+                                y = y_label, x = x_label),
+                           expand_limits(y = 0),
+                           scale_y_continuous(expand = expansion(mult = expand_lims),
+                                              sec.axis = dup_axis(labels =  NULL,
+                                                                  name = NULL)),
+                           ggtitle(plot_title, 
+                                   subtitle = "U.S. Geological Survey"))
+  } else {
+    basic_elements <- list(theme_gwl(),
+                           labs(caption = paste("Plot created:", Sys.Date()), 
+                                y = y_label, x = x_label),
+                           ggtitle(plot_title, 
+                                   subtitle = "U.S. Geological Survey"))
+  }
   
+  return(basic_elements)
 }
 

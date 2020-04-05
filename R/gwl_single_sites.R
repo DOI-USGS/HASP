@@ -44,7 +44,8 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
          aes_string(x = "year", y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
     geom_point(aes_string(color = approved_col), size = 1) +
-    hasp_framework("Years", y_label, plot_title, zero_on_top = on_top) +
+    hasp_framework("Years", y_label, plot_title, 
+                   zero_on_top = on_top, include_y_scale = TRUE) +
     scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved",
@@ -163,7 +164,8 @@ gwl_plot_all <- function(gw_level_dv,
                           y = value_col, 
                           fill = approved_col),
                size = 1.5, shape = 21, color = "transparent") +
-    hasp_framework("Years", y_label, plot_title, zero_on_top = on_top) +
+    hasp_framework("Years", y_label, plot_title, 
+                   zero_on_top = on_top, include_y_scale = TRUE) +
     theme(aspect.ratio = NULL) +
     scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
                        values = c("A" = "navy", "P" = "red"), 
