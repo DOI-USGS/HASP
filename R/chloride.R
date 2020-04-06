@@ -116,33 +116,29 @@ create_segs <- function(x,
                                            value_col = value_col)
 
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
-                       x2 = as.Date(c(NA, NA)),
+                       x2 = rep(max(x[[date_col]], na.rm = FALSE), 2),
                        y1 = c(NA, NA),
                        y2 = c(NA, NA),
-                       trend = c("",""), 
+                       trend = trend_results$test, 
+                       years = as.numeric(gsub("-year trend", "", trend_results$test)),
                        stringsAsFactors = FALSE)
-  
-  
-  names(df_seg) <- c("x1", "x2", "y1", "y2", "trend")
-  
-  df_seg$x2 <- x[[date_col]][nrow(x)]
-  df_seg$x1[1] <- as.Date(df_seg$x2[1] - as.difftime(5*365+1, units = "days"), origin = "1970-01-01")
-  df_seg$x1[2] <- as.Date(df_seg$x2[2] - as.difftime(20*365+5, units = "days"), origin = "1970-01-01")
-  
-  
-  df_seg$y1[1] <- as.numeric(df_seg$x1[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
-  df_seg$y2[1] <- as.numeric(df_seg$x2[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
-  df_seg$trend[1] <- "5-year trend"
-  
-  df_seg$y1[2] <- as.numeric(df_seg$x1[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
-  df_seg$y2[2] <- as.numeric(df_seg$x2[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
-  df_seg$trend[2] <- "20-year trend"
-  
-  df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
-  df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))
-  
-  
-  
+
+  for(i in seq_len(nrow(trend_results))){
+    if(trend_results$trend[i] != "Not significant"){
+      df_seg$x1[df_seg$trend == trend_results$test[i]] <- as.Date(df_seg$x2[df_seg$trend == trend_results$test[i]] - as.difftime(df_seg$years[i]*365+1, units = "days"), origin = "1970-01-01")
+      
+      df_seg$y1[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x1[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
+      df_seg$y2[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x2[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
+    } else {
+      df_seg <- df_seg[-which(df_seg$trend == trend_results$test[i]),]
+    }
+  }
+
+  if(nrow(df_seg) != 0){
+    df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
+    df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))    
+  }
+
   return(df_seg)
   
 }
