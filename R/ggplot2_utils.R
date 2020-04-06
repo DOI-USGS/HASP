@@ -39,10 +39,12 @@ theme_gwl <- function(base_family = "", ...){
 
 #' @export
 #' @rdname themes
-#' @param x_label character
-#' @param y_label character
-#' @param plot_title character
-#' @param zero_on_top logical
+#' @param x_label character. Label for x-axis.
+#' @param y_label character. Label for y-axis.
+#' @param include_y_scale logical. Include style for y-axis.
+#' @param plot_title character. Title for plot.
+#' @param zero_on_top logical. If zero_on_top is \code{TRUE}, there is no padding
+#' at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.
 #' @examples 
 #' 
 #' x_label <- "Date"
@@ -53,8 +55,10 @@ theme_gwl <- function(base_family = "", ...){
 #'      hasp_framework(x_label, 
 #'                     y_label, 
 #'                     plot_title)
-hasp_framework <- function(x_label, y_label, include_y_scale = TRUE,
-                           plot_title, zero_on_top = TRUE){
+hasp_framework <- function(x_label, y_label,
+                           plot_title, 
+                           include_y_scale = TRUE, 
+                           zero_on_top = TRUE){
   
   if(is.na(zero_on_top)) {
     expand_lims <- c(0.05, 0.05)
@@ -63,8 +67,6 @@ hasp_framework <- function(x_label, y_label, include_y_scale = TRUE,
   } else {
     expand_lims <- c(0, 0.05)
   }
-  
-
   
   if(include_y_scale){
     basic_elements <- list(theme_gwl(),

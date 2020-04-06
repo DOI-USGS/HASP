@@ -11,9 +11,9 @@ test_that("Composite Graphs", {
   expect_true(all(names(comp_data$data) %in% c("year","name","value")))
   expect_true(all(names(norm_data$data) %in% c("year","name","value")))
 
-  expect_true(all(levels(comp_data$data$name) %in% c("Composite Annual Median", "Composite Annual Mean")))
-  expect_true(all(levels(norm_data$data$name) %in% c("Composite Annual Median Percent Variation",
-                                                     "Composite Annual Mean Percent Variation")))
+  expect_true(all(levels(comp_data$data$name) %in% c("Median", "Mean")))
+  expect_true(all(levels(norm_data$data$name) %in% c("Median",
+                                                     "Mean")))
   
     
 })

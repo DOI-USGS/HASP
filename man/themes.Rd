@@ -10,8 +10,8 @@ theme_gwl(base_family = "", ...)
 hasp_framework(
   x_label,
   y_label,
-  include_y_scale = TRUE,
   plot_title,
+  include_y_scale = TRUE,
   zero_on_top = TRUE
 )
 }
@@ -20,13 +20,16 @@ hasp_framework(
 
 \item{\dots}{additional arguments}
 
-\item{x_label}{character}
+\item{x_label}{character. Label for x-axis.}
 
-\item{y_label}{character}
+\item{y_label}{character. Label for y-axis.}
 
-\item{plot_title}{character}
+\item{plot_title}{character. Title for plot.}
 
-\item{zero_on_top}{logical}
+\item{include_y_scale}{logical. Include style for y-axis.}
+
+\item{zero_on_top}{logical. If zero_on_top is \code{TRUE}, there is no padding
+at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.}
 }
 \description{
 Themes and other useful graphing utilities for the HASP package

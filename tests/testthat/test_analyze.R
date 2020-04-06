@@ -106,8 +106,8 @@ test_that("Composite hydrodata", {
   comp_data <- composite_data(aquifer_data, sum_col, num_years)
   
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
-  expect_true(all(levels(comp_data$name) %in% c("Composite Annual Median",
-                                                "Composite Annual Mean")))
+  expect_true(all(levels(comp_data$name) %in% c("Median",
+                                                "Mean")))
   expect_equal(round(comp_data$value[1], digits = 2), 155.82)
 })
 
@@ -120,7 +120,7 @@ test_that("Normalized composite hydrodata", {
   norm_data <- normalized_data(aquifer_data, sum_col, num_years)
   
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
-  expect_true(all(levels(norm_data$name) %in% c("Composite Annual Median Percent Variation",
-                                                "Composite Annual Mean Percent Variation")))
+  expect_true(all(levels(norm_data$name) %in% c("Median",
+                                                "Mean")))
   expect_equal(round(norm_data$value[1], digits = 2), 0.04)
 })
