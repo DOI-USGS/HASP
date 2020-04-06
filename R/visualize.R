@@ -5,6 +5,7 @@
 #' @param x aquifer data
 #' @param sum_col column name
 #' @param num_years integer number of years required
+#' @param plot_title character
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -16,7 +17,7 @@
 #' 
 #' comp_data <- plot_composite_data(aquifer_data, sum_col, num_years)
 #' comp_data
-plot_composite_data <- function(x, sum_col, num_years){
+plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
   
   year <- value <- name <- ".dplyr"
   
@@ -24,12 +25,16 @@ plot_composite_data <- function(x, sum_col, num_years){
   
   plot_out <- ggplot(data = comp_data) +
     geom_line(aes(x = year, y = value, color = name)) +
-    theme_bw() +
-    scale_y_reverse() +
-    theme(legend.title = element_blank(),
-          legend.position="bottom") +
-    ylab("Principal Aquifer Water-Level Index") +
-    xlab("Years")
+    hasp_framework(x_label = "Years", include_y_scale = FALSE,
+                   y_label = "Principal Aquifer Water-Level Index",
+                   plot_title = plot_title, zero_on_top = NA) +
+    scale_y_reverse(sec.axis = dup_axis(labels =  NULL,
+                                        name = NULL)) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
+    scale_color_manual("EXPLANATION\nComposite Annual", 
+                       values = c("red", "blue"), 
+                       labels = levels(comp_data$name))
   
   return(plot_out)
 }
@@ -41,6 +46,7 @@ plot_composite_data <- function(x, sum_col, num_years){
 #' @param x aquifer data
 #' @param sum_col column name
 #' @param num_years integer number of years required
+#' @param plot_title character
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -52,7 +58,7 @@ plot_composite_data <- function(x, sum_col, num_years){
 #' 
 #' norm_data <- plot_normalized_data(aquifer_data, sum_col, num_years)
 #' norm_data
-plot_normalized_data <- function(x, sum_col, num_years){
+plot_normalized_data <- function(x, sum_col, num_years, plot_title = ""){
   
   year <- value <- name <- ".dplyr"
 
@@ -60,12 +66,17 @@ plot_normalized_data <- function(x, sum_col, num_years){
   
   plot_out <- ggplot(data = norm_data) +
     geom_line(aes(x = year, y = value, color = name)) +
-    theme_bw() +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-    theme(legend.title = element_blank(),
-          legend.position="bottom") +
-    ylab("Water-Level Index, feet below land surface") +
-    xlab("Years")
+    hasp_framework(x_label = "Years", include_y_scale = FALSE,
+                   y_label = "Water-Level Index, feet below land surface",
+                   plot_title = plot_title, zero_on_top = NA) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+                    sec.axis = dup_axis(labels =  NULL,
+                                        name = NULL)) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
+    scale_color_manual("EXPLANATION\nPercent Variation", 
+                       values = c("red", "blue"), 
+                       labels = levels(norm_data$name))
   
   return(plot_out)
 }

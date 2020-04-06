@@ -101,7 +101,7 @@ gwl_data <- L2701_example_data$Discrete
 # QW:
 qw_data <- L2701_example_data$QW
 
-plot_title <- "263819081585801 L -2701 "
+plot_title <- "L -2701\n263819081585801 "
 
 ```
 
@@ -145,7 +145,7 @@ monthly_freq_table <- monthly_frequency_table(gwl_data) %>%
          "75th" = p75,
          "Highest median" = maxMed,
          "Number of years" = nYears)
-kable(monthly_freq_table)
+kable(monthly_freq_table, digits = 1)
 ```
 
 
@@ -160,7 +160,7 @@ daily_gwl_2yr_plot(gw_level_dv,
                    parameterCd, 
                    statCd, 
                    plot_title = plot_title, 
-                   month_breaks = FALSE, 
+                   month_breaks = TRUE, 
                    historical_stat = "median")
 
 daily_gwl_summary(gw_level_dv, parameterCd, statCd)
@@ -169,13 +169,13 @@ daily_gwl_summary(gw_level_dv, parameterCd, statCd)
 <table>
 <tr><td>
 
-```{r dailyPlotShow, echo = FALSE}
+```{r dailyPlotShow, echo = FALSE, fig.width=9}
 
 daily_gwl_2yr_plot(gw_level_dv, 
                    parameterCd, 
                    statCd, 
                    plot_title = plot_title, 
-                   month_breaks = FALSE, 
+                   month_breaks = TRUE, 
                    historical_stat = "median")
 ```
 

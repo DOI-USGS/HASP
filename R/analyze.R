@@ -175,8 +175,8 @@ composite_data <- function(x, sum_col, num_years){
     pivot_longer(c("mean", "median")) %>% 
     mutate(name = factor(name, 
                          levels = c("median","mean"),
-                         labels = c("Composite Annual Median",
-                                    "Composite Annual Mean") ))
+                         labels = c("Median",
+                                    "Mean") ))
   
   
   return(composite)
@@ -226,8 +226,8 @@ normalized_data <- function(x, sum_col, num_years){
     pivot_longer(c("mean", "median")) %>% 
     mutate(name = factor(name, 
                          levels = c("median","mean"),
-                         labels = c("Composite Annual Median Percent Variation",
-                                    "Composite Annual Mean Percent Variation") ))
+                         labels = c("Median",
+                                    "Mean") ))
   
   
   

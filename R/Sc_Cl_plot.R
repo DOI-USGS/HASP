@@ -20,8 +20,8 @@
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
-#' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
-#' Sc_Cl_plot(qw_data, plot_title = title)
+#' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+#' Sc_Cl_plot(qw_data, plot_title)
 Sc_Cl_plot <- function(qw_data, plot_title){
   
   chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
@@ -42,16 +42,14 @@ Sc_Cl_plot <- function(qw_data, plot_title){
     geom_point(color = "blue") +
     stat_smooth(method = "lm", color = "black", 
                 formula = y ~ x , se = FALSE) +
-    theme_gwl() +
+    hasp_framework(Cltitle, Sctitle, include_y_scale = TRUE,
+                   plot_title = plot_title,
+                   zero_on_top = NA) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
     stat_poly_eq(formula = y ~ x,
                  aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
-                 parse = TRUE) +
-    scale_y_continuous(Cltitle, 
-                       labels = scales::comma) +
-    scale_x_continuous(Sctitle, 
-                       labels = scales::comma) +
-    labs(caption = paste("Plot created:", Sys.Date())) +
-    ggtitle(plot_title, subtitle = "U.S. Geological Survey") 
+                 parse = TRUE) 
   
   return(plot_out)
   
@@ -100,9 +98,9 @@ Sc_Cl_table <- function(qw_data){
 #' @param pcode character pcode to plot
 #' @export
 #' @examples
-#' title <- attr(qw_data, "siteInfo")[["station_nm"]]
-#' qw_plot(qw_data, title, pcode = c("00095", "90095"))
-#' qw_plot(qw_data, title, pcode = c("00940","99220"))
+#' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
+#' qw_plot(qw_data, plot_title, pcode = c("00095", "90095"))
+#' qw_plot(qw_data, plot_title, pcode = c("00940","99220"))
 qw_plot <- function(qw_data, plot_title,
                     pcode = c("00095", "90095")){
   
@@ -110,27 +108,23 @@ qw_plot <- function(qw_data, plot_title,
     stop("data frame qw_data doesn't include all mandatory columns")
   }
   
-  sample_dt <- result_va <- remark_cd <- parm_cd <- ".dplyr"
+  sample_dt <- result_va <- remark_cd <- parm_cd <- year <- ".dplyr"
   
   qw_data <- qw_data %>% 
-    filter(parm_cd %in% pcode)
+    filter(parm_cd %in% pcode) %>% 
+    mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
   
   y_label <- trimmed_name(pcode[1])
-
+  on_top <- zero_on_top(qw_data$result_va)
+  
   plot_out <- ggplot() +
-    geom_point(data = qw_data,
-               aes(x = sample_dt, y = result_va),
+    geom_point(data = qw_data ,
+               aes(x = year, y = result_va),
                size = 1.5, color = "blue") +
-    theme_gwl() +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Date") +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
-    theme(legend.position = "bottom",
-          legend.direction = "vertical")
+    hasp_framework(x_label = "Date", y_label = y_label, include_y_scale = TRUE,
+                   plot_title = plot_title, zero_on_top = on_top) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL))
   
   return(plot_out)
   

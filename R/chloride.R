@@ -21,11 +21,11 @@
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
-#' title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
-#' trend_plot(qw_data, plot_title = title)
+#' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
+#' trend_plot(qw_data, plot_title)
 trend_plot <- function(qw_data, plot_title, 
-                          pcode = c("00940","99220"),
-                          norm_range = c(225,999)){
+                        pcode = c("00940","99220"),
+                        norm_range = c(225,999)){
   
   if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
@@ -36,11 +36,12 @@ trend_plot <- function(qw_data, plot_title,
   }
   
   sample_dt <- condition <- result_va <- remark_cd <- parm_cd <- ".dplyr"
-  x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
+  x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
   
   qw_sub <- qw_data %>% 
     filter(parm_cd %in% pcode) %>% 
-    arrange(sample_dt)
+    arrange(sample_dt) %>% 
+    mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
 
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"
@@ -56,7 +57,7 @@ trend_plot <- function(qw_data, plot_title,
         result_va >= norm_range[1] & 
           result_va <= norm_range[2] ~ "medium",
         result_va > norm_range[2] ~ "high")) %>% 
-      select(sample_dt, result_va, condition)
+      select(sample_dt, year, result_va, condition)
     
     col_values <- c("low", "medium", "high")
     col_labels <- c(paste0("<", norm_range[1]), 
@@ -66,24 +67,24 @@ trend_plot <- function(qw_data, plot_title,
   }
   
   y_label <- trimmed_name(pcode[1])
-
+  on_top <- zero_on_top(qw_sub$result_va)
+  
   seg_df <- create_segs(qw_sub)
   linetype = c('solid', 'dashed')
   
   plot_out <- ggplot() +
     geom_point(data = qw_sub,
-               aes(x = sample_dt, y = result_va,
+               aes(x = year, y = result_va,
                    shape = condition, 
                    color = condition)) +
     geom_segment(data = seg_df, color = "blue", 
                  aes(x = x1, xend = x2, 
                      y = y1, yend = y2,
                      group = trend, linetype = trend)) +
-    theme_gwl() +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Date") +
+    hasp_framework("Date", y_label, plot_title, 
+                   zero_on_top = on_top, include_y_scale = TRUE) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) +
     scale_color_manual(name = "EXPLANATION", 
                        breaks = col_values,
                        labels = col_labels,
@@ -96,8 +97,6 @@ trend_plot <- function(qw_data, plot_title,
                           values = linetype,
                           breaks = c("5-year trend", "20-year trend"),
                           labels = c("5 year", "20 year")) +
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
     guides(shape = guide_legend(order = 1),
            color = guide_legend(order = 1),
            linetype = guide_legend(order = 2))
@@ -117,27 +116,29 @@ create_segs <- function(x,
                                            value_col = value_col)
 
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
-                       x2 = as.Date(c(NA, NA)),
+                       x2 = rep(max(x[[date_col]], na.rm = FALSE), 2),
                        y1 = c(NA, NA),
                        y2 = c(NA, NA),
-                       trend = c("",""), 
+                       trend = trend_results$test, 
+                       years = as.numeric(gsub("-year trend", "", trend_results$test)),
                        stringsAsFactors = FALSE)
-  
-  
-  names(df_seg) <- c("x1", "x2", "y1", "y2", "trend")
-  
-  df_seg$x2 <- x[[date_col]][nrow(x)]
-  df_seg$x1[1] <- as.Date(df_seg$x2[1] - as.difftime(5*365+1, units = "days"), origin = "1970-01-01")
-  df_seg$x1[2] <- as.Date(df_seg$x2[2] - as.difftime(20*365+5, units = "days"), origin = "1970-01-01")
-  
-  df_seg$y1[1] <- as.numeric(df_seg$x1[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
-  df_seg$y2[1] <- as.numeric(df_seg$x2[1])*trend_results$slope[trend_results$test == "5-year trend"] + trend_results$intercept[trend_results$test == "5-year trend"]
-  df_seg$trend[1] <- "5-year trend"
-  
-  df_seg$y1[2] <- as.numeric(df_seg$x1[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
-  df_seg$y2[2] <- as.numeric(df_seg$x2[2])*trend_results$slope[trend_results$test == "20-year trend"] + trend_results$intercept[trend_results$test == "20-year trend"]
-  df_seg$trend[2] <- "20-year trend"
-  
+
+  for(i in seq_len(nrow(trend_results))){
+    if(trend_results$trend[i] != "Not significant"){
+      df_seg$x1[df_seg$trend == trend_results$test[i]] <- as.Date(df_seg$x2[df_seg$trend == trend_results$test[i]] - as.difftime(df_seg$years[i]*365+1, units = "days"), origin = "1970-01-01")
+      
+      df_seg$y1[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x1[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
+      df_seg$y2[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x2[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
+    } else {
+      df_seg <- df_seg[-which(df_seg$trend == trend_results$test[i]),]
+    }
+  }
+
+  if(nrow(df_seg) != 0){
+    df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
+    df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))    
+  }
+
   return(df_seg)
   
 }

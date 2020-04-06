@@ -19,8 +19,8 @@
 #' 
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
-#' title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' gwl_plot_periodic(gwl_data, plot_title = title)
+#' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+#' gwl_plot_periodic(gwl_data, plot_title)
 gwl_plot_periodic <- function(gwl_data, plot_title = "",
                               date_col = "lev_dt",
                               value_col = "sl_lev_va",
@@ -29,28 +29,29 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
   if(!all(c(date_col, value_col, approved_col, "sl_datum_cd") %in% names(gwl_data))){
     stop("data frame gwl_data doesn't include all mandatory columns")
   }
+  
+  year <- ".dplyr"
 
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   
+  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
+    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
+  
+  on_top <- zero_on_top(gwl_data[[value_col]])
+  
   plot_out <- ggplot(data = gwl_data,
-         aes_string(x = date_col, y = value_col)) +
+         aes_string(x = "year", y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
     geom_point(aes_string(color = approved_col), size = 1) +
-    theme_gwl() +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Years") +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0.05, 0))) +
-    scale_color_manual("",
+    hasp_framework("Years", y_label, plot_title, 
+                   zero_on_top = on_top, include_y_scale = TRUE) +
+    scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
                        values = c("A" = "blue", "P" = "red"), 
-                       labels = c("A" = "Approved water-level measurement",
-                                  "P" = "Provisional water-level measurement")) +
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey") +
-    theme(legend.position = "bottom",
-          legend.direction = "vertical",
-          legend.title = element_blank())
+                       labels = c("A" = "Approved",
+                                  "P" = "Provisional")) +
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) 
 
   return(plot_out)
   
@@ -59,6 +60,7 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 
 #' @rdname gwl_periodic
 #' @export
+#' @importFrom rlang `:=`
 #' @param gw_level_dv daily value groundwater levels. Must include columns 
 #' @param p_code_dv daily parameter code. Default is "62610".
 #' @param add_trend logical. Uses \code{kendell_test_5_20_years}.
@@ -69,13 +71,15 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 #' # Using package example data:
 #' gw_level_dv <- L2701_example_data$Daily
-#' gwl_plot_all(gw_level_dv, gwl_data, p_code_dv = parameterCd)
+#' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+#' gwl_plot_all(gw_level_dv, gwl_data, plot_title, p_code_dv = parameterCd)
 #' 
-#' gwl_plot_all(gw_level_dv, gwl_data, add_trend = TRUE,
+#' gwl_plot_all(gw_level_dv, gwl_data, plot_title, add_trend = TRUE,
 #'              p_code_dv = parameterCd)
 #' 
-#' gwl_plot_all(NULL, gwl_data, p_code_dv = parameterCd)
-gwl_plot_all <- function(gw_level_dv, gwl_data, 
+#' gwl_plot_all(NULL, gwl_data, plot_title, p_code_dv = parameterCd)
+gwl_plot_all <- function(gw_level_dv, 
+                         gwl_data, 
                          plot_title = "",
                          date_col = "lev_dt",
                          value_col = "sl_lev_va",
@@ -87,22 +91,25 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
     stop("data frame gwl_data doesn't include all mandatory columns")
   }
   
-  x1 <- x2 <- y1 <- y2 <- trend <- ".dplyr"
+  x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
+  Date <- is_na_after <- is_na_before <- is_point <- ".dplyr"
   
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
   linetype = c('solid', 'dashed')
   
-  plot_out <- ggplot() +
-    geom_point(data = gwl_data,
-               aes_string(x = date_col, y = value_col, fill = approved_col),
-               size = 1.5, shape = 21, color = "transparent") 
-    
+  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
+    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
+  
   if(!all(is.null(gw_level_dv))){
     
     if(!all(c("Date") %in% names(gw_level_dv))){
       stop("data frame gw_level_dv doesn't include all mandatory columns")
     }
+    
+    complete_df <- data.frame(Date = seq.Date(from = min(gw_level_dv$Date, na.rm = TRUE),
+                                       to = max(gw_level_dv$Date, na.rm = TRUE), 
+                                       by = "day"))
     
     val_cols <- grep(p_code_dv, names(gw_level_dv))
     remark_col <- grep("_cd", names(gw_level_dv))
@@ -112,28 +119,60 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
     val_cols <- names(gw_level_dv)[val_cols]
     remark_col <- names(gw_level_dv)[remark_col]
     
+    on_top <- zero_on_top(c(gw_level_dv[[val_cols]],
+                            gwl_data[[value_col]]))
+
+    gw_complete <- complete_df %>% 
+      left_join(select(gw_level_dv, Date, !!val_cols, !!remark_col), by = "Date") %>% 
+      mutate(year = as.numeric(format(Date, "%Y")) + 
+               as.numeric(as.character(Date, "%j"))/365,
+             is_na_before = is.na(lag(!!sym(val_cols))),
+             is_na_after = is.na(lead(!!sym(val_cols))),
+             is_point = is_na_after & is_na_before & !is.na(!!sym(val_cols)),
+             is_complete = !is.na(!!sym(val_cols)) & !is_na_after & !is_na_before,
+             !!remark_col := ifelse(grepl(pattern = "A",  
+                                          x =  !!sym(remark_col)), "A", "P"))
+
+    gw_complete[is.na(gw_complete[[val_cols]]), remark_col] <- "A"
+
+    plot_out <- ggplot() +
+      geom_path(data = gw_complete,
+                aes_string(x = "year", color = remark_col,
+                           y = val_cols)) 
+    
+    if(sum(gw_complete$is_point) > 0){
+      plot_out <- plot_out +
+        geom_point(data = filter(gw_complete, is_point),
+                 aes_string(x = "year", color = remark_col,
+                            y = val_cols), size = 0.2) 
+    }
+    
     plot_out <- plot_out +
-      geom_line(data = gw_level_dv,
-                aes_string(x = "Date", y = val_cols, color = remark_col),
-                linetype = "dashed") +
       scale_color_manual("Daily Data",
                          values = c("A" = "blue", "P" = "red"), 
                          labels = c("A" = "Approved",
                                     "P" = "Provisional"))
-  } 
+  } else {
+    plot_out <- ggplot()
+    on_top <- zero_on_top(gwl_data[[value_col]])
+
+  }
   
   plot_out <- plot_out +
-    theme_gwl() +
-    labs(caption = paste("Plot created:", Sys.Date()), 
-         y = y_label, x = "Years") +
-    expand_limits(y = 0) +
-    scale_y_continuous(expand = expansion(mult = c(0.05, 0)))  +
-    scale_fill_manual("Water-Level\nMeasurement",
-                       values = c("A" = "blue", "P" = "red"), 
+    geom_point(data = gwl_data,
+               aes_string(x = "year", 
+                          y = value_col, 
+                          fill = approved_col),
+               size = 1.5, shape = 21, color = "transparent") +
+    hasp_framework("Years", y_label, plot_title, 
+                   zero_on_top = on_top, include_y_scale = TRUE) +
+    theme(aspect.ratio = NULL) +
+    scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
+                       values = c("A" = "navy", "P" = "red"), 
                        labels = c("A" = "Approved",
                                   "P" = "Provisional")) +
-    ggtitle(plot_title, 
-            subtitle = "U.S. Geological Survey")
+    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+                                           name = NULL)) 
   
   if(add_trend){
     
@@ -167,5 +206,13 @@ gwl_plot_all <- function(gw_level_dv, gwl_data,
   
 }
 
- 
+zero_on_top <- function(x){
+  on_top <- max(range(x), na.rm = TRUE) < 0
+  if(!on_top){
+    if(min(range(x), na.rm = TRUE) < 0){
+      on_top <- NA
+    }
+  }
+  return(on_top)
+}
 

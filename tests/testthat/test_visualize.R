@@ -11,9 +11,9 @@ test_that("Composite Graphs", {
   expect_true(all(names(comp_data$data) %in% c("year","name","value")))
   expect_true(all(names(norm_data$data) %in% c("year","name","value")))
 
-  expect_true(all(levels(comp_data$data$name) %in% c("Composite Annual Median", "Composite Annual Mean")))
-  expect_true(all(levels(norm_data$data$name) %in% c("Composite Annual Median Percent Variation",
-                                                     "Composite Annual Mean Percent Variation")))
+  expect_true(all(levels(comp_data$data$name) %in% c("Median", "Mean")))
+  expect_true(all(levels(norm_data$data$name) %in% c("Median",
+                                                     "Mean")))
   
     
 })
@@ -54,8 +54,6 @@ test_that("SC Chloride graphs and table", {
 
 test_that("Monthly frequency plot", {
   
-  skip_on_cran()
-  
   plot <- monthly_frequency_plot(L2701_example_data$Discrete)
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
@@ -66,8 +64,6 @@ test_that("Monthly frequency plot", {
 })
 
 test_that("Weekly frequency plot", {
-  
-  skip_on_cran()
   
   site <- "263819081585801"
   parameterCd <- "62610"
@@ -97,6 +93,19 @@ test_that("Periodic gwl plot", {
                     "mapping", "theme", "coordinates",
                     "facet","plot_env", "labels") %in%
                     names(plot2)))
+  
+  plot_with_trend <- gwl_plot_all(dv, gwl_data, "title", add_trend = TRUE)
+  
+  plot_data_elements <- unlist(lapply(plot_with_trend$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("Date", "X_62610_00001", "year", 
+                    "is_complete", "x1", "x2", "y1", "y2", "trend") %in%
+                    plot_data_elements))
+  
+  plot_with_gwl <- gwl_plot_all(NULL, gwl_data, "title", add_trend = FALSE)
+  plot_elements <- unlist(lapply(plot_with_gwl$layers, function(x) {names(x$data)}))
+  expect_true(all(c("lev_dt", "sl_lev_va", "year", "y") %in%
+                    plot_elements))
   
 })
 

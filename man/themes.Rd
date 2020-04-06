@@ -2,14 +2,34 @@
 % Please edit documentation in R/ggplot2_utils.R
 \name{theme_gwl}
 \alias{theme_gwl}
+\alias{hasp_framework}
 \title{ggplot2 themes and accesories for package}
 \usage{
 theme_gwl(base_family = "", ...)
+
+hasp_framework(
+  x_label,
+  y_label,
+  plot_title,
+  include_y_scale = TRUE,
+  zero_on_top = TRUE
+)
 }
 \arguments{
 \item{base_family}{character base font family}
 
 \item{\dots}{additional arguments}
+
+\item{x_label}{character. Label for x-axis.}
+
+\item{y_label}{character. Label for y-axis.}
+
+\item{plot_title}{character. Title for plot.}
+
+\item{include_y_scale}{logical. Include style for y-axis.}
+
+\item{zero_on_top}{logical. If zero_on_top is \code{TRUE}, there is no padding
+at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.}
 }
 \description{
 Themes and other useful graphing utilities for the HASP package
@@ -19,4 +39,13 @@ Themes and other useful graphing utilities for the HASP package
 ggplot2::ggplot() + theme_gwl()
 
 
+
+x_label <- "Date"
+y_label <- "Level"
+plot_title <- "Super Site"
+
+ggplot2::ggplot() + 
+     hasp_framework(x_label, 
+                    y_label, 
+                    plot_title)
 }
