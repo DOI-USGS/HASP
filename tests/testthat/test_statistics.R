@@ -122,3 +122,15 @@ test_that("trend segments",{
   
   
 })
+
+test_that("utils", {
+  
+  no_zero <- zero_on_top(c(1:10))
+  yes_zero <- zero_on_top(c(-10:-2))
+  crosses_zero <- zero_on_top(c(-10:5))
+  
+  expect_false(no_zero)
+  expect_true(yes_zero)
+  expect_true(is.na(crosses_zero))
+  
+})
