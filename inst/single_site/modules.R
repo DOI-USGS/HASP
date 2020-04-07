@@ -21,8 +21,8 @@ ggraph_table_downloaders <- function(id, init_text) {
   tagList(
     shinycssloaders::withSpinner(plotOutput(ns('plot'))),
     fluidRow(
-      column(3, downloadButton(ns('download_plot'), 'Download PNG')),
-      column(3, downloadButton(ns('download_csv'), 'Download CSV'))
+      column(3, downloadButton(ns('download_plot'), 'Download png')),
+      column(3, downloadButton(ns('download_xlsx'), 'Download xlsx'))
     ),
     DT::dataTableOutput(ns('table')),
     h4("R Code:"),
@@ -58,12 +58,12 @@ graph_download_code <- function(input, output, session,
     }
   )
   
-  output$download_csv <- downloadHandler(
+  output$download_xlsx <- downloadHandler(
     
-    filename = "plot_data.csv",
+    filename = "plot_data.xlsx",
     
     content = function(file) {
-      write.csv(plot_gg()[['data']], file, row.names = FALSE)
+      openxlsx::write.xlsx(get_layer_data(plot_gg()), file = "plot_data.xlsx", row.names = FALSE)
     }
   )
   
@@ -83,8 +83,7 @@ graph_table_download_code <- function(input, output, session,
     
     shinyAce::updateAceEditor(session, editorId = "code", value = code_out() )
     
-    plot_gg()
-    
+    plot_gg()    
   })
   
   output$table <- DT::renderDataTable({
@@ -101,12 +100,29 @@ graph_table_download_code <- function(input, output, session,
     }
   )
   
-  output$download_csv <- downloadHandler(
+  output$download_xlsx <- downloadHandler(
     
-    filename = "plot_data.csv",
+    filename = "plot_data.xlsx",
     
     content = function(file) {
-      write.csv(plot_gg()[['data']], file, row.names = FALSE)
+      
+      x <- plot_gg()[['layers']]
+      
+      wb <- openxlsx::createWorkbook()
+      
+      for(i in seq_len(length(x))){
+        
+        data_i <- x[[i]][["data"]]
+        sheet_name <- paste("Sheet", i)
+        openxlsx::addWorksheet(wb, sheetName = sheet_name)
+        
+        openxlsx::writeData(wb,
+                            sheet = sheet_name, 
+                            x = data_i)
+      }
+      openxlsx::saveWorkbook(wb, 
+                   file = file, 
+                   overwrite = TRUE)
     }
   )
   

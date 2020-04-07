@@ -72,6 +72,51 @@ week_plot <- reactive({
   
 })
 
+week_table <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$daily_data), "Please select a data set")
+  )
+  
+  val_col <- paste("X", rawData_data$p_code, rawData_data$stat_cd, sep = "_")
+  week_tab <-  weekly_frequency_table(dvData(), 
+                                      p_code_dv = rawData_data$p_code, 
+                                      statCd = rawData_data$stat_cd, 
+                                      date_col = "Date") 
+  
+  week_tab_DT <- DT::datatable(week_tab, 
+                               rownames = FALSE, 
+                               options = list(dom = 'tp')) %>% 
+    formatSignif(c(-1, -9), digits = 3)
+  
+  return(week_tab_DT)
+  
+})
+
+week_plot_out <- reactive({
+  code_out <- paste0(setup(),'
+p_code <- "', rawData_data$p_code,'"
+stat_cd <- "', rawData_data$stat_cd,'"
+week_plot <-  weekly_frequency_plot(gw_level_dv, 
+                                    p_code, stat_cd, 
+                                    plot_title = plot_title)
+week_plot
+
+week_table <- weekly_frequency_table(gw_level_dv,
+                                     p_code_dv = p_code, 
+                                     statCd = stat_cd, 
+                                     date_col = "Date")
+
+# To save:
+# Fiddle with height and width (in inches) for best results:
+# Change file name extension to save as png.
+# ggplot2::ggsave(week_plot, file="week_plot.pdf",
+#                        height = 9,
+#                        width = 11)
+  ')
+  code_out
+})
+
 year2_plot <- reactive({
   
   validate(
@@ -92,26 +137,27 @@ year2_plot <- reactive({
   
 })
 
-
-
-
-week_plot_out <- reactive({
-  code_out <- paste0(setup(),'
-p_code <- "', rawData_data$p_code,'"
-stat_cd <- "', rawData_data$stat_cd,'"
-week_plot <-  weekly_frequency_plot(gw_level_dv, 
-                                    p_code, stat_cd, 
-                                    plot_title = plot_title)
-week_plot
-# To save:
-# Fiddle with height and width (in inches) for best results:
-# Change file name extension to save as png.
-# ggplot2::ggsave(week_plot, file="week_plot.pdf",
-#                        height = 9,
-#                        width = 11)
-  ')
-  code_out
+year2_table <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$daily_data), "Please select a data set")
+  )
+  
+  daily_tab <-  daily_frequency_table(dvData(), 
+                                    p_code_dv = rawData_data$p_code, 
+                                    statCd = rawData_data$stat_cd) 
+  
+  daily_tab_DT <- DT::datatable(daily_tab, 
+                               rownames = FALSE, 
+                               options = list(dom = 'tp')) %>% 
+    formatSignif(c(2:4), digits = 3)
+  
+  return(daily_tab_DT)
+  
 })
+
+
+
 
 year2_plot_out <- reactive({
   code_out <- paste0(setup(),'

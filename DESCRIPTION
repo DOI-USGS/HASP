@@ -40,7 +40,8 @@ Imports:
     shinydashboard,
     EnvStats,
     lubridate,
-    purrr
+    purrr,
+    openxlsx
 Suggests:
     rmarkdown,
     testthat,

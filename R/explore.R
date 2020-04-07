@@ -33,6 +33,10 @@ explore_aquifers <- function(browse=TRUE){
 #' @importFrom DT dataTableOutput
 #' @importFrom DT datatable
 #' @importFrom DT formatSignif
+#' @importFrom openxlsx writeData
+#' @importFrom openxlsx createWorkbook
+#' @importFrom openxlsx addWorksheet
+#' @importFrom openxlsx saveWorkbook
 #' @examples 
 #' \donttest{
 #' explore_site()
