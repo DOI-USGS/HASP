@@ -2,9 +2,12 @@
 % Please edit documentation in R/explore.R
 \name{explore_aquifers}
 \alias{explore_aquifers}
-\title{Explore data in the Shiny Application}
+\alias{explore_site}
+\title{Explore data in shiny applications}
 \usage{
 explore_aquifers(browse = TRUE)
+
+explore_site(browse = TRUE)
 }
 \arguments{
 \item{browse}{Logical. Use browser for running Shiny app.}
@@ -20,5 +23,8 @@ a good starting-point for a custom analysis.
 \examples{
 \donttest{
 explore_aquifers()
+}
+\donttest{
+explore_site()
 }
 }

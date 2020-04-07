@@ -9,3 +9,5 @@ ci/*
 HASP_*.tar.gz
 orig_scripts/
 DISCLAIMER.md
+^doc$
+^Meta$

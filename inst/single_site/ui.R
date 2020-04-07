@@ -17,16 +17,15 @@ header <- dashboardHeader(title = "HASP",
                             style='color: #000000; 
                             margin-right:13px;margin-top:7px;margin-bottom:7px',
                             onclick = "setTimeout(function(){window.close();},500);",  # close browser
-                            "Stop compHydros"
+                            "Stop App"
                           )))
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    selectInput("aquiferCd", label = "Prinicple Aquifer", 
-                choices = summary_aquifers$long_name,
-                selected = summary_aquifers$long_name[1], 
-                multiple = FALSE),
-    actionButton("get_data", label = "Get Latest Data"),
+    textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
+    textInput("pcode", value = "62610", label = "Daily pcode"),
+    textInput("statcd", value = "00001", label = "Daily stat code"),
+    actionButton("get_data", label = "Get Data"),
     menuItem("Source code", icon = icon("file-code-o"), 
              href = "https://code.usgs.gov/water/stats/HASP"),
     actionButton("example_data", label = "Load Example Data")
@@ -35,22 +34,31 @@ sidebar <- dashboardSidebar(
 
 body <- dashboardBody(
   tabBox(width = 12, id = "mainOut",
-         tabPanel(title = tagList("Composite Hydrograph", shiny::icon("bar-chart")),
-                  value = "comp_plot",
-                  ggraph_w_downloaders("composite_graph", init_text = init_text)
-
-         ),
-         tabPanel(title = tagList("Normalized Composite Hydrograph", shiny::icon("bar-chart")),
-                  value = "norm_plot",
-                  ggraph_w_downloaders("normalized_graph", init_text = init_text)
+         tabPanel(title = tagList("Get Data", shiny::icon("laptop-code")),
+                  value = "get_data",
+                  shinyAce::aceEditor(outputId = "get_data_code", value = init_text, 
+                                      mode = "r", theme = "chrome", readOnly = TRUE)
                   
          ),
-         tabPanel(title = tagList("Map", shiny::icon("map-marker")),
-                  value = "map",
-                  leaflet::leafletOutput("mymap",height = "500px"),
-                  h4("R Code:"),
-                  shinyAce::aceEditor(outputId = "map_code", value = init_text, 
-                                      mode = "r", theme = "chrome", readOnly = TRUE)
+         tabPanel(title = tagList("Groundwater", shiny::icon("bar-chart")),
+                  value = "gwl_plot",
+                  ggraph_table_downloaders("gwl_graph", init_text = init_text)
+
+         ),
+         tabPanel(title = tagList("Weekly Frequency", shiny::icon("bar-chart")),
+                  value = "week_plot",
+                  ggraph_w_downloaders("week_graph", init_text = init_text)
+                  
+         ),
+         tabPanel(title = tagList("2-year Plot", shiny::icon("bar-chart")),
+                  value = "year2_plot",
+                  ggraph_w_downloaders("year2_graph", init_text = init_text)
+                  
+         ),
+         tabPanel(title = tagList("Chloride", shiny::icon("bar-chart")),
+                  value = "chloride_plot",
+                  ggraph_w_downloaders("chloride_graph", init_text = init_text)
+                  
          )
          
   ),

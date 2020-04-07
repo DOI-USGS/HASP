@@ -124,16 +124,16 @@ create_segs <- function(x,
                        stringsAsFactors = FALSE)
 
   for(i in seq_len(nrow(trend_results))){
-    if(trend_results$trend[i] != "Not significant"){
+    if(!is.na(trend_results$trend[i]) && trend_results$trend[i] != "Not significant"){
       df_seg$x1[df_seg$trend == trend_results$test[i]] <- as.Date(df_seg$x2[df_seg$trend == trend_results$test[i]] - as.difftime(df_seg$years[i]*365+1, units = "days"), origin = "1970-01-01")
       
       df_seg$y1[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x1[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
       df_seg$y2[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x2[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
-    } else {
-      df_seg <- df_seg[-which(df_seg$trend == trend_results$test[i]),]
-    }
+    } 
   }
 
+  df_seg <- df_seg[!(is.na(df_seg$y1)),]
+  
   if(nrow(df_seg) != 0){
     df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
     df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))    

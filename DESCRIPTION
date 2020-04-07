@@ -34,6 +34,7 @@ Imports:
     leaflet,
     scales,
     shiny,
+    DT,
     shinyAce,
     shinycssloaders,
     shinydashboard,
