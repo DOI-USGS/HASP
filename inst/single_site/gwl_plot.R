@@ -86,7 +86,16 @@ week_table_df <- reactive({
   week_tab <-  weekly_frequency_table(dvData(), 
                                       p_code_dv = rawData_data$p_code, 
                                       statCd = rawData_data$stat_cd, 
-                                      date_col = "Date")
+                                      date_col = "Date") %>% 
+    select("Week" = week,
+           "Lowest median" = minMed,
+           "10th" = p10,
+           "25th" = p25,
+           "50th" = p50,
+           "75th" = p75,
+           "90th" = p90,
+           "Highest median" = maxMed,
+                                                               "# Years" = nYears)
   return(week_tab)
 })
 
@@ -151,7 +160,12 @@ year2_table_df <- reactive({
   
   daily_tab <-  daily_frequency_table(dvData(), 
                                       p_code_dv = rawData_data$p_code, 
-                                      statCd = rawData_data$stat_cd) 
+                                      statCd = rawData_data$stat_cd) %>%
+    rename("DOY" = DOY,
+           "Maximum" = max,
+           "Mean" = mean,
+           "Minimum" = min,
+           "# Points" = points)
   return(daily_tab)
 })
 
@@ -211,7 +225,17 @@ month_table_df <- reactive({
     need(!is.null(rawData_data$gwl_data), "Please select a data set")
   )
   
-  month_tab <-  monthly_frequency_table(gwlData()) 
+  month_tab <-  monthly_frequency_table(gwlData()) %>%
+    select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
+    mutate(month = month.abb[month]) %>%
+    rename("Month" = month,
+           "Lowest median" = minMed,
+           "10th" = p10,
+           "25th" = p25,
+           "50th" = p50,
+           "75th" = p75,
+           "Highest median" = maxMed,
+           "Number of years" = nYears)
   return(month_tab)
 })
 
