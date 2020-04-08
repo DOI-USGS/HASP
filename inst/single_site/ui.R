@@ -23,11 +23,15 @@ header <- dashboardHeader(title = "HASP",
 sidebar <- dashboardSidebar(
   sidebarMenu(
     
-    textInput("pcode", value = "62610", label = "Daily pcode"),
-    textInput("statcd", value = "00001", label = "Daily stat code"),
-    checkboxGroupInput("pcode_plot", label = "QW pcodes",
-                choices = c("00095","90095","00940","99220"),
-                selected = c("00095","90095")),
+    menuItem("Daily Options", icon = icon("th"), tabName = "dailyDat",
+             textInput("pcode", value = "62610", label = "Daily pcode"),
+             textInput("statcd", value = "00001", label = "Daily stat code")            
+    ),
+    menuItem("QW Options", icon = icon("th"), tabName = "wDat",
+      checkboxGroupInput("pcode_plot", label = "QW pcodes",
+                  choices = c("00095","90095","00940","99220"),
+                  selected = c("00095","90095"))
+    ),
     actionButton("get_data", label = "Get Data"),
     menuItem("Source code", icon = icon("file-code-o"), 
              href = "https://code.usgs.gov/water/stats/HASP"),

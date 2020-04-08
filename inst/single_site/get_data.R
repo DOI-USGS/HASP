@@ -21,6 +21,8 @@ observeEvent(input$example_data,{
   rawData_data$available_data <- data_available("263819081585801")
   rawData_data$site_meta <- site_summary("263819081585801")
   
+  updateTextInput(session, "siteID", value = "263819081585801")
+  
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
                             value = setup() )
@@ -33,6 +35,23 @@ observeEvent(input$get_data,{
   site_id <- input$siteID
   parameter_cd <- input$pcode
   stat_cd <- input$statcd
+  
+  rawData_data$available_data <- data_available(site_id)
+  
+  site_info <- site_summary(site_id)
+
+  if(!any(grepl("GW", site_info$site_tp_cd))){
+    showNotification("The site is not identified as a groundwater site.", 
+                     type = "error")
+  }
+  
+  rawData_data$site_meta <-  site_info
+  
+  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
+    filter(!is.na(parm_cd)) %>% 
+    pull(parm_cd)
+  
+  rawData_data$p_code_qw <- pcodes_qw
   
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
@@ -59,8 +78,8 @@ observeEvent(input$get_data,{
                    duration = NULL, id = "load3")
   
   rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, 
-                                                     c("00095","90095","00940","99220"))
-  rawData_data$p_code_qw <- c("00095","90095","00940","99220")
+                                                    p_code_qw())
+
   removeNotification(id = "load3")
   
   rawData_data$p_code_dv <- input$pcode
@@ -100,13 +119,21 @@ p_code_qw <- reactive({
 
 observe({
   updateCheckboxGroupInput(session, "pcode_plot", 
-                            choices = p_code_qw(), selected = p_code_qw()[1])
+                            choices = p_code_qw(), selected = p_code_qw())
 })
 
 observeEvent(input$get_data_avail,{
   site_id <- input$siteID
+
+  site_info <- site_summary(site_id)
+  
+  if(!any(grepl("GW", site_info$site_tp_cd))){
+    showNotification("The site is not identified as a groundwater site.", 
+                     type = "error")
+  }
+  
   rawData_data$available_data <- data_available(site_id)
-  rawData_data$site_meta <-  site_summary(site_id)
+  rawData_data$site_meta <-  site_info
   
   pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
     filter(!is.na(parm_cd)) %>% 
