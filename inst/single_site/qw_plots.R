@@ -30,8 +30,8 @@ cl_trend_table <- reactive({
                                rownames = FALSE,
                                extensions = 'Buttons',
                                options = list(dom = 'tB',
-                                             ordering = FALSE,
-                                             buttons = c('csv'))) %>% 
+                                              ordering = FALSE,
+                                              buttons = c('csv'))) %>% 
     formatSignif(2:3, digits = 2)
   
   return(qw_table_DT)
@@ -63,6 +63,57 @@ qw_summary(qw_data,
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
 # ggplot2::ggsave(cl_trend, file="cl_trend.pdf",
+#                        height = 9,
+#                        width = 11)
+  ')
+  code_out
+})
+
+cl_sc_plot <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$qw_data), "Please select a data set")
+  )
+  plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],
+                      attr(qwData(), "siteInfo")[["site_no"]], sep = "\n")
+  Sc_Cl <-  Sc_Cl_plot(qwData(), plot_title = plot_title) 
+  
+  return(Sc_Cl)
+  
+})
+
+cl_sc_table_df <- reactive({
+  validate(
+    need(!is.null(rawData_data$qw_data), "Please select a data set")
+  )
+  
+  sl_cl_table <-  Sc_Cl_table(qwData())
+  return(sl_cl_table)
+})
+
+cl_sc_table <- reactive({
+  
+  sl_cl_table_DT <- DT::datatable(cl_sc_table_df(), 
+                                  rownames = FALSE,
+                                  options = list(dom = 't')) 
+  
+  return(sl_cl_table_DT)
+  
+})
+
+cl_sc_plot_out <- reactive({
+  code_out <- paste0(setup(),'
+
+Sc_Cl <-  Sc_Cl_plot(qw_data, 
+                        plot_title = plot_title)
+Sc_Cl
+
+Sc_Cl_df <- Sc_Cl_table(qw_data)
+
+# To save:
+# Fiddle with height and width (in inches) for best results:
+# Change file name extension to save as png.
+# ggplot2::ggsave(Sc_Cl, file="Sc_Cl.pdf",
 #                        height = 9,
 #                        width = 11)
   ')

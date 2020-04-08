@@ -103,8 +103,7 @@ week_table <- reactive({
 
 week_plot_out <- reactive({
   code_out <- paste0(setup(),'
-p_code <- "', rawData_data$p_code,'"
-stat_cd <- "', rawData_data$stat_cd,'"
+
 week_plot <-  weekly_frequency_plot(gw_level_dv, 
                                     p_code, stat_cd, 
                                     plot_title = plot_title)
@@ -172,8 +171,7 @@ year2_table <- reactive({
 
 year2_plot_out <- reactive({
   code_out <- paste0(setup(),'
-p_code <- "', rawData_data$p_code,'"
-stat_cd <- "', rawData_data$stat_cd,'"
+
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
                                   p_code, stat_cd, 
                                   plot_title = plot_title,
@@ -187,6 +185,59 @@ daily_frequencies <- daily_frequency_table(gw_level_dv,
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
 # ggplot2::ggsave(year2_plot, file="year2_plot.pdf",
+#                        height = 9,
+#                        width = 11)
+  ')
+  code_out
+})
+
+month_plot <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$gwl_data), "Please select a data set")
+  )
+  plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
+                      attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
+  
+  month_plot <-  monthly_frequency_plot(gwlData(), plot_title = plot_title) 
+  
+  
+  return(month_plot)
+  
+})
+
+month_table_df <- reactive({
+  validate(
+    need(!is.null(rawData_data$gwl_data), "Please select a data set")
+  )
+  
+  month_tab <-  monthly_frequency_table(gwlData()) 
+  return(month_tab)
+})
+
+month_table <- reactive({
+  
+  month_tab_DT <- DT::datatable(month_table_df(), 
+                                rownames = FALSE,
+                                options = list(dom = 'tp')) %>% 
+    formatSignif(c(2:8), digits = 3)
+  
+  return(month_tab_DT)
+  
+})
+
+month_plot_out <- reactive({
+  code_out <- paste0(setup(),'
+
+month_plot <-  monthly_frequency_plot(gwl_data, 
+                                  plot_title = plot_title)
+month_plot
+
+month_frequencies <- monthly_frequency_table(gwl_data)
+# To save:
+# Fiddle with height and width (in inches) for best results:
+# Change file name extension to save as png.
+# ggplot2::ggsave(month_plot, file="month_plot.pdf",
 #                        height = 9,
 #                        width = 11)
   ')

@@ -30,6 +30,13 @@ shinyServer(function(input, output, session) {
              table_df = week_table_df,
              raw_data = reactive({rawData_data$daily_data}))
   
+  callModule(graph_table_download_code, 'month_graph', 
+             plot_gg = month_plot, 
+             table_DT = month_table,
+             code_out = month_plot_out, 
+             table_df = month_table_df,
+             raw_data = reactive({rawData_data$daily_data}))
+  
   callModule(graph_table_download_code, 'year2_graph', 
              plot_gg = year2_plot, 
              table_DT = year2_table,
@@ -43,6 +50,13 @@ shinyServer(function(input, output, session) {
              code_out = cl_trend_plot_out, 
              raw_data = reactive({rawData_data$qw_data}))
   
+  callModule(graph_table_download_code, 'ch_sc_graph', 
+             plot_gg = cl_sc_plot, 
+             table_DT = cl_sc_table,
+             table_df = cl_sc_table_df,
+             code_out = cl_sc_plot_out, 
+             raw_data = reactive({rawData_data$qw_data}))
+  
   setup <- reactive({
     
     p_code <- input$pcode
@@ -51,6 +65,7 @@ shinyServer(function(input, output, session) {
     
     if(rawData_data$example_data){
       setup_code <- paste0('library(HASP)
+
 gw_level_dv <- L2701_example_data$Daily
 gwl_data <- L2701_example_data$Discrete
 qw_data <- L2701_example_data$QW
@@ -60,6 +75,7 @@ stat_cd <- "00001"')
     } else {
       setup_code <- paste0('library(HASP)
 library(dataRetrieval)
+
 site_id <- "', site_id ,'"
 
 pcodes_cl_sc <- c("00095","90095","00940","99220")

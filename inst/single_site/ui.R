@@ -50,14 +50,24 @@ body <- dashboardBody(
                   ggraph_table_downloaders("week_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("2-year Plot", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Daily Plot", shiny::icon("bar-chart")),
                   value = "year2_plot",
                   ggraph_table_downloaders("year2_graph", init_text = init_text)
+                  
+         ),
+         tabPanel(title = tagList("Monthly Plot", shiny::icon("bar-chart")),
+                  value = "month_plot",
+                  ggraph_table_downloaders("month_graph", init_text = init_text)
                   
          ),
          tabPanel(title = tagList("Chloride", shiny::icon("bar-chart")),
                   value = "chloride_plot",
                   ggraph_table_downloaders_1line("chloride_graph", init_text = init_text)
+                  
+         ),
+         tabPanel(title = tagList("Chloride-SC", shiny::icon("bar-chart")),
+                  value = "ch_sc_plot",
+                  ggraph_table_downloaders("ch_sc_graph", init_text = init_text)
                   
          )
          
