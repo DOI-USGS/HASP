@@ -19,7 +19,7 @@ gwl_table <- reactive({
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
 
-  val_col <- paste("X", rawData_data$p_code, rawData_data$stat_cd, sep = "_")
+  val_col <- paste("X", rawData_data$p_code_dv, rawData_data$stat_cd, sep = "_")
   gwl_tab <-  site_data_summary(dvData(), 
                                 sum_col = val_col) 
   
@@ -41,7 +41,7 @@ gwl_table <- reactive({
 })
 
 gwl_plot_out <- reactive({
-  sum_col <- paste("X", rawData_data$p_code, rawData_data$stat_cd, sep = "_")
+  sum_col <- paste("X", rawData_data$p_code_dv, rawData_data$stat_cd, sep = "_")
   code_out <- paste0(setup(),'
 
 gwl_plot <-  gwl_plot_all(gw_level_dv, gwl_data, 
@@ -70,7 +70,7 @@ week_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   week_plot <-  weekly_frequency_plot(dvData(), plot_title = plot_title,
-                                     p_code_dv = rawData_data$p_code, 
+                                     p_code_dv = rawData_data$p_code_dv, 
                                      statCd = rawData_data$stat_cd) 
   
   
@@ -83,9 +83,9 @@ week_table_df <- reactive({
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
   
-  val_col <- paste("X", rawData_data$p_code, rawData_data$stat_cd, sep = "_")
+  val_col <- paste("X", rawData_data$p_code_dv, rawData_data$stat_cd, sep = "_")
   week_tab <-  weekly_frequency_table(dvData(), 
-                                      p_code_dv = rawData_data$p_code, 
+                                      p_code_dv = rawData_data$p_code_dv, 
                                       statCd = rawData_data$stat_cd, 
                                       date_col = "Date") %>% 
     select("Week" = week,
@@ -142,7 +142,7 @@ year2_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
-                                     p_code_dv = rawData_data$p_code, 
+                                     p_code_dv = rawData_data$p_code_dv, 
                                      statCd = rawData_data$stat_cd,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
@@ -160,7 +160,7 @@ year2_table_df <- reactive({
   )
   
   daily_tab <-  daily_frequency_table(dvData(), 
-                                      p_code_dv = rawData_data$p_code, 
+                                      p_code_dv = rawData_data$p_code_dv, 
                                       statCd = rawData_data$stat_cd) %>%
     rename("DOY" = DOY,
            "Maximum" = max,

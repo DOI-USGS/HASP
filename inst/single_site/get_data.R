@@ -3,18 +3,20 @@ rawData_data <- reactiveValues(daily_data = NULL,
                                daily_data = NULL,
                                gwl_data = NULL,
                                qw_data = NULL,
-                               p_code = "62610",
+                               p_code_dv = "62610",
                                stat_cd = "00001",
                                available_data = NULL,
-                               site_meta = NULL)
+                               site_meta = NULL,
+                               p_code_qw = NULL)
 
 observeEvent(input$example_data,{
   rawData_data$example_data <- TRUE
   rawData_data$daily_data <- HASP::L2701_example_data$Daily
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
-  rawData_data$p_code <- "62610"
+  rawData_data$p_code_dv <- "62610"
   rawData_data$stat_cd <- "00001"
+  rawData_data$p_code_qw <- c("00095","90095","00940","99220")
 
   rawData_data$available_data <- data_available("263819081585801")
   rawData_data$site_meta <- site_summary("263819081585801")
@@ -58,10 +60,10 @@ observeEvent(input$get_data,{
   
   rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, 
                                                      c("00095","90095","00940","99220"))
-  
+  rawData_data$p_code_qw <- c("00095","90095","00940","99220")
   removeNotification(id = "load3")
   
-  rawData_data$p_code <- input$pcode
+  rawData_data$p_code_dv <- input$pcode
   rawData_data$stat_cd <- input$statcd
 })
 
@@ -92,8 +94,24 @@ siteData <- reactive({
   return(rawData_data$site_meta)
 })
 
+p_code_qw <- reactive({
+  return(rawData_data$p_code_qw)
+})
+
+observe({
+  updateCheckboxGroupInput(session, "pcode_plot", 
+                            choices = p_code_qw(), selected = p_code_qw()[1])
+})
+
 observeEvent(input$get_data_avail,{
   site_id <- input$siteID
   rawData_data$available_data <- data_available(site_id)
   rawData_data$site_meta <-  site_summary(site_id)
+  
+  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
+    filter(!is.na(parm_cd)) %>% 
+    pull(parm_cd)
+  
+  rawData_data$p_code_qw <- pcodes_qw
+  
 })
