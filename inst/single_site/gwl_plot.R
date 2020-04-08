@@ -26,9 +26,14 @@ gwl_table <- reactive({
   gwl_tab <- gwl_tab[,-1]
   names(gwl_tab) <- gsub("_site", "", names(gwl_tab))
   
-  gwl_tab_DT <- DT::datatable(gwl_tab, rownames = FALSE,
-                              options = list(dom = 't')) %>% 
-    formatSignif(-9, digits = 3)
+  gwl_tab_t <- data.frame(t(gwl_tab))
+  
+  gwl_tab_DT <- DT::datatable(gwl_tab_t, 
+                              extensions = 'Buttons',colnames = '',
+                              options = list(dom = 'tB',
+                                             ordering = FALSE,
+                                             buttons = c('csv'))) %>% 
+    formatSignif(1, digits = 3)
   
   return(gwl_tab_DT)
   
@@ -72,8 +77,7 @@ week_plot <- reactive({
   
 })
 
-week_table <- reactive({
-  
+week_table_df <- reactive({
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
@@ -82,9 +86,13 @@ week_table <- reactive({
   week_tab <-  weekly_frequency_table(dvData(), 
                                       p_code_dv = rawData_data$p_code, 
                                       statCd = rawData_data$stat_cd, 
-                                      date_col = "Date") 
+                                      date_col = "Date")
+  return(week_tab)
+})
+
+week_table <- reactive({
   
-  week_tab_DT <- DT::datatable(week_tab, 
+  week_tab_DT <- DT::datatable(week_table_df(), 
                                rownames = FALSE, 
                                options = list(dom = 'tp')) %>% 
     formatSignif(c(-1, -9), digits = 3)
@@ -137,18 +145,21 @@ year2_plot <- reactive({
   
 })
 
-year2_table <- reactive({
-  
+year2_table_df <- reactive({
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
   
   daily_tab <-  daily_frequency_table(dvData(), 
-                                    p_code_dv = rawData_data$p_code, 
-                                    statCd = rawData_data$stat_cd) 
+                                      p_code_dv = rawData_data$p_code, 
+                                      statCd = rawData_data$stat_cd) 
+  return(daily_tab)
+})
+
+year2_table <- reactive({
   
-  daily_tab_DT <- DT::datatable(daily_tab, 
-                               rownames = FALSE, 
+  daily_tab_DT <- DT::datatable(year2_table_df(), 
+                               rownames = FALSE,
                                options = list(dom = 'tp')) %>% 
     formatSignif(c(2:4), digits = 3)
   
@@ -164,11 +175,14 @@ year2_plot_out <- reactive({
 p_code <- "', rawData_data$p_code,'"
 stat_cd <- "', rawData_data$stat_cd,'"
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
-                                    p_code, stat_cd, 
-                                    plot_title = plot_title,
-                                    historical_stat = "mean",
-                                    month_breaks = TRUE)
+                                  p_code, stat_cd, 
+                                  plot_title = plot_title,
+                                  historical_stat = "mean",
+                                  month_breaks = TRUE)
 year2_plot
+
+daily_frequencies <- daily_frequency_table(gw_level_dv,
+                                           p_code, stat_cd)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.

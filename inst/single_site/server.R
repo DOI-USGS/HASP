@@ -27,12 +27,14 @@ shinyServer(function(input, output, session) {
              plot_gg = week_plot, 
              table_DT = week_table,
              code_out = week_plot_out, 
+             table_df = week_table_df,
              raw_data = reactive({rawData_data$daily_data}))
   
   callModule(graph_table_download_code, 'year2_graph', 
              plot_gg = year2_plot, 
              table_DT = year2_table,
              code_out = year2_plot_out, 
+             table_df = year2_table_df,
              raw_data = reactive({rawData_data$daily_data}))
   
   callModule(graph_table_download_code, 'chloride_graph', 

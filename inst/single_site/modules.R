@@ -1,20 +1,4 @@
 
-ggraph_w_downloaders <- function(id, init_text) {
-  ns <- NS(id)
-  
-  tagList(
-    shinycssloaders::withSpinner(plotOutput(ns('plot'))),
-    fluidRow(
-      column(3, downloadButton(ns('download_plot'), 'Download PNG')),
-      column(3, downloadButton(ns('download_csv'), 'Download CSV'))
-    ),
-    h4("R Code:"),
-    shinyAce::aceEditor(outputId = ns('code'), value = init_text, 
-                        mode = "r", theme = "chrome", readOnly = TRUE)
-  )
-}
-
-
 ggraph_table_downloaders <- function(id, init_text) {
   ns <- NS(id)
   
@@ -22,56 +6,40 @@ ggraph_table_downloaders <- function(id, init_text) {
     shinycssloaders::withSpinner(plotOutput(ns('plot'))),
     fluidRow(
       column(3, downloadButton(ns('download_plot'), 'Download png')),
-      column(3, downloadButton(ns('download_xlsx'), 'Download xlsx'))
+      column(3, downloadButton(ns('download_xlsx'), 'Download plot data'))
     ),
     DT::dataTableOutput(ns('table')),
+    downloadButton(ns('download_table'), 'Download full table'),
     h4("R Code:"),
     shinyAce::aceEditor(outputId = ns('code'), value = init_text, 
                         mode = "r", theme = "chrome", readOnly = TRUE)
   )
 }
 
-graph_download_code <- function(input, output, session, 
-                                plot_gg, code_out, raw_data){
+ggraph_table_downloaders_1line <- function(id, init_text) {
+  ns <- NS(id)
   
-  ns <- session$ns
-  
-  output$plot <- renderPlot({
-    
-    validate(
-      need(!is.null(raw_data()), "Please select a data set")
-    )
-    
-    shinyAce::updateAceEditor(session, editorId = "code", value = code_out() )
-    
-    plot_gg()
-    
-  })
-  
-  output$download_plot <- downloadHandler(
-    
-    filename = "plot.png",
-    content = function(file) {
-      ggplot2::ggsave(file, plot = plot_gg(),
-                      device = "png", width = 11,
-                      height = 9)
-    }
+  tagList(
+    fluidRow(
+      column(6,  shinycssloaders::withSpinner(plotOutput(ns('plot')))),
+      column(6, DT::dataTableOutput(ns('table')))
+    ),
+    fluidRow(
+      column(3, downloadButton(ns('download_plot'), 'Download png')),
+      column(3, downloadButton(ns('download_xlsx'), 'Download plot data'))
+    ),
+    h4("R Code:"),
+    shinyAce::aceEditor(outputId = ns('code'), value = init_text, 
+                        mode = "r", theme = "chrome", readOnly = TRUE)
   )
-  
-  output$download_xlsx <- downloadHandler(
-    
-    filename = "plot_data.xlsx",
-    
-    content = function(file) {
-      openxlsx::write.xlsx(get_layer_data(plot_gg()), file = "plot_data.xlsx", row.names = FALSE)
-    }
-  )
-  
 }
 
+
+
 graph_table_download_code <- function(input, output, session, 
-                                      plot_gg, table_DT, 
-                                      code_out, raw_data){
+                                      plot_gg, table_DT,
+                                      code_out, raw_data, 
+                                      table_df = NULL){
   
   ns <- session$ns
   
@@ -123,6 +91,14 @@ graph_table_download_code <- function(input, output, session,
       openxlsx::saveWorkbook(wb, 
                    file = file, 
                    overwrite = TRUE)
+    }
+  )
+  
+  output$download_table <- downloadHandler(
+    
+    filename = "hasp_data.csv",
+    content = function(file) {
+      write.csv(table_df(), file, row.names = FALSE)
     }
   )
   
