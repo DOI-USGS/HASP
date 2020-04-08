@@ -13,6 +13,10 @@ shinyServer(function(input, output, session) {
     if (input$close > 0) shiny::stopApp()    
   })
   
+  output$dataAvailable <- DT::renderDataTable({
+      availData()
+    }, escape=FALSE, rownames = FALSE, options = list(dom = "t"))
+  
   source("get_data.R",local=TRUE)$value
   source("gwl_plot.R",local=TRUE)$value
   source("qw_plots.R",local=TRUE)$value
@@ -50,6 +54,13 @@ shinyServer(function(input, output, session) {
              code_out = cl_trend_plot_out, 
              raw_data = reactive({rawData_data$qw_data}))
   
+  callModule(graph_table_download_code, 'qw_graph', 
+             plot_gg = qw1_plot, 
+             table_DT = qw1_table,
+             code_out = qw1_plot_out, 
+             raw_data = reactive({rawData_data$qw_data}))
+  
+  
   callModule(graph_table_download_code, 'ch_sc_graph', 
              plot_gg = cl_sc_plot, 
              table_DT = cl_sc_table,
@@ -62,6 +73,7 @@ shinyServer(function(input, output, session) {
     p_code <- input$pcode
     site_id <- input$siteID
     stat_cd <- input$statcd
+    pcodeqw <- input$pcode_plot
     
     if(rawData_data$example_data){
       setup_code <- paste0('library(HASP)
@@ -69,7 +81,7 @@ shinyServer(function(input, output, session) {
 gw_level_dv <- L2701_example_data$Daily
 gwl_data <- L2701_example_data$Discrete
 qw_data <- L2701_example_data$QW
-p_code <- "62610"
+p_code_dv <- "62610"
 stat_cd <- "00001"')
 
     } else {
@@ -77,14 +89,15 @@ stat_cd <- "00001"')
 library(dataRetrieval)
 
 site_id <- "', site_id ,'"
-
-pcodes_cl_sc <- c("00095","90095","00940","99220")
+p_code_dv <- c("', paste(p_code, collapse = '", "') ,'")
+stat_cd <- "00001"
+pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
 gw_level_dv <- readNWISdv(site_id = site_id,
                            parameterCd = "', p_code,'",
                            statCd = "', stat_cd, '")
 gwl_data <- readNWISqwl(site_id = site_id)
 qw_data <- readNWISqw(site_id = site_id,
-                      parameterCd = pcodes_cl_sc)
+                      parameterCd = pcodes_qw)
 plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
                     site_id, sep = "\\\\n")')     
     }

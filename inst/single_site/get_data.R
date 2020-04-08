@@ -4,7 +4,9 @@ rawData_data <- reactiveValues(daily_data = NULL,
                                gwl_data = NULL,
                                qw_data = NULL,
                                p_code = "62610",
-                               stat_cd = "00001")
+                               stat_cd = "00001",
+                               available_data = NULL,
+                               site_meta = NULL)
 
 observeEvent(input$example_data,{
   rawData_data$example_data <- TRUE
@@ -14,6 +16,9 @@ observeEvent(input$example_data,{
   rawData_data$p_code <- "62610"
   rawData_data$stat_cd <- "00001"
 
+  rawData_data$available_data <- data_available("263819081585801")
+  rawData_data$site_meta <- site_summary("263819081585801")
+  
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
                             value = setup() )
@@ -77,4 +82,18 @@ gwlData <- reactive({
   
   return(rawData_data$gwl_data)
   
+})
+
+availData <- reactive({
+  return(rawData_data$available_data)
+})
+
+siteData <- reactive({
+  return(rawData_data$site_meta)
+})
+
+observeEvent(input$get_data_avail,{
+  site_id <- input$siteID
+  rawData_data$available_data <- data_available(site_id)
+  rawData_data$site_meta <-  site_summary(site_id)
 })

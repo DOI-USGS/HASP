@@ -119,3 +119,66 @@ Sc_Cl_df <- Sc_Cl_table(qw_data)
   ')
   code_out
 })
+
+
+qw1_plot <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$qw_data), "Please select a data set")
+  )
+  
+  pcode <- input$pcode_plot
+  
+  plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],
+                      attr(qwData(), "siteInfo")[["site_no"]], sep = "\n")
+  qwplot <-  qw_plot(qwData(),
+                     pcode = pcode,
+                     plot_title = plot_title) 
+  
+  return(qwplot)
+  
+})
+
+qw1_table <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$qw_data), "Please select a data set")
+  )
+  
+  pcode <- input$pcode_plot
+  
+  qw_table <-  qw_summary(qwData(), pcode = pcode)
+  
+  qw_table_DT <- DT::datatable(qw_table, 
+                               colnames = "",
+                               rownames = FALSE,
+                               extensions = 'Buttons',
+                               options = list(dom = 'tB',
+                                              ordering = FALSE,
+                                              buttons = c('csv'))) 
+  
+  return(qw_table_DT)
+  
+})
+
+qw1_plot_out <- reactive({
+  
+  pcode <- input$pcode_plot
+  
+  code_out <- paste0(setup(),'
+qw_pcodes <- c("', paste(pcode, collapse = '", "'), '")
+qw_dt_plot <-  qw_plot(qw_data, 
+                       plot_title = plot_title)
+qw_dt_plot
+
+qw_table <- qw_summary(qw_data, pcode)
+
+# To save:
+# Fiddle with height and width (in inches) for best results:
+# Change file name extension to save as png.
+# ggplot2::ggsave(Sc_Cl, file="Sc_Cl.pdf",
+#                        height = 9,
+#                        width = 11)
+  ')
+  code_out
+})

@@ -22,9 +22,12 @@ header <- dashboardHeader(title = "HASP",
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
+    
     textInput("pcode", value = "62610", label = "Daily pcode"),
     textInput("statcd", value = "00001", label = "Daily stat code"),
+    checkboxGroupInput("pcode_plot", label = "QW pcodes",
+                choices = c("00095","90095","00940","99220"),
+                selected = c("00095","90095")),
     actionButton("get_data", label = "Get Data"),
     menuItem("Source code", icon = icon("file-code-o"), 
              href = "https://code.usgs.gov/water/stats/HASP"),
@@ -36,8 +39,15 @@ body <- dashboardBody(
   tabBox(width = 12, id = "mainOut",
          tabPanel(title = tagList("Get Data", shiny::icon("laptop-code")),
                   value = "get_data",
-                  shinyAce::aceEditor(outputId = "get_data_code", value = init_text, 
-                                      mode = "r", theme = "chrome", readOnly = TRUE)
+                  fluidRow(
+                    column(6, 
+                           textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
+                           actionButton("get_data_avail", label = "Get Data Options"),
+                           DT::dataTableOutput("dataAvailable")),
+                    column(6, shinyAce::aceEditor(outputId = "get_data_code", value = init_text, 
+                                                  mode = "r", theme = "chrome", readOnly = TRUE))
+                  ),
+
                   
          ),
          tabPanel(title = tagList("Groundwater", shiny::icon("bar-chart")),
@@ -68,6 +78,11 @@ body <- dashboardBody(
          tabPanel(title = tagList("Chloride-SC", shiny::icon("bar-chart")),
                   value = "ch_sc_plot",
                   ggraph_table_downloaders("ch_sc_graph", init_text = init_text)
+                  
+         ),
+         tabPanel(title = tagList("QW Plot", shiny::icon("bar-chart")),
+                  value = "qw_plot",
+                  ggraph_table_downloaders_1line("qw_graph", init_text = init_text)
                   
          )
          

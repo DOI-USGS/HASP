@@ -28,8 +28,9 @@ gwl_table <- reactive({
   
   gwl_tab_t <- data.frame(t(gwl_tab))
   
-  gwl_tab_DT <- DT::datatable(gwl_tab_t, 
-                              extensions = 'Buttons',colnames = '',
+  gwl_tab_DT <- DT::datatable(gwl_tab_t,
+                              extensions = 'Buttons',
+                              colnames = '',
                               options = list(dom = 'tB',
                                              ordering = FALSE,
                                              buttons = c('csv'))) %>% 
@@ -88,21 +89,21 @@ week_table_df <- reactive({
                                       statCd = rawData_data$stat_cd, 
                                       date_col = "Date") %>% 
     select("Week" = week,
-           "Lowest median" = minMed,
+           "Lowest<br>median" = minMed,
            "10th" = p10,
            "25th" = p25,
            "50th" = p50,
            "75th" = p75,
            "90th" = p90,
-           "Highest median" = maxMed,
-                                                               "# Years" = nYears)
+           "Highest<br>median" = maxMed,
+           "# Years" = nYears)
   return(week_tab)
 })
 
 week_table <- reactive({
   
   week_tab_DT <- DT::datatable(week_table_df(), 
-                               rownames = FALSE, 
+                               rownames = FALSE, escape = FALSE,
                                options = list(dom = 'tp')) %>% 
     formatSignif(c(-1, -9), digits = 3)
   
@@ -114,12 +115,12 @@ week_plot_out <- reactive({
   code_out <- paste0(setup(),'
 
 week_plot <-  weekly_frequency_plot(gw_level_dv, 
-                                    p_code, stat_cd, 
+                                    p_code_dv, stat_cd, 
                                     plot_title = plot_title)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
-                                     p_code_dv = p_code, 
+                                     p_code_dv, 
                                      statCd = stat_cd, 
                                      date_col = "Date")
 
@@ -172,7 +173,7 @@ year2_table_df <- reactive({
 year2_table <- reactive({
   
   daily_tab_DT <- DT::datatable(year2_table_df(), 
-                               rownames = FALSE,
+                                rownames = FALSE,
                                options = list(dom = 'tp')) %>% 
     formatSignif(c(2:4), digits = 3)
   
@@ -187,14 +188,14 @@ year2_plot_out <- reactive({
   code_out <- paste0(setup(),'
 
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
-                                  p_code, stat_cd, 
+                                  p_code_dv, stat_cd, 
                                   plot_title = plot_title,
                                   historical_stat = "mean",
                                   month_breaks = TRUE)
 year2_plot
 
 daily_frequencies <- daily_frequency_table(gw_level_dv,
-                                           p_code, stat_cd)
+                                           p_code_dv, stat_cd)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
@@ -229,20 +230,20 @@ month_table_df <- reactive({
     select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
     mutate(month = month.abb[month]) %>%
     rename("Month" = month,
-           "Lowest median" = minMed,
+           "Lowest<br>median" = minMed,
            "10th" = p10,
            "25th" = p25,
            "50th" = p50,
            "75th" = p75,
-           "Highest median" = maxMed,
-           "Number of years" = nYears)
+           "Highest<br>median" = maxMed,
+           "Number<br>of years" = nYears)
   return(month_tab)
 })
 
 month_table <- reactive({
   
   month_tab_DT <- DT::datatable(month_table_df(), 
-                                rownames = FALSE,
+                                rownames = FALSE, escape = FALSE,
                                 options = list(dom = 'tp')) %>% 
     formatSignif(c(2:8), digits = 3)
   
