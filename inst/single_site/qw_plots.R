@@ -1,7 +1,7 @@
 cl_trend_plot <- reactive({
   
   validate(
-    need(!is.null(rawData_data$qw_data), "Please select a data set")
+    need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],
                       attr(qwData(), "siteInfo")[["site_no"]], sep = "\n")
@@ -15,7 +15,7 @@ cl_trend_plot <- reactive({
 cl_trend_table <- reactive({
   
   validate(
-    need(!is.null(rawData_data$qw_data), "Please select a data set")
+    need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   
   qw_table <-  kendell_test_5_20_years(dplyr::filter(qw_data, 
@@ -72,7 +72,7 @@ qw_summary(qw_data,
 cl_sc_plot <- reactive({
   
   validate(
-    need(!is.null(rawData_data$qw_data), "Please select a data set")
+    need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],
                       attr(qwData(), "siteInfo")[["site_no"]], sep = "\n")
@@ -124,7 +124,7 @@ Sc_Cl_df <- Sc_Cl_table(qw_data)
 qw1_plot <- reactive({
   
   validate(
-    need(!is.null(rawData_data$qw_data), "Please select a data set")
+    need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   
   pcode <- input$pcode_plot
@@ -142,7 +142,7 @@ qw1_plot <- reactive({
 qw1_table <- reactive({
   
   validate(
-    need(!is.null(rawData_data$qw_data), "Please select a data set")
+    need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   
   pcode <- input$pcode_plot

@@ -29,7 +29,38 @@ observeEvent(input$example_data,{
   
 })
 
-observeEvent(input$get_data,{
+observeEvent(input$get_data_qw, {
+  
+  rawData_data$example_data <- FALSE
+  
+  site_id <- input$siteID
+  site_info <- site_summary(site_id)
+  
+  if(!any(grepl("GW", site_info$site_tp_cd))){
+    showNotification("The site is not identified as a groundwater site.", 
+                     type = "error")
+  }
+  
+  rawData_data$site_meta <-  site_info
+  rawData_data$available_data <- data_available(site_id)
+  
+  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
+    filter(!is.na(parm_cd)) %>% 
+    pull(parm_cd)
+  
+  rawData_data$p_code_qw <- pcodes_qw
+  
+  showNotification("Loading QW", 
+                   duration = NULL, id = "load3")
+  
+  rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, 
+                                                    pcodes_qw)
+  
+  removeNotification(id = "load3")
+
+})
+
+observeEvent(input$get_data_ground, {
   rawData_data$example_data <- FALSE
   
   site_id <- input$siteID
@@ -44,6 +75,12 @@ observeEvent(input$get_data,{
     showNotification("The site is not identified as a groundwater site.", 
                      type = "error")
   }
+
+  pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
+    filter(!is.na(parm_cd)) %>% 
+    pull(parm_cd)
+  
+  rawData_data$p_code_dv <- pcodes_dv
   
   rawData_data$site_meta <-  site_info
   
@@ -57,52 +94,36 @@ observeEvent(input$get_data,{
                             editorId = "get_data_code", 
                             value = setup() )
   
-  showNotification("Loading Daily", 
+  showNotification("Loading Daily Groundwater Data", 
                    duration = NULL, id = "load")
 
   rawData_data$daily_data <- dataRetrieval::readNWISdv(site_id, 
-                                                       parameter_cd, 
+                                                       pcodes_dv, 
                                                        statCd = stat_cd)
 
   
   removeNotification(id = "load")
   
-  showNotification("Loading Discrete", 
+  showNotification("Loading Discrete Groundwater Data", 
                    duration = NULL, id = "load2")
   
   rawData_data$gwl_data <- dataRetrieval::readNWISgwl(site_id)
   
   removeNotification(id = "load2")
   
-  showNotification("Loading QW", 
-                   duration = NULL, id = "load3")
-  
-  rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, 
-                                                    p_code_qw())
 
-  removeNotification(id = "load3")
-  
-  rawData_data$p_code_dv <- input$pcode
-  rawData_data$stat_cd <- input$statcd
 })
 
-
 dvData <- reactive({
-  
   return(rawData_data$daily_data)
-  
 })
 
 qwData <- reactive({
-  
   return(rawData_data$qw_data)
-  
 })
 
 gwlData <- reactive({
-  
   return(rawData_data$gwl_data)
-  
 })
 
 availData <- reactive({
@@ -120,6 +141,15 @@ p_code_qw <- reactive({
 observe({
   updateCheckboxGroupInput(session, "pcode_plot", 
                             choices = p_code_qw(), selected = p_code_qw())
+})
+
+p_code_dv <- reactive({
+  return(rawData_data$p_code_dv)
+})
+
+observe({
+  updateRadioButtons(session, "pcode", 
+                      choices = p_code_dv(), selected = p_code_dv()[1])
 })
 
 observeEvent(input$get_data_avail,{
@@ -140,5 +170,11 @@ observeEvent(input$get_data_avail,{
     pull(parm_cd)
   
   rawData_data$p_code_qw <- pcodes_qw
+  
+  pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
+    filter(!is.na(parm_cd)) %>% 
+    pull(parm_cd)
+  
+  rawData_data$p_code_dv <- pcodes_dv
   
 })

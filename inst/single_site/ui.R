@@ -22,17 +22,22 @@ header <- dashboardHeader(title = "HASP",
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    
+    textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
+    actionButton("get_data_avail", label = "Check Data Options"),
     menuItem("Daily Options", icon = icon("th"), tabName = "dailyDat",
-             textInput("pcode", value = "62610", label = "Daily pcode"),
+             radioButtons("pcode",
+                           choices = "62610", 
+                           selected = "62610", 
+                           label = "Daily pcode"),
              textInput("statcd", value = "00001", label = "Daily stat code")            
     ),
+    actionButton("get_data_ground", label = "Get Groundwater Data"),
     menuItem("QW Options", icon = icon("th"), tabName = "wDat",
       checkboxGroupInput("pcode_plot", label = "QW pcodes",
                   choices = c("00095","90095","00940","99220"),
                   selected = c("00095","90095"))
     ),
-    actionButton("get_data", label = "Get Data"),
+    actionButton("get_data_qw", label = "Get QW Data"),
     menuItem("Source code", icon = icon("file-code-o"), 
              href = "https://code.usgs.gov/water/stats/HASP"),
     actionButton("example_data", label = "Load Example Data")
@@ -44,10 +49,7 @@ body <- dashboardBody(
          tabPanel(title = tagList("Get Data", shiny::icon("laptop-code")),
                   value = "get_data",
                   fluidRow(
-                    column(6, 
-                           textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
-                           actionButton("get_data_avail", label = "Get Data Options"),
-                           DT::dataTableOutput("dataAvailable")),
+                    column(6, DT::dataTableOutput("dataAvailable")),
                     column(6, shinyAce::aceEditor(outputId = "get_data_code", value = init_text, 
                                                   mode = "r", theme = "chrome", readOnly = TRUE))
                   ),
@@ -71,7 +73,7 @@ body <- dashboardBody(
          ),
          tabPanel(title = tagList("Monthly Plot", shiny::icon("bar-chart")),
                   value = "month_plot",
-                  ggraph_table_downloaders("month_graph", init_text = init_text)
+                  ggraph_table_downloaders_1line("month_graph", init_text = init_text)
                   
          ),
          tabPanel(title = tagList("Chloride", shiny::icon("bar-chart")),

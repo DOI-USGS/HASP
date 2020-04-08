@@ -38,7 +38,6 @@ shinyServer(function(input, output, session) {
              plot_gg = month_plot, 
              table_DT = month_table,
              code_out = month_plot_out, 
-             table_df = month_table_df,
              raw_data = reactive({rawData_data$daily_data}))
   
   callModule(graph_table_download_code, 'year2_graph', 
@@ -70,7 +69,7 @@ shinyServer(function(input, output, session) {
   
   setup <- reactive({
     
-    p_code <- input$pcode
+    p_code <- rawData_data$p_code_dv
     site_id <- input$siteID
     stat_cd <- input$statcd
     pcodeqw <- input$pcode_plot
@@ -81,6 +80,7 @@ shinyServer(function(input, output, session) {
 gw_level_dv <- L2701_example_data$Daily
 gwl_data <- L2701_example_data$Discrete
 qw_data <- L2701_example_data$QW
+
 p_code_dv <- "62610"
 stat_cd <- "00001"')
 
@@ -91,15 +91,22 @@ library(dataRetrieval)
 site_id <- "', site_id ,'"
 p_code_dv <- c("', paste(p_code, collapse = '", "') ,'")
 stat_cd <- "00001"
-pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
+
 gw_level_dv <- readNWISdv(site_id = site_id,
                            parameterCd = "', p_code,'",
                            statCd = "', stat_cd, '")
 gwl_data <- readNWISqwl(site_id = site_id)
+
+plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
+                    site_id, sep = "\\\\n")') 
+      
+      if(!isTRUE(is.null(rawData_data$qw_data))){
+        setup_code <- paste0(setup_code,'
+pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
 qw_data <- readNWISqw(site_id = site_id,
                       parameterCd = pcodes_qw)
-plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
-                    site_id, sep = "\\\\n")')     
+')
+      }      
     }
     
     setup_code
