@@ -31,6 +31,13 @@ sidebar <- dashboardSidebar(
                            label = "Daily pcode"),
              textInput("statcd", value = "00001", label = "Daily stat code")            
     ),
+    menuItem("Periodic Options", icon = icon("th"), tabName = "periodicDat",
+             radioButtons("gwl_vals",
+                          choices = c("sl_lev_va", "lev_va"), 
+                          selected = "sl_lev_va", 
+                          label = "Data Column")
+             
+    ),
     actionButton("get_data_ground", label = "Get Groundwater Data"),
     menuItem("QW Options", icon = icon("th"), tabName = "wDat",
       checkboxGroupInput("pcode_plot", label = "QW pcodes",

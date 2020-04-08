@@ -69,7 +69,7 @@ shinyServer(function(input, output, session) {
   
   setup <- reactive({
     
-    p_code <- rawData_data$p_code_dv
+    p_code <- input$pcode
     site_id <- input$siteID
     stat_cd <- input$statcd
     pcodeqw <- input$pcode_plot
@@ -89,11 +89,12 @@ stat_cd <- "00001"')
 library(dataRetrieval)
 
 site_id <- "', site_id ,'"
-p_code_dv <- c("', paste(p_code, collapse = '", "') ,'")
+p_code_dv_all <- c("', paste(rawData_data$p_code_dv, collapse = '", "') ,'")
+p_code_dv <- "', p_code, '"
 stat_cd <- "00001"
 
 gw_level_dv <- readNWISdv(site_id = site_id,
-                           parameterCd = "', p_code,'",
+                           parameterCd = p_code_dv_all,
                            statCd = "', stat_cd, '")
 gwl_data <- readNWISqwl(site_id = site_id)
 
