@@ -5,12 +5,13 @@ gwl_plot <- reactive({
   )
   
   p_code_dv <- input$pcode 
-  
+  val_col <- input$gwl_vals
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
   gwl_plot <-  gwl_plot_all(dvData(), p_code_dv = p_code_dv,
                             plot_title = plot_title,
+                            value_col = val_col,
                             gwlData(), add_trend = TRUE) 
   
   
@@ -52,11 +53,14 @@ gwl_plot_out <- reactive({
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
   
+  val_col <- input$gwl_vals
+  
   sum_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   code_out <- paste0(setup(),'
-
+val_col <- "', val_col,'"
 gwl_plot <-  gwl_plot_all(gw_level_dv, gwl_data, 
                           p_code_dv = p_code_dv,
+                          val_col = val_col,
                           plot_title = plot_title,
                           add_trend = TRUE)
 gwl_plot
@@ -234,10 +238,13 @@ month_plot <- reactive({
   validate(
     need(!is.null(rawData_data$gwl_data), "Please select a data set")
   )
+  val_col <- input$gwl_vals
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
-  month_plot <-  monthly_frequency_plot(gwlData(), plot_title = plot_title) 
+  month_plot <-  monthly_frequency_plot(gwlData(), 
+                                        value_col = val_col,
+                                        plot_title = plot_title) 
   
   
   return(month_plot)
@@ -248,8 +255,9 @@ month_table_df <- reactive({
   validate(
     need(!is.null(rawData_data$gwl_data), "Please select a data set")
   )
-  
-  month_tab <-  monthly_frequency_table(gwlData()) %>%
+  val_col <- input$gwl_vals
+  month_tab <-  monthly_frequency_table(gwlData(), 
+                                        value_col = val_col) %>%
     select(month, minMed, p25, p50, p75, maxMed, nYears) %>%
     mutate(month = month.abb[month]) %>%
     rename("Month" = month,
@@ -275,13 +283,18 @@ month_table <- reactive({
 })
 
 month_plot_out <- reactive({
+  val_col <- input$gwl_vals
+  
   code_out <- paste0(setup(),'
+val_col <- "', val_col,'"
 
 month_plot <-  monthly_frequency_plot(gwl_data, 
-                                  plot_title = plot_title)
+                                      value_col = val_col,
+                                      plot_title = plot_title)
 month_plot
 
-month_frequencies <- monthly_frequency_table(gwl_data)
+month_frequencies <- monthly_frequency_table(gwl_data,
+                                             value_col = val_col)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
