@@ -34,12 +34,14 @@ Imports:
     leaflet,
     scales,
     shiny,
+    DT,
     shinyAce,
     shinycssloaders,
     shinydashboard,
     EnvStats,
     lubridate,
-    purrr
+    purrr,
+    openxlsx
 Suggests:
     rmarkdown,
     testthat,

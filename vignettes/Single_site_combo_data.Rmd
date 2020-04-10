@@ -273,9 +273,12 @@ kable(siteDaily, digits = 1)
 ### Chloride
 
 ```{r chloride_plot, eval=FALSE}
-trend_plot(qw_data, plot_title = plot_title)
+trend_plot(qw_data, 
+           plot_title = plot_title, 
+           pcode = c("00940","99220"))
 
-kendell_test_5_20_years(qw_data, 
+kendell_test_5_20_years(dplyr::filter(qw_data, 
+                                      parm_cd %in% c("00940","99220")), 
                         seasonal = TRUE,
                         enough_5 = 1,
                         enough_20 = 1,
@@ -297,7 +300,8 @@ trend_plot(qw_data, plot_title = plot_title)
 </td><td>
 
 ```{r chloride_trend, echo=FALSE}
-cl_trend <- kendell_test_5_20_years(qw_data, 
+cl_trend <- kendell_test_5_20_years(dplyr::filter(qw_data, 
+                                      parm_cd %in% c("00940","99220")), 
                      seasonal = TRUE,
                      enough_5 = 1,
                      enough_20 = 1,

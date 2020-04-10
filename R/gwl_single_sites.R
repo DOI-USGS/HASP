@@ -95,7 +95,7 @@ gwl_plot_all <- function(gw_level_dv,
   Date <- is_na_after <- is_na_before <- is_point <- ".dplyr"
   
   datum <- unique(gwl_data$sl_datum_cd)
-  y_label <- sprintf("Elevation above %s, feet", datum)
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   linetype = c('solid', 'dashed')
   
   gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
