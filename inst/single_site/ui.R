@@ -2,7 +2,6 @@ library(HASP)
 library(dplyr)
 library(shiny)
 library(shinydashboard)
-library(shinyWidgets)
 source("modules.R",local=TRUE)
 
 init_text <- "######################################

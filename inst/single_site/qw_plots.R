@@ -32,7 +32,7 @@ cl_trend_table <- reactive({
                                options = list(dom = 'tB',
                                               ordering = FALSE,
                                               buttons = c('csv'))) %>% 
-    formatSignif(2:3, digits = 2)
+    DT::formatSignif(2:3, digits = 2)
   
   return(qw_table_DT)
   
