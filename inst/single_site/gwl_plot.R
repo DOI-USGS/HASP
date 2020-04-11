@@ -43,7 +43,7 @@ gwl_table <- reactive({
                               options = list(dom = 'tB',
                                              ordering = FALSE,
                                              buttons = c('csv'))) %>% 
-    formatSignif(1, digits = 3)
+    DT::formatSignif(1, digits = 3)
   
   return(gwl_tab_DT)
   
@@ -127,7 +127,7 @@ week_table <- reactive({
   week_tab_DT <- DT::datatable(week_table_df(), 
                                rownames = FALSE, escape = FALSE,
                                options = list(dom = 'tp')) %>% 
-    formatSignif(c(-1, -9), digits = 3)
+    DT::formatSignif(c(-1, -9), digits = 3)
   
   return(week_tab_DT)
   
@@ -202,7 +202,7 @@ year2_table <- reactive({
   daily_tab_DT <- DT::datatable(year2_table_df(), 
                                 rownames = FALSE,
                                options = list(dom = 'tp')) %>% 
-    formatSignif(c(2:4), digits = 3)
+    DT::formatSignif(c(2:4), digits = 3)
   
   return(daily_tab_DT)
   
@@ -276,7 +276,7 @@ month_table <- reactive({
                                 rownames = FALSE, escape = FALSE,
                                 options = list(dom = 't',
                                                pageLength = 12)) %>% 
-    formatSignif(c(2:6), digits = 3)
+    DT::formatSignif(c(2:6), digits = 3)
   
   return(month_tab_DT)
   
