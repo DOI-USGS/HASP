@@ -17,7 +17,7 @@ header <- dashboardHeader(title = "HASP",
                             style='color: #000000; 
                             margin-right:13px;margin-top:7px;margin-bottom:7px',
                             onclick = "setTimeout(function(){window.close();},500);",  # close browser
-                            "Stop compHydros"
+                            "Stop Shiny App"
                           )))
 
 sidebar <- dashboardSidebar(
