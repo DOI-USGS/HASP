@@ -17,7 +17,7 @@ cl_trend_table <- reactive({
   validate(
     need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
-  
+  qw_data <- qwData()
   qw_table <-  kendell_test_5_20_years(dplyr::filter(qw_data, 
                                                     parm_cd %in% c("00940","99220")), 
                                       seasonal = TRUE,
