@@ -12,3 +12,4 @@ DISCLAIMER.md
 ^doc$
 ^Meta$
 code.json
+travis.yml
