@@ -19,7 +19,11 @@ knitr::opts_chunk$set(echo = TRUE,
 )
 ```
 
-# HASP
+# HASP  <img src="man/figures/R_logo.png" alt="HASP" height="150px" align="right" />
+
+[![travis](https://travis-ci.org/USGS-R/HASP.svg?branch=master)](https://travis-ci.org/USGS-R/HASP)
+[![Coverage Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
+[![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
 
 Hydrologic AnalySis Package
 
@@ -92,19 +96,11 @@ plot_normalized_data(aquifer_data, sum_col, num_years)
 
 ## Installation
 
-To install the package while the package is still internal, users will need to get a "Personal Access Token" from code.usgs.gov. 
+You can install the `HASP` package using the `remotes` package:
 
-1. Go to https://code.usgs.gov/profile/personal_access_tokens
-2. Create a Personal Access Token and click the "api" scope:
-![pat](man/figures/pat.png)
-3. After clicking the green "Create personal access token", you will see a screen like this:
-![pat](man/figures/save_pat.png)
-4. Save your token in a safe place (KeyPass for instance) so you don't need to constantly regenerate tokens. 
-5. In R, you can will need the `remotes` package to install:
 ```{r install, eval=FALSE}
 remotes::install_gitlab("water/stats/HASP", 
                         host = "code.usgs.gov", 
-                        auth_token = "abc123",
                         build_vignettes = TRUE, 
                         build_opts = c("--no-resave-data",
                                        "--no-manual"))

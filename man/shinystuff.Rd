@@ -21,10 +21,10 @@ produce each graph and table is displayed in the app. That is
 a good starting-point for a custom analysis.
 }
 \examples{
-\donttest{
+\dontrun{
 explore_aquifers()
 }
-\donttest{
+\dontrun{
 explore_site()
 }
 }
