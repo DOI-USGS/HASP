@@ -8,6 +8,13 @@
 
 <title>Function reference • HASP</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -40,6 +47,7 @@
 
 
 <meta property="og:title" content="Function reference" />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -53,6 +61,16 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53797708-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-53797708-7');
+</script>
 
 
   </head>
@@ -78,13 +96,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">Function Help</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,22 +106,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Priniciple_Aquifers.html">Principle Aquifers</a>
+      <a href="../articles/Single_site_combo_data.html">Single Site</a>
     </li>
     <li>
-      <a href="../articles/Single_basin.html">Composite Hydrograph</a>
+      <a href="../articles/Single_site_water_level.html">Water Level</a>
     </li>
     <li>
-      <a href="../articles/Single_site_combo_data.html">Single Site Data Availability</a>
-    </li>
-    <li>
-      <a href="../articles/Single_site_water_level.html">Single Site Water Level</a>
+      <a href="../articles/Single_basin.html">Principle Aquifers</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/USGS-R/HASP">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -137,8 +151,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-visualize" class="hasAnchor"><a href="#section-visualize" class="anchor"></a>Visualize</h2>
+          <p class="section-desc"><p>Plot functions</p></p>
         </th>
       </tr>
       
@@ -155,15 +169,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="composite_data.html">composite_data()</a></code> </p>
+          <p><code><a href="gwl_periodic.html">gwl_plot_periodic()</a></code> <code><a href="gwl_periodic.html">gwl_plot_all()</a></code> </p>
         </td>
-        <td><p>Composite hydrograph data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="daily_frequency_table.html">daily_frequency_table()</a></code> </p>
-        </td>
-        <td><p>Daily frequency table</p></td>
+        <td><p>Single site groundwater level plots and tables</p></td>
       </tr><tr>
         
         <td>
@@ -173,81 +181,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="daily_gwl_summary.html">daily_gwl_summary()</a></code> </p>
+          <p><code><a href="weekly_frequency_plot.html">weekly_frequency_plot()</a></code> </p>
         </td>
-        <td><p>Summary table of daily data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="data_available.html">data_available()</a></code> </p>
-        </td>
-        <td><p>site_summary</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="example_data.html">L2701_example_data</a></code> </p>
-        </td>
-        <td><p>Example groundwater level data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="filter_sites.html">filter_sites()</a></code> </p>
-        </td>
-        <td><p>filter_sites</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="first_day.html">first_day()</a></code> </p>
-        </td>
-        <td><p>Find the first day of the month for a given date</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_aquifer_data.html">get_aquifer_data()</a></code> </p>
-        </td>
-        <td><p>get_aquifer_data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gwl_periodic.html">gwl_plot_periodic()</a></code> <code><a href="gwl_periodic.html">gwl_plot_all()</a></code> </p>
-        </td>
-        <td><p>Single site groundwater level plots and tables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="HASP-package.html">HASP-package</a></code> </p>
-        </td>
-        <td><p>Analyze groundwater data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="included_data.html">nat_aqfr_state</a></code> </p>
-        </td>
-        <td><p>Aquifer data included</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="kendell_test_5_20_years.html">kendell_test_5_20_years()</a></code> </p>
-        </td>
-        <td><p>Seasonal Kendall Trend Test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="last_day.html">last_day()</a></code> </p>
-        </td>
-        <td><p>Find the last day of the month for a given date</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="map_hydro_data.html">map_hydro_data()</a></code> </p>
-        </td>
-        <td><p>Map data used in composite hydrographs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mid_month.html">mid_month()</a></code> </p>
-        </td>
-        <td><p>Find the middle of the month for a given date</p></td>
+        <td><p>Plot weekly frequency analysis</p></td>
       </tr><tr>
         
         <td>
@@ -257,21 +193,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="monthly_frequency_table.html">monthly_frequency_table()</a></code> </p>
+          <p><code><a href="sc_cl.html">Sc_Cl_plot()</a></code> <code><a href="sc_cl.html">Sc_Cl_table()</a></code> <code><a href="sc_cl.html">qw_plot()</a></code> <code><a href="sc_cl.html">qw_summary()</a></code> </p>
         </td>
-        <td><p>Create a table of monthly frequency analysis</p></td>
+        <td><p>Specific conductance and chloride</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="monthly_mean.html">monthly_mean()</a></code> </p>
+          <p><code><a href="map_hydro_data.html">map_hydro_data()</a></code> </p>
         </td>
-        <td><p>Monthly mean</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="normalized_data.html">normalized_data()</a></code> </p>
-        </td>
-        <td><p>Composite normalized hydrograph data</p></td>
+        <td><p>Map data used in composite hydrographs</p></td>
       </tr><tr>
         
         <td>
@@ -284,36 +214,93 @@
           <p><code><a href="plot_normalized_data.html">plot_normalized_data()</a></code> </p>
         </td>
         <td><p>Plot normalized composite hydrograph data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-table" class="hasAnchor"><a href="#section-table" class="anchor"></a>Table</h2>
+          <p class="section-desc"><p>Table functions</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="site_data_summary.html">site_data_summary()</a></code> </p>
+        </td>
+        <td><p>site_data_summary</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="prep_map_data.html">prep_map_data()</a></code> </p>
+          <p><code><a href="daily_gwl_summary.html">daily_gwl_summary()</a></code> </p>
         </td>
-        <td><p>prep_map_data</p></td>
+        <td><p>Summary table of daily data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="sampleData.html">aquifer_data</a></code> </p>
+          <p><code><a href="daily_frequency_table.html">daily_frequency_table()</a></code> </p>
         </td>
-        <td><p>Example aquifer data</p></td>
+        <td><p>Daily frequency table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="weekly_frequency_table.html">weekly_frequency_table()</a></code> </p>
+        </td>
+        <td><p>Create a table of weekly frequency analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="monthly_frequency_table.html">monthly_frequency_table()</a></code> </p>
+        </td>
+        <td><p>Create a table of monthly frequency analysis</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="sc_cl.html">Sc_Cl_plot()</a></code> <code><a href="sc_cl.html">Sc_Cl_table()</a></code> <code><a href="sc_cl.html">qw_plot()</a></code> <code><a href="sc_cl.html">qw_summary()</a></code> </p>
         </td>
         <td><p>Specific conductance and chloride</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-statistics" class="hasAnchor"><a href="#section-statistics" class="anchor"></a>Statistics</h2>
+          <p class="section-desc"><p>Calculate trends and statistics</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
-          <p><code><a href="shinystuff.html">explore_aquifers()</a></code> <code><a href="shinystuff.html">explore_site()</a></code> </p>
+          <p><code><a href="kendell_test_5_20_years.html">kendell_test_5_20_years()</a></code> </p>
         </td>
-        <td><p>Explore data in shiny applications</p></td>
-      </tr><tr>
+        <td><p>Seasonal Kendall Trend Test</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
+          <p class="section-desc"><p>Included data and functions to retrieve data.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
-          <p><code><a href="site_data_summary.html">site_data_summary()</a></code> </p>
+          <p><code><a href="data_available.html">data_available()</a></code> </p>
         </td>
-        <td><p>site_data_summary</p></td>
+        <td><p>site_summary</p></td>
       </tr><tr>
         
         <td>
@@ -323,21 +310,82 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="composite_data.html">composite_data()</a></code> </p>
+        </td>
+        <td><p>Composite hydrograph data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="example_data.html">L2701_example_data</a></code> </p>
+        </td>
+        <td><p>Example groundwater level data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="included_data.html">nat_aqfr_state</a></code> </p>
+        </td>
+        <td><p>Aquifer data included</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sampleData.html">aquifer_data</a></code> </p>
+        </td>
+        <td><p>Example aquifer data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_aquifer_data.html">get_aquifer_data()</a></code> </p>
+        </td>
+        <td><p>get_aquifer_data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-utilities" class="hasAnchor"><a href="#section-utilities" class="anchor"></a>Utilities</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
           <p><code><a href="themes.html">theme_gwl()</a></code> <code><a href="themes.html">hasp_framework()</a></code> </p>
         </td>
         <td><p>ggplot2 themes and accesories for package</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="weekly_frequency_plot.html">weekly_frequency_plot()</a></code> </p>
+          <p><code><a href="shinystuff.html">explore_aquifers()</a></code> <code><a href="shinystuff.html">explore_site()</a></code> </p>
         </td>
-        <td><p>Plot weekly frequency analysis</p></td>
+        <td><p>Explore data in shiny applications</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="weekly_frequency_table.html">weekly_frequency_table()</a></code> </p>
+          <p><code><a href="normalized_data.html">normalized_data()</a></code> </p>
         </td>
-        <td><p>Create a table of weekly frequency analysis</p></td>
+        <td><p>Composite normalized hydrograph data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="last_day.html">last_day()</a></code> </p>
+        </td>
+        <td><p>Find the last day of the month for a given date</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mid_month.html">mid_month()</a></code> </p>
+        </td>
+        <td><p>Find the middle of the month for a given date</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filter_sites.html">filter_sites()</a></code> </p>
+        </td>
+        <td><p>filter_sites</p></td>
       </tr>
     </tbody>
     </table>
