@@ -13,4 +13,5 @@ DISCLAIMER.md
 ^Meta$
 code.json
 travis.yml
-
+_pkgdown.yml
+pkgdown/

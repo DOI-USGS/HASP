@@ -1,4 +1,4 @@
-# HASP <img src="man/figures/logo.png" alt="toxEval" height="150px" align="right" />
+# HASP <img src="man/figures/R_logo.png" alt="HASP" height="150px" align="right" />
 
 [![travis](https://travis-ci.org/USGS-R/HASP.svg?branch=master)](https://travis-ci.org/USGS-R/HASP)
 [![Coverage
