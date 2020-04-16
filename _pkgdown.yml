@@ -1,0 +1,67 @@
+template:
+  params:
+    ganalytics: UA-53797708-7
+navbar:
+  type: default
+  left:
+  - text: Function Help
+    href: reference/index.html
+  - text: Articles
+    menu:
+    - text: Single Site
+      href: articles/Single_site_combo_data.html
+    - text: Water Level
+      href: articles/Single_site_water_level.html
+    - text: Principle Aquifers
+      href: articles/Single_basin.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/USGS-R/HASP
+reference:
+  - title: Visualize
+    desc:  Plot functions
+    contents:
+      - trend_plot
+      - gwl_plot_all
+      - daily_gwl_2yr_plot
+      - weekly_frequency_plot
+      - monthly_frequency_plot
+      - qw_plot
+      - Sc_Cl_plot
+      - map_hydro_data
+      - plot_composite_data
+      - plot_normalized_data
+  - title: Table
+    desc: Table functions
+    contents:
+      - site_data_summary
+      - daily_gwl_summary
+      - daily_frequency_table
+      - weekly_frequency_table
+      - monthly_frequency_table
+      - qw_summary
+      - Sc_Cl_table
+  - title: Statistics
+    desc: Calculate trends and statistics
+    contents:
+      - kendell_test_5_20_years
+  - title: Data
+    desc: Included data and functions to retrieve data.
+    contents:
+      - data_available
+      - site_summary
+      - composite_data
+      - L2701_example_data
+      - nat_aqfr_state
+      - aquifer_data
+      - get_aquifer_data
+  - title: Utilities
+    contents:
+      - theme_gwl
+      - hasp_framework
+      - explore_aquifers
+      - explore_sites
+      - normalized_data
+      - last_day
+      - mid_month
+      - filter_sites 

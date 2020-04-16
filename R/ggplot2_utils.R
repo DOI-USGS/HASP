@@ -26,8 +26,7 @@ theme_gwl <- function(base_family = "", ...){
       axis.text.x = element_text(margin=unit(spacing_1, units = "cm")),
       axis.title.x = element_text(margin=unit(spacing_2, units = "cm")),
       axis.text.y = element_text(margin=unit(spacing_1, units = "cm")),
-      axis.title.y = element_text(margin=unit(spacing_2, units = "cm")),
-      aspect.ratio = 1,
+      axis.title.y = element_text(margin=unit(spacing_2, units = "cm")), 
       plot.caption = element_text(hjust = 1, size = 8),
       legend.direction = "vertical",
       legend.box = "horoizontal",
@@ -62,10 +61,13 @@ hasp_framework <- function(x_label, y_label,
   
   if(is.na(zero_on_top)) {
     expand_lims <- c(0.05, 0.05)
+    yrange <- c(NA, NA)
   } else if (zero_on_top){
     expand_lims <- c(0.05, 0)
+    yrange <- c(NA, 0)
   } else {
     expand_lims <- c(0, 0.05)
+    yrange <- c(0, NA)
   }
   
   if(include_y_scale){
@@ -73,6 +75,7 @@ hasp_framework <- function(x_label, y_label,
                            labs(caption = paste("Plot created:", Sys.Date()), 
                                 y = y_label, x = x_label),
                            expand_limits(y = 0),
+                           coord_cartesian(ylim = yrange),
                            scale_y_continuous(expand = expansion(mult = expand_lims),
                                               sec.axis = dup_axis(labels =  NULL,
                                                                   name = NULL)),

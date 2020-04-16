@@ -20,7 +20,7 @@
 #' @importFrom shinydashboard dashboardPage
 #' @import ggplot2
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' explore_aquifers()
 #' }
 explore_aquifers <- function(browse=TRUE){
@@ -38,7 +38,7 @@ explore_aquifers <- function(browse=TRUE){
 #' @importFrom openxlsx addWorksheet
 #' @importFrom openxlsx saveWorkbook
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' explore_site()
 #' }
 explore_site <- function(browse=TRUE){
