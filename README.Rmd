@@ -67,7 +67,12 @@ qw_data <- L2701_example_data$QW
 ```
 
 ```{r graphs, echo=TRUE, eval=TRUE}
-monthly_frequency_plot(gwl_data, "L2701_example_data")
+monthly_frequency_plot(dv,
+                       date_col = "Date",
+                       value_col = "X_62610_00001",
+                       approved_col = "X_62610_00001_cd",
+                       plot_title = "L2701_example_data",
+                       y_axis_label = "GGroundwater level above NGVD 1929, feet")
 gwl_plot_periodic(gwl_data, "L2701_example_data")
 gwl_plot_all(dv, gwl_data, "L2701_example_data")
 Sc_Cl_plot(qw_data, "L2701_example_data")

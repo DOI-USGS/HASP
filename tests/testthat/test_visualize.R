@@ -54,7 +54,10 @@ test_that("SC Chloride graphs and table", {
 
 test_that("Monthly frequency plot", {
   
-  plot <- monthly_frequency_plot(L2701_example_data$Discrete)
+  plot <- monthly_frequency_plot(L2701_example_data$Discrete,
+                                 date_col = "lev_dt",
+                                 value_col = "sl_lev_va",
+                                 approved_col = "lev_age_cd")
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
@@ -65,10 +68,10 @@ test_that("Monthly frequency plot", {
 
 test_that("Weekly frequency plot", {
   
-  site <- "263819081585801"
-  parameterCd <- "62610"
-  statCd <- "00001"
-  plot <- weekly_frequency_plot(L2701_example_data$Daily, parameterCd, statCd, plot_title = "Groundwater Level")
+  plot <- weekly_frequency_plot(L2701_example_data$Daily, 
+                                date_col = "Date",
+                                value_col = "X_62610_00001",
+                                approved_col = "X_62610_00001_cd")
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
@@ -114,17 +117,23 @@ test_that("Daily gwl plot", {
   gwl_data <- L2701_example_data$Daily
   plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
   
-  plot1 <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", 
-                             historical_stat = "mean",
-                             month_breaks = TRUE,
-                             plot_title = plot_title)
+  plot1 <- daily_gwl_2yr_plot(gwl_data, 
+                              date_col = "Date",
+                              value_col = "X_62610_00001",
+                              approved_col = "X_62610_00001_cd",
+                              historical_stat = "mean",
+                              month_breaks = TRUE,
+                              plot_title = plot_title)
   
   plot_data_elements <- unlist(lapply(plot1$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
   
-  plot2 <- daily_gwl_2yr_plot(gwl_data, "62610", "00001", 
+  plot2 <- daily_gwl_2yr_plot(gwl_data,
+                              date_col = "Date",
+                              value_col = "X_62610_00001",
+                              approved_col = "X_62610_00001_cd",
                               historical_stat = "median",
                               month_breaks = FALSE,
                               plot_title = plot_title)

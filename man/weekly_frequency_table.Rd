@@ -4,17 +4,17 @@
 \alias{weekly_frequency_table}
 \title{Create a table of weekly frequency analysis}
 \usage{
-weekly_frequency_table(gw_level_dv, p_code_dv, statCd, date_col = "Date")
+weekly_frequency_table(gwl_data, date_col, value_col, approved_col)
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
+\item{gwl_data}{daily groundwater level data
 from readNWISdv}
 
-\item{p_code_dv}{the parameter code used}
+\item{date_col}{name of date column.}
 
-\item{statCd}{the statistic code used}
+\item{value_col}{name of value column.}
 
-\item{date_col}{name of date column. Default is "Date".}
+\item{approved_col}{name of column to get provisional/approved status.}
 }
 \value{
 a data frame of weekly frequency analysis
@@ -27,7 +27,10 @@ The weekly frequency analysis is based on daily values
 # site <- "263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
-gw_level_dv <- L2701_example_data$Daily
-weekly_frequency <- weekly_frequency_table(gw_level_dv, p_code_dv, statCd)
+# gwl_data <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gwl_data <- L2701_example_data$Daily
+weekly_frequency <- weekly_frequency_table(gwl_data,
+                                           date_col = "Date",
+                                           value_col = "X_62610_00001",
+                                           approved_col = "X_62610_00001_cd")
 }
