@@ -36,7 +36,12 @@ qw_data <- dataRetrieval::readNWISqw(site,
 ```
 
 ``` r
-monthly_frequency_plot(gwl_data, "L2701_example_data")
+monthly_frequency_plot(dv,
+                       date_col = "Date",
+                       value_col = "X_62610_00001",
+                       approved_col = "X_62610_00001_cd",
+                       plot_title = "L2701_example_data",
+                       y_axis_label = "GGroundwater level above NGVD 1929, feet")
 ```
 
 ![](man/figures/graphs-1.png)<!-- -->
