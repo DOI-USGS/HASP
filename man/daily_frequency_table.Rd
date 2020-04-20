@@ -4,17 +4,17 @@
 \alias{daily_frequency_table}
 \title{Daily frequency table}
 \usage{
-daily_frequency_table(gw_level_dv, p_code_dv, statCd, date_col = "Date")
+daily_frequency_table(gwl_data, date_col, value_col, approved_col)
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
+\item{gwl_data}{daily groundwater level data
 from readNWISdv}
 
-\item{p_code_dv}{the parameter code used}
+\item{date_col}{the heading of the date column.}
 
-\item{statCd}{the statistic code used}
+\item{value_col}{name of value column.}
 
-\item{date_col}{the heading of the date column, default is "Date"}
+\item{approved_col}{name of column to get provisional/approved status.}
 }
 \value{
 a data frame giving the max, mean, min, and number of available
@@ -31,6 +31,9 @@ p_code_dv <- "62610"
 statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
-daily_frequency_table(gw_level_dv, p_code_dv, statCd)
+daily_frequency_table(gw_level_dv,
+                      date_col = "Date",
+                      value_col = "X_62610_00001",
+                      approved_col = "X_62610_00001_cd")
 
 }

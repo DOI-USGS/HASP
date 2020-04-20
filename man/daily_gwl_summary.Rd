@@ -4,15 +4,17 @@
 \alias{daily_gwl_summary}
 \title{Summary table of daily data}
 \usage{
-daily_gwl_summary(gw_level_dv, p_code_dv, statCd)
+daily_gwl_summary(gwl_data, date_col, value_col, approved_col)
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
+\item{gwl_data}{daily groundwater level data
 from readNWISdv}
 
-\item{p_code_dv}{the parameter code used}
+\item{date_col}{the heading of the date column.}
 
-\item{statCd}{the statistic code used}
+\item{value_col}{name of value column.}
+
+\item{approved_col}{name of column to get provisional/approved status.}
 }
 \value{
 a summary table giving the period of record, completeness
@@ -28,6 +30,9 @@ p_code_dv <- "62610"
 statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
-daily_gwl_summary(gw_level_dv, p_code_dv, statCd)
+daily_gwl_summary(gw_level_dv,
+                  date_col = "Date",
+                  value_col = "X_62610_00001",
+                  approved_col = "X_62610_00001_cd")
 
 }

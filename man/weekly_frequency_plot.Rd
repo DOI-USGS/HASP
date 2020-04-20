@@ -5,29 +5,32 @@
 \title{Plot weekly frequency analysis}
 \usage{
 weekly_frequency_plot(
-  gw_level_dv,
-  p_code_dv,
-  statCd,
-  date_col = "Date",
+  gwl_data,
+  date_col,
+  value_col,
+  approved_col,
+  plot_range = c("Past year", "Calendar year"),
   plot_title = "",
-  plot_range = c("Past year", "Calendar year")
+  y_axis_label = ""
 )
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
+\item{gwl_data}{daily groundwater level data
 from readNWISdv}
 
-\item{p_code_dv}{the parameter code used}
+\item{date_col}{name of date column.}
 
-\item{statCd}{the statistic code used}
+\item{value_col}{name of value column.}
 
-\item{date_col}{name of date column. Default is "Date".}
-
-\item{plot_title}{the title to use on the plot}
+\item{approved_col}{name of column to get provisional/approved status.}
 
 \item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
 in January.}
+
+\item{plot_title}{the title to use on the plot}
+
+\item{y_axis_label}{the label used for the y-axis of the plot.}
 }
 \value{
 a ggplot object with rectangles representing the historical weekly percentiles,
@@ -41,8 +44,11 @@ The weekly frequency analysis is based on daily data
 # site <- "263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
-gw_level_dv <- L2701_example_data$Daily
-weekly_frequency_plot(gw_level_dv, p_code_dv, statCd, plot_title = "Groundwater Level")
+# gwl_data <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gwl_data <- L2701_example_data$Daily
+weekly_frequency_plot(gwl_data, 
+                      date_col = "Date",
+                      value_col = "X_62610_00001",
+                      approved_col = "X_62610_00001_cd")
 
 }

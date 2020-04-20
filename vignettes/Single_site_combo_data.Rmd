@@ -114,9 +114,13 @@ plot_title <- "L -2701\n263819081585801 "
 
 ```{r monthlyFrequencyPlot, eval=FALSE}
 
-monthly_frequency_plot(gwl_data, 
+monthly_frequency_plot(gw_level_dv,
+                       date_col = "Date",
+                       value_col = "X_62610_00001",
+                       approved_col = "X_62610_00001_cd",
                        plot_title = plot_title,
-                       plot_range = "Past year")
+                       plot_range = "Past year",
+                       y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 monthly_frequency_table(gwl_data)
 ```
@@ -126,7 +130,10 @@ monthly_frequency_table(gwl_data)
 <tr><td>
 
 ```{r monthlyFreqPlot, echo = FALSE}
-monthly_frequency_plot(gwl_data, 
+monthly_frequency_plot(gw_level_dv,
+                       date_col = "Date",
+                       value_col = "X_62610_00001",
+                       approved_col = "X_62610_00001_cd",
                        plot_title = plot_title,
                        plot_range = "Past year")
 ```
@@ -134,7 +141,10 @@ monthly_frequency_plot(gwl_data,
 </td><td>
 
 ```{r monthlyFreqTable, echo = FALSE}
-monthly_freq_table <- monthly_frequency_table(gwl_data) %>%
+monthly_freq_table <- monthly_frequency_table(gw_level_dv,
+                                              date_col = "Date",
+                                              value_col = "X_62610_00001",
+                                              approved_col = "X_62610_00001_cd") %>%
   select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
   mutate(month = month.abb[month]) %>%
   rename("Month" = month,
@@ -157,13 +167,16 @@ kable(monthly_freq_table, digits = 1)
 ```{r dailyPlot, eval = FALSE}
 
 daily_gwl_2yr_plot(gw_level_dv, 
-                   parameterCd, 
-                   statCd, 
+                   date_col = "Date",
+                   value_col = "X_62610_00001",
+                   approved_col = "X_62610_00001_cd",
                    plot_title = plot_title, 
                    month_breaks = TRUE, 
-                   historical_stat = "median")
+                   historical_stat = "median",
+                   y_axis_label = "Groundwater level above NGVD 1929, feet")
 
-daily_gwl_summary(gw_level_dv, parameterCd, statCd)
+daily_gwl_summary(gw_level_dv, date_col = "Date", 
+                  value_col = "X_62610_00001", approved_col = "X_62610_00001_cd")
 ```
 
 <table>
@@ -172,18 +185,23 @@ daily_gwl_summary(gw_level_dv, parameterCd, statCd)
 ```{r dailyPlotShow, echo = FALSE, fig.width=9}
 
 daily_gwl_2yr_plot(gw_level_dv, 
-                   parameterCd, 
-                   statCd, 
+                   date_col = "Date",
+                   value_col = "X_62610_00001",
+                   approved_col = "X_62610_00001_cd",
                    plot_title = plot_title, 
                    month_breaks = TRUE, 
-                   historical_stat = "median")
+                   historical_stat = "median",
+                   y_axis_label = "Groundwater level above NGVD 1929, feet")
 ```
 
 
 </td><td>
 
 ```{r dailySummary, echo=FALSE}
-daily_summary_table <- daily_gwl_summary(gw_level_dv, parameterCd, statCd) %>%
+daily_summary_table <- daily_gwl_summary(gw_level_dv, 
+                                         date_col = "Date",
+                                         value_col = "X_62610_00001",
+                                         approved_col = "X_62610_00001_cd") %>%
   select("Begin Date" = begin_date,
          "End Date" = end_date,
          "Days" = days,

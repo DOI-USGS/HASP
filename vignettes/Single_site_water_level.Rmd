@@ -110,12 +110,16 @@ site_title <- "L -2701\n263819081585801"
 ```{r weeklyFrequencyShow, eval=FALSE}
 
 weekly_frequency_plot(gw_level_dv, 
-                      parameterCd, statCd, 
-                      plot_title = site_title)
+                      date_col = "Date",
+                      value_col = "X_62610_00001",
+                      approved_col = "X_62610_00001_cd",
+                      plot_title = site_title,
+                      y_axis_label = "Groundwater level above NGVD 1929, feet")
 
-weekly_table <- weekly_frequency_table(gw_level_dv,
-                                       parameterCd,
-                                       statCd)
+weekly_table <- weekly_frequency_table(gw_level_dv, 
+                                       date_col = "Date",
+                                       value_col = "X_62610_00001",
+                                       approved_col = "X_62610_00001_cd",d)
 
 head(weekly_table, 10)
 ```
@@ -125,8 +129,11 @@ head(weekly_table, 10)
 <tr><td>
 ```{r weeklyFrequencyPlot, echo=FALSE, fig.width=9}
 weekly_frequency_plot(gw_level_dv, 
-                      parameterCd, statCd, 
-                      plot_title = site_title)
+                      date_col = "Date",
+                      value_col = "X_62610_00001",
+                      approved_col = "X_62610_00001_cd",
+                      plot_title = site_title,
+                      y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 ```
 
@@ -138,8 +145,9 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 library(dplyr)
 
 weekly_freq_table <- weekly_frequency_table(gw_level_dv,
-                                            parameterCd,
-                                            statCd) %>%
+                                            date_col = "Date",
+                                            value_col = "X_62610_00001",
+                                            approved_col = "X_62610_00001_cd") %>%
   select("Week" = week,
          "Lowest median" = minMed,
          "10th" = p10,
@@ -161,15 +169,18 @@ kable(head(weekly_freq_table, 10), digits = 1)
 
 ```{r dailyPlotShow, eval=FALSE}
 daily_gwl_2yr_plot(gw_level_dv, 
-                   p_code_dv = parameterCd, 
-                   statCd = statCd,
+                   date_col = "Date",
+                   value_col = "X_62610_00001",
+                   approved_col = "X_62610_00001_cd",
                    plot_title = site_title,
                    historical_stat = "mean",
-                   month_breaks = TRUE)
+                   month_breaks = TRUE,
+                   y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 daily_table <- daily_frequency_table(gw_level_dv, 
-                      p_code_dv = parameterCd,
-                      statCd = statCd)
+                      date_col = "Date",
+                      value_col = "X_62610_00001",
+                      approved_col = "X_62610_00001_cd")
 head(daily_table, n = 10)
 ```
 
@@ -178,11 +189,13 @@ head(daily_table, n = 10)
 
 ```{r dailyDo, echo=FALSE, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
-                   p_code_dv = parameterCd, 
-                   statCd = statCd,
+                   date_col = "Date",
+                   value_col = "X_62610_00001",
+                   approved_col = "X_62610_00001_cd",
                    plot_title = site_title,
                    historical_stat = "mean",
-                   month_breaks = TRUE)
+                   month_breaks = TRUE,
+                   y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 ```
 
@@ -192,8 +205,9 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 
 ```{r dailyShow2, echo=FALSE}
 daily_table <- daily_frequency_table(gw_level_dv, 
-                                     p_code_dv = parameterCd,
-                                     statCd = statCd) %>%
+                                     date_col = "Date",
+                                     value_col = "X_62610_00001",
+                                     approved_col = "X_62610_00001_cd") %>%
   rename("DOY" = DOY,
          "Maximum" = max,
          "Mean" = mean,

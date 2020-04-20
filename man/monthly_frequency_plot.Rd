@@ -6,16 +6,22 @@
 \usage{
 monthly_frequency_plot(
   gwl_data,
+  date_col,
+  value_col,
+  approved_col,
   plot_title = "",
   plot_range = c("Past year"),
-  date_col = "lev_dt",
-  value_col = "sl_lev_va",
-  approved_col = "lev_age_cd",
-  datum_col = "sl_datum_cd"
+  y_axis_label = ""
 )
 }
 \arguments{
 \item{gwl_data}{groundwater level data from \code{readNWISgwl}}
+
+\item{date_col}{name of date column.}
+
+\item{value_col}{name of value column.}
+
+\item{approved_col}{name of column to get provisional/approved status.}
 
 \item{plot_title}{the title to use on the plot}
 
@@ -23,13 +29,7 @@ monthly_frequency_plot(
 last year of data, or "Calendar year" to use the current calendar year, beginning
 in January.}
 
-\item{date_col}{name of date column. Default is "lev_dt".}
-
-\item{value_col}{name of value column. Default is "sl_lev_va".}
-
-\item{approved_col}{name of column to get provisional/approved status. Default is "lev_age_cd".}
-
-\item{datum_col}{name of column giving the measurement datum. Default is "sl_datum_cd"}
+\item{y_axis_label}{the label used for the y-axis of the plot.}
 }
 \value{
 a ggplot with rectangles representing the historical monthly percentile,
@@ -42,7 +42,13 @@ Plot monthly frequency analysis
 \examples{
 
 # site <- "263819081585801"
-# gwl_data <- dataRetrieval::readNWISgwl(site)
-gwl_data <- L2701_example_data$Discrete
-monthly_frequency_plot(gwl_data, plot_title = "Groundwater level")
+p_code_dv <- "62610"
+statCd <- "00001"
+# gwl_data <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gwl_data <- L2701_example_data$Daily
+monthly_frequency <- monthly_frequency_plot(gwl_data,
+                                             date_col = "Date",
+                                             value_col = "X_62610_00001",
+                                             approved_col = "X_62610_00001_cd",
+                                             plot_title = "L2701 Groundwater Level")
 }
