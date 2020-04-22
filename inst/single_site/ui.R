@@ -40,9 +40,8 @@ sidebar <- dashboardSidebar(
     ),
     actionButton("get_data_ground", label = "Get Periodic Data"),
     menuItem("QW Options", icon = icon("th"), tabName = "wDat",
-      checkboxGroupInput("pcode_plot", label = "QW pcodes",
-                  choices = c("00095","90095","00940","99220"),
-                  selected = c("00095","90095"))
+             radioButtons("pcode_plot", label = "QW pcodes",
+                  choices = c("00095","90095","00940","99220"))
     ),
     actionButton("get_data_qw", label = "Get QW Data"),
     menuItem("Source code", icon = icon("file-code-o"), 

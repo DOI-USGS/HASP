@@ -5,16 +5,52 @@ gwl_plot <- reactive({
   )
   
   p_code_dv <- input$pcode 
-  val_col <- input$gwl_vals
-  plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
-                      attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
+  val_col_per <- input$gwl_vals
   
-  gwl_plot <-  gwl_plot_all(dvData(), gwlData(), 
-                            p_code_dv = p_code_dv,
+  dv_data <- dvData()
+  gwl_data <- gwlData()
+  
+  includes_gwl <- !is.null(gwl_data) 
+  includes_dv <- !is.null(dv_data)
+  includes_both <- includes_gwl & includes_dv
+
+  y_label <- dataRetrieval::readNWISpCode(input$pcode)$parameter_nm
+  
+  if(includes_both){
+    date_col = c("Date", "lev_dt")
+    value_col = c(paste("X", input$pcode, input$statcd, sep = "_"),
+                  input$gwl_vals)
+    approved_col = c(paste("X", input$pcode, input$statcd, "cd", sep = "_"),
+                     "lev_age_cd") 
+    
+  } else if(includes_dv){
+    date_col = "Date"
+    value_col = paste("X", input$pcode, input$statcd, sep = "_")
+    approved_col = paste("X", input$pcode, input$statcd, "cd", sep = "_")
+  } else if(includes_gwl){
+    date_col = "lev_dt"
+    value_col = input$gwl_vals
+    approved_col = "lev_age_cd" 
+    if("sl_datum_cd" %in% names(gwl_data)){
+      datum <- unique(gwl_data$sl_datum_cd)
+      y_label <- sprintf("Elevation above %s, feet", datum)
+    } else {
+      y_label <- "Elevation"
+    }
+
+  }
+
+  plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
+                      attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
+  
+  gwl_plot <-  gwl_plot_all(dv_data, 
+                            gwl_data, 
+                            date_col = date_col,
+                            value_col = value_col,
+                            approved_col = approved_col,
                             plot_title = plot_title,
-                            value_col = val_col,
+                            y_label = y_label,
                             add_trend = TRUE) 
-  
   
   return(gwl_plot)
   
@@ -88,12 +124,14 @@ week_plot <- reactive({
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
   
+  dv_data <- dvData()
+  
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
   
-  plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
-                      attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
-  week_plot <-  weekly_frequency_plot(dvData(), 
+  plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
+                      attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
+  week_plot <-  weekly_frequency_plot(dv_data, 
                                       date_col = "Date",
                                       value_col = value_col,
                                       approved_col = approv_col,
@@ -221,8 +259,6 @@ year2_table <- reactive({
   return(daily_tab_DT)
   
 })
-
-
 
 
 year2_plot_out <- reactive({

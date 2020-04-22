@@ -118,7 +118,7 @@ gwl_plot_all <- function(gw_level_dv,
                          plot_title = "",
                          add_trend = FALSE){
   
-  x1 <- x2 <- y1 <- y2 <- trend <- year <- Value <- Approve <- long_name <- Aqfr_Name_prpr <- ".dplyr"
+  x1 <- x2 <- y1 <- y2 <- trend <- year <- Value <- Approve <- ".dplyr"
   Date <- is_na_after <- is_na_before <- is_point <- ".dplyr"
   
   includes_gwl <- !is.null(gwl_data) || !all(is.na(gwl_data))

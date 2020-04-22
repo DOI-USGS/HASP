@@ -160,7 +160,7 @@ p_code_qw <- reactive({
 })
 
 observe({
-  updateCheckboxGroupInput(session, "pcode_plot", 
+  updateRadioButtons(session, "pcode_plot", 
                             choices = p_code_qw(), selected = p_code_qw())
 })
 
