@@ -13,6 +13,7 @@ observeEvent(input$example_data,{
   rawData_data$daily_data <- HASP::L2701_example_data$Daily
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
+  
   rawData_data$p_code_dv <- "62610"
   rawData_data$stat_cd <- "00001"
   rawData_data$p_code_qw <- c("00095","90095","00940","99220")

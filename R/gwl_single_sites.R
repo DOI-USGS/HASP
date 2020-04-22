@@ -61,6 +61,7 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 #' @rdname gwl_periodic
 #' @export
 #' @param gw_level_dv daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.
+#' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
 #' @param date_col Vector of date column names. It is assumed if there are 2 values, 
 #' that the first is associated with gwl_data and the second is gw_level_dv
 #' @param value_col Vector of value column names. It is assumed if there are 2 values, 
@@ -117,7 +118,7 @@ gwl_plot_all <- function(gw_level_dv,
                          plot_title = "",
                          add_trend = FALSE){
   
-  x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
+  x1 <- x2 <- y1 <- y2 <- trend <- year <- Value <- Approve <- long_name <- Aqfr_Name_prpr <- ".dplyr"
   Date <- is_na_after <- is_na_before <- is_point <- ".dplyr"
   
   includes_gwl <- !is.null(gwl_data) || !all(is.na(gwl_data))

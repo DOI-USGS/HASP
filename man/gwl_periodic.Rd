@@ -40,6 +40,8 @@ that the first is associated with gwl_data and the second is gw_level_dv.}
 
 \item{gw_level_dv}{daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.}
 
+\item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
+
 \item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
 }
 \description{
