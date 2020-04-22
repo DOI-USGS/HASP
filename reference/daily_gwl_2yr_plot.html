@@ -149,12 +149,13 @@
 
     <pre class="usage"><span class='fu'>daily_gwl_2yr_plot</span>(
   <span class='no'>gw_level_dv</span>,
-  <span class='no'>p_code_dv</span>,
-  <span class='no'>statCd</span>,
-  <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>,
-  <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='no'>date_col</span>,
+  <span class='no'>value_col</span>,
+  <span class='no'>approved_col</span>,
   <span class='kw'>historical_stat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mean"</span>, <span class='st'>"median"</span>),
-  <span class='kw'>month_breaks</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>month_breaks</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>y_axis_label</span> <span class='kw'>=</span> <span class='st'>""</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -166,20 +167,16 @@
 from readNWISdv</p></td>
     </tr>
     <tr>
-      <th>p_code_dv</th>
-      <td><p>the parameter code used</p></td>
-    </tr>
-    <tr>
-      <th>statCd</th>
-      <td><p>the statistic code used</p></td>
-    </tr>
-    <tr>
       <th>date_col</th>
-      <td><p>name of date column. Default is "Date"</p></td>
+      <td><p>name of date column.</p></td>
     </tr>
     <tr>
-      <th>plot_title</th>
-      <td><p>the title to use on the plot</p></td>
+      <th>value_col</th>
+      <td><p>name of value column.</p></td>
+    </tr>
+    <tr>
+      <th>approved_col</th>
+      <td><p>name of column to get provisional/approved status.</p></td>
     </tr>
     <tr>
       <th>historical_stat</th>
@@ -189,6 +186,14 @@ from readNWISdv</p></td>
     <tr>
       <th>month_breaks</th>
       <td><p>a logical indicating whether to use monthly breaks for the plot</p></td>
+    </tr>
+    <tr>
+      <th>plot_title</th>
+      <td><p>the title to use on the plot</p></td>
+    </tr>
+    <tr>
+      <th>y_axis_label</th>
+      <td><p>the label to use for the y axis</p></td>
     </tr>
     </table>
 
@@ -205,7 +210,10 @@ daily data for the last two years</p>
 <span class='no'>statCd</span> <span class='kw'>&lt;-</span> <span class='st'>"00001"</span>
 <span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
 <span class='no'>gw_level_dv</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Daily</span>
-<span class='fu'>daily_gwl_2yr_plot</span>(<span class='no'>gw_level_dv</span>, <span class='no'>p_code_dv</span>, <span class='no'>statCd</span>,
+<span class='fu'>daily_gwl_2yr_plot</span>(<span class='no'>gw_level_dv</span>,
+                   <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>,
+                   <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>,
+                   <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>,
                    <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>"Groundwater Level"</span>,
                    <span class='kw'>month_breaks</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
                    <span class='kw'>historical_stat</span> <span class='kw'>=</span> <span class='st'>"median"</span>)</div><div class='img'><img src='daily_gwl_2yr_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>

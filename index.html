@@ -111,7 +111,6 @@
 <span class="co">#Periodic data:</span>
 <span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span>(<span class="no">site</span>)
 
-
 <span class="co"># Daily data:</span>
 <span class="no">parameterCd</span> <span class="kw">&lt;-</span> <span class="st">"62610"</span>
 <span class="no">statCd</span> <span class="kw">&lt;-</span> <span class="st">"00001"</span>
@@ -123,21 +122,35 @@
 <span class="no">parameterCd</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span>)
 <span class="no">qw_data</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISqw.html">readNWISqw</a></span>(<span class="no">site</span>,
                                      <span class="no">parameterCd</span>)</pre></div>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span>(<span class="no">gwl_data</span>, <span class="st">"L2701_example_data"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="r">
+<span class="no">y_axis_label</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span>(<span class="st">"62610"</span>)$<span class="no">parameter_nm</span>
+
+<span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span>(<span class="no">dv</span>,
+                       <span class="kw">date_col</span> <span class="kw">=</span> <span class="st">"Date"</span>,
+                       <span class="kw">value_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001"</span>,
+                       <span class="kw">approved_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001_cd"</span>,
+                       <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>,
+                       <span class="kw">y_axis_label</span> <span class="kw">=</span> <span class="no">y_axis_label</span>)</pre></div>
 <p><img src="reference/figures/graphs-1.png"><!-- --></p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/gwl_periodic.html">gwl_plot_periodic</a></span>(<span class="no">gwl_data</span>, <span class="st">"L2701_example_data"</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="r">
+<span class="fu"><a href="reference/gwl_periodic.html">gwl_plot_all</a></span>(<span class="no">dv</span>, <span class="no">gwl_data</span>,
+             <span class="kw">date_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Date"</span>, <span class="st">"lev_dt"</span>),
+             <span class="kw">value_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span>),
+             <span class="kw">approved_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001_cd"</span>,
+                              <span class="st">"lev_age_cd"</span>),
+             <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>,
+             <span class="kw">add_trend</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 <p><img src="reference/figures/graphs-2.png"><!-- --></p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/gwl_periodic.html">gwl_plot_all</a></span>(<span class="no">dv</span>, <span class="no">gwl_data</span>, <span class="st">"L2701_example_data"</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="r">
+<span class="fu"><a href="reference/sc_cl.html">Sc_Cl_plot</a></span>(<span class="no">qw_data</span>, <span class="st">"L2701_example_data"</span>)</pre></div>
 <p><img src="reference/figures/graphs-3.png"><!-- --></p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/sc_cl.html">Sc_Cl_plot</a></span>(<span class="no">qw_data</span>, <span class="st">"L2701_example_data"</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/chloridetrend.html">trend_plot</a></span>(<span class="no">qw_data</span>, <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>)</pre></div>
 <p><img src="reference/figures/graphs-4.png"><!-- --></p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="reference/chloridetrend.html">trend_plot</a></span>(<span class="no">qw_data</span>, <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>)</pre></div>
-<p><img src="reference/figures/graphs-5.png"><!-- --></p>
 </div>
 <div id="composite-workflows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#composite-workflows" class="anchor"></a>Composite workflows:</h3>
-<div class="sourceCode" id="cb7"><pre class="r">
+<div class="sourceCode" id="cb6"><pre class="r">
 <span class="co">#included sample data:</span>
 
 <span class="no">aquifer_data</span> <span class="kw">&lt;-</span> <span class="no">aquifer_data</span>
@@ -146,7 +159,7 @@
 
 <span class="fu"><a href="reference/plot_composite_data.html">plot_composite_data</a></span>(<span class="no">aquifer_data</span>, <span class="no">sum_col</span>, <span class="no">num_years</span>)</pre></div>
 <p><img src="reference/figures/example-1.png"><!-- --></p>
-<div class="sourceCode" id="cb8"><pre class="r">
+<div class="sourceCode" id="cb7"><pre class="r">
 <span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span>(<span class="no">aquifer_data</span>, <span class="no">sum_col</span>, <span class="no">num_years</span>)</pre></div>
 <p><img src="reference/figures/example-2.png"><!-- --></p>
 </div>
@@ -163,7 +176,7 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the <code>HASP</code> package using the <code>remotes</code> package:</p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html">install_gitlab</a></span>(<span class="st">"water/stats/HASP"</span>,
+<div class="sourceCode" id="cb8"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html">install_gitlab</a></span>(<span class="st">"water/stats/HASP"</span>,
                         <span class="kw">host</span> <span class="kw">=</span> <span class="st">"code.usgs.gov"</span>,
                         <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
                         <span class="kw">build_opts</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--no-resave-data"</span>,

@@ -147,7 +147,7 @@
     <p>Summary table of daily data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>daily_gwl_summary</span>(<span class='no'>gw_level_dv</span>, <span class='no'>p_code_dv</span>, <span class='no'>statCd</span>)</pre>
+    <pre class="usage"><span class='fu'>daily_gwl_summary</span>(<span class='no'>gw_level_dv</span>, <span class='no'>date_col</span>, <span class='no'>value_col</span>, <span class='no'>approved_col</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,12 +158,16 @@
 from readNWISdv</p></td>
     </tr>
     <tr>
-      <th>p_code_dv</th>
-      <td><p>the parameter code used</p></td>
+      <th>date_col</th>
+      <td><p>the heading of the date column.</p></td>
     </tr>
     <tr>
-      <th>statCd</th>
-      <td><p>the statistic code used</p></td>
+      <th>value_col</th>
+      <td><p>name of value column.</p></td>
+    </tr>
+    <tr>
+      <th>approved_col</th>
+      <td><p>name of column to get provisional/approved status.</p></td>
     </tr>
     </table>
 
@@ -179,7 +183,10 @@ and percentile values</p>
 <span class='no'>statCd</span> <span class='kw'>&lt;-</span> <span class='st'>"00001"</span>
 <span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
 <span class='no'>gw_level_dv</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Daily</span>
-<span class='fu'>daily_gwl_summary</span>(<span class='no'>gw_level_dv</span>, <span class='no'>p_code_dv</span>, <span class='no'>statCd</span>)</div><div class='output co'>#&gt;   begin_date   end_date  days percent_complete lowest_level     p5    p10
+<span class='fu'>daily_gwl_summary</span>(<span class='no'>gw_level_dv</span>,
+                  <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>,
+                  <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>,
+                  <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>)</div><div class='output co'>#&gt;   begin_date   end_date  days percent_complete lowest_level     p5    p10
 #&gt; 1 1978-10-01 2019-12-11 14362               95       -51.08 -38.57 -34.04
 #&gt;      p25    p50    p75     p90   p95 highest_level
 #&gt; 1 -28.56 -21.97 -16.89 -11.871 -9.09         -2.81</div><div class='input'>

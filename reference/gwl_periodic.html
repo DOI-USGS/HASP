@@ -158,11 +158,11 @@
 <span class='fu'>gwl_plot_all</span>(
   <span class='no'>gw_level_dv</span>,
   <span class='no'>gwl_data</span>,
+  <span class='no'>date_col</span>,
+  <span class='no'>value_col</span>,
+  <span class='no'>approved_col</span>,
+  <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"GWL"</span>,
   <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"lev_dt"</span>,
-  <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"sl_lev_va"</span>,
-  <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"lev_age_cd"</span>,
-  <span class='kw'>p_code_dv</span> <span class='kw'>=</span> <span class='st'>"62610"</span>,
   <span class='kw'>add_trend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
@@ -179,24 +179,26 @@
     </tr>
     <tr>
       <th>date_col</th>
-      <td><p>name of date column. Default is "lev_dt".</p></td>
+      <td><p>Vector of date column names. It is assumed if there are 2 values, 
+that the first is associated with gwl_data and the second is gw_level_dv</p></td>
     </tr>
     <tr>
       <th>value_col</th>
-      <td><p>name of value column. Default is "sl_lev_va".</p></td>
+      <td><p>Vector of value column names. It is assumed if there are 2 values, 
+that the first is associated with gwl_data and the second is gw_level_dv.</p></td>
     </tr>
     <tr>
       <th>approved_col</th>
-      <td><p>name of column to get provisional/approved status.
-Default is "lev_age_cd".</p></td>
+      <td><p>Vector of approval column names. It is assumed if there are 2 values, 
+that the first is associated with gwl_data and the second is gw_level_dv.</p></td>
     </tr>
     <tr>
       <th>gw_level_dv</th>
-      <td><p>daily value groundwater levels. Must include columns</p></td>
+      <td><p>daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.</p></td>
     </tr>
     <tr>
-      <th>p_code_dv</th>
-      <td><p>daily parameter code. Default is "62610".</p></td>
+      <th>y_label</th>
+      <td><p>character for y-axis label. Consider using <code><a href='https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html'>readNWISpCode</a></code> for USGS parameter_nm.</p></td>
     </tr>
     <tr>
       <th>add_trend</th>
@@ -219,11 +221,39 @@ Default is "lev_age_cd".</p></td>
 <span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)</span>
 <span class='co'># Using package example data:</span>
 <span class='no'>gw_level_dv</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Daily</span>
+<span class='no'>gwl_data</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Discrete</span>
 <span class='no'>plot_title</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>gwl_data</span>, <span class='st'>"siteInfo"</span>)<span class='kw'>[[</span><span class='st'>"station_nm"</span>]]
-<span class='fu'>gwl_plot_all</span>(<span class='no'>gw_level_dv</span>, <span class='no'>gwl_data</span>, <span class='no'>plot_title</span>, <span class='kw'>p_code_dv</span> <span class='kw'>=</span> <span class='no'>parameterCd</span>)</div><div class='img'><img src='gwl_periodic-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gwl_plot_all</span>(<span class='no'>gw_level_dv</span>, <span class='no'>gwl_data</span>, <span class='no'>plot_title</span>, <span class='kw'>add_trend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-             <span class='kw'>p_code_dv</span> <span class='kw'>=</span> <span class='no'>parameterCd</span>)</div><div class='img'><img src='gwl_periodic-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gwl_plot_all</span>(<span class='kw'>NULL</span>, <span class='no'>gwl_data</span>, <span class='no'>plot_title</span>, <span class='kw'>p_code_dv</span> <span class='kw'>=</span> <span class='no'>parameterCd</span>)</div><div class='img'><img src='gwl_periodic-4.png' alt='' width='700' height='433' /></div></pre>
+
+<span class='no'>y_label</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dataRetrieval</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html'>readNWISpCode</a></span>(<span class='no'>parameterCd</span>)$<span class='no'>parameter_nm</span>
+
+<span class='no'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>
+<span class='no'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>
+<span class='no'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>
+
+<span class='fu'>gwl_plot_all</span>(<span class='no'>gw_level_dv</span>,
+             <span class='kw'>NULL</span>,
+             <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='no'>date_col</span>,
+             <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='no'>value_col</span>,
+             <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='no'>approved_col</span>,
+             <span class='no'>plot_title</span>)</div><div class='img'><img src='gwl_periodic-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>date_col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Date"</span>, <span class='st'>"lev_dt"</span>)
+<span class='no'>value_col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X_62610_00001"</span>, <span class='st'>"sl_lev_va"</span>)
+<span class='no'>approved_col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X_62610_00001_cd"</span>, <span class='st'>"lev_age_cd"</span>)
+
+<span class='fu'>gwl_plot_all</span>(<span class='no'>gw_level_dv</span>,
+             <span class='no'>gwl_data</span>,
+             <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='no'>date_col</span>,
+             <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='no'>value_col</span>,
+             <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='no'>approved_col</span>,
+             <span class='no'>plot_title</span>,
+             <span class='kw'>add_trend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='gwl_periodic-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>gwl_plot_all</span>(<span class='kw'>NULL</span>,
+             <span class='no'>gwl_data</span>,
+             <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"lev_dt"</span>,
+             <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"sl_lev_va"</span>,
+             <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"lev_age_cd"</span>,
+             <span class='no'>plot_title</span>)</div><div class='img'><img src='gwl_periodic-4.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

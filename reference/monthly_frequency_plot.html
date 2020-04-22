@@ -148,21 +148,33 @@
     </div>
 
     <pre class="usage"><span class='fu'>monthly_frequency_plot</span>(
-  <span class='no'>gwl_data</span>,
+  <span class='no'>gw_level_dv</span>,
+  <span class='no'>date_col</span>,
+  <span class='no'>value_col</span>,
+  <span class='no'>approved_col</span>,
   <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>plot_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Past year"</span>),
-  <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"lev_dt"</span>,
-  <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"sl_lev_va"</span>,
-  <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"lev_age_cd"</span>,
-  <span class='kw'>datum_col</span> <span class='kw'>=</span> <span class='st'>"sl_datum_cd"</span>
+  <span class='kw'>y_axis_label</span> <span class='kw'>=</span> <span class='st'>""</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>gwl_data</th>
+      <th>gw_level_dv</th>
       <td><p>groundwater level data from <code>readNWISgwl</code></p></td>
+    </tr>
+    <tr>
+      <th>date_col</th>
+      <td><p>name of date column.</p></td>
+    </tr>
+    <tr>
+      <th>value_col</th>
+      <td><p>name of value column.</p></td>
+    </tr>
+    <tr>
+      <th>approved_col</th>
+      <td><p>name of column to get provisional/approved status.</p></td>
     </tr>
     <tr>
       <th>plot_title</th>
@@ -175,20 +187,8 @@ last year of data, or "Calendar year" to use the current calendar year, beginnin
 in January.</p></td>
     </tr>
     <tr>
-      <th>date_col</th>
-      <td><p>name of date column. Default is "lev_dt".</p></td>
-    </tr>
-    <tr>
-      <th>value_col</th>
-      <td><p>name of value column. Default is "sl_lev_va".</p></td>
-    </tr>
-    <tr>
-      <th>approved_col</th>
-      <td><p>name of column to get provisional/approved status. Default is "lev_age_cd".</p></td>
-    </tr>
-    <tr>
-      <th>datum_col</th>
-      <td><p>name of column giving the measurement datum. Default is "sl_datum_cd"</p></td>
+      <th>y_axis_label</th>
+      <td><p>the label used for the y-axis of the plot.</p></td>
     </tr>
     </table>
 
@@ -201,9 +201,16 @@ showing the last year of groundwater level measurements.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># site &lt;- "263819081585801"</span>
-<span class='co'># gwl_data &lt;- dataRetrieval::readNWISgwl(site)</span>
-<span class='no'>gwl_data</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Discrete</span>
-<span class='fu'>monthly_frequency_plot</span>(<span class='no'>gwl_data</span>, <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>"Groundwater level"</span>)</div><div class='img'><img src='monthly_frequency_plot-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>p_code_dv</span> <span class='kw'>&lt;-</span> <span class='st'>"62610"</span>
+<span class='no'>statCd</span> <span class='kw'>&lt;-</span> <span class='st'>"00001"</span>
+<span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
+<span class='no'>gw_level_dv</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Daily</span>
+<span class='no'>monthly_frequency</span> <span class='kw'>&lt;-</span> <span class='fu'>monthly_frequency_plot</span>(<span class='no'>gw_level_dv</span>,
+                                             <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>,
+                                             <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>,
+                                             <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>,
+                                             <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>"L2701 Groundwater Level"</span>)
+<span class='no'>monthly_frequency</span></div><div class='img'><img src='monthly_frequency_plot-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
