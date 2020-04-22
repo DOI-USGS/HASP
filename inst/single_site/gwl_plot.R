@@ -1,9 +1,4 @@
-gwl_plot <- reactive({
-  
-  validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
-  )
-  
+col_stuff <- reactive({
   p_code_dv <- input$pcode 
   val_col_per <- input$gwl_vals
   
@@ -13,7 +8,7 @@ gwl_plot <- reactive({
   includes_gwl <- !is.null(gwl_data) 
   includes_dv <- !is.null(dv_data)
   includes_both <- includes_gwl & includes_dv
-
+  
   y_label <- dataRetrieval::readNWISpCode(input$pcode)$parameter_nm
   
   if(includes_both){
@@ -37,19 +32,36 @@ gwl_plot <- reactive({
     } else {
       y_label <- "Elevation"
     }
-
+    
   }
+  
+  return(list(date_col = date_col,
+              value_col = value_col,
+              approved_col = approved_col,
+              y_label = y_label))
+})
+
+gwl_plot <- reactive({
+  
+  validate(
+    need(!is.null(rawData_data$daily_data), "Please select a data set")
+  )
+  
+  dv_data <- dvData()
+  gwl_data <- gwlData()
+  
+  columns <- col_stuff()
 
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
   
   gwl_plot <-  gwl_plot_all(dv_data, 
                             gwl_data, 
-                            date_col = date_col,
-                            value_col = value_col,
-                            approved_col = approved_col,
+                            date_col = columns$date_col,
+                            value_col = columns$value_col,
+                            approved_col = columns$approved_col,
                             plot_title = plot_title,
-                            y_label = y_label,
+                            y_label = columns$y_label,
                             add_trend = TRUE) 
   
   return(gwl_plot)
@@ -87,23 +99,32 @@ gwl_table <- reactive({
 })
 
 gwl_plot_out <- reactive({
-  p_code_dv <- input$pcode 
-  stat_cd <- input$statcd
+
   
-  val_col <- input$gwl_vals
+  columns <- col_stuff() 
   
-  sum_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  val_col <- columns$value_col
+  date_col <- columns$date_col
+  approved_col <- columns$approved_col
+  y_label <- columns$y_label
+
   code_out <- paste0(setup(),'
-val_col <- "', val_col,'"
-gwl_plot <-  gwl_plot_all(gw_level_dv, gwl_data, 
-                          p_code_dv = p_code_dv,
-                          val_col = val_col,
+val_col <- c("', paste(val_col, collapse = '", "'),'")
+date_col <- c("', paste(date_col, collapse = '", "'),'")
+approved_col <- c("', paste(approved_col, collapse = '", "'),'")
+y_label <- "', y_label,'"
+gwl_plot <-  gwl_plot_all(gw_level_dv, 
+                          gwl_data, 
+                          date_col = date_cols,
+                          value_col = val_cols,
+                          approved_col = approved_col,
+                          y_label = y_label,
                           plot_title = plot_title,
                           add_trend = TRUE)
 gwl_plot
 
 gwl_summary_table <- site_data_summary(gw_level_dv,
-                                       sum_col = "', sum_col,'")
+                                       sum_col = "', val_col[1],'")
 
 # To save plot:
 # Fiddle with height and width (in inches) for best results:
