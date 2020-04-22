@@ -5,7 +5,7 @@
 \title{Plot monthly frequency analysis}
 \usage{
 monthly_frequency_plot(
-  gwl_data,
+  gw_level_dv,
   date_col,
   value_col,
   approved_col,
@@ -15,7 +15,7 @@ monthly_frequency_plot(
 )
 }
 \arguments{
-\item{gwl_data}{groundwater level data from \code{readNWISgwl}}
+\item{gw_level_dv}{groundwater level data from \code{readNWISgwl}}
 
 \item{date_col}{name of date column.}
 
@@ -44,11 +44,12 @@ Plot monthly frequency analysis
 # site <- "263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-# gwl_data <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
-gwl_data <- L2701_example_data$Daily
-monthly_frequency <- monthly_frequency_plot(gwl_data,
+# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gw_level_dv <- L2701_example_data$Daily
+monthly_frequency <- monthly_frequency_plot(gw_level_dv,
                                              date_col = "Date",
                                              value_col = "X_62610_00001",
                                              approved_col = "X_62610_00001_cd",
                                              plot_title = "L2701 Groundwater Level")
+monthly_frequency
 }

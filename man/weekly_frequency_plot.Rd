@@ -5,7 +5,7 @@
 \title{Plot weekly frequency analysis}
 \usage{
 weekly_frequency_plot(
-  gwl_data,
+  gw_level_dv,
   date_col,
   value_col,
   approved_col,
@@ -15,7 +15,7 @@ weekly_frequency_plot(
 )
 }
 \arguments{
-\item{gwl_data}{daily groundwater level data
+\item{gw_level_dv}{daily groundwater level data
 from readNWISdv}
 
 \item{date_col}{name of date column.}
@@ -44,9 +44,9 @@ The weekly frequency analysis is based on daily data
 # site <- "263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-# gwl_data <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
-gwl_data <- L2701_example_data$Daily
-weekly_frequency_plot(gwl_data, 
+# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+gw_level_dv <- L2701_example_data$Daily
+weekly_frequency_plot(gw_level_dv, 
                       date_col = "Date",
                       value_col = "X_62610_00001",
                       approved_col = "X_62610_00001_cd")
