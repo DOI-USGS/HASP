@@ -221,10 +221,18 @@ kable(head(daily_table, 10))
 ### Daily value trends
 
 ```{r trend_dv, eval=FALSE}
+y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
-gwl_plot_all(gw_level_dv, plot_title = site_title,
-             gwl_data, add_trend = TRUE,
-             p_code_dv = parameterCd)
+gwl_plot_all(gw_level_dv, 
+             gwl_data, 
+             y_label = y_label,
+             date_col = c("Date", "lev_dt"),
+             value_col = c("X_62610_00001",
+                           "sl_lev_va"),
+             approved_col = c("X_62610_00001_cd",
+                              "lev_age_cd"),
+             plot_title = site_title,
+             add_trend = TRUE)
 
 site_data_summary(gw_level_dv, "X_62610_00001")
 
@@ -241,9 +249,18 @@ kendell_test_5_20_years(gw_monthly,
 <tr><td>
 
 ```{r gwlTrendplot, echo=FALSE}
-gwl_plot_all(gw_level_dv, plot_title = site_title,
-             gwl_data, add_trend = TRUE,
-             p_code_dv = parameterCd)
+y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
+
+
+gwl_plot_all(gw_level_dv, gwl_data, 
+             y_label = y_label,
+             date_col = c("Date", "lev_dt"),
+             value_col = c("X_62610_00001",
+                           "sl_lev_va"),
+             approved_col = c("X_62610_00001_cd",
+                              "lev_age_cd"),
+             plot_title = site_title,
+             add_trend = TRUE)
 
 
 ```
@@ -284,7 +301,12 @@ kable(trend_result, digits = 1)
 ### Periodic values
 
 ```{r manual, eval=FALSE}
-gwl_plot_all(NULL, gwl_data, plot_title = site_title)
+gwl_plot_all(NULL, gwl_data,
+             y_label = y_label,
+             date_col = "lev_dt",
+             value_col = "sl_lev_va",
+             approved_col = "lev_age_cd",
+             plot_title = site_title)
 
 site_data_summary(gwl_data, "sl_lev_va")
 ```
@@ -293,7 +315,12 @@ site_data_summary(gwl_data, "sl_lev_va")
 <tr><td>
 
 ```{r manualPlot, echo=FALSE}
-gwl_plot_all(NULL, gwl_data, plot_title = site_title)
+gwl_plot_all(NULL, gwl_data,
+             y_label = y_label,
+             date_col = "lev_dt",
+             value_col = "sl_lev_va",
+             approved_col = "lev_age_cd",
+             plot_title = site_title)
 
 
 ```

@@ -16,11 +16,11 @@ gwl_plot_periodic(
 gwl_plot_all(
   gw_level_dv,
   gwl_data,
+  date_col,
+  value_col,
+  approved_col,
+  y_label = "GWL",
   plot_title = "",
-  date_col = "lev_dt",
-  value_col = "sl_lev_va",
-  approved_col = "lev_age_cd",
-  p_code_dv = "62610",
   add_trend = FALSE
 )
 }
@@ -29,16 +29,18 @@ gwl_plot_all(
 
 \item{plot_title}{character}
 
-\item{date_col}{name of date column. Default is "lev_dt".}
+\item{date_col}{Vector of date column names. It is assumed if there are 2 values, 
+that the first is associated with gwl_data and the second is gw_level_dv}
 
-\item{value_col}{name of value column. Default is "sl_lev_va".}
+\item{value_col}{Vector of value column names. It is assumed if there are 2 values, 
+that the first is associated with gwl_data and the second is gw_level_dv.}
 
-\item{approved_col}{name of column to get provisional/approved status.
-Default is "lev_age_cd".}
+\item{approved_col}{Vector of approval column names. It is assumed if there are 2 values, 
+that the first is associated with gwl_data and the second is gw_level_dv.}
 
-\item{gw_level_dv}{daily value groundwater levels. Must include columns}
+\item{gw_level_dv}{daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.}
 
-\item{p_code_dv}{daily parameter code. Default is "62610".}
+\item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
 
 \item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
 }
@@ -60,11 +62,39 @@ parameterCd <- "62610"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
 # Using package example data:
 gw_level_dv <- L2701_example_data$Daily
+gwl_data <- L2701_example_data$Discrete
 plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-gwl_plot_all(gw_level_dv, gwl_data, plot_title, p_code_dv = parameterCd)
 
-gwl_plot_all(gw_level_dv, gwl_data, plot_title, add_trend = TRUE,
-             p_code_dv = parameterCd)
+y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm
 
-gwl_plot_all(NULL, gwl_data, plot_title, p_code_dv = parameterCd)
+date_col = "Date"
+value_col = "X_62610_00001"
+approved_col = "X_62610_00001_cd"
+
+gwl_plot_all(gw_level_dv, 
+             NULL, 
+             date_col = date_col, 
+             value_col = value_col,
+             approved_col = approved_col,
+             plot_title) 
+
+date_col = c("Date", "lev_dt")
+value_col = c("X_62610_00001", "sl_lev_va")
+approved_col = c("X_62610_00001_cd", "lev_age_cd") 
+
+gwl_plot_all(gw_level_dv, 
+             gwl_data, 
+             date_col = date_col, 
+             value_col = value_col,
+             approved_col = approved_col,
+             plot_title, 
+             add_trend = TRUE)
+             
+gwl_plot_all(NULL, 
+             gwl_data, 
+             date_col = "lev_dt", 
+             value_col = "sl_lev_va",
+             approved_col = "lev_age_cd",
+             plot_title)
+
 }
