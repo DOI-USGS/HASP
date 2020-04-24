@@ -104,6 +104,7 @@ site_summary <- function(siteID, markdown = FALSE){
   
   site_no <- station_nm <- lat_va <- long_va <- nat_aqfr_cd <- ".dplyr"
   site_tp_cd <- state_cd <- county_cd <- huc_cd <- aqfr_cd <- land_net_ds <- well_depth_va <- alt_va <- alt_datum_cd <- ".dplyr"
+  long_name <- Aqfr_Name_prpr <- ".dplyr"
   
   site_info <- readNWISsite(siteID)
   
@@ -114,6 +115,10 @@ site_summary <- function(siteID, markdown = FALSE){
   
   end_of_line <- ifelse(markdown, "<br/>", "\n")
   
+  nat_aqfrs <- nat_aqfr_state %>% 
+    select(nat_aqfr_cd, nat_aq = long_name) %>% 
+    distinct()
+  
   site_info_cleaned <- site_info %>% 
     select(site_no, station_nm, lat_va, long_va,
            site_tp_cd,
@@ -122,13 +127,14 @@ site_summary <- function(siteID, markdown = FALSE){
            land_net_ds,
            well_depth_va,
            alt_va, alt_datum_cd) %>% 
+    left_join(nat_aqfrs, by = "nat_aqfr_cd") %>% 
+    left_join(rename(local_aqfr, 
+                     local_aq = Aqfr_Name_prpr), by = "aqfr_cd") %>% 
     mutate(state = stateCdLookup(state_cd, 
                                  outputType = "fullName"),
            county = countyCdLookup(state = state_cd,
                                    county = county_cd,
                                    outputType = "fullName"),
-           nat_aq = nat_aqfr_state$long_name[nat_aqfr_state$nat_aqfr_cd == nat_aqfr_cd],
-           local_aq = local_aqfr$Aqfr_Name_prpr[local_aqfr$aqfr_cd == aqfr_cd],
            lat_deg = substr(lat_va, start = 1, stop = 2),
            lat_min = substr(lat_va, start = 3, stop = 4),
            lat_sec = substr(lat_va, start = 5, stop = 6),

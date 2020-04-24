@@ -21,7 +21,6 @@ site <- "263819081585801"
 #Periodic data:
 gwl_data <- dataRetrieval::readNWISgwl(site)
 
-
 # Daily data:
 parameterCd <- "62610"
 statCd <- "00001"
@@ -36,39 +35,44 @@ qw_data <- dataRetrieval::readNWISqw(site,
 ```
 
 ``` r
+
+y_axis_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
+
 monthly_frequency_plot(dv,
                        date_col = "Date",
                        value_col = "X_62610_00001",
                        approved_col = "X_62610_00001_cd",
                        plot_title = "L2701_example_data",
-                       y_axis_label = "GGroundwater level above NGVD 1929, feet")
+                       y_axis_label = y_axis_label)
 ```
 
 ![](man/figures/graphs-1.png)<!-- -->
 
 ``` r
-gwl_plot_periodic(gwl_data, "L2701_example_data")
+
+gwl_plot_all(dv, gwl_data, 
+             date_col = c("Date", "lev_dt"),
+             value_col = c("X_62610_00001", "sl_lev_va"),
+             approved_col = c("X_62610_00001_cd",
+                              "lev_age_cd"),
+             plot_title = "L2701_example_data", 
+             add_trend = TRUE)
 ```
 
 ![](man/figures/graphs-2.png)<!-- -->
 
 ``` r
-gwl_plot_all(dv, gwl_data, "L2701_example_data")
+
+Sc_Cl_plot(qw_data, "L2701_example_data")
 ```
 
 ![](man/figures/graphs-3.png)<!-- -->
 
 ``` r
-Sc_Cl_plot(qw_data, "L2701_example_data")
-```
-
-![](man/figures/graphs-4.png)<!-- -->
-
-``` r
 trend_plot(qw_data, plot_title = "L2701_example_data")
 ```
 
-![](man/figures/graphs-5.png)<!-- -->
+![](man/figures/graphs-4.png)<!-- -->
 
 ### Composite workflows:
 

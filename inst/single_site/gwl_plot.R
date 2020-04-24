@@ -1,19 +1,68 @@
+col_stuff <- reactive({
+  p_code_dv <- input$pcode 
+  val_col_per <- input$gwl_vals
+  
+  dv_data <- dvData()
+  gwl_data <- gwlData()
+  
+  includes_gwl <- !is.null(gwl_data) 
+  includes_dv <- !is.null(dv_data)
+  includes_both <- includes_gwl & includes_dv
+  
+  y_label <- dataRetrieval::readNWISpCode(input$pcode)$parameter_nm
+  
+  if(includes_both){
+    date_col = c("Date", "lev_dt")
+    value_col = c(paste("X", input$pcode, input$statcd, sep = "_"),
+                  input$gwl_vals)
+    approved_col = c(paste("X", input$pcode, input$statcd, "cd", sep = "_"),
+                     "lev_age_cd") 
+    
+  } else if(includes_dv){
+    date_col = "Date"
+    value_col = paste("X", input$pcode, input$statcd, sep = "_")
+    approved_col = paste("X", input$pcode, input$statcd, "cd", sep = "_")
+  } else if(includes_gwl){
+    date_col = "lev_dt"
+    value_col = input$gwl_vals
+    approved_col = "lev_age_cd" 
+    if("sl_datum_cd" %in% names(gwl_data)){
+      datum <- unique(gwl_data$sl_datum_cd)
+      y_label <- sprintf("Elevation above %s, feet", datum)
+    } else {
+      y_label <- "Elevation"
+    }
+    
+  }
+  
+  return(list(date_col = date_col,
+              value_col = value_col,
+              approved_col = approved_col,
+              y_label = y_label))
+})
+
 gwl_plot <- reactive({
   
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
   
-  p_code_dv <- input$pcode 
-  val_col <- input$gwl_vals
-  plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
-                      attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
+  dv_data <- dvData()
+  gwl_data <- gwlData()
   
-  gwl_plot <-  gwl_plot_all(dvData(), p_code_dv = p_code_dv,
+  columns <- col_stuff()
+
+  plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
+                      attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
+  
+  gwl_plot <-  gwl_plot_all(dv_data, 
+                            gwl_data, 
+                            date_col = columns$date_col,
+                            value_col = columns$value_col,
+                            approved_col = columns$approved_col,
                             plot_title = plot_title,
-                            value_col = val_col,
-                            gwlData(), add_trend = TRUE) 
-  
+                            y_label = columns$y_label,
+                            add_trend = TRUE) 
   
   return(gwl_plot)
   
@@ -50,23 +99,32 @@ gwl_table <- reactive({
 })
 
 gwl_plot_out <- reactive({
-  p_code_dv <- input$pcode 
-  stat_cd <- input$statcd
+
   
-  val_col <- input$gwl_vals
+  columns <- col_stuff() 
   
-  sum_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  val_col <- columns$value_col
+  date_col <- columns$date_col
+  approved_col <- columns$approved_col
+  y_label <- columns$y_label
+
   code_out <- paste0(setup(),'
-val_col <- "', val_col,'"
-gwl_plot <-  gwl_plot_all(gw_level_dv, gwl_data, 
-                          p_code_dv = p_code_dv,
-                          val_col = val_col,
+val_col <- c("', paste(val_col, collapse = '", "'),'")
+date_col <- c("', paste(date_col, collapse = '", "'),'")
+approved_col <- c("', paste(approved_col, collapse = '", "'),'")
+y_label <- "', y_label,'"
+gwl_plot <-  gwl_plot_all(gw_level_dv, 
+                          gwl_data, 
+                          date_col = date_cols,
+                          value_col = val_cols,
+                          approved_col = approved_col,
+                          y_label = y_label,
                           plot_title = plot_title,
                           add_trend = TRUE)
 gwl_plot
 
 gwl_summary_table <- site_data_summary(gw_level_dv,
-                                       sum_col = "', sum_col,'")
+                                       sum_col = "', val_col[1],'")
 
 # To save plot:
 # Fiddle with height and width (in inches) for best results:
@@ -81,17 +139,24 @@ gwl_summary_table <- site_data_summary(gw_level_dv,
 week_plot <- reactive({
   
   validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data), "Please select a daily data set")
   )
   
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
   
-  plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
-                      attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
-  week_plot <-  weekly_frequency_plot(dvData(), plot_title = plot_title,
-                                     p_code_dv = p_code_dv, 
-                                     statCd = stat_cd) 
+  dv_data <- dvData()
+  
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
+  plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
+                      attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
+  week_plot <-  weekly_frequency_plot(dv_data, 
+                                      date_col = "Date",
+                                      value_col = value_col,
+                                      approved_col = approv_col,
+                                      plot_title = plot_title) 
   
   return(week_plot)
   
@@ -100,16 +165,18 @@ week_plot <- reactive({
 week_table_df <- reactive({
   
   validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data), "Please select a daily data set")
   )
   
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
-
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
   week_tab <-  weekly_frequency_table(dvData(), 
-                                      p_code_dv = p_code_dv, 
-                                      statCd = stat_cd, 
-                                      date_col = "Date") %>% 
+                                      date_col = "Date",
+                                      value_col = value_col,
+                                      approved_col = approv_col) %>% 
     select("Week" = week,
            "Lowest<br>median" = minMed,
            "10th" = p10,
@@ -159,16 +226,20 @@ week_table <- weekly_frequency_table(gw_level_dv,
 year2_plot <- reactive({
   
   validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data), "Please select a daily data set")
   )
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
   
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
-                                     p_code_dv = p_code_dv, 
-                                     statCd = stat_cd,
+                                     date_col = "Date",
+                                     value_col = value_col,
+                                     approved_col = approv_col,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
                                      month_breaks = TRUE)
@@ -185,10 +256,12 @@ year2_table_df <- reactive({
   )
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
-  
-  daily_tab <-  daily_frequency_table(dvData(), 
-                                      p_code_dv = p_code_dv, 
-                                      statCd = stat_cd) %>%
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  daily_tab <-  daily_frequency_table(dvData(),
+                                      date_col = "Date",
+                                      value_col = value_col,
+                                      approved_col = approv_col) %>%
     rename("DOY" = DOY,
            "Maximum" = max,
            "Mean" = mean,
@@ -207,8 +280,6 @@ year2_table <- reactive({
   return(daily_tab_DT)
   
 })
-
-
 
 
 year2_plot_out <- reactive({
@@ -236,14 +307,20 @@ daily_frequencies <- daily_frequency_table(gw_level_dv,
 month_plot <- reactive({
   
   validate(
-    need(!is.null(rawData_data$gwl_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
-  val_col <- input$gwl_vals
+  p_code_dv <- input$pcode 
+  stat_cd <- input$statcd
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
-  month_plot <-  monthly_frequency_plot(gwlData(), 
-                                        value_col = val_col,
+  month_plot <-  monthly_frequency_plot(dvData(), 
+                                        date_col = "Date",
+                                        value_col = value_col,
+                                        approved_col = approv_col,
                                         plot_title = plot_title) 
   
   
@@ -253,11 +330,17 @@ month_plot <- reactive({
 
 month_table_df <- reactive({
   validate(
-    need(!is.null(rawData_data$gwl_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
-  val_col <- input$gwl_vals
-  month_tab <-  monthly_frequency_table(gwlData(), 
-                                        value_col = val_col) %>%
+  p_code_dv <- input$pcode 
+  stat_cd <- input$statcd
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
+  month_tab <-  monthly_frequency_table(dvData(), 
+                                        date_col = "Date",
+                                        value_col = value_col,
+                                        approved_col = approv_col) %>%
     select(month, minMed, p25, p50, p75, maxMed, nYears) %>%
     mutate(month = month.abb[month]) %>%
     rename("Month" = month,

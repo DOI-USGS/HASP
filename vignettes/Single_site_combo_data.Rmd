@@ -122,7 +122,10 @@ monthly_frequency_plot(gw_level_dv,
                        plot_range = "Past year",
                        y_axis_label = "Groundwater level above NGVD 1929, feet")
 
-monthly_frequency_table(gwl_data)
+monthly_frequency_table(gw_level_dv, 
+                        date_col = "Date",
+                        value_col = "X_62610_00001",
+                        approved_col = "X_62610_00001_cd")
 ```
 
 
@@ -175,8 +178,10 @@ daily_gwl_2yr_plot(gw_level_dv,
                    historical_stat = "median",
                    y_axis_label = "Groundwater level above NGVD 1929, feet")
 
-daily_gwl_summary(gw_level_dv, date_col = "Date", 
-                  value_col = "X_62610_00001", approved_col = "X_62610_00001_cd")
+daily_gwl_summary(gw_level_dv, 
+                  date_col = "Date", 
+                  value_col = "X_62610_00001", 
+                  approved_col = "X_62610_00001_cd")
 ```
 
 <table>
@@ -255,7 +260,16 @@ kable(sitePeriodic, digits = 1)
 ### Period of Record - All Data Types
 
 ```{r dvPlotDisplay, eval=FALSE}
-gwl_plot_all(gw_level_dv, gwl_data, plot_title)
+y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
+
+gwl_plot_all(gw_level_dv, 
+             gwl_data, 
+             y_label = y_label,
+             date_col = c("Date", "lev_dt"),
+             value_col = c("X_62610_00001", "sl_lev_va"),
+             approved_col = c("X_62610_00001_cd",
+                              "lev_age_cd"),
+             plot_title = plot_title)
 
 site_data_summary(gw_level_dv, "X_62610_00001")
 ```
@@ -264,7 +278,17 @@ site_data_summary(gw_level_dv, "X_62610_00001")
 <tr><td>
 
 ```{r dvPlot, echo=FALSE}
-gwl_plot_all(gw_level_dv, gwl_data, plot_title)
+y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
+
+gwl_plot_all(gw_level_dv, 
+             gwl_data, 
+             y_label = y_label,
+             date_col = c("Date", "lev_dt"),
+             value_col = c("X_62610_00001", "sl_lev_va"),
+             approved_col = c("X_62610_00001_cd",
+                              "lev_age_cd"),
+             plot_title = plot_title)
+
 ```
 
 </td><td>
