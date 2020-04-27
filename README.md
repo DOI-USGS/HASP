@@ -2,7 +2,6 @@
 
 [![R build
 status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/HASP/actions)
-[![travis](https://travis-ci.org/USGS-R/HASP.svg?branch=master)](https://travis-ci.org/USGS-R/HASP)
 [![Coverage
 Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
 [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
