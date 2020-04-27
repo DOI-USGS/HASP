@@ -17,3 +17,5 @@ _pkgdown.yml
 pkgdown/
 ^docs$
 ^pkgdown$
+^codecov\.yml$
+^\.github$
