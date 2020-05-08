@@ -16,3 +16,8 @@ travis.yml
 _pkgdown.yml
 pkgdown/
 .gitlab/
+^docs$
+^pkgdown$
+^codecov\.yml$
+^\.github$
+
