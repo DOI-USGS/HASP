@@ -186,6 +186,8 @@ composite_data <- function(x, sum_col, num_years){
 #'
 #' Create normalized composite data
 #' 
+#' Information can be found here: \url{https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html}
+#' 
 #' @param x aquifer data
 #' @param sum_col column name
 #' @param num_years integer number of years required
