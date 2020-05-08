@@ -45,7 +45,8 @@ Suggests:
     rmarkdown,
     testthat,
     knitr,
-    kableExtra
+    kableExtra,
+    covr
 BugReports: https://code.usgs.gov/water/stats/hasp/issues
 VignetteBuilder: knitr
 BuildVignettes: true
