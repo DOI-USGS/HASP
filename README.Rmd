@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.height = 7,
                       collapse = TRUE,
                       comment = "#>",
-                      fig.path = "man/figures/"
+                      fig.path = "man/figures/README-"
 )
 ```
 
