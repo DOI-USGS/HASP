@@ -4,6 +4,7 @@
 status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/HASP/actions)
 [![Coverage
 Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
+[![codecov](https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg)](https://codecov.io/gh/USGS-R/HASP)
 [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
 
 Hydrologic AnalySis Package
@@ -47,7 +48,7 @@ monthly_frequency_plot(dv,
                        y_axis_label = y_axis_label)
 ```
 
-![](man/figures/graphs-1.png)<!-- -->
+![](man/figures/README-graphs-1.png)<!-- -->
 
 ``` r
 
@@ -60,20 +61,20 @@ gwl_plot_all(dv, gwl_data,
              add_trend = TRUE)
 ```
 
-![](man/figures/graphs-2.png)<!-- -->
+![](man/figures/README-graphs-2.png)<!-- -->
 
 ``` r
 
 Sc_Cl_plot(qw_data, "L2701_example_data")
 ```
 
-![](man/figures/graphs-3.png)<!-- -->
+![](man/figures/README-graphs-3.png)<!-- -->
 
 ``` r
 trend_plot(qw_data, plot_title = "L2701_example_data")
 ```
 
-![](man/figures/graphs-4.png)<!-- -->
+![](man/figures/README-graphs-4.png)<!-- -->
 
 ### Composite workflows:
 
@@ -88,14 +89,14 @@ num_years <- 30
 plot_composite_data(aquifer_data, sum_col, num_years)
 ```
 
-![](man/figures/example-1.png)<!-- -->
+![](man/figures/README-example-1.png)<!-- -->
 
 ``` r
 
 plot_normalized_data(aquifer_data, sum_col, num_years)
 ```
 
-![](man/figures/example-2.png)<!-- -->
+![](man/figures/README-example-2.png)<!-- -->
 
 ## Shiny App
 
