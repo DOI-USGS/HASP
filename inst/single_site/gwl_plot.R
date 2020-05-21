@@ -174,7 +174,7 @@ week_table_df <- reactive({
   
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
-  
+
   week_tab <-  weekly_frequency_table(dvData(), 
                                       date_col = "Date",
                                       value_col = value_col,

@@ -485,13 +485,25 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
                  breaks = month_breaks, labels = month_labels) +
     hasp_framework(x_label, y_label, plot_title, include_y_scale = TRUE,
                    zero_on_top = on_top) +
-    guides(color = guide_legend(order = 1, 
+    theme(axis.ticks.x = element_blank(),
+          aspect.ratio = NULL)
+  
+  if(all(levels(point_data$group) %in% unique(point_data$group))){
+    plot <- plot +
+      guides(color = guide_legend(order = 1,
                                 override.aes = list(shape = c(NA, NA, 17),
                                                     linetype = c("solid", "solid", "blank"))),
            shape = FALSE,
-           fill = guide_legend(order = 2)) +
-    theme(axis.ticks.x = element_blank(),
-          aspect.ratio = NULL)
+           fill = guide_legend(order = 2)) 
+  } else {
+    #TODO: be smarter:
+    plot <- plot +
+      guides(color = guide_legend(order = 1,
+                                  override.aes = list(shape = c(NA, 17),
+                                                      linetype = c("solid",  "blank"))),
+             shape = FALSE,
+             fill = guide_legend(order = 2))     
+  }
   
   return(plot)
   
