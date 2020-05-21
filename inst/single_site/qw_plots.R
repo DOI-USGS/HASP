@@ -127,7 +127,7 @@ qw1_plot <- reactive({
     need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   
-  pcode <- input$pcode_plot
+  pcode <-  input$pcode_plot
   
   plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],
                       attr(qwData(), "siteInfo")[["site_no"]], sep = "\n")
