@@ -41,8 +41,7 @@ observeEvent(input$example_data,{
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
   
-  rawData_data$p_codes_dv <- NULL
-  rawData_data$p_codes_dv <-  "62610"
+  rawData_data$p_code_dv <-  "62610"
   
   rawData_data$stat_cd <- "00001"
   rawData_data$p_code_qw <- c("00095","90095","00940","99220")
@@ -98,7 +97,7 @@ observeEvent(input$get_data_dv, {
   pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
     filter(!is.na(parm_cd))
 
-  rawData_data$p_codes_dv <- pcodes_dv$parm_cd
+  rawData_data$p_code_dv <- pcodes_dv$parm_cd
   rawData_data$stat_cd <- pcodes_dv$stat_cd
   rawData_data$site_meta <-  site_info
   
