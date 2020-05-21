@@ -143,7 +143,7 @@ week_plot <- reactive({
     need(!is.null(rawData_data$daily_data), "Please select a daily data set")
   )
   
-  p_code_dv <- rawData_data[["p_code_dv"]]
+  p_code_dv <- input$pcode
   stat_cd <- input$statcd
   
   dv_data <- dvData()
@@ -169,8 +169,9 @@ week_table_df <- reactive({
     need(!is.null(rawData_data$daily_data), "Please select a daily data set")
   )
   
-  p_code_dv <- rawData_data[["p_code_dv"]]
+  p_code_dv <- input$pcode
   stat_cd <- input$statcd
+  
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
   
@@ -229,7 +230,7 @@ year2_plot <- reactive({
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a daily data set")
   )
-  p_code_dv <- rawData_data[["p_code_dv"]]
+  p_code_dv <- input$pcode
   stat_cd <- input$statcd
   
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
@@ -255,7 +256,7 @@ year2_table_df <- reactive({
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
-  p_code_dv <- rawData_data[["p_code_dv"]]
+  p_code_dv <- input$pcode
   stat_cd <- input$statcd
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
@@ -310,7 +311,7 @@ month_plot <- reactive({
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
-  p_code_dv <-  rawData_data[["p_code_dv"]] 
+  p_code_dv <-  input$pcode
   stat_cd <- input$statcd
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
@@ -333,7 +334,7 @@ month_table_df <- reactive({
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
-  p_code_dv <-  rawData_data[["p_code_dv"]] 
+  p_code_dv <- input$pcode 
   stat_cd <- input$statcd
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
