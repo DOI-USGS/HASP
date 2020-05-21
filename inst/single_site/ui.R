@@ -28,7 +28,8 @@ sidebar <- dashboardSidebar(
                            choices = "62610", 
                            selected = "62610", 
                            label = "Daily pcode"),
-             textInput("statcd", value = "00001", label = "Daily stat code")            
+             radioButtons("statcd", choices = "00001", 
+                          label = "Daily stat code")            
     ),
     actionButton("get_data_dv", label = "Get Daily Data"),
     menuItem("Periodic Options", icon = icon("th"), tabName = "periodicDat",

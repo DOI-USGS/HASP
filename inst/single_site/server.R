@@ -8,6 +8,9 @@ source("modules.R",local=TRUE)
 
 shinyServer(function(input, output, session) {
   
+  source("get_data.R",local=TRUE)$value
+  source("gwl_plot.R",local=TRUE)$value
+  source("qw_plots.R",local=TRUE)$value
   
   observe({
     if (input$close > 0) shiny::stopApp()    
@@ -15,11 +18,9 @@ shinyServer(function(input, output, session) {
   
   output$dataAvailable <- DT::renderDataTable({
       availData()
-    }, escape=FALSE, rownames = FALSE, options = list(dom = "t"))
-  
-  source("get_data.R",local=TRUE)$value
-  source("gwl_plot.R",local=TRUE)$value
-  source("qw_plots.R",local=TRUE)$value
+    }, 
+    escape=FALSE, rownames = FALSE, options = list(dom = "t")
+  )
   
   callModule(graph_table_download_code, 'gwl_graph', 
              plot_gg = gwl_plot, 
@@ -59,7 +60,6 @@ shinyServer(function(input, output, session) {
              code_out = qw1_plot_out, 
              raw_data = reactive({rawData_data$qw_data}))
   
-  
   callModule(graph_table_download_code, 'ch_sc_graph', 
              plot_gg = cl_sc_plot, 
              table_DT = cl_sc_table,
@@ -69,10 +69,10 @@ shinyServer(function(input, output, session) {
   
   setup <- reactive({
     
-    p_code <- input$pcode
+    p_code <- rawData_data[["p_code_df"]]
     site_id <- input$siteID
     stat_cd <- input$statcd
-    pcodeqw <- input$pcode_plot
+    pcodeqw <- rawData_data[["p_code_qw"]]
     
     if(rawData_data$example_data){
       setup_code <- paste0('library(HASP)

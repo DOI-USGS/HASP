@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.height = 7,
                       collapse = TRUE,
                       comment = "#>",
-                      fig.path = "man/figures/"
+                      fig.path = "man/figures/README-"
 )
 ```
 
@@ -23,6 +23,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 [![R build status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/HASP/actions)
 [![Coverage Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
+[![codecov](https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg)](https://codecov.io/gh/USGS-R/HASP)
 [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
 
 Hydrologic AnalySis Package

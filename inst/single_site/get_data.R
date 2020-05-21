@@ -8,13 +8,41 @@ rawData_data <- reactiveValues(daily_data = NULL,
                                site_meta = NULL,
                                p_code_qw = NULL)
 
+observeEvent(input$get_data_avail,{
+  site_id <- input$siteID
+  
+  site_info <- site_summary(site_id)
+  
+  if(!any(grepl("GW", site_info$site_tp_cd))){
+    showNotification("The site is not identified as a groundwater site.", 
+                     type = "error")
+  }
+  
+  rawData_data$available_data <- data_available(site_id)
+  rawData_data$site_meta <-  site_info
+  
+  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
+    filter(!is.na(parm_cd)) %>% 
+    pull(parm_cd)
+  
+  rawData_data$p_code_qw <- pcodes_qw
+
+  pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
+    filter(!is.na(parm_cd))
+
+  rawData_data$p_code_dv <- pcodes_dv$parm_cd
+  rawData_data$stat_cd <- pcodes_dv$stat_cd
+  
+})
+
 observeEvent(input$example_data,{
   rawData_data$example_data <- TRUE
   rawData_data$daily_data <- HASP::L2701_example_data$Daily
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
   
-  rawData_data$p_code_dv <- "62610"
+  rawData_data$p_code_dv <-  "62610"
+  
   rawData_data$stat_cd <- "00001"
   rawData_data$p_code_qw <- c("00095","90095","00940","99220")
 
@@ -26,7 +54,6 @@ observeEvent(input$example_data,{
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
                             value = setup() )
-  
 })
 
 observeEvent(input$get_data_qw, {
@@ -41,7 +68,6 @@ observeEvent(input$get_data_qw, {
                      type = "error")
   }
   
-  rawData_data$site_meta <-  site_info
   rawData_data$available_data <- data_available(site_id)
   
   pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
@@ -61,21 +87,18 @@ observeEvent(input$get_data_qw, {
 })
 
 observeEvent(input$get_data_dv, {
-  
+
   rawData_data$example_data <- FALSE
   
   site_id <- input$siteID
-  parameter_cd <- input$pcode
-  stat_cd <- input$statcd
-  
+
   site_info <- site_summary(site_id)
   
   pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
-    filter(!is.na(parm_cd)) %>% 
-    pull(parm_cd)
-  
-  rawData_data$p_code_dv <- pcodes_dv
-  
+    filter(!is.na(parm_cd))
+
+  rawData_data$p_code_dv <- pcodes_dv$parm_cd
+  rawData_data$stat_cd <- pcodes_dv$stat_cd
   rawData_data$site_meta <-  site_info
   
   pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
@@ -84,11 +107,6 @@ observeEvent(input$get_data_dv, {
   
   rawData_data$p_code_qw <- pcodes_qw
 
-  if(!any(grepl("GW", site_info$site_tp_cd))){
-    showNotification("The site is not identified as a groundwater site.", 
-                     type = "error")
-  }
-  
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
                             value = setup() )
@@ -97,8 +115,8 @@ observeEvent(input$get_data_dv, {
                    duration = NULL, id = "load")
   
   rawData_data$daily_data <- dataRetrieval::readNWISdv(site_id, 
-                                                       pcodes_dv, 
-                                                       statCd = stat_cd)
+                                                       pcodes_dv$parm_cd, 
+                                                       statCd = pcodes_dv$stat_cd)
   
   
   removeNotification(id = "load")
@@ -109,9 +127,7 @@ observeEvent(input$get_data_ground, {
   rawData_data$example_data <- FALSE
   
   site_id <- input$siteID
-  parameter_cd <- input$pcode
-  stat_cd <- input$statcd
-  
+
   rawData_data$available_data <- data_available(site_id)
   
   site_info <- site_summary(site_id)
@@ -131,8 +147,6 @@ observeEvent(input$get_data_ground, {
   rawData_data$gwl_data <- dataRetrieval::readNWISgwl(site_id)
   
   removeNotification(id = "load2")
-  
-
 })
 
 dvData <- reactive({
@@ -161,41 +175,27 @@ p_code_qw <- reactive({
 
 observe({
   updateRadioButtons(session, "pcode_plot", 
-                            choices = p_code_qw(), selected = p_code_qw())
+                            choices = p_code_qw(), selected = p_code_qw()[1])
 })
 
 p_code_dv <- reactive({
   return(rawData_data$p_code_dv)
 })
 
-observe({
-  updateRadioButtons(session, "pcode", 
-                      choices = p_code_dv(), selected = p_code_dv()[1])
+stat_cd <- reactive({
+  return(rawData_data$stat_cd)
 })
 
-observeEvent(input$get_data_avail,{
-  site_id <- input$siteID
+observe({
+  choices_dv <- p_code_dv()
+  
+  updateRadioButtons(session, inputId = "pcode",
+                    choices = choices_dv, selected = choices_dv[1])
+})
 
-  site_info <- site_summary(site_id)
+observe({
+  choices_st <- stat_cd()
   
-  if(!any(grepl("GW", site_info$site_tp_cd))){
-    showNotification("The site is not identified as a groundwater site.", 
-                     type = "error")
-  }
-  
-  rawData_data$available_data <- data_available(site_id)
-  rawData_data$site_meta <-  site_info
-  
-  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
-    filter(!is.na(parm_cd)) %>% 
-    pull(parm_cd)
-  
-  rawData_data$p_code_qw <- pcodes_qw
-  
-  pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
-    filter(!is.na(parm_cd)) %>% 
-    pull(parm_cd)
-  
-  rawData_data$p_code_dv <- pcodes_dv
-  
+  updateRadioButtons(session, inputId = "statcd",
+                     choices = choices_st, selected = choices_st[1])
 })
