@@ -71,7 +71,7 @@ gwl_plot <- reactive({
 
 gwl_table <- reactive({
   
-  p_code_dv <-  rawData_data[["p_code_dv"]]
+  p_code_dv <-  input$pcode
   stat_cd <- input$statcd
   
   validate(

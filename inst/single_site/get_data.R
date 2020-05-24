@@ -19,6 +19,10 @@ clear_data <- function(){
   rawData_data$site_meta <- NULL
 }
 
+observeEvent(input$clear_data,{
+  clear_data()
+})
+
 observeEvent(input$get_data_avail,{
   
   clear_data()

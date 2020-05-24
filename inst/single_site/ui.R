@@ -23,6 +23,7 @@ sidebar <- dashboardSidebar(
   sidebarMenu(
     textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
     actionButton("get_data_avail", label = "Check Data Options"),
+    actionButton("clear_data", label = "Clear Data"),
     menuItem("Daily Options", icon = icon("th"), tabName = "dailyDat",
              radioButtons("pcode",
                            choices = "62610", 
