@@ -67,6 +67,7 @@ body <- dashboardBody(
          ),
          tabPanel(title = tagList("Groundwater", shiny::icon("bar-chart")),
                   value = "gwl_plot",
+                  radioButtons("flip_plot", label = "Flip y-axis", choices = c(TRUE,FALSE), selected = TRUE, inline = TRUE),
                   ggraph_table_downloaders_1line("gwl_graph", init_text = init_text)
 
          ),

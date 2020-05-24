@@ -119,7 +119,7 @@ weekly_frequency_plot(gw_level_dv,
 weekly_table <- weekly_frequency_table(gw_level_dv, 
                                        date_col = "Date",
                                        value_col = "X_62610_00001",
-                                       approved_col = "X_62610_00001_cd",d)
+                                       approved_col = "X_62610_00001_cd")
 
 head(weekly_table, 10)
 ```
@@ -232,7 +232,7 @@ gwl_plot_all(gw_level_dv,
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
              plot_title = site_title,
-             add_trend = TRUE)
+             add_trend = TRUE, flip_y = FALSE)
 
 site_data_summary(gw_level_dv, "X_62610_00001")
 
@@ -260,7 +260,7 @@ gwl_plot_all(gw_level_dv, gwl_data,
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
              plot_title = site_title,
-             add_trend = TRUE)
+             add_trend = TRUE, flip_y = FALSE)
 
 
 ```
@@ -306,7 +306,8 @@ gwl_plot_all(NULL, gwl_data,
              date_col = "lev_dt",
              value_col = "sl_lev_va",
              approved_col = "lev_age_cd",
-             plot_title = site_title)
+             plot_title = site_title, 
+             flip_y = FALSE)
 
 site_data_summary(gwl_data, "sl_lev_va")
 ```
@@ -320,7 +321,8 @@ gwl_plot_all(NULL, gwl_data,
              date_col = "lev_dt",
              value_col = "sl_lev_va",
              approved_col = "lev_age_cd",
-             plot_title = site_title)
+             plot_title = site_title, 
+             flip_y = FALSE)
 
 
 ```

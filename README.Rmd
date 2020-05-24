@@ -83,7 +83,7 @@ gwl_plot_all(dv, gwl_data,
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
              plot_title = "L2701_example_data", 
-             add_trend = TRUE)
+             add_trend = TRUE, flip_y = FALSE)
 
 Sc_Cl_plot(qw_data, "L2701_example_data")
 trend_plot(qw_data, plot_title = "L2701_example_data")

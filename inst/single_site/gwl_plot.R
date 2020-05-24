@@ -63,7 +63,8 @@ gwl_plot <- reactive({
                             approved_col = columns$approved_col,
                             plot_title = plot_title,
                             y_label = columns$y_label,
-                            add_trend = TRUE) 
+                            add_trend = TRUE, 
+                            flip_y = input$flip_plot) 
   
   return(gwl_plot)
   

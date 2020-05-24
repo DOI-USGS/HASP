@@ -226,7 +226,7 @@ kable(daily_summary_table)
 ## Periodic Groundwater Data
 
 ```{r periodicPlotDisplay, eval=FALSE}
-gwl_plot_periodic(gwl_data, plot_title)
+gwl_plot_periodic(gwl_data, plot_title, flip_y = FALSE)
 
 site_data_summary(gwl_data, "sl_lev_va")
 ```
@@ -235,7 +235,7 @@ site_data_summary(gwl_data, "sl_lev_va")
 <tr><td>
 
 ```{r periodicPlot, echo=FALSE}
-gwl_plot_periodic(gwl_data, plot_title)
+gwl_plot_periodic(gwl_data, plot_title, flip_y = FALSE)
 ```
 
 </td><td>
@@ -269,7 +269,8 @@ gwl_plot_all(gw_level_dv,
              value_col = c("X_62610_00001", "sl_lev_va"),
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
-             plot_title = plot_title)
+             plot_title = plot_title, 
+             flip_y = FALSE)
 
 site_data_summary(gw_level_dv, "X_62610_00001")
 ```
@@ -287,7 +288,8 @@ gwl_plot_all(gw_level_dv,
              value_col = c("X_62610_00001", "sl_lev_va"),
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
-             plot_title = plot_title)
+             plot_title = plot_title,
+             flip_y = FALSE)
 
 ```
 
