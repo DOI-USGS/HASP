@@ -38,14 +38,11 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
   gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
     as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
   
-  on_top <- zero_on_top(gwl_data[[value_col]])
-  
   plot_out <- ggplot(data = gwl_data,
          aes_string(x = "year", y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
     geom_point(aes_string(color = approved_col), size = 1) +
-    hasp_framework("Years", y_label, plot_title, 
-                   zero_on_top = on_top, include_y_scale = TRUE) +
+    hasp_framework("Years", y_label, plot_title = plot_title) +
     scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
                        values = c("A" = "blue", "P" = "red"), 
                        labels = c("A" = "Approved",
@@ -136,8 +133,7 @@ gwl_plot_all <- function(gw_level_dv,
       date_col_per <- date_col[1]
       value_col_per <- value_col[1]
       approved_col_per <- approved_col[1]
-      
-      on_top <- zero_on_top(gwl_data[[value_col_per]])
+
     }
     
     if(!all(c(date_col_per, value_col_per, approved_col_per) %in% names(gwl_data))){
@@ -159,18 +155,9 @@ gwl_plot_all <- function(gw_level_dv,
       stop("gw_level_dv data frame doesn't include all specified columns")
     }
     
-    if(!includes_both){
-      on_top <- zero_on_top(gw_level_dv[[value_col_dv]])
-    }
   }
   
   linetype = c('solid', 'dashed')
-  
-  if(includes_both){
-    
-    on_top <- zero_on_top(c(gw_level_dv[[value_col_dv]],
-                            gwl_data[[value_col_per]]))
-  }
   
   if(includes_dv){
     complete_df <- data.frame(Date = seq.Date(from = min(gw_level_dv[[date_col_dv]], na.rm = TRUE),
@@ -227,8 +214,7 @@ gwl_plot_all <- function(gw_level_dv,
   } 
   
   plot_out <- plot_out +
-    hasp_framework("Years", y_label, plot_title, 
-                   zero_on_top = on_top, include_y_scale = TRUE)  +
+    hasp_framework("Years", y_label, plot_title = plot_title)  +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) 
   

@@ -40,7 +40,7 @@ theme_gwl <- function(base_family = "", ...){
 #' @rdname themes
 #' @param x_label character. Label for x-axis.
 #' @param y_label character. Label for y-axis.
-#' @param include_y_scale logical. Include style for y-axis.
+#' @param include_y_scale logical. If \code{TRUE}, include groundwater type style for y-axis. Default is \code{FALSE}.
 #' @param plot_title character. Title for plot.
 #' @param zero_on_top logical. If zero_on_top is \code{TRUE}, there is no padding
 #' at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.
@@ -56,7 +56,7 @@ theme_gwl <- function(base_family = "", ...){
 #'                     plot_title)
 hasp_framework <- function(x_label, y_label,
                            plot_title, 
-                           include_y_scale = TRUE, 
+                           include_y_scale = FALSE, 
                            zero_on_top = TRUE){
   
   if(is.na(zero_on_top)) {

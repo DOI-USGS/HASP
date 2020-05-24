@@ -124,7 +124,7 @@ test_that("Periodic gwl plot", {
                                 approved_col = "lev_age_cd",
                                 plot_title = "title", add_trend = FALSE)
   plot_elements <- unlist(lapply(plot_with_gwl$layers, function(x) {names(x$data)}))
-  expect_true(all(c("lev_dt", "sl_lev_va", "year", "y") %in%
+  expect_true(all(c("lev_dt", "sl_lev_va", "year") %in%
                     plot_elements))
   
 })
