@@ -63,11 +63,6 @@ observeEvent(input$get_data_qw, {
   site_id <- input$siteID
   site_info <- site_summary(site_id)
   
-  if(!any(grepl("GW", site_info$site_tp_cd))){
-    showNotification("The site is not identified as a groundwater site.", 
-                     type = "error")
-  }
-  
   rawData_data$available_data <- data_available(site_id)
   
   pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
@@ -79,8 +74,7 @@ observeEvent(input$get_data_qw, {
   showNotification("Loading QW", 
                    duration = NULL, id = "load3")
   
-  rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, 
-                                                    pcodes_qw)
+  rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, parameterCd = "All")
   
   removeNotification(id = "load3")
 
