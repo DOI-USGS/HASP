@@ -5,12 +5,12 @@ col_stuff <- reactive({
   
   dv_data <- dvData()
   gwl_data <- gwlData()
-  
+
   includes_gwl <- !is.null(gwl_data) 
   includes_dv <- !is.null(dv_data)
   includes_both <- includes_gwl & includes_dv
   
-  y_label <- dataRetrieval::readNWISpCode( rawData_data[["p_code_dv"]])$parameter_nm
+  y_label <- dataRetrieval::readNWISpCode(input$pcode)$parameter_nm
   
   if(includes_both){
     date_col = c("Date", "lev_dt")
@@ -55,7 +55,7 @@ gwl_plot <- reactive({
 
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
-  
+
   gwl_plot <-  gwl_plot_all(dv_data, 
                             gwl_data, 
                             date_col = columns$date_col,
@@ -71,14 +71,13 @@ gwl_plot <- reactive({
 
 gwl_table <- reactive({
   
-  p_code_dv <-  input$pcode
-  stat_cd <- input$statcd
-  
   validate(
     need(!is.null(rawData_data$daily_data), "Please select a data set")
   )
+  
+  columns <- col_stuff()
 
-  val_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  val_col <- columns$value_col
   gwl_tab <-  site_data_summary(dvData(), 
                                 sum_col = val_col) 
   
