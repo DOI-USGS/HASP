@@ -2,13 +2,31 @@ rawData_data <- reactiveValues(daily_data = NULL,
                                example_data = FALSE,
                                gwl_data = NULL,
                                qw_data = NULL,
-                               p_code_dv = "62610",
+                               p_code_dv = dataRetrieval::readNWISpCode("62610"),
                                stat_cd = "00001",
                                available_data = NULL,
                                site_meta = NULL,
                                p_code_qw = NULL)
 
+clear_data <- function(){
+  rawData_data$gwl_data <- NULL
+  rawData_data$qw_data <- NULL
+  rawData_data$daily_data <- NULL
+  rawData_data$p_code_dv <- NULL
+  rawData_data$stat_cd <- NULL
+  rawData_data$p_code_qw <- NULL
+  rawData_data$available_data <- NULL
+  rawData_data$site_meta <- NULL
+}
+
+observeEvent(input$clear_data,{
+  clear_data()
+})
+
 observeEvent(input$get_data_avail,{
+  
+  clear_data()
+  
   site_id <- input$siteID
   
   site_info <- site_summary(site_id)
@@ -30,18 +48,21 @@ observeEvent(input$get_data_avail,{
   pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
     filter(!is.na(parm_cd))
 
-  rawData_data$p_code_dv <- pcodes_dv$parm_cd
-  rawData_data$stat_cd <- pcodes_dv$stat_cd
+  rawData_data$p_code_dv <- dataRetrieval::readNWISpCode(pcodes_dv$parm_cd)
+  rawData_data$stat_cd <- unique(pcodes_dv$stat_cd)
   
 })
 
 observeEvent(input$example_data,{
+  
+  clear_data()
+  
   rawData_data$example_data <- TRUE
   rawData_data$daily_data <- HASP::L2701_example_data$Daily
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
   
-  rawData_data$p_code_dv <-  "62610"
+  rawData_data$p_code_dv <-  dataRetrieval::readNWISpCode("62610")
   
   rawData_data$stat_cd <- "00001"
   rawData_data$p_code_qw <- c("00095","90095","00940","99220")
@@ -91,8 +112,8 @@ observeEvent(input$get_data_dv, {
   pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
     filter(!is.na(parm_cd))
 
-  rawData_data$p_code_dv <- pcodes_dv$parm_cd
-  rawData_data$stat_cd <- pcodes_dv$stat_cd
+  rawData_data$p_code_dv <- dataRetrieval::readNWISpCode(pcodes_dv$parm_cd)
+  rawData_data$stat_cd <- unique(pcodes_dv$stat_cd)
   rawData_data$site_meta <-  site_info
   
   pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
@@ -110,7 +131,7 @@ observeEvent(input$get_data_dv, {
   
   rawData_data$daily_data <- dataRetrieval::readNWISdv(site_id, 
                                                        pcodes_dv$parm_cd, 
-                                                       statCd = pcodes_dv$stat_cd)
+                                                       statCd = unique(pcodes_dv$stat_cd))
   
   
   removeNotification(id = "load")
@@ -182,9 +203,9 @@ stat_cd <- reactive({
 
 observe({
   choices_dv <- p_code_dv()
-  
-  updateRadioButtons(session, inputId = "pcode",
-                    choices = choices_dv, selected = choices_dv[1])
+
+  updateRadioButtons(session, inputId = "pcode",choiceNames = choices_dv$parameter_nm,
+                    choiceValues = choices_dv$parameter_cd, selected = choices_dv$parameter_cd[1])
 })
 
 observe({

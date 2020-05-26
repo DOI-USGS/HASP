@@ -10,7 +10,8 @@ gwl_plot_periodic(
   plot_title = "",
   date_col = "lev_dt",
   value_col = "sl_lev_va",
-  approved_col = "lev_age_cd"
+  approved_col = "lev_age_cd",
+  flip_y = TRUE
 )
 
 gwl_plot_all(
@@ -21,7 +22,8 @@ gwl_plot_all(
   approved_col,
   y_label = "GWL",
   plot_title = "",
-  add_trend = FALSE
+  add_trend = FALSE,
+  flip_y = TRUE
 )
 }
 \arguments{
@@ -29,14 +31,15 @@ gwl_plot_all(
 
 \item{plot_title}{character}
 
-\item{date_col}{Vector of date column names. It is assumed if there are 2 values, 
-that the first is associated with gwl_data and the second is gw_level_dv}
+\item{date_col}{name of date column. Default is "lev_dt".}
 
-\item{value_col}{Vector of value column names. It is assumed if there are 2 values, 
-that the first is associated with gwl_data and the second is gw_level_dv.}
+\item{value_col}{name of value column. Default is "sl_lev_va".}
 
-\item{approved_col}{Vector of approval column names. It is assumed if there are 2 values, 
-that the first is associated with gwl_data and the second is gw_level_dv.}
+\item{approved_col}{name of column to get provisional/approved status.
+Default is "lev_age_cd".}
+
+\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+Default is \code{TRUE}.}
 
 \item{gw_level_dv}{daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.}
 
@@ -55,7 +58,7 @@ Funtion to create the periodic groundwater data plot.
 # Using package example data:
 gwl_data <- L2701_example_data$Discrete
 plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-gwl_plot_periodic(gwl_data, plot_title)
+gwl_plot_periodic(gwl_data, plot_title, flip_y = FALSE)
 # site <- "263819081585801"
 parameterCd <- "62610"
 # statCd <- "00001"
@@ -76,7 +79,7 @@ gwl_plot_all(gw_level_dv,
              date_col = date_col, 
              value_col = value_col,
              approved_col = approved_col,
-             plot_title) 
+             plot_title, flip_y = FALSE) 
 
 date_col = c("Date", "lev_dt")
 value_col = c("X_62610_00001", "sl_lev_va")
@@ -87,7 +90,7 @@ gwl_plot_all(gw_level_dv,
              date_col = date_col, 
              value_col = value_col,
              approved_col = approved_col,
-             plot_title, 
+             plot_title, flip_y = FALSE,
              add_trend = TRUE)
              
 gwl_plot_all(NULL, 
@@ -95,6 +98,6 @@ gwl_plot_all(NULL,
              date_col = "lev_dt", 
              value_col = "sl_lev_va",
              approved_col = "lev_age_cd",
-             plot_title)
+             plot_title, flip_y = FALSE)
 
 }

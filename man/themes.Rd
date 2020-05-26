@@ -11,7 +11,7 @@ hasp_framework(
   x_label,
   y_label,
   plot_title,
-  include_y_scale = TRUE,
+  include_y_scale = FALSE,
   zero_on_top = TRUE
 )
 }
@@ -26,7 +26,7 @@ hasp_framework(
 
 \item{plot_title}{character. Title for plot.}
 
-\item{include_y_scale}{logical. Include style for y-axis.}
+\item{include_y_scale}{logical. If \code{TRUE}, include groundwater type style for y-axis. Default is \code{FALSE}.}
 
 \item{zero_on_top}{logical. If zero_on_top is \code{TRUE}, there is no padding
 at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.}
