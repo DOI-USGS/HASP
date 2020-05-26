@@ -58,7 +58,7 @@ gwl_plot_all(dv, gwl_data,
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
              plot_title = "L2701_example_data", 
-             add_trend = TRUE)
+             add_trend = TRUE, flip_y = FALSE)
 ```
 
 ![](man/figures/README-graphs-2.png)<!-- -->
