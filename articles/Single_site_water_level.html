@@ -224,7 +224,7 @@ body {
 <span class="no">weekly_table</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/weekly_frequency_table.html">weekly_frequency_table</a></span>(<span class="no">gw_level_dv</span>,
                                        <span class="kw">date_col</span> <span class="kw">=</span> <span class="st">"Date"</span>,
                                        <span class="kw">value_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001"</span>,
-                                       <span class="kw">approved_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001_cd"</span>,<span class="no">d</span>)
+                                       <span class="kw">approved_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001_cd"</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">weekly_table</span>, <span class="fl">10</span>)</pre></body></html></div>
 <table class="table"><tr>
@@ -482,7 +482,7 @@ body {
              <span class="kw">approved_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001_cd"</span>,
                               <span class="st">"lev_age_cd"</span>),
              <span class="kw">plot_title</span> <span class="kw">=</span> <span class="no">site_title</span>,
-             <span class="kw">add_trend</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+             <span class="kw">add_trend</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">flip_y</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
 <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span>(<span class="no">gw_level_dv</span>, <span class="st">"X_62610_00001"</span>)
 
@@ -556,7 +556,8 @@ body {
              <span class="kw">date_col</span> <span class="kw">=</span> <span class="st">"lev_dt"</span>,
              <span class="kw">value_col</span> <span class="kw">=</span> <span class="st">"sl_lev_va"</span>,
              <span class="kw">approved_col</span> <span class="kw">=</span> <span class="st">"lev_age_cd"</span>,
-             <span class="kw">plot_title</span> <span class="kw">=</span> <span class="no">site_title</span>)
+             <span class="kw">plot_title</span> <span class="kw">=</span> <span class="no">site_title</span>,
+             <span class="kw">flip_y</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
 <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span>(<span class="no">gwl_data</span>, <span class="st">"sl_lev_va"</span>)</pre></body></html></div>
 <table class="table"><tr>
