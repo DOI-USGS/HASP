@@ -24,6 +24,7 @@ sidebar <- dashboardSidebar(
     textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
     actionButton("get_data_avail", label = "Check Data Options"),
     actionButton("clear_data", label = "Clear Data"),
+    radioButtons("flip_plot", label = "Flip y-axis", choices = c(TRUE,FALSE), selected = TRUE, inline = TRUE),
     menuItem("Daily Options", icon = icon("th"), tabName = "dailyDat",
              radioButtons("pcode", 
                           choiceNames = "Groundwater level above NGVD 1929, feet",
@@ -67,7 +68,6 @@ body <- dashboardBody(
          ),
          tabPanel(title = tagList("Groundwater", shiny::icon("bar-chart")),
                   value = "gwl_plot",
-                  radioButtons("flip_plot", label = "Flip y-axis", choices = c(TRUE,FALSE), selected = TRUE, inline = TRUE),
                   ggraph_table_downloaders_1line("gwl_graph", init_text = init_text)
 
          ),

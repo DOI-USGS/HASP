@@ -167,7 +167,8 @@ week_plot <- reactive({
                                       date_col = "Date",
                                       value_col = value_col,
                                       approved_col = approv_col,
-                                      plot_title = plot_title) 
+                                      plot_title = plot_title, 
+                                      flip_y = input$flip_plot) 
   
   return(week_plot)
   
@@ -254,7 +255,8 @@ year2_plot <- reactive({
                                      approved_col = approv_col,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
-                                     month_breaks = TRUE)
+                                     month_breaks = TRUE, 
+                                     flip_y = input$flip_plot)
  
   
   
@@ -333,7 +335,8 @@ month_plot <- reactive({
                                         date_col = "Date",
                                         value_col = value_col,
                                         approved_col = approv_col,
-                                        plot_title = plot_title) 
+                                        plot_title = plot_title, 
+                                        flip_y = input$flip_plot) 
   
   
   return(month_plot)
