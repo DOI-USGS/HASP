@@ -80,11 +80,11 @@ test_that("Weekly frequency plot", {
   
 })
 
-test_that("Periodic gwl plot", {
+test_that("Field gwl plot", {
   
   gwl_data <- L2701_example_data$Discrete
   plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-  plot_out <- gwl_plot_periodic(gwl_data, plot_title)
+  plot_out <- gwl_plot_field(gwl_data, plot_title)
   
   dv <- L2701_example_data$Daily
   plot2 <- gwl_plot_all(dv, gwl_data,

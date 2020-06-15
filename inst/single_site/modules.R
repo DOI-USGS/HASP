@@ -46,7 +46,7 @@ graph_table_download_code <- function(input, output, session,
   output$plot <- renderPlot({
     
     validate(
-      need(!is.null(raw_data()), "Please select a data set")
+      need((raw_data()), "Please select a data set")
     )
     
     shinyAce::updateAceEditor(session, editorId = "code", value = code_out() )

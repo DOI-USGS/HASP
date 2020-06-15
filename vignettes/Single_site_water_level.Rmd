@@ -78,7 +78,7 @@ gw_level_dv <- readNWISdv(siteID,
                           parameterCd,
                           statCd = statCd)
 
-# Periodically measured:
+# Field GWL measured:
 gwl_data <- readNWISgwl(siteID)
 
 ```
@@ -94,7 +94,7 @@ statCd <- "00001"
 
 # Daily
 gw_level_dv <-  L2701_example_data$Daily
-# Periodic
+# Field
 gwl_data <- L2701_example_data$Discrete
 
 site_title <- "L -2701\n263819081585801"
@@ -298,7 +298,7 @@ kable(trend_result, digits = 1)
 
 </td></tr> </table>
 
-### Periodic values
+### Field GWL values
 
 ```{r manual, eval=FALSE}
 gwl_plot_all(NULL, gwl_data,

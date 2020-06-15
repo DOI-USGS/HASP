@@ -1,5 +1,11 @@
 col_stuff <- reactive({
 
+  validate(
+    need(!is.null(rawData_data$daily_data) | 
+           !is.null(rawData_data$gwl_data),
+         "Please select a data set")
+  )
+  
   p_code_dv <-  input$pcode
   val_col_per <- input$gwl_vals
   
@@ -39,13 +45,16 @@ col_stuff <- reactive({
   return(list(date_col = date_col,
               value_col = value_col,
               approved_col = approved_col,
-              y_label = y_label))
+              y_label = y_label,
+              includes_both = includes_both))
 })
 
 gwl_plot <- reactive({
-  
+
   validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data) | 
+           !is.null(rawData_data$gwl_data),
+         "Please select a data set")
   )
   
   dv_data <- dvData()
@@ -73,12 +82,13 @@ gwl_plot <- reactive({
 gwl_table <- reactive({
   
   validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data),
+         "Please select a daily data set")
   )
   
   columns <- col_stuff()
 
-  val_col <- columns$value_col
+  val_col <- columns$value_col[1]
   gwl_tab <-  site_data_summary(dvData(), 
                                 sum_col = val_col) 
   
@@ -153,11 +163,16 @@ week_plot <- reactive({
   
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
-  week_plot <-  weekly_frequency_plot(dv_data, 
+  
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  
+    week_plot <-  weekly_frequency_plot(dv_data, 
                                       date_col = "Date",
                                       value_col = value_col,
                                       approved_col = approv_col,
-                                      plot_title = plot_title) 
+                                      plot_title = plot_title, 
+                                      y_axis_label = y_label,
+                                      flip_y = input$flip_plot) 
   
   return(week_plot)
   
@@ -238,13 +253,16 @@ year2_plot <- reactive({
   
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
                                      date_col = "Date",
                                      value_col = value_col,
                                      approved_col = approv_col,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
-                                     month_breaks = TRUE)
+                                     month_breaks = TRUE, 
+                                     y_axis_label = y_label,
+                                     flip_y = input$flip_plot)
  
   
   
@@ -319,11 +337,15 @@ month_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         date_col = "Date",
                                         value_col = value_col,
                                         approved_col = approv_col,
-                                        plot_title = plot_title) 
+                                        plot_title = plot_title, 
+                                        y_axis_label = y_label,
+                                        flip_y = input$flip_plot) 
   
   
   return(month_plot)

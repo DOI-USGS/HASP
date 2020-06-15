@@ -11,7 +11,8 @@ monthly_frequency_plot(
   approved_col,
   plot_title = "",
   plot_range = c("Past year"),
-  y_axis_label = ""
+  y_axis_label = "",
+  flip_y = TRUE
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ last year of data, or "Calendar year" to use the current calendar year, beginnin
 in January.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
+
+\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+Default is \code{TRUE}.}
 }
 \value{
 a ggplot with rectangles representing the historical monthly percentile,
@@ -52,4 +56,13 @@ monthly_frequency <- monthly_frequency_plot(gw_level_dv,
                                              approved_col = "X_62610_00001_cd",
                                              plot_title = "L2701 Groundwater Level")
 monthly_frequency
+
+monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
+                                             date_col = "Date",
+                                             value_col = "X_62610_00001",
+                                             approved_col = "X_62610_00001_cd",
+                                             plot_title = "L2701 Groundwater Level", 
+                                             flip_y = FALSE)
+monthly_frequency_flip 
+
 }

@@ -11,7 +11,8 @@ weekly_frequency_plot(
   approved_col,
   plot_range = c("Past year", "Calendar year"),
   plot_title = "",
-  y_axis_label = ""
+  y_axis_label = "",
+  flip_y = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ in January.}
 \item{plot_title}{the title to use on the plot}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
+
+\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+Default is \code{TRUE}.}
 }
 \value{
 a ggplot object with rectangles representing the historical weekly percentiles,
@@ -50,5 +54,11 @@ weekly_frequency_plot(gw_level_dv,
                       date_col = "Date",
                       value_col = "X_62610_00001",
                       approved_col = "X_62610_00001_cd")
+                      
+weekly_frequency_plot(gw_level_dv, 
+                      date_col = "Date",
+                      value_col = "X_62610_00001",
+                      approved_col = "X_62610_00001_cd",
+                      flip_y = FALSE)
 
 }

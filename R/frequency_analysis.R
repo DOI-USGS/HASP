@@ -28,7 +28,7 @@
 #'                                              date_col = "Date",
 #'                                              value_col = "X_62610_00001",
 #'                                              approved_col = "X_62610_00001_cd")
-#' 
+#' head(monthly_frequency)
 monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_col) {
   
   year <- lev_dt <- month <- week <- sl_lev_va <- ".dplyr"
@@ -77,7 +77,8 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #' in January.
 #' @param plot_title the title to use on the plot
 #' @param y_axis_label the label used for the y-axis of the plot.
-#' 
+#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' Default is \code{TRUE}. 
 #' @return a ggplot with rectangles representing the historical monthly percentile,
 #' black triangles representing the hisotorical monthly median, and red diamonds
 #' showing the last year of groundwater level measurements.
@@ -104,13 +105,23 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #'                                              approved_col = "X_62610_00001_cd",
 #'                                              plot_title = "L2701 Groundwater Level")
 #' monthly_frequency
+#' 
+#' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
+#'                                              date_col = "Date",
+#'                                              value_col = "X_62610_00001",
+#'                                              approved_col = "X_62610_00001_cd",
+#'                                              plot_title = "L2701 Groundwater Level", 
+#'                                              flip_y = FALSE)
+#' monthly_frequency_flip 
+#' 
 monthly_frequency_plot <- function(gw_level_dv, 
                                    date_col, 
                                    value_col, 
                                    approved_col,
                                    plot_title = "",
                                    plot_range = c("Past year"),
-                                   y_axis_label = "") {
+                                   y_axis_label = "",
+                                   flip_y = TRUE) {
   
   lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
     plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
@@ -204,7 +215,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   y_label <- y_axis_label
     
   # Plot
-  plot <- ggplot() +
+  plot_out <- ggplot() +
     geom_rect(data = site_statistics_plot,
               aes(xmin = plot_month,
                   xmax = plot_month_last,
@@ -233,8 +244,11 @@ monthly_frequency_plot <- function(gw_level_dv,
                                                     color = point_colors)),
            shape = FALSE,
            fill = guide_legend(order = 2)) 
-  
-  return(plot)
+  if(flip_y){
+    plot_out <- plot_out +
+      scale_y_continuous(trans = "reverse")
+  }
+  return(plot_out)
 }
 
 #' Create a table of weekly frequency analysis
@@ -267,7 +281,7 @@ monthly_frequency_plot <- function(gw_level_dv,
 #'                                            date_col = "Date",
 #'                                            value_col = "X_62610_00001",
 #'                                            approved_col = "X_62610_00001_cd")
-
+#' head(weekly_frequency)
 weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_col) {
   
   Date <- gw_level <- ".dplyr"
@@ -319,7 +333,8 @@ weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_co
 #' in January.
 #' @param plot_title the title to use on the plot
 #' @param y_axis_label the label used for the y-axis of the plot.
-#' 
+#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' Default is \code{TRUE}. 
 #' @return a ggplot object with rectangles representing the historical weekly percentiles,
 #' and points representing the historical median and daily values
 #' 
@@ -343,12 +358,19 @@ weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_co
 #'                       date_col = "Date",
 #'                       value_col = "X_62610_00001",
 #'                       approved_col = "X_62610_00001_cd")
+#'                       
+#' weekly_frequency_plot(gw_level_dv, 
+#'                       date_col = "Date",
+#'                       value_col = "X_62610_00001",
+#'                       approved_col = "X_62610_00001_cd",
+#'                       flip_y = FALSE)
 #' 
 weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col,
                                   plot_range = c("Past year",
                                                  "Calendar year"),
                                   plot_title = "", 
-                                  y_axis_label = "") {
+                                  y_axis_label = "",
+                                  flip_y = TRUE) {
   
   Date <- nYears <- minMed <- maxMed <- name <- value <- group <-
     plot_week_med <- p50 <- gw_code <- gw_level <- x <- y <- 
@@ -457,7 +479,7 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   point_data$group <- factor(point_data$group, 
                              levels = order_groups)
   # Plot
-  plot <- ggplot() +
+  plot_out <- ggplot() +
     geom_rect(data = site_statistics_plot,
               aes(xmin = plot_week,
                   xmax = plot_week_last,
@@ -484,7 +506,7 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
           aspect.ratio = NULL)
   
   if(all(levels(point_data$group) %in% unique(point_data$group))){
-    plot <- plot +
+    plot_out <- plot_out +
       guides(color = guide_legend(order = 1,
                                 override.aes = list(shape = c(NA, NA, 17),
                                                     linetype = c("solid", "solid", "blank"))),
@@ -492,7 +514,7 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
            fill = guide_legend(order = 2)) 
   } else {
     #TODO: be smarter:
-    plot <- plot +
+    plot_out <- plot_out +
       guides(color = guide_legend(order = 1,
                                   override.aes = list(shape = c(NA, 17),
                                                       linetype = c("solid",  "blank"))),
@@ -500,7 +522,12 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
              fill = guide_legend(order = 2))     
   }
   
-  return(plot)
+  if(flip_y){
+    plot_out <- plot_out +
+      scale_y_continuous(trans = "reverse")
+  }
+  
+  return(plot_out)
   
 }
 
@@ -516,7 +543,8 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
 #' @param month_breaks a logical indicating whether to use monthly breaks for the plot
 #' @param plot_title the title to use on the plot
 #' @param y_axis_label the label to use for the y axis
-#'
+#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' Default is \code{TRUE}. 
 #' @return a ggplot object with a ribbon indicating the historical daily range,
 #' the historical daily mean or median, and approved and provisional
 #' daily data for the last two years
@@ -544,6 +572,14 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
 #'                    month_breaks = TRUE,
 #'                    historical_stat = "median")
 #' 
+#' daily_gwl_2yr_plot(gw_level_dv,
+#'                    date_col = "Date",
+#'                    value_col = "X_62610_00001",
+#'                    approved_col = "X_62610_00001_cd", 
+#'                    plot_title = "Groundwater Level", 
+#'                    month_breaks = TRUE,
+#'                    historical_stat = "median",
+#'                    flip_y = FALSE)
 daily_gwl_2yr_plot <- function(gw_level_dv, 
                                date_col,
                                value_col,
@@ -551,7 +587,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
                                historical_stat = c("mean", "median"), 
                                month_breaks = FALSE,
                                plot_title = "",
-                               y_axis_label = "") {
+                               y_axis_label = "",
+                               flip_y = TRUE) {
   
   Date <- gw_level_cd <- J <- gw_level <- name <- group <- value <- gw_level_cd <- middle <-
     ".dplyr"
@@ -632,7 +669,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
   
   y_label <- y_axis_label
   
-  plot <- ggplot() +
+  plot_out <- ggplot() +
     geom_ribbon(data = plot_data, 
                 aes(x = Date, ymin = min, ymax = max, fill = group)) +
     geom_line(data = line_data, 
@@ -648,14 +685,19 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
            fill = guide_legend(order = 2)) 
   
   if(month_breaks) {
-    plot <- plot +
+    plot_out <- plot_out +
       geom_vline(xintercept = seq.Date(plot_start, plot_end, by = "month"),
                  color = "grey80") +
       theme(axis.ticks.x = element_blank())
     
   } 
   
-  return(plot)
+  if(flip_y){
+    plot_out <- plot_out +
+      scale_y_continuous(trans = "reverse")
+  }
+  
+  return(plot_out)
   
 }
 
