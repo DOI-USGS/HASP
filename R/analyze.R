@@ -203,6 +203,7 @@ composite_data <- function(x, sum_col, num_years){
 normalized_data <- function(x, sum_col, num_years){
   
   year <- site_no <- n_sites_year <- mean_site <- max_site <- min_site <- x_norm <- med_site <- name <- ".dplyr"
+  mean_med <- max_med <- min_med <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
