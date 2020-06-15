@@ -190,7 +190,7 @@ body {
                           <span class="no">parameterCd</span>,
                           <span class="kw">statCd</span> <span class="kw">=</span> <span class="no">statCd</span>)
 
-<span class="co"># Periodically measured:</span>
+<span class="co"># Field GWL measured:</span>
 <span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span>(<span class="no">siteID</span>)</pre></body></html></div>
 </td>
 <td>
@@ -201,7 +201,7 @@ body {
 
 <span class="co"># Daily</span>
 <span class="no">gw_level_dv</span> <span class="kw">&lt;-</span>  <span class="no">L2701_example_data</span>$<span class="no">Daily</span>
-<span class="co"># Periodic</span>
+<span class="co"># Field</span>
 <span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="no">L2701_example_data</span>$<span class="no">Discrete</span>
 
 <span class="no">site_title</span> <span class="kw">&lt;-</span> <span class="st">"L -2701\n263819081585801"</span></pre></body></html></div>
@@ -473,7 +473,7 @@ body {
 <a href="#daily-value-trends" class="anchor"></a>Daily value trends</h3>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">y_label</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span>(<span class="st">"62610"</span>)$<span class="no">parameter_nm</span>
 
-<span class="fu"><a href="../reference/gwl_periodic.html">gwl_plot_all</a></span>(<span class="no">gw_level_dv</span>,
+<span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span>(<span class="no">gw_level_dv</span>,
              <span class="no">gwl_data</span>,
              <span class="kw">y_label</span> <span class="kw">=</span> <span class="no">y_label</span>,
              <span class="kw">date_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Date"</span>, <span class="st">"lev_dt"</span>),
@@ -548,10 +548,10 @@ body {
 </td>
 </tr></table>
 </div>
-<div id="periodic-values" class="section level3">
+<div id="field-gwl-values" class="section level3">
 <h3 class="hasAnchor">
-<a href="#periodic-values" class="anchor"></a>Periodic values</h3>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/gwl_periodic.html">gwl_plot_all</a></span>(<span class="kw">NULL</span>, <span class="no">gwl_data</span>,
+<a href="#field-gwl-values" class="anchor"></a>Field GWL values</h3>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span>(<span class="kw">NULL</span>, <span class="no">gwl_data</span>,
              <span class="kw">y_label</span> <span class="kw">=</span> <span class="no">y_label</span>,
              <span class="kw">date_col</span> <span class="kw">=</span> <span class="st">"lev_dt"</span>,
              <span class="kw">value_col</span> <span class="kw">=</span> <span class="st">"sl_lev_va"</span>,

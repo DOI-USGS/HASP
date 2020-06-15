@@ -191,7 +191,7 @@ body {
                           <span class="no">parameterCd</span>,
                           <span class="kw">statCd</span> <span class="kw">=</span> <span class="no">statCd</span>)
 
-<span class="co"># Periodically measured:</span>
+<span class="co"># Field measured:</span>
 <span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span>(<span class="no">siteID</span>)
 
 <span class="co"># Water quality data:</span>
@@ -206,7 +206,7 @@ body {
 
 <span class="co"># Daily</span>
 <span class="no">gw_level_dv</span> <span class="kw">&lt;-</span>  <span class="no">L2701_example_data</span>$<span class="no">Daily</span>
-<span class="co"># Periodic</span>
+<span class="co"># Field</span>
 <span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="no">L2701_example_data</span>$<span class="no">Discrete</span>
 <span class="co"># QW:</span>
 <span class="no">qw_data</span> <span class="kw">&lt;-</span> <span class="no">L2701_example_data</span>$<span class="no">QW</span>
@@ -437,15 +437,15 @@ body {
 </td>
 </tr></table>
 </div>
-<div id="periodic-groundwater-data" class="section level2">
+<div id="field-groundwater-level-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#periodic-groundwater-data" class="anchor"></a>Periodic Groundwater Data</h2>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/gwl_periodic.html">gwl_plot_periodic</a></span>(<span class="no">gwl_data</span>, <span class="no">plot_title</span>, <span class="kw">flip_y</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<a href="#field-groundwater-level-data" class="anchor"></a>Field Groundwater Level Data</h2>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_field</a></span>(<span class="no">gwl_data</span>, <span class="no">plot_title</span>, <span class="kw">flip_y</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
 <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span>(<span class="no">gwl_data</span>, <span class="st">"sl_lev_va"</span>)</pre></body></html></div>
 <table class="table"><tr>
 <td>
-<p><img src="Single_site_combo_data_files/figure-html/periodicPlot-1.png" width="576"></p>
+<p><img src="Single_site_combo_data_files/figure-html/fieldPlot-1.png" width="576"></p>
 </td>
 <td>
 <table class="table">
@@ -473,7 +473,7 @@ body {
 <a href="#period-of-record---all-data-types" class="anchor"></a>Period of Record - All Data Types</h3>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">y_label</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span>(<span class="st">"62610"</span>)$<span class="no">parameter_nm</span>
 
-<span class="fu"><a href="../reference/gwl_periodic.html">gwl_plot_all</a></span>(<span class="no">gw_level_dv</span>,
+<span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span>(<span class="no">gw_level_dv</span>,
              <span class="no">gwl_data</span>,
              <span class="kw">y_label</span> <span class="kw">=</span> <span class="no">y_label</span>,
              <span class="kw">date_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Date"</span>, <span class="st">"lev_dt"</span>),

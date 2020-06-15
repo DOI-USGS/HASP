@@ -154,7 +154,8 @@
   <span class='no'>approved_col</span>,
   <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>plot_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Past year"</span>),
-  <span class='kw'>y_axis_label</span> <span class='kw'>=</span> <span class='st'>""</span>
+  <span class='kw'>y_axis_label</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>flip_y</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -190,6 +191,11 @@ in January.</p></td>
       <th>y_axis_label</th>
       <td><p>the label used for the y-axis of the plot.</p></td>
     </tr>
+    <tr>
+      <th>flip_y</th>
+      <td><p>logical. If <code>TRUE</code>, flips the y axis so that the smallest number is on top.
+Default is <code>TRUE</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -210,7 +216,15 @@ showing the last year of groundwater level measurements.</p>
                                              <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>,
                                              <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>,
                                              <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>"L2701 Groundwater Level"</span>)
-<span class='no'>monthly_frequency</span></div><div class='img'><img src='monthly_frequency_plot-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>monthly_frequency</span></div><div class='img'><img src='monthly_frequency_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>monthly_frequency_flip</span> <span class='kw'>&lt;-</span> <span class='fu'>monthly_frequency_plot</span>(<span class='no'>gw_level_dv</span>,
+                                             <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>,
+                                             <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>,
+                                             <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>,
+                                             <span class='kw'>plot_title</span> <span class='kw'>=</span> <span class='st'>"L2701 Groundwater Level"</span>,
+                                             <span class='kw'>flip_y</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>monthly_frequency_flip</span></div><div class='img'><img src='monthly_frequency_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

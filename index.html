@@ -108,7 +108,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dataRetrieval</span>)
 <span class="no">site</span> <span class="kw">&lt;-</span> <span class="st">"263819081585801"</span>
 
-<span class="co">#Periodic data:</span>
+<span class="co">#Field GWL data:</span>
 <span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span>(<span class="no">site</span>)
 
 <span class="co"># Daily data:</span>
@@ -133,7 +133,7 @@
                        <span class="kw">y_axis_label</span> <span class="kw">=</span> <span class="no">y_axis_label</span>)</pre></div>
 <p><img src="reference/figures/README-graphs-1.png"><!-- --></p>
 <div class="sourceCode" id="cb3"><pre class="r">
-<span class="fu"><a href="reference/gwl_periodic.html">gwl_plot_all</a></span>(<span class="no">dv</span>, <span class="no">gwl_data</span>,
+<span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span>(<span class="no">dv</span>, <span class="no">gwl_data</span>,
              <span class="kw">date_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Date"</span>, <span class="st">"lev_dt"</span>),
              <span class="kw">value_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span>),
              <span class="kw">approved_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001_cd"</span>,
