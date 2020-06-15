@@ -20,7 +20,7 @@ library(HASP)
 library(dataRetrieval)
 site <- "263819081585801"
 
-#Periodic data:
+#Field GWL data:
 gwl_data <- dataRetrieval::readNWISgwl(site)
 
 # Daily data:
