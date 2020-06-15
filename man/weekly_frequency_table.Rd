@@ -33,4 +33,5 @@ weekly_frequency <- weekly_frequency_table(gw_level_dv,
                                            date_col = "Date",
                                            value_col = "X_62610_00001",
                                            approved_col = "X_62610_00001_cd")
+head(weekly_frequency)
 }
