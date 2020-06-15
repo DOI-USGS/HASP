@@ -214,10 +214,15 @@ normalized_data <- function(x, sum_col, num_years){
   year_summaries <- site_data_summary(x, sum_col)
   
   norm_composite <- x %>% 
-    left_join(year_summaries, by = "site_no") %>% 
     group_by(year, site_no) %>% 
-    mutate(med_site = median(!!sym(sum_col), na.rm = TRUE),
-           x_norm = -1*(med_site - mean_site)/(max_site - min_site)) %>% 
+    mutate(med_site = median(!!sym(sum_col), na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    group_by(site_no) %>% 
+    mutate(max_med = max(med_site, na.rm = TRUE),
+           min_med = min(med_site, na.rm = TRUE),
+           mean_med = mean(med_site, na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    mutate(x_norm = -1*(med_site - mean_med)/(max_med - min_med)) %>% 
     ungroup() %>% 
     group_by(year) %>% 
     summarise(mean = mean(x_norm, na.rm = TRUE),
@@ -230,8 +235,6 @@ normalized_data <- function(x, sum_col, num_years){
                          levels = c("median","mean"),
                          labels = c("Median",
                                     "Mean") ))
-  
-  
   
   return(norm_composite)
 }

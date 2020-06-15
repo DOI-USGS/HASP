@@ -126,5 +126,5 @@ test_that("Normalized composite hydrodata", {
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(norm_data$value[1]), 0.04)
+  expect_equal(format_2(norm_data$value[1]), 0.02)
 })
