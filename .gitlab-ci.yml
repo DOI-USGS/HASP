@@ -20,7 +20,7 @@ getready:
   script:
     - mkdir -p $R_LIBS_USER
     - mkdir -p $APT_CACHE
-    - R -e 'install.packages(c("shinycssloaders", "shinydashboard","shinyAce","leaflet", "dataRetrieval", "kableExtra","shiny", "EnvStats", "ggpmisc"), repos = Sys.getenv("CRAN_MIRROR"), lib = Sys.getenv("R_LIBS_USER"))'
+    - R -e 'install.packages(c("shinycssloaders", "shinydashboard","shinyAce","leaflet", "dataRetrieval", "kableExtra","shiny", "EnvStats", "ggpmisc", "openxlsx"), repos = Sys.getenv("CRAN_MIRROR"), lib = Sys.getenv("R_LIBS_USER"))'
   cache:
     paths:
      - $R_LIBS_USER
