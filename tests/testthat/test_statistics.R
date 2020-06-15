@@ -39,8 +39,8 @@ test_that("Weekly frequency table", {
                                 date_col = "Date",
                                 value_col = "X_62610_00001",
                                 approved_col = "X_62610_00001_cd")
-  expect_equal(head(wft$p25, 6), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
-  expect_equal(head(wft$nYears, 6), c(39, 40, 40, 40, 41, 41))
+  expect_equal(as.numeric(head(wft$p25, 6)), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
+  expect_equal(as.numeric(head(wft$nYears, 6)), c(39, 40, 40, 40, 41, 41))
   expect_equal(tail(wft$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
   
 })
@@ -51,8 +51,8 @@ test_that("Monthly frequency table", {
                                  date_col = "lev_dt",
                                  value_col = "sl_lev_va",
                                  approved_col = "lev_age_cd")
-  expect_equal(head(mft$p75, 6), c(-20.3, -22.6, -24.1, -26.2, -29.4, -24.3), tolerance = 0.05)
-  expect_equal(head(mft$nYears, 6), c(22, 28, 26, 33, 28, 30))
+  expect_equal(as.numeric(head(mft$p75, 6)), c(-20.3, -22.6, -24.1, -26.2, -29.4, -24.3), tolerance = 0.05)
+  expect_equal(as.numeric(head(mft$nYears, 6)), c(22, 28, 26, 33, 28, 30))
   expect_equal(tail(mft$maxMed, 6), c(-16.7, -12.3, -15.3, -4.83, -10.8, -16.2), tolerance = 0.05)
   
 })
