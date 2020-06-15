@@ -45,7 +45,8 @@ col_stuff <- reactive({
   return(list(date_col = date_col,
               value_col = value_col,
               approved_col = approved_col,
-              y_label = y_label))
+              y_label = y_label,
+              includes_both = includes_both))
 })
 
 gwl_plot <- reactive({
@@ -80,9 +81,14 @@ gwl_plot <- reactive({
 
 gwl_table <- reactive({
   
+  validate(
+    need(!is.null(rawData_data$daily_data),
+         "Please select a daily data set")
+  )
+  
   columns <- col_stuff()
 
-  val_col <- columns$value_col
+  val_col <- columns$value_col[1]
   gwl_tab <-  site_data_summary(dvData(), 
                                 sum_col = val_col) 
   
