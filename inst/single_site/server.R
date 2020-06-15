@@ -22,50 +22,63 @@ shinyServer(function(input, output, session) {
     escape=FALSE, rownames = FALSE, options = list(dom = "t")
   )
   
+  any_data <- reactive({
+    return(!is.null(rawData_data$daily_data) | 
+    !is.null(rawData_data$gwl_data))
+  })
+  
+  daily_data <- reactive({
+    return(!is.null(rawData_data$daily_data))
+  })
+  
+  qw_data <- reactive({
+    return(!is.null(rawData_data$qw_data))
+  })
+  
   callModule(graph_table_download_code, 'gwl_graph', 
              plot_gg = gwl_plot, 
              table_DT = gwl_table,
              code_out = gwl_plot_out, 
-             raw_data = reactive({rawData_data$daily_data}))
+             raw_data = any_data)
   
   callModule(graph_table_download_code, 'week_graph', 
              plot_gg = week_plot, 
              table_DT = week_table,
              code_out = week_plot_out, 
              table_df = week_table_df,
-             raw_data = reactive({rawData_data$daily_data}))
+             raw_data = daily_data)
   
   callModule(graph_table_download_code, 'month_graph', 
              plot_gg = month_plot, 
              table_DT = month_table,
              code_out = month_plot_out, 
-             raw_data = reactive({rawData_data$daily_data}))
+             raw_data = daily_data)
   
   callModule(graph_table_download_code, 'year2_graph', 
              plot_gg = year2_plot, 
              table_DT = year2_table,
              code_out = year2_plot_out, 
              table_df = year2_table_df,
-             raw_data = reactive({rawData_data$daily_data}))
+             raw_data = daily_data)
   
   callModule(graph_table_download_code, 'chloride_graph', 
              plot_gg = cl_trend_plot, 
              table_DT = cl_trend_table,
              code_out = cl_trend_plot_out, 
-             raw_data = reactive({rawData_data$qw_data}))
+             raw_data = qw_data)
   
   callModule(graph_table_download_code, 'qw_graph', 
              plot_gg = qw1_plot, 
              table_DT = qw1_table,
              code_out = qw1_plot_out, 
-             raw_data = reactive({rawData_data$qw_data}))
+             raw_data = qw_data)
   
   callModule(graph_table_download_code, 'ch_sc_graph', 
              plot_gg = cl_sc_plot, 
              table_DT = cl_sc_table,
              table_df = cl_sc_table_df,
              code_out = cl_sc_plot_out, 
-             raw_data = reactive({rawData_data$qw_data}))
+             raw_data = qw_data)
   
   setup <- reactive({
     

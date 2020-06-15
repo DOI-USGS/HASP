@@ -1,6 +1,6 @@
 #' Single site groundwater level plots and tables
 #' 
-#' Funtion to create the periodic groundwater data plot.
+#' Function to create the field groundwater level data plot.
 #' @export
 #' @param gwl_data data frame returned from dataRetrieval::readNWISgwl
 #' @param plot_title character
@@ -12,7 +12,7 @@
 #' Default is \code{TRUE}.
 #' @import ggplot2
 #' @import dplyr
-#' @rdname gwl_periodic
+#' @rdname gwl_plot_field
 #' 
 #' @examples
 #' 
@@ -22,8 +22,8 @@
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' gwl_plot_periodic(gwl_data, plot_title, flip_y = FALSE)
-gwl_plot_periodic <- function(gwl_data, plot_title = "",
+#' gwl_plot_field(gwl_data, plot_title, flip_y = FALSE)
+gwl_plot_field <- function(gwl_data, plot_title = "",
                               date_col = "lev_dt",
                               value_col = "sl_lev_va",
                               approved_col = "lev_age_cd",
@@ -62,7 +62,7 @@ gwl_plot_periodic <- function(gwl_data, plot_title = "",
 }
 
 
-#' @rdname gwl_periodic
+#' @rdname gwl_plot_field
 #' @export
 #' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
 #' @param add_trend logical. Uses \code{kendell_test_5_20_years}.

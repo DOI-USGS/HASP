@@ -1,5 +1,11 @@
 col_stuff <- reactive({
 
+  validate(
+    need(!is.null(rawData_data$daily_data) | 
+           !is.null(rawData_data$gwl_data),
+         "Please select a data set")
+  )
+  
   p_code_dv <-  input$pcode
   val_col_per <- input$gwl_vals
   
@@ -43,9 +49,11 @@ col_stuff <- reactive({
 })
 
 gwl_plot <- reactive({
-  
+
   validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
+    need(!is.null(rawData_data$daily_data) | 
+           !is.null(rawData_data$gwl_data),
+         "Please select a data set")
   )
   
   dv_data <- dvData()
@@ -71,10 +79,6 @@ gwl_plot <- reactive({
 })
 
 gwl_table <- reactive({
-  
-  validate(
-    need(!is.null(rawData_data$daily_data), "Please select a data set")
-  )
   
   columns <- col_stuff()
 

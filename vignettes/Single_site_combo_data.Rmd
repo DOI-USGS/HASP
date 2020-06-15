@@ -76,7 +76,7 @@ gw_level_dv <- readNWISdv(siteID,
                           parameterCd,
                           statCd = statCd)
 
-# Periodically measured:
+# Field measured:
 gwl_data <- readNWISgwl(siteID)
 
 # Water quality data:
@@ -96,7 +96,7 @@ statCd <- "00001"
 
 # Daily
 gw_level_dv <-  L2701_example_data$Daily
-# Periodic
+# Field
 gwl_data <- L2701_example_data$Discrete
 # QW:
 qw_data <- L2701_example_data$QW
@@ -223,10 +223,10 @@ kable(daily_summary_table)
 
 
 
-## Periodic Groundwater Data
+## Field Groundwater Level Data
 
-```{r periodicPlotDisplay, eval=FALSE}
-gwl_plot_periodic(gwl_data, plot_title, flip_y = FALSE)
+```{r fieldPlotDisplay, eval=FALSE}
+gwl_plot_field(gwl_data, plot_title, flip_y = FALSE)
 
 site_data_summary(gwl_data, "sl_lev_va")
 ```
@@ -234,14 +234,14 @@ site_data_summary(gwl_data, "sl_lev_va")
 <table>
 <tr><td>
 
-```{r periodicPlot, echo=FALSE}
-gwl_plot_periodic(gwl_data, plot_title, flip_y = FALSE)
+```{r fieldPlot, echo=FALSE}
+gwl_plot_field(gwl_data, plot_title, flip_y = FALSE)
 ```
 
 </td><td>
 
-```{r periodicTable, echo=FALSE}
-sitePeriodic <- site_data_summary(gwl_data, 
+```{r fieldTable, echo=FALSE}
+siteField <- site_data_summary(gwl_data, 
                                   "sl_lev_va") %>% 
   select(Minimum = min_site, 	
          `1st` = p25, 
@@ -250,7 +250,7 @@ sitePeriodic <- site_data_summary(gwl_data,
          `3rd` = p75,
          Maximum = max_site)
 
-kable(sitePeriodic, digits = 1)
+kable(siteField, digits = 1)
 
 ```
 

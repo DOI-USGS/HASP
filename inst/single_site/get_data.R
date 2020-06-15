@@ -162,6 +162,7 @@ observeEvent(input$get_data_ground, {
   rawData_data$gwl_data <- dataRetrieval::readNWISgwl(site_id)
   
   removeNotification(id = "load2")
+
 })
 
 dvData <- reactive({
@@ -213,4 +214,13 @@ observe({
   
   updateRadioButtons(session, inputId = "statcd",
                      choices = choices_st, selected = choices_st[1])
+})
+
+observe({
+  gwl_data <- gwlData()
+  
+  if(all(is.na(gwl_data$sl_lev_va))){
+    updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
+  }
+
 })
