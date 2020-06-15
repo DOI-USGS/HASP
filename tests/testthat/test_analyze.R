@@ -1,5 +1,9 @@
 context("Analyze Data")
 
+format_2 <- function(x){
+  return(as.numeric(round(x, digits = 2)))
+}
+
 test_that("Site summaries", {
   aquifer_data <- aquifer_data
 
@@ -12,13 +16,13 @@ test_that("Site summaries", {
                       "p10", "p25", "p75", "p50",     
                       "p90",  "count")))
   
-  expect_equal(round(summary_info2$min_site[1], digits = 2), 3.26)
-  expect_equal(round(summary_info2$max_site[1], digits = 2), 7.9)
-  expect_equal(round(summary_info2$mean_site[1], digits = 2),5.37)
-  expect_equal(round(summary_info2$p10[1], digits = 2), 4.43)
-  expect_equal(round(summary_info2$p25[1], digits = 2), 4.57)
-  expect_equal(round(summary_info2$p75[1], digits = 2), 6.46)
-  expect_equal(round(summary_info2$p90[1], digits = 2), 7.12)
+  expect_equal(format_2(summary_info2$min_site[1]), 3.26)
+  expect_equal(format_2(summary_info2$max_site[1]), 7.9)
+  expect_equal(format_2(summary_info2$mean_site[1]),5.37)
+  expect_equal(format_2(summary_info2$p10[1]), 4.43)
+  expect_equal(format_2(summary_info2$p25[1]), 4.57)
+  expect_equal(format_2(summary_info2$p75[1]), 6.46)
+  expect_equal(format_2(summary_info2$p90[1]), 7.12)
   
   
 })
@@ -89,8 +93,8 @@ test_that("Filter sites", {
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
   freq <- aq_data %>%
-    group_by(site_no) %>% 
-    summarise(nYear = length(unique(year))) 
+    dplyr::group_by(site_no) %>% 
+    dplyr::summarise(nYear = length(unique(year))) 
   
   expect_true(all(freq$nYear >= 30))
   
@@ -122,5 +126,5 @@ test_that("Normalized composite hydrodata", {
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(round(norm_data$value[1], digits = 2), 0.04)
+  expect_equal(format_2(norm_data$value[1]), 0.04)
 })
