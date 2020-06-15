@@ -1,10 +1,6 @@
 pandoc: 2.7.3
 pkgdown: 1.5.1.9000
-pkgdown_sha: d8a449c31f7fa8533268cdcde9e0204a74604b3e
-articles:
-  Priniciple_Aquifers: Priniciple_Aquifers.html
-  Single_basin: Single_basin.html
-  Single_site_combo_data: Single_site_combo_data.html
-  Single_site_water_level: Single_site_water_level.html
-last_built: 2020-06-15T21:48Z
+pkgdown_sha: 42dbedc387fd0e7b88409cbd38486c1efa7820b3
+articles: []
+last_built: 2020-06-15T22:06Z
 

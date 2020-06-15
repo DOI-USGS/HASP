@@ -104,63 +104,77 @@
 <div id="single-site-workflows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#single-site-workflows" class="anchor"></a>Single site workflows:</h3>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">HASP</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dataRetrieval</span>)
-<span class="no">site</span> <span class="kw">&lt;-</span> <span class="st">"263819081585801"</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">HASP</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://pubs.usgs.gov/tm/04/a10">dataRetrieval</a></span>)
+<span class="kw">site</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
 
 <span class="co">#Field GWL data:</span>
-<span class="no">gwl_data</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span>(<span class="no">site</span>)
+<span class="kw">gwl_data</span> <span class="op">&lt;-</span> <span class="kw">dataRetrieval</span>::<span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span>(<span class="kw">site</span>)
 
 <span class="co"># Daily data:</span>
-<span class="no">parameterCd</span> <span class="kw">&lt;-</span> <span class="st">"62610"</span>
-<span class="no">statCd</span> <span class="kw">&lt;-</span> <span class="st">"00001"</span>
-<span class="no">dv</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html">readNWISdv</a></span>(<span class="no">site</span>,
-                                <span class="no">parameterCd</span>,
-                                <span class="kw">statCd</span> <span class="kw">=</span> <span class="no">statCd</span>)
+<span class="kw">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span>
+<span class="kw">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span>
+<span class="kw">dv</span> <span class="op">&lt;-</span> <span class="kw">dataRetrieval</span>::<span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html">readNWISdv</a></span>(<span class="kw">site</span>,
+                                <span class="kw">parameterCd</span>,
+                                statCd = <span class="kw">statCd</span>)
 
 <span class="co"># Water Quality data:</span>
-<span class="no">parameterCd</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span>)
-<span class="no">qw_data</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISqw.html">readNWISqw</a></span>(<span class="no">site</span>,
-                                     <span class="no">parameterCd</span>)</pre></div>
-<div class="sourceCode" id="cb2"><pre class="r">
-<span class="no">y_axis_label</span> <span class="kw">&lt;-</span> <span class="kw pkg">dataRetrieval</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span>(<span class="st">"62610"</span>)$<span class="no">parameter_nm</span>
+<span class="kw">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span>)
+<span class="kw">qw_data</span> <span class="op">&lt;-</span> <span class="kw">dataRetrieval</span>::<span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISqw.html">readNWISqw</a></span>(<span class="kw">site</span>,
+                                     <span class="kw">parameterCd</span>)
+</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
 
-<span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span>(<span class="no">dv</span>,
-                       <span class="kw">date_col</span> <span class="kw">=</span> <span class="st">"Date"</span>,
-                       <span class="kw">value_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001"</span>,
-                       <span class="kw">approved_col</span> <span class="kw">=</span> <span class="st">"X_62610_00001_cd"</span>,
-                       <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>,
-                       <span class="kw">y_axis_label</span> <span class="kw">=</span> <span class="no">y_axis_label</span>)</pre></div>
+<span class="kw">y_axis_label</span> <span class="op">&lt;-</span> <span class="kw">dataRetrieval</span>::<span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span>(<span class="st">"62610"</span>)<span class="op">$</span><span class="kw">parameter_nm</span>
+
+<span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span>(<span class="kw">dv</span>,
+                       date_col = <span class="st">"Date"</span>,
+                       value_col = <span class="st">"X_62610_00001"</span>,
+                       approved_col = <span class="st">"X_62610_00001_cd"</span>,
+                       plot_title = <span class="st">"L2701_example_data"</span>,
+                       y_axis_label = <span class="kw">y_axis_label</span>)
+</pre></div>
 <p><img src="reference/figures/README-graphs-1.png"><!-- --></p>
-<div class="sourceCode" id="cb3"><pre class="r">
-<span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span>(<span class="no">dv</span>, <span class="no">gwl_data</span>,
-             <span class="kw">date_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Date"</span>, <span class="st">"lev_dt"</span>),
-             <span class="kw">value_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span>),
-             <span class="kw">approved_col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001_cd"</span>,
+<div class="sourceCode" id="cb3"><pre class="downlit">
+
+<span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span>(<span class="kw">dv</span>, <span class="kw">gwl_data</span>, 
+             date_col = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Date"</span>, <span class="st">"lev_dt"</span>),
+             value_col = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span>),
+             approved_col = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X_62610_00001_cd"</span>,
                               <span class="st">"lev_age_cd"</span>),
-             <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>,
-             <span class="kw">add_trend</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">flip_y</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
+             plot_title = <span class="st">"L2701_example_data"</span>, 
+             add_trend = <span class="fl">TRUE</span>, flip_y = <span class="fl">FALSE</span>)
+</pre></div>
 <p><img src="reference/figures/README-graphs-2.png"><!-- --></p>
-<div class="sourceCode" id="cb4"><pre class="r">
-<span class="fu"><a href="reference/sc_cl.html">Sc_Cl_plot</a></span>(<span class="no">qw_data</span>, <span class="st">"L2701_example_data"</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+
+<span class="fu"><a href="reference/Sc_Cl_plot.html">Sc_Cl_plot</a></span>(<span class="kw">qw_data</span>, <span class="st">"L2701_example_data"</span>)
+</pre></div>
 <p><img src="reference/figures/README-graphs-3.png"><!-- --></p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/chloridetrend.html">trend_plot</a></span>(<span class="no">qw_data</span>, <span class="kw">plot_title</span> <span class="kw">=</span> <span class="st">"L2701_example_data"</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="reference/trend_plot.html">trend_plot</a></span>(<span class="kw">qw_data</span>, plot_title = <span class="st">"L2701_example_data"</span>)
+</pre></div>
 <p><img src="reference/figures/README-graphs-4.png"><!-- --></p>
 </div>
 <div id="composite-workflows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#composite-workflows" class="anchor"></a>Composite workflows:</h3>
-<div class="sourceCode" id="cb6"><pre class="r">
+<div class="sourceCode" id="cb6"><pre class="downlit">
+
 <span class="co">#included sample data:</span>
 
-<span class="no">aquifer_data</span> <span class="kw">&lt;-</span> <span class="no">aquifer_data</span>
-<span class="no">sum_col</span> <span class="kw">&lt;-</span> <span class="st">"lev_va"</span>
-<span class="no">num_years</span> <span class="kw">&lt;-</span> <span class="fl">30</span>
+<span class="kw">aquifer_data</span> <span class="op">&lt;-</span> <span class="kw">aquifer_data</span>
+<span class="kw">sum_col</span> <span class="op">&lt;-</span> <span class="st">"lev_va"</span>
+<span class="kw">num_years</span> <span class="op">&lt;-</span> <span class="fl">30</span>
 
-<span class="fu"><a href="reference/plot_composite_data.html">plot_composite_data</a></span>(<span class="no">aquifer_data</span>, <span class="no">sum_col</span>, <span class="no">num_years</span>)</pre></div>
+<span class="fu"><a href="reference/plot_composite_data.html">plot_composite_data</a></span>(<span class="kw">aquifer_data</span>, <span class="kw">sum_col</span>, <span class="kw">num_years</span>)
+</pre></div>
 <p><img src="reference/figures/README-example-1.png"><!-- --></p>
-<div class="sourceCode" id="cb7"><pre class="r">
-<span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span>(<span class="no">aquifer_data</span>, <span class="no">sum_col</span>, <span class="no">num_years</span>)</pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+
+<span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span>(<span class="kw">aquifer_data</span>, <span class="kw">sum_col</span>, <span class="kw">num_years</span>)
+</pre></div>
 <p><img src="reference/figures/README-example-2.png"><!-- --></p>
 </div>
 </div>
@@ -176,11 +190,13 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the <code>HASP</code> package using the <code>remotes</code> package:</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html">install_gitlab</a></span>(<span class="st">"water/stats/HASP"</span>,
-                        <span class="kw">host</span> <span class="kw">=</span> <span class="st">"code.usgs.gov"</span>,
-                        <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                        <span class="kw">build_opts</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--no-resave-data"</span>,
-                                       <span class="st">"--no-manual"</span>))</pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html">install_gitlab</a></span>(<span class="st">"water/stats/HASP"</span>, 
+                        host = <span class="st">"code.usgs.gov"</span>, 
+                        build_vignettes = <span class="fl">TRUE</span>, 
+                        build_opts = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--no-resave-data"</span>,
+                                       <span class="st">"--no-manual"</span>))
+</pre></div>
 </div>
 <div id="disclaimer" class="section level2">
 <h2 class="hasAnchor">

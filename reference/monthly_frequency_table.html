@@ -147,7 +147,7 @@
     <p>Create a table of monthly frequency analysis</p>
     </div>
 
-    <pre class="usage"><span class='fu'>monthly_frequency_table</span>(<span class='no'>gw_level_dv</span>, <span class='no'>date_col</span>, <span class='no'>value_col</span>, <span class='no'>approved_col</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/monthly_frequency_table.html'>monthly_frequency_table</a></span>(<span class='kw'>gw_level_dv</span>, <span class='kw'>date_col</span>, <span class='kw'>value_col</span>, <span class='kw'>approved_col</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,14 +180,23 @@ median.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># site &lt;- "263819081585801"</span>
-<span class='no'>p_code_dv</span> <span class='kw'>&lt;-</span> <span class='st'>"62610"</span>
-<span class='no'>statCd</span> <span class='kw'>&lt;-</span> <span class='st'>"00001"</span>
+<span class='kw'>p_code_dv</span> <span class='op'>&lt;-</span> <span class='st'>"62610"</span>
+<span class='kw'>statCd</span> <span class='op'>&lt;-</span> <span class='st'>"00001"</span>
 <span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
-<span class='no'>gw_level_dv</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Daily</span>
-<span class='no'>monthly_frequency</span> <span class='kw'>&lt;-</span> <span class='fu'>monthly_frequency_table</span>(<span class='no'>gw_level_dv</span>,
-                                             <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"Date"</span>,
-                                             <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001"</span>,
-                                             <span class='kw'>approved_col</span> <span class='kw'>=</span> <span class='st'>"X_62610_00001_cd"</span>)</div></pre>
+<span class='kw'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>Daily</span>
+<span class='kw'>monthly_frequency</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/HASP/man/monthly_frequency_table.html'>monthly_frequency_table</a></span>(<span class='kw'>gw_level_dv</span>,
+                                             date_col = <span class='st'>"Date"</span>,
+                                             value_col = <span class='st'>"X_62610_00001"</span>,
+                                             approved_col = <span class='st'>"X_62610_00001_cd"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>monthly_frequency</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 11</span><span>
+#&gt;   month    p5   p10   p25   p50   p75   p90    p95 nYears minMed maxMed
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>     1 -</span><span style='color: #BB0000;'>38.6</span><span> -</span><span style='color: #BB0000;'>32.7</span><span> -</span><span style='color: #BB0000;'>29.3</span><span> -</span><span style='color: #BB0000;'>21.6</span><span> -</span><span style='color: #BB0000;'>17.9</span><span> -</span><span style='color: #BB0000;'>11.7</span><span>  -</span><span style='color: #BB0000;'>7.91</span><span>     40  -</span><span style='color: #BB0000;'>41.8</span><span>  -</span><span style='color: #BB0000;'>5.68</span><span>
+#&gt; </span><span style='color: #555555;'>2</span><span>     2 -</span><span style='color: #BB0000;'>40.1</span><span> -</span><span style='color: #BB0000;'>32.9</span><span> -</span><span style='color: #BB0000;'>29.4</span><span> -</span><span style='color: #BB0000;'>22.6</span><span> -</span><span style='color: #BB0000;'>19.0</span><span> -</span><span style='color: #BB0000;'>12.3</span><span>  -</span><span style='color: #BB0000;'>7.92</span><span>     41  -</span><span style='color: #BB0000;'>42.8</span><span>  -</span><span style='color: #BB0000;'>7.25</span><span>
+#&gt; </span><span style='color: #555555;'>3</span><span>     3 -</span><span style='color: #BB0000;'>40.9</span><span> -</span><span style='color: #BB0000;'>36.5</span><span> -</span><span style='color: #BB0000;'>30.2</span><span> -</span><span style='color: #BB0000;'>24.6</span><span> -</span><span style='color: #BB0000;'>20.2</span><span> -</span><span style='color: #BB0000;'>11.8</span><span>  -</span><span style='color: #BB0000;'>7.96</span><span>     41  -</span><span style='color: #BB0000;'>45.1</span><span>  -</span><span style='color: #BB0000;'>6.87</span><span>
+#&gt; </span><span style='color: #555555;'>4</span><span>     4 -</span><span style='color: #BB0000;'>43.7</span><span> -</span><span style='color: #BB0000;'>39.1</span><span> -</span><span style='color: #BB0000;'>32.7</span><span> -</span><span style='color: #BB0000;'>26.3</span><span> -</span><span style='color: #BB0000;'>22.0</span><span> -</span><span style='color: #BB0000;'>15.7</span><span> -</span><span style='color: #BB0000;'>11.1</span><span>      41  -</span><span style='color: #BB0000;'>48.5</span><span>  -</span><span style='color: #BB0000;'>9.34</span><span>
+#&gt; </span><span style='color: #555555;'>5</span><span>     5 -</span><span style='color: #BB0000;'>45.9</span><span> -</span><span style='color: #BB0000;'>40.3</span><span> -</span><span style='color: #BB0000;'>35.2</span><span> -</span><span style='color: #BB0000;'>28.8</span><span> -</span><span style='color: #BB0000;'>23.4</span><span> -</span><span style='color: #BB0000;'>18</span><span>   -</span><span style='color: #BB0000;'>14.0</span><span>      41  -</span><span style='color: #BB0000;'>49.4</span><span> -</span><span style='color: #BB0000;'>10.0</span><span> 
+#&gt; </span><span style='color: #555555;'>6</span><span>     6 -</span><span style='color: #BB0000;'>42.0</span><span> -</span><span style='color: #BB0000;'>37.4</span><span> -</span><span style='color: #BB0000;'>33.2</span><span> -</span><span style='color: #BB0000;'>27.6</span><span> -</span><span style='color: #BB0000;'>21.4</span><span> -</span><span style='color: #BB0000;'>16.6</span><span> -</span><span style='color: #BB0000;'>14.1</span><span>      40  -</span><span style='color: #BB0000;'>42.8</span><span> -</span><span style='color: #BB0000;'>11.0</span><span> </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

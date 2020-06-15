@@ -147,11 +147,11 @@
     <p>Function creates the cloride over time plot with trends.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>trend_plot</span>(
-  <span class='no'>qw_data</span>,
-  <span class='no'>plot_title</span>,
-  <span class='kw'>pcode</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00940"</span>, <span class='st'>"99220"</span>),
-  <span class='kw'>norm_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>225</span>, <span class='fl'>999</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/chloridetrend.html'>trend_plot</a></span>(
+  <span class='kw'>qw_data</span>,
+  <span class='kw'>plot_title</span>,
+  pcode = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00940"</span>, <span class='st'>"99220"</span>),
+  norm_range = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>225</span>, <span class='fl'>999</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -184,9 +184,9 @@ must include columns sample_dt, parm_cd, result_va</p></td>
 <span class='co'># site_data &lt;- dataRetrieval::readNWISqw(site, </span>
 <span class='co'>#                                        parameterCd)</span>
 <span class='co'># Using package example data:</span>
-<span class='no'>qw_data</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>QW</span>
-<span class='no'>plot_title</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>qw_data</span>, <span class='st'>"siteInfo"</span>)<span class='kw'>[[</span><span class='st'>"station_nm"</span>]], <span class='st'>": Chloride"</span>)
-<span class='fu'>trend_plot</span>(<span class='no'>qw_data</span>, <span class='no'>plot_title</span>)</div><div class='img'><img src='chloridetrend-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='kw'>qw_data</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>QW</span>
+<span class='kw'>plot_title</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='kw'>qw_data</span>, <span class='st'>"siteInfo"</span>)[[<span class='st'>"station_nm"</span>]], <span class='st'>": Chloride"</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/chloridetrend.html'>trend_plot</a></span>(<span class='kw'>qw_data</span>, <span class='kw'>plot_title</span>)</div><div class='img'><img src='chloridetrend-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

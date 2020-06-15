@@ -149,15 +149,15 @@ Seasonal Kendall Trend Test." />
 Seasonal Kendall Trend Test.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kendell_test_5_20_years</span>(
-  <span class='no'>gwl</span>,
-  <span class='kw'>date_col</span> <span class='kw'>=</span> <span class='st'>"lev_dt"</span>,
-  <span class='kw'>value_col</span> <span class='kw'>=</span> <span class='st'>"sl_lev_va"</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>seasonal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>enough_5</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>enough_20</span> <span class='kw'>=</span> <span class='fl'>6</span>,
-  <span class='kw'>include_current_year</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/kendell_test_5_20_years.html'>kendell_test_5_20_years</a></span>(
+  <span class='kw'>gwl</span>,
+  date_col = <span class='st'>"lev_dt"</span>,
+  value_col = <span class='st'>"sl_lev_va"</span>,
+  alpha = <span class='fl'>0.95</span>,
+  seasonal = <span class='fl'>TRUE</span>,
+  enough_5 = <span class='fl'>10</span>,
+  enough_20 = <span class='fl'>6</span>,
+  include_current_year = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -214,11 +214,10 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 <span class='co'># gw_level_data &lt;- dataRetrieval::readNWISgwl(site)</span>
 
 <span class='co'># Using package example data:</span>
-<span class='no'>gwl_data</span> <span class='kw'>&lt;-</span> <span class='no'>L2701_example_data</span>$<span class='no'>Discrete</span>
-<span class='fu'>kendell_test_5_20_years</span>(<span class='no'>gwl_data</span>)</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
+<span class='kw'>gwl_data</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>Discrete</span>
+<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/kendell_test_5_20_years.html'>kendell_test_5_20_years</a></span>(<span class='kw'>gwl_data</span>)</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
 #&gt; 1  5-year trend          NA        NA          NA        NA            &lt;NA&gt;
-#&gt; 2 20-year trend -0.04106885 0.4894787 -0.05597039  102.0067 Not significant</div><div class='input'>
-</div></pre>
+#&gt; 2 20-year trend -0.04106885 0.4894787 -0.05597039  102.0067 Not significant</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

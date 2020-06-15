@@ -147,14 +147,14 @@
     <p>Themes and other useful graphing utilities for the HASP package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>theme_gwl</span>(<span class='kw'>base_family</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/themes.html'>theme_gwl</a></span>(base_family = <span class='st'>""</span>, <span class='kw'>...</span>)
 
-<span class='fu'>hasp_framework</span>(
-  <span class='no'>x_label</span>,
-  <span class='no'>y_label</span>,
-  <span class='no'>plot_title</span>,
-  <span class='kw'>include_y_scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>zero_on_top</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/themes.html'>hasp_framework</a></span>(
+  <span class='kw'>x_label</span>,
+  <span class='kw'>y_label</span>,
+  <span class='kw'>plot_title</span>,
+  include_y_scale = <span class='fl'>FALSE</span>,
+  zero_on_top = <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -194,17 +194,17 @@ at the top of y axis. If <code>FALSE</code>, no padding at the bottom. If <code>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>() + <span class='fu'>theme_gwl</span>()</div><div class='img'><img src='themes-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>ggplot2</span>::<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>() <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/pkg/HASP/man/themes.html'>theme_gwl</a></span>()</div><div class='img'><img src='themes-1.png' alt='' width='700' height='433' /></div><div class='input'>
 
 
-<span class='no'>x_label</span> <span class='kw'>&lt;-</span> <span class='st'>"Date"</span>
-<span class='no'>y_label</span> <span class='kw'>&lt;-</span> <span class='st'>"Level"</span>
-<span class='no'>plot_title</span> <span class='kw'>&lt;-</span> <span class='st'>"Super Site"</span>
+<span class='kw'>x_label</span> <span class='op'>&lt;-</span> <span class='st'>"Date"</span>
+<span class='kw'>y_label</span> <span class='op'>&lt;-</span> <span class='st'>"Level"</span>
+<span class='kw'>plot_title</span> <span class='op'>&lt;-</span> <span class='st'>"Super Site"</span>
 
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>() +
-     <span class='fu'>hasp_framework</span>(<span class='no'>x_label</span>,
-                    <span class='no'>y_label</span>,
-                    <span class='no'>plot_title</span>)</div><div class='img'><img src='themes-2.png' alt='' width='700' height='433' /></div></pre>
+<span class='kw'>ggplot2</span>::<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>() <span class='op'>+</span> 
+     <span class='fu'><a href='https://rdrr.io/pkg/HASP/man/themes.html'>hasp_framework</a></span>(<span class='kw'>x_label</span>, 
+                    <span class='kw'>y_label</span>, 
+                    <span class='kw'>plot_title</span>)</div><div class='img'><img src='themes-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
