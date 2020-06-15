@@ -163,11 +163,15 @@ week_plot <- reactive({
   
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
-  week_plot <-  weekly_frequency_plot(dv_data, 
+  
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  
+    week_plot <-  weekly_frequency_plot(dv_data, 
                                       date_col = "Date",
                                       value_col = value_col,
                                       approved_col = approv_col,
                                       plot_title = plot_title, 
+                                      y_axis_label = y_label,
                                       flip_y = input$flip_plot) 
   
   return(week_plot)
@@ -249,6 +253,7 @@ year2_plot <- reactive({
   
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
                                      date_col = "Date",
                                      value_col = value_col,
@@ -256,6 +261,7 @@ year2_plot <- reactive({
                                      plot_title = plot_title,
                                      historical_stat = "mean",
                                      month_breaks = TRUE, 
+                                     y_axis_label = y_label,
                                      flip_y = input$flip_plot)
  
   
@@ -331,11 +337,14 @@ month_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
+  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         date_col = "Date",
                                         value_col = value_col,
                                         approved_col = approv_col,
                                         plot_title = plot_title, 
+                                        y_axis_label = y_label,
                                         flip_y = input$flip_plot) 
   
   
