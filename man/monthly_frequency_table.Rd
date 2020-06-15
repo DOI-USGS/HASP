@@ -35,5 +35,5 @@ monthly_frequency <- monthly_frequency_table(gw_level_dv,
                                              date_col = "Date",
                                              value_col = "X_62610_00001",
                                              approved_col = "X_62610_00001_cd")
-
+head(monthly_frequency)
 }

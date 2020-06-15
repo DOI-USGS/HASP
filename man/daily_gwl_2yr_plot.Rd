@@ -61,4 +61,12 @@ daily_gwl_2yr_plot(gw_level_dv,
                    month_breaks = TRUE,
                    historical_stat = "median")
 
+daily_gwl_2yr_plot(gw_level_dv,
+                   date_col = "Date",
+                   value_col = "X_62610_00001",
+                   approved_col = "X_62610_00001_cd", 
+                   plot_title = "Groundwater Level", 
+                   month_breaks = TRUE,
+                   historical_stat = "median",
+                   flip_y = FALSE)
 }
