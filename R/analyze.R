@@ -218,6 +218,7 @@ normalized_data <- function(x, sum_col, num_years){
     group_by(year, site_no) %>% 
     mutate(med_site = median(!!sym(sum_col), na.rm = TRUE)) %>% 
     ungroup() %>% 
+    distinct() %>% 
     group_by(site_no) %>% 
     mutate(max_med = max(med_site, na.rm = TRUE),
            min_med = min(med_site, na.rm = TRUE),
@@ -238,5 +239,39 @@ normalized_data <- function(x, sum_col, num_years){
                                     "Mean") ))
   
   return(norm_composite)
+}
+
+#' Convert to water year
+#' 
+#' This function is a little more robust than \code{\link[dataRetrieval::calcWaterYear]{dataRetrieval::calcWaterYear()}} 
+#' 
+#' @param x character vector
+#' @export
+#' 
+#' @examples 
+#' x <- c("2010-01-01", "1994-02", "1980", "2009-11-01")
+#' water_year(x)
+water_year <- function(x){
+  
+  x_date <- as.Date(x)
+  
+  if(any(is.na(x_date))){
+    bad_dates <- x[which(is.na(x_date))]
+    
+    # Year-month date:
+    # this one is legit....the day will never affect the water year:
+    x[grep("^(\\d{4}-\\d{2}$)", x)] <- paste0(x[grep("^(\\d{4}-\\d{2}$)", x)],"-01")
+    
+    if(length(grep("^(\\d{4}$)", x)) > 0){
+      message("Calendar year being reported as water year in row(s) ", grep("^(\\d{4}$)", x))
+      # this one is less legit...maybe USGS only reports in water years?
+      x[grep("^(\\d{4}$)", x)] <- paste0(x[grep("^(\\d{4}$)", x)],"-01-01")
+    }
+    
+    x_date <- as.Date(x)
+  }
+  
+  return(dataRetrieval::calcWaterYear(x_date))
+  
 }
 
