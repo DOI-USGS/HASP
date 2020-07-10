@@ -10,7 +10,7 @@ water_year(x)
 \item{x}{character vector}
 }
 \description{
-This function is a little more robust than \code{\link[dataRetrieval::calcWaterYear]{dataRetrieval::calcWaterYear()}}
+This function is a little more robust than \code{\link[dataRetrieval]{calcWaterYear}}
 }
 \examples{
 x <- c("2010-01-01", "1994-02", "1980", "2009-11-01")

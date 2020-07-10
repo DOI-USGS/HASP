@@ -243,7 +243,7 @@ normalized_data <- function(x, sum_col, num_years){
 
 #' Convert to water year
 #' 
-#' This function is a little more robust than \code{\link[dataRetrieval::calcWaterYear]{dataRetrieval::calcWaterYear()}} 
+#' This function is a little more robust than \code{\link[dataRetrieval]{calcWaterYear}}
 #' 
 #' @param x character vector
 #' @export
