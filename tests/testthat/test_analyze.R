@@ -112,7 +112,7 @@ test_that("Composite hydrodata", {
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(round(comp_data$value[1], digits = 2), 155.82)
+  expect_equal(format_2(comp_data$value[1]), 149.77)
 })
 
 test_that("Normalized composite hydrodata", {
@@ -126,5 +126,15 @@ test_that("Normalized composite hydrodata", {
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(norm_data$value[1]), 0.02)
+  expect_equal(format_2(norm_data$value[1]), -0.02)
+})
+
+
+test_that("water year", {
+  
+  x <- c("2010-01-01", "1994-02", "1980", "2009-11-01")
+  wy <- water_year(x)
+  
+  expect_equal(wy, c(2010, 1994, 1980, 2010))
+  expect_message(water_year(x))
 })

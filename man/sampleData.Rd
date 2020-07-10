@@ -5,7 +5,7 @@
 \alias{aquifer_data}
 \title{Example aquifer data}
 \description{
-Example data representing Basin and Range basin-fill aquifers.
+Example data representing Basin and Range basin-fill aquifers (N100BSNRGB).
 }
 \examples{
 head(aquifer_data)

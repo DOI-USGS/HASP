@@ -17,6 +17,10 @@
 #' 
 #' comp_data <- plot_composite_data(aquifer_data, sum_col, num_years)
 #' comp_data
+#' #' # Do it on a water year:
+#' aquifer_data$cal_year <- aquifer_data$year
+#' aquifer_data$year <- aquifer_data$water_year
+#' plot_composite_data(aquifer_data, sum_col, num_years)
 plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
   
   year <- value <- name <- ".dplyr"
@@ -58,6 +62,10 @@ plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
 #' 
 #' norm_data <- plot_normalized_data(aquifer_data, sum_col, num_years)
 #' norm_data
+#' 
+#' aquifer_data$cal_year <- aquifer_data$year
+#' aquifer_data$year <- aquifer_data$water_year
+#' plot_normalized_data(aquifer_data, sum_col, num_years)
 plot_normalized_data <- function(x, sum_col, num_years, plot_title = ""){
   
   year <- value <- name <- ".dplyr"

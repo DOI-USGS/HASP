@@ -28,4 +28,8 @@ num_years <- 30
 
 norm_data <- plot_normalized_data(aquifer_data, sum_col, num_years)
 norm_data
+
+aquifer_data$cal_year <- aquifer_data$year
+aquifer_data$year <- aquifer_data$water_year
+plot_normalized_data(aquifer_data, sum_col, num_years)
 }

@@ -28,4 +28,8 @@ num_years <- 30
 
 comp_data <- plot_composite_data(aquifer_data, sum_col, num_years)
 comp_data
+#' # Do it on a water year:
+aquifer_data$cal_year <- aquifer_data$year
+aquifer_data$year <- aquifer_data$water_year
+plot_composite_data(aquifer_data, sum_col, num_years)
 }

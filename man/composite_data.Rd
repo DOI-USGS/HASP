@@ -25,4 +25,5 @@ sum_col <- "lev_va"
 num_years <- 30
 
 comp_data <- composite_data(aquifer_data, sum_col, num_years)
+
 }
