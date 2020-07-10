@@ -26,7 +26,7 @@ NULL
 
 #' Example aquifer data
 #'
-#' Example data representing Basin and Range basin-fill aquifers.
+#' Example data representing Basin and Range basin-fill aquifers (N100BSNRGB).
 #'
 #' @name aquifer_data
 #' @rdname sampleData
@@ -35,6 +35,13 @@ NULL
 #' @examples 
 #' head(aquifer_data)
 NULL
+# Example to get the data:
+# start_date <- "1988-10-01"
+# end_date <- "2019-12-31"
+# aquiferCd <- "N100BSNRGB"
+# aquifer_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+# save(aquifer_data, file = "data/aquifer_data.RData", compress = "xz")
+
 
 #' Local Aquifer Code Listing
 #' 

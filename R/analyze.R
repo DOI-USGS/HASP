@@ -150,6 +150,7 @@ filter_sites <- function(x, sum_col, num_years){
 #' num_years <- 30
 #' 
 #' comp_data <- composite_data(aquifer_data, sum_col, num_years)
+#' 
 composite_data <- function(x, sum_col, num_years){
   
   year <- site_no <- n_sites_year <- med_site <- name <- ".dplyr"
@@ -263,7 +264,7 @@ water_year <- function(x){
     x[grep("^(\\d{4}-\\d{2}$)", x)] <- paste0(x[grep("^(\\d{4}-\\d{2}$)", x)],"-01")
     
     if(length(grep("^(\\d{4}$)", x)) > 0){
-      message("Calendar year being reported as water year in row(s) ", grep("^(\\d{4}$)", x))
+      message("Calendar year being reported as water year in row(s) ", paste(grep("^(\\d{4}$)", x), collapse = ", "))
       # this one is less legit...maybe USGS only reports in water years?
       x[grep("^(\\d{4}$)", x)] <- paste0(x[grep("^(\\d{4}$)", x)],"-01-01")
     }

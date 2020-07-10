@@ -82,6 +82,8 @@ get_state_data <- function(state, aquiferCd, startDate, endDate){
                                        function(x) x[1]))
   
   
+  state_data$water_year <- water_year(state_data$lev_dt)
+  
   return(state_data)
 }
 
