@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Example aquifer data — aquifer_data" />
-<meta property="og:description" content="Example data representing Basin and Range basin-fill aquifers." />
+<meta property="og:description" content="Example data representing Basin and Range basin-fill aquifers (N100BSNRGB)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -144,20 +144,20 @@
     </div>
 
     <div class="ref-description">
-    <p>Example data representing Basin and Range basin-fill aquifers.</p>
+    <p>Example data representing Basin and Range basin-fill aquifers (N100BSNRGB).</p>
     </div>
 
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>aquifer_data</span>)</div><div class='output co'>#&gt;   lev_va sl_lev_va     lev_dt         site_no state_call year
-#&gt; 1   4.83        NA 2001-06-21 312127110073101    Arizona 2001
-#&gt; 2   5.13        NA 2001-08-10 312127110073101    Arizona 2001
-#&gt; 3   4.29        NA 2001-12-19 312127110073101    Arizona 2001
-#&gt; 4   6.72        NA 2002-06-12 312127110073101    Arizona 2002
-#&gt; 5   7.41        NA 2002-11-01 312127110073101    Arizona 2002
-#&gt; 6   4.41        NA 2003-03-13 312127110073101    Arizona 2003</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>aquifer_data</span>)</div><div class='output co'>#&gt;   lev_va sl_lev_va     lev_dt         site_no state_call year water_year
+#&gt; 1   4.83        NA 2001-06-21 312127110073101    Arizona 2001       2001
+#&gt; 2   5.13        NA 2001-08-10 312127110073101    Arizona 2001       2001
+#&gt; 3   4.29        NA 2001-12-19 312127110073101    Arizona 2001       2002
+#&gt; 4   6.72        NA 2002-06-12 312127110073101    Arizona 2002       2002
+#&gt; 5   7.41        NA 2002-11-01 312127110073101    Arizona 2002       2003
+#&gt; 6   4.41        NA 2003-03-13 312127110073101    Arizona 2003       2003</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
