@@ -111,7 +111,11 @@ plot_normalized_data(aquifer_data, sum_col, num_years)
 You can install the `HASP` package using the `remotes` package:
 
 ``` r
-remotes::install_github("USGS-R/HASP")
+remotes::install_gitlab("water/stats/HASP", 
+                        host = "code.usgs.gov", 
+                        build_vignettes = TRUE, 
+                        build_opts = c("--no-resave-data",
+                                       "--no-manual"))
 ```
 
 ## Disclaimer
