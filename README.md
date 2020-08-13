@@ -112,10 +112,7 @@ You can install the `HASP` package using the `remotes` package:
 
 ``` r
 remotes::install_gitlab("water/stats/HASP", 
-                        host = "code.usgs.gov", 
-                        build_vignettes = TRUE, 
-                        build_opts = c("--no-resave-data",
-                                       "--no-manual"))
+                        host = "code.usgs.gov"))
 ```
 
 ## Disclaimer
