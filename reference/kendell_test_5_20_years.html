@@ -149,7 +149,7 @@ Seasonal Kendall Trend Test." />
 Seasonal Kendall Trend Test.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/kendell_test_5_20_years.html'>kendell_test_5_20_years</a></span>(
+    <pre class="usage"><span class='fu'>kendell_test_5_20_years</span>(
   <span class='kw'>gwl</span>,
   date_col = <span class='st'>"lev_dt"</span>,
   value_col = <span class='st'>"sl_lev_va"</span>,
@@ -215,7 +215,7 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 
 <span class='co'># Using package example data:</span>
 <span class='kw'>gwl_data</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>Discrete</span>
-<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/kendell_test_5_20_years.html'>kendell_test_5_20_years</a></span>(<span class='kw'>gwl_data</span>)</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
+<span class='fu'>kendell_test_5_20_years</span>(<span class='kw'>gwl_data</span>)</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
 #&gt; 1  5-year trend          NA        NA          NA        NA            &lt;NA&gt;
 #&gt; 2 20-year trend -0.04106885 0.4894787 -0.05597039  102.0067 Not significant</div><div class='input'></div></pre>
   </div>

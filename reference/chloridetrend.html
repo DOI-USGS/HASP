@@ -147,7 +147,7 @@
     <p>Function creates the cloride over time plot with trends.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/chloridetrend.html'>trend_plot</a></span>(
+    <pre class="usage"><span class='fu'>trend_plot</span>(
   <span class='kw'>qw_data</span>,
   <span class='kw'>plot_title</span>,
   pcode = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"00940"</span>, <span class='st'>"99220"</span>),
@@ -186,7 +186,7 @@ must include columns sample_dt, parm_cd, result_va</p></td>
 <span class='co'># Using package example data:</span>
 <span class='kw'>qw_data</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>QW</span>
 <span class='kw'>plot_title</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='kw'>qw_data</span>, <span class='st'>"siteInfo"</span>)[[<span class='st'>"station_nm"</span>]], <span class='st'>": Chloride"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/chloridetrend.html'>trend_plot</a></span>(<span class='kw'>qw_data</span>, <span class='kw'>plot_title</span>)</div><div class='img'><img src='chloridetrend-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>trend_plot</span>(<span class='kw'>qw_data</span>, <span class='kw'>plot_title</span>)</div><div class='img'><img src='chloridetrend-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

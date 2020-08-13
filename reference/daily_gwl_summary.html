@@ -147,7 +147,7 @@
     <p>Summary table of daily data</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/daily_gwl_summary.html'>daily_gwl_summary</a></span>(<span class='kw'>gw_level_dv</span>, <span class='kw'>date_col</span>, <span class='kw'>value_col</span>, <span class='kw'>approved_col</span>)</pre>
+    <pre class="usage"><span class='fu'>daily_gwl_summary</span>(<span class='kw'>gw_level_dv</span>, <span class='kw'>date_col</span>, <span class='kw'>value_col</span>, <span class='kw'>approved_col</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,7 +183,7 @@ and percentile values</p>
 <span class='kw'>statCd</span> <span class='op'>&lt;-</span> <span class='st'>"00001"</span>
 <span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
 <span class='kw'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>Daily</span>
-<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/daily_gwl_summary.html'>daily_gwl_summary</a></span>(<span class='kw'>gw_level_dv</span>,
+<span class='fu'>daily_gwl_summary</span>(<span class='kw'>gw_level_dv</span>,
                   date_col = <span class='st'>"Date"</span>,
                   value_col = <span class='st'>"X_62610_00001"</span>,
                   approved_col = <span class='st'>"X_62610_00001_cd"</span>)</div><div class='output co'>#&gt;   begin_date   end_date  days percent_complete lowest_level     p5    p10

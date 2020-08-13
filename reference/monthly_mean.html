@@ -149,7 +149,7 @@ and create a new date that is the midpoint of each month." />
 and create a new date that is the midpoint of each month.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/HASP/man/monthly_mean.html'>monthly_mean</a></span>(<span class='kw'>x</span>, date_col = <span class='st'>"Date"</span>, value_col = <span class='st'>"X_62610_00001"</span>)</pre>
+    <pre class="usage"><span class='fu'>monthly_mean</span>(<span class='kw'>x</span>, date_col = <span class='st'>"Date"</span>, value_col = <span class='st'>"X_62610_00001"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,9 +178,9 @@ and create a new date that is the midpoint of each month.</p>
 <span class='co'>#                                           statCd = statCd)</span>
 <span class='co'># Using package example data:</span>
 <span class='kw'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>Daily</span>
-<span class='kw'>gw_monthly</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/HASP/man/monthly_mean.html'>monthly_mean</a></span>(<span class='kw'>gw_level_dv</span>)
+<span class='kw'>gw_monthly</span> <span class='op'>&lt;-</span> <span class='fu'>monthly_mean</span>(<span class='kw'>gw_level_dv</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/HASP/man/kendell_test_5_20_years.html'>kendell_test_5_20_years</a></span>(<span class='kw'>gw_monthly</span>, seasonal = <span class='fl'>TRUE</span>, 
+<span class='fu'><a href='kendell_test_5_20_years.html'>kendell_test_5_20_years</a></span>(<span class='kw'>gw_monthly</span>, seasonal = <span class='fl'>TRUE</span>, 
                         date_col = <span class='st'>"mid_date"</span>, value_col = <span class='st'>"mean_va"</span>)</div><div class='output co'>#&gt;            test       tau       pValue     slope  intercept trend
 #&gt; 1  5-year trend 0.4057971 0.0001573652 1.9125806 -3745.6795    Up
 #&gt; 2 20-year trend 0.1400222 0.0025870459 0.2478392  -463.8815    Up</div><div class='input'></div></pre>
