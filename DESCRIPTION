@@ -40,7 +40,8 @@ Imports:
     EnvStats,
     lubridate,
     purrr,
-    openxlsx
+    openxlsx,
+    shinyWidgets
 Suggests:
     rmarkdown,
     testthat,
