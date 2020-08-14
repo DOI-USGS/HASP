@@ -186,16 +186,43 @@
 <p><img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo"></p>
 
 </div>
-<div id="installation" class="section level2">
+<div id="installation-of-r-and-rstudio" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the <code>HASP</code> package using the <code>remotes</code> package:</p>
+<a href="#installation-of-r-and-rstudio" class="anchor"></a>Installation of R and RStudio</h2>
+<p>To use the HASP package, you will need to have R and RStudio installed on your computer. This installation will only need to be done once for each computer. This link has instructions for installing R and RStudio:</p>
+<p><a href="https://owi.usgs.gov/R/training-curriculum/installr/">R and RStudio Installation Instructions</a></p>
+<p>Useful links:</p>
+<ul>
+<li><a href="https://cran.r-project.org/bin/windows/base/">Download R Windows</a></li>
+<li><a href="https://cran.r-project.org/bin/macosx/">Download R Mac</a></li>
+<li><a href="https://www.rstudio.com/products/rstudio/download/">Download RStudio</a></li>
+</ul>
+</div>
+<div id="installation-of-hasp" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation-of-hasp" class="anchor"></a>Installation of HASP</h2>
+<p>You can install the <code>HASP</code> package using the <code>remotes</code> package.</p>
+<p>To install the remotes package, copy the following line into R or the “Console” window in RStudio:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html">install_gitlab</a></span>(<span class="st">"water/stats/HASP"</span>, 
-                        host = <span class="st">"code.usgs.gov"</span>, 
-                        build_vignettes = <span class="fl">TRUE</span>, 
-                        build_opts = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--no-resave-data"</span>,
-                                       <span class="st">"--no-manual"</span>))
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
+</pre></div>
+<p>To install the <code>HASP</code> package:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"USGS-R/HASP"</span>)
+</pre></div>
+<p>During this installation, you may be prompted to update or install some packages. You can press 1 to update all packages.</p>
+</div>
+<div id="running-the-apps" class="section level2">
+<h2 class="hasAnchor">
+<a href="#running-the-apps" class="anchor"></a>Running the apps</h2>
+<p><code>HASP</code> includes two interactive applications as a way to explore the functionality of this package. One has functions for exploring data from a single site, and the other has functions for exploring data from an aquifer.</p>
+<p>To run the single site application, use the following code:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="kw">HASP</span>::<span class="fu"><a href="reference/explore_aquifers.html">explore_site</a></span>()
+</pre></div>
+<p>To run the aquifer application use the following code:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="kw">HASP</span>::<span class="fu"><a href="reference/explore_aquifers.html">explore_aquifers</a></span>()
 </pre></div>
 </div>
 <div id="disclaimer" class="section level2">
