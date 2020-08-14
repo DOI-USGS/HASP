@@ -109,16 +109,50 @@ plot_normalized_data(aquifer_data, sum_col, num_years)
   <img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo">
 </p>
 
-## Installation
+## Installation of R and RStudio
 
-You can install the `HASP` package using the `remotes` package:
+To use the HASP package, you will need to have R and RStudio installed on your computer. This installation will only need to be done once for each computer. This link has instructions for installing R and RStudio:  
+  
+[R and RStudio Installation Instructions](https://owi.usgs.gov/R/training-curriculum/installr/)  
+
+Useful links:
+
+* [Download R Windows](https://cran.r-project.org/bin/windows/base/)
+* [Download R Mac](https://cran.r-project.org/bin/macosx/)
+* [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+## Installation of HASP
+
+You can install the `HASP` package using the `remotes` package.
+
+To install the remotes package, copy the following line into R or the "Console" window in RStudio:
+
+```{r installRemotes, eval = FALSE}
+install.packages("remotes")
+```
+
+To install the `HASP` package:
 
 ```{r install, eval=FALSE}
-remotes::install_gitlab("water/stats/HASP", 
-                        host = "code.usgs.gov", 
-                        build_vignettes = TRUE, 
-                        build_opts = c("--no-resave-data",
-                                       "--no-manual"))
+remotes::install_github("USGS-R/HASP")
+```
+
+During this installation, you may be prompted to update or install some packages. You can press 1 to update all packages.
+
+## Running the apps
+
+`HASP` includes two interactive applications as a way to explore the functionality of this package. One has functions for exploring data from a single site, and the other has functions for exploring data from an aquifer.  
+  
+To run the single site application, use the following code:  
+
+```{r runSingleSiteApp, eval = FALSE}
+HASP::explore_site()
+```
+
+To run the aquifer application use the following code:
+
+```{r runAquiferApp, eval = FALSE}
+HASP::explore_aquifers()
 ```
 
 ## Disclaimer
