@@ -17,11 +17,12 @@ shinyServer(function(input, output, session) {
   source("get_data.R",local=TRUE)$value
   source("comp_plot.R",local=TRUE)$value
   source("norm_plot.R",local=TRUE)$value
-  
+
   output$mymap <- leaflet::renderLeaflet({
 
     map <- leaflet::leaflet() %>%
-      leaflet::addProviderTiles("CartoDB.Positron")     
+      leaflet::addProviderTiles("CartoDB.Positron") %>%
+      leaflet::setView(lng = -83.5, lat = 44.5, zoom=6)   
 
 
   })
@@ -30,6 +31,10 @@ shinyServer(function(input, output, session) {
     validate(
       need(!is.null(rawData_data$data), "Please select a data set")
     )
+    req(input$mainOut == "map")
+    
+    showNotification("Prepping map", id = "loadmap",
+                     type = "message")
     
     aquifer_data <- rawData()
     
@@ -48,9 +53,9 @@ shinyServer(function(input, output, session) {
       fitBounds(~min(dec_long_va), ~min(dec_lat_va),
                 ~max(dec_long_va), ~max(dec_lat_va))
     
-    map
+    removeNotification(id = "loadmap")
     
-   
+    map
     
   })
 
