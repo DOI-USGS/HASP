@@ -106,8 +106,9 @@ observeEvent(input$get_data_dv, {
   rawData_data$example_data <- FALSE
   
   site_id <- input$siteID
-
   site_info <- site_summary(site_id)
+  
+  rawData_data$available_data <- data_available(site_id)
   
   pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
     filter(!is.na(parm_cd))
@@ -126,15 +127,21 @@ observeEvent(input$get_data_dv, {
                             editorId = "get_data_code", 
                             value = setup() )
   
-  showNotification("Loading Daily Groundwater Data", 
-                   duration = NULL, id = "load")
-  
-  rawData_data$daily_data <- dataRetrieval::readNWISdv(site_id, 
-                                                       pcodes_dv$parm_cd, 
-                                                       statCd = unique(pcodes_dv$stat_cd))
-  
-  
-  removeNotification(id = "load")
+  if(!any(grepl("Daily Data", rawData_data$available_data$`Data Type`))) {
+    showNotification("This site doesn't have any daily data available",
+                     type = "error")
+    rawData_data$daily_data <- NULL
+  } else {
+    showNotification("Loading Daily Groundwater Data", 
+                     duration = NULL, id = "load")
+    
+    rawData_data$daily_data <- dataRetrieval::readNWISdv(site_id, 
+                                                         pcodes_dv$parm_cd, 
+                                                         statCd = unique(pcodes_dv$stat_cd))
+    
+    
+    removeNotification(id = "load")
+  }
     
 })
 
