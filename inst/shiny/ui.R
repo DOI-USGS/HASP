@@ -27,6 +27,10 @@ sidebar <- dashboardSidebar(
                 selected = summary_aquifers$long_name[1], 
                 multiple = FALSE),
     actionButton("get_data", label = "Get Latest Data"),
+    radioButtons("gwl_vals",
+                  choices = c("sl_lev_va", "lev_va"), 
+                  selected = "lev_va", 
+                  label = "Data Column"),
     menuItem("Source code", icon = icon("file-code-o"), 
              href = "https://code.usgs.gov/water/stats/HASP"),
     actionButton("example_data", label = "Load Example Data")
@@ -47,6 +51,7 @@ body <- dashboardBody(
          ),
          tabPanel(title = tagList("Map", shiny::icon("map-marker")),
                   value = "map",
+                  h3("Site used in composite hydrograph"),
                   leaflet::leafletOutput("mymap",height = "500px"),
                   h4("R Code:"),
                   shinyAce::aceEditor(outputId = "map_code", value = init_text, 

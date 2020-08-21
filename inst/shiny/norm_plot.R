@@ -5,7 +5,7 @@ norm_plot <- reactive({
   )
   
   norm_plot <-  plot_normalized_data(rawData(), 
-                                    "lev_va", 30) +
+                                     input$gwl_vals, 30) +
     ggplot2::ggtitle(rawData_data$aquifer_cd)
   
   return(norm_plot)

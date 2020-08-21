@@ -40,8 +40,13 @@ shinyServer(function(input, output, session) {
     
     shinyAce::updateAceEditor(session, editorId = "map_code", value = map_code() )
     
-    x <- filter_sites(aquifer_data, "lev_va", 30)
-    map_data <- prep_map_data(x, "lev_va")
+    x <- filter_sites(aquifer_data, input$gwl_vals, 30)
+    
+    if(nrow(x) == 0){
+      x <- aquifer_data
+    }
+    
+    map_data <- prep_map_data(x)
 
     map <- leafletProxy("mymap", data = map_data) %>%
       clearMarkers() %>%

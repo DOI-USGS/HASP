@@ -4,7 +4,7 @@
 \alias{prep_map_data}
 \title{prep_map_data}
 \usage{
-prep_map_data(x, sum_col)
+prep_map_data(x)
 }
 \arguments{
 \item{x}{aquifer data}
@@ -19,6 +19,5 @@ Get map info
 }
 \examples{
 aquifer_data <- aquifer_data
-sum_col <- "lev_va"
-map_info <- prep_map_data(aquifer_data, sum_col)
+map_info <- prep_map_data(aquifer_data)
 }
