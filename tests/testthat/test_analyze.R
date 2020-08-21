@@ -70,7 +70,7 @@ test_that("QW summaries", {
 test_that("Map info", {
   aquifer_data <- aquifer_data
   sum_col <- "lev_va"
-  map_info <- prep_map_data(aquifer_data, sum_col)
+  map_info <- prep_map_data(aquifer_data)
   
   expect_true(all(c("popup","station_nm", 
                 "dec_long_va", "dec_lat_va") %in% 
@@ -112,7 +112,7 @@ test_that("Composite hydrodata", {
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(comp_data$value[1]), 149.77)
+  expect_equal(format_2(comp_data$value[1]), 149.92)
 })
 
 test_that("Normalized composite hydrodata", {
@@ -126,7 +126,7 @@ test_that("Normalized composite hydrodata", {
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(norm_data$value[1]), -0.02)
+  expect_equal(format_2(norm_data$value[1]), 0.1)
 })
 
 
