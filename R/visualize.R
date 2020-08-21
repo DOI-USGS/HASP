@@ -112,7 +112,7 @@ map_hydro_data <- function(x, sum_col, num_years){
   
   x <- filter_sites(x, sum_col, num_years)
   
-  map_data <- prep_map_data(x, sum_col)
+  map_data <- prep_map_data(x)
 
   map <- leaflet(data = map_data) %>%
     addProviderTiles("CartoDB.Positron") %>%

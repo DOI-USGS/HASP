@@ -49,7 +49,6 @@ site_data_summary <- function(x, sum_col){
 #' Get map info
 #' 
 #' @param x aquifer data
-#' @param sum_col column name
 #' @return data frame 
 #' @export
 #' @import dplyr

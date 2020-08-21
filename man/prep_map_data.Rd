@@ -8,8 +8,6 @@ prep_map_data(x)
 }
 \arguments{
 \item{x}{aquifer data}
-
-\item{sum_col}{column name}
 }
 \value{
 data frame
