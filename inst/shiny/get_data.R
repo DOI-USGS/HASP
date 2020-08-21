@@ -22,7 +22,7 @@ observeEvent(input$get_data,{
   short_code <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == aquiferCd]
   end_date <- Sys.Date()
   parts <- strsplit(as.character(end_date), split = "-")[[1]]
-  parts[[1]] <- as.character(as.numeric(parts[[1]]) - 30)
+  parts[[1]] <- as.character(as.numeric(parts[[1]]) - 31) #gives a buffer
   start_date <- paste(parts, collapse = "-")
   
   states <- unlist(summary_aquifers$states[summary_aquifers$long_name == aquiferCd])
@@ -54,16 +54,15 @@ observeEvent(input$get_data,{
       state_data_sites <- dataRetrieval::readNWISsite(unique(state_data$site_no))
       
       state_data_sites <- state_data_sites %>% 
-        select(station_nm, site_no, dec_lat_va, dec_long_va)
+        select(station_nm, site_no, dec_lat_va, dec_long_va, coord_datum_cd)
       
       aquifer_data <- bind_rows(aquifer_data, state_data)
       site_data <- bind_rows(site_data, state_data_sites)
     }
     
   }
-  
-  aquifer_data <- filter_sites(aquifer_data, "lev_va", 30)
-  
+
+
   if(nrow(aquifer_data) == 0){
     showNotification(paste("Not enough data for: ", aquiferCd), 
                      type = "message", duration = 5)

@@ -71,7 +71,8 @@ aquifer_data <- aquifer_data
 
 ```{r mapIt}
 
-map <- map_hydro_data(aquifer_data, "lev_va", 30)
+map <- map_hydro_data(aquifer_data,
+                      "lev_va", 30)
 map
 
 ```

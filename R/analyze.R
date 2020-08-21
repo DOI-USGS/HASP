@@ -49,22 +49,18 @@ site_data_summary <- function(x, sum_col){
 #' Get map info
 #' 
 #' @param x aquifer data
-#' @param sum_col column name
 #' @return data frame 
 #' @export
 #' @import dplyr
 #'
 #' @examples 
 #' aquifer_data <- aquifer_data
-#' sum_col <- "lev_va"
-#' map_info <- prep_map_data(aquifer_data, sum_col)
-prep_map_data <- function(x, sum_col ){
+#' map_info <- prep_map_data(aquifer_data)
+prep_map_data <- function(x ){
   
   lev_dt <- site_no <- category <- dec_lat_va <- station_nm <- dec_long_va <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
-  
-  if(!all(c("site_no", "lev_dt", sum_col) %in% names(x))) stop("Missing columns")
   
   if(!("siteInfo" %in% names(attributes(x)))) stop("Missing site attributes")
 
@@ -110,21 +106,37 @@ filter_sites <- function(x, sum_col, num_years){
 
   pick_sites <- x %>% 
     filter(!is.na(!!sym(sum_col))) %>% 
-    select(site_no, year) %>% 
-    distinct() %>% 
-    group_by(site_no) %>% 
-    summarise(num_years = length(unique(year))) %>% 
-    ungroup() %>% 
-    filter(num_years >= !!num_years) %>% 
-    select(site_no) %>% 
-    pull()
+    group_by(site_no, year) %>% 
+    summarize(n_meas = n()) %>% 
+    ungroup() 
   
+  years = data.frame(year = min(pick_sites$year):max(pick_sites$year))
+  
+  tots <- expand.grid(year = min(pick_sites$year):max(pick_sites$year),
+              site_no = unique(pick_sites$site_no), stringsAsFactors = FALSE) %>% 
+    data.frame()
+  
+  pick_sites_comp <- pick_sites %>% 
+    right_join(tots, by = c("year", "site_no"))
+  
+  sites_incomplete <- unique(pick_sites_comp$site_no[is.na(pick_sites_comp$n_meas)])
+  sites_complete <- unique(pick_sites_comp$site_no)
+  sites_complete <- sites_complete[!sites_complete %in% sites_incomplete]
+  
+  pick_sites_comp_sum <- pick_sites_comp %>% 
+    filter(site_no %in% sites_complete) %>% 
+    group_by(site_no) %>% 
+    summarise(n_years = length(unique(year))) %>% 
+    ungroup() %>% 
+    filter(n_years >= !!num_years) %>% 
+    pull(site_no)
+    
   aquifer_data <- x %>% 
-    filter(site_no %in% pick_sites)
+    filter(site_no %in% pick_sites_comp_sum)
   
   if("siteInfo" %in% names(attributes(x))){
     siteInfo <- attr(x, "siteInfo") %>% 
-      filter(site_no %in% pick_sites)
+      filter(site_no %in% pick_sites_comp_sum)
     
     attr(aquifer_data, "siteInfo") <- siteInfo    
   }
@@ -161,17 +173,22 @@ composite_data <- function(x, sum_col, num_years){
 
   x <- filter_sites(x, sum_col, num_years)
   
+  if(nrow(x) == 0){
+    stop("No data in ", sum_col)
+  }
+  
   n_sites <- length(unique(x$site_no))
   
   composite <- x %>% 
     group_by(year, site_no) %>% 
     summarize(med_site = median(!!sym(sum_col), na.rm = TRUE)) %>% 
     ungroup() %>% 
+    distinct(year, site_no, med_site) %>% 
     group_by(year) %>% 
     summarise(mean = mean(med_site, na.rm = TRUE),
               median = median(med_site, na.rm = TRUE),
               n_sites_year = length(unique(site_no))) %>% 
-    filter(!n_sites_year < {{n_sites}}) %>% 
+    filter(n_sites_year == {{n_sites}}) %>%
     select(-n_sites_year) %>% 
     pivot_longer(c("mean", "median")) %>% 
     mutate(name = factor(name, 
@@ -211,6 +228,11 @@ normalized_data <- function(x, sum_col, num_years){
   if(!all(c("site_no", "year", sum_col) %in% names(x))) stop("Missing columns")
   
   x <- filter_sites(x, sum_col, num_years)
+  
+  if(nrow(x) == 0){
+    stop("No data in ", sum_col)
+  }
+  
   n_sites <- length(unique(x$site_no))
   
   year_summaries <- site_data_summary(x, sum_col)
@@ -219,7 +241,7 @@ normalized_data <- function(x, sum_col, num_years){
     group_by(year, site_no) %>% 
     mutate(med_site = median(!!sym(sum_col), na.rm = TRUE)) %>% 
     ungroup() %>% 
-    distinct() %>% 
+    distinct(year, site_no, med_site) %>% 
     group_by(site_no) %>% 
     mutate(max_med = max(med_site, na.rm = TRUE),
            min_med = min(med_site, na.rm = TRUE),

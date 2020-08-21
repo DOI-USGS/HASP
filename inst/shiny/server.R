@@ -17,11 +17,12 @@ shinyServer(function(input, output, session) {
   source("get_data.R",local=TRUE)$value
   source("comp_plot.R",local=TRUE)$value
   source("norm_plot.R",local=TRUE)$value
-  
+
   output$mymap <- leaflet::renderLeaflet({
 
     map <- leaflet::leaflet() %>%
-      leaflet::addProviderTiles("CartoDB.Positron")     
+      leaflet::addProviderTiles("CartoDB.Positron") %>%
+      leaflet::setView(lng = -83.5, lat = 44.5, zoom=6)   
 
 
   })
@@ -30,13 +31,22 @@ shinyServer(function(input, output, session) {
     validate(
       need(!is.null(rawData_data$data), "Please select a data set")
     )
+    req(input$mainOut == "map")
+    
+    showNotification("Prepping map", id = "loadmap",
+                     type = "message")
     
     aquifer_data <- rawData()
     
     shinyAce::updateAceEditor(session, editorId = "map_code", value = map_code() )
     
-    x <- filter_sites(aquifer_data, "lev_va", 30)
-    map_data <- prep_map_data(x, "lev_va")
+    x <- filter_sites(aquifer_data, input$gwl_vals, 30)
+    
+    if(nrow(x) == 0){
+      x <- aquifer_data
+    }
+    
+    map_data <- prep_map_data(x)
 
     map <- leafletProxy("mymap", data = map_data) %>%
       clearMarkers() %>%
@@ -48,9 +58,9 @@ shinyServer(function(input, output, session) {
       fitBounds(~min(dec_long_va), ~min(dec_lat_va),
                 ~max(dec_long_va), ~max(dec_lat_va))
     
-    map
+    removeNotification(id = "loadmap")
     
-   
+    map
     
   })
 
