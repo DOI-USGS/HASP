@@ -229,5 +229,9 @@ observe({
   if(all(is.na(gwl_data$sl_lev_va))){
     updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
   }
+  
+  if(all(is.na(gwl_data$lev_va))){
+    updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
+  }
 
 })

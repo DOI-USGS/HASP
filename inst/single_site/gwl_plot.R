@@ -218,16 +218,27 @@ week_table <- reactive({
 })
 
 week_plot_out <- reactive({
+  
+  p_code_dv <- input$pcode
+  stat_cd <- input$statcd
+  
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
   code_out <- paste0(setup(),'
+val_col <- "',value_col, '"
+approved_col <- "', approv_col,'"
 
-week_plot <-  weekly_frequency_plot(gw_level_dv, 
-                                    p_code_dv, stat_cd, 
+week_plot <-  weekly_frequency_plot(gw_level_dv,  
+                                    date_col = "Date",
+                                    value_col = val_col,
+                                    approved_col = approved_col,
                                     plot_title = plot_title)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
-                                     p_code_dv, 
-                                     statCd = stat_cd, 
+                                     value_col = val_col,
+                                     approved_col = approved_col,
                                      date_col = "Date")
 
 # To save:
@@ -303,17 +314,30 @@ year2_table <- reactive({
 
 
 year2_plot_out <- reactive({
+  
+  p_code_dv <- input$pcode
+  stat_cd <- input$statcd
+  
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
+  
   code_out <- paste0(setup(),'
+val_col <- "',value_col, '"
+approved_col <- "', approv_col,'"
 
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
-                                  p_code_dv, stat_cd, 
+                                  date_col = "Date",
+                                  value_col = val_col,
+                                  approved_col = approved_col,
                                   plot_title = plot_title,
                                   historical_stat = "mean",
                                   month_breaks = TRUE)
 year2_plot
 
 daily_frequencies <- daily_frequency_table(gw_level_dv,
-                                           p_code_dv, stat_cd)
+                                           date_col = "Date",
+                                           value_col = val_col,
+                                           approved_col = approved_col)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
@@ -390,18 +414,29 @@ month_table <- reactive({
 })
 
 month_plot_out <- reactive({
-  val_col <- input$gwl_vals
+  
+  p_code_dv <- input$pcode
+  stat_cd <- input$statcd
+  
+  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
+  approv_col <- paste0(value_col, "_cd")
   
   code_out <- paste0(setup(),'
-val_col <- "', val_col,'"
+val_col <- "',value_col, '"
+approved_col <- "', approv_col,'"
 
-month_plot <-  monthly_frequency_plot(gwl_data, 
+
+month_plot <-  monthly_frequency_plot(gw_level_dv,  
+                                      date_col = "Date",
                                       value_col = val_col,
+                                      approved_col = approved_col,
                                       plot_title = plot_title)
 month_plot
 
-month_frequencies <- monthly_frequency_table(gwl_data,
-                                             value_col = val_col)
+month_frequencies <- monthly_frequency_table(gw_level_dv,  
+                                             date_col = "Date",
+                                             value_col = val_col,
+                                             approved_col = approved_col)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
