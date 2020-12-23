@@ -126,8 +126,8 @@ approved_col <- c("', paste(approved_col, collapse = '", "'),'")
 y_label <- "', y_label,'"
 gwl_plot <-  gwl_plot_all(gw_level_dv, 
                           gwl_data, 
-                          date_col = date_cols,
-                          value_col = val_cols,
+                          date_col = date_col,
+                          value_col = val_col,
                           approved_col = approved_col,
                           y_label = y_label,
                           plot_title = plot_title,

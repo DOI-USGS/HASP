@@ -102,14 +102,14 @@ stat_cd <- "00001"')
 library(dataRetrieval)
 
 site_id <- "', site_id ,'"
-p_code_dv_all <- c("', paste(rawData_data$p_code_dv, collapse = '", "') ,'")
+p_code_dv_all <- c("', paste(rawData_data$p_code_dv$parameter_cd, collapse = '", "') ,'")
 p_code_dv <- "', p_code, '"
 stat_cd <- "00001"
 
-gw_level_dv <- readNWISdv(site_id = site_id,
-                           parameterCd = p_code_dv_all,
-                           statCd = "', stat_cd, '")
-gwl_data <- readNWISqwl(site_id = site_id)
+gw_level_dv <- readNWISdv(siteNumbers = site_id,
+                          parameterCd = p_code_dv_all,
+                          statCd = "', stat_cd, '")
+gwl_data <- readNWISgwl(siteNumbers = site_id)
 
 plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
                     site_id, sep = "\\\\n")') 
@@ -117,7 +117,7 @@ plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
       if(!isTRUE(is.null(rawData_data$qw_data))){
         setup_code <- paste0(setup_code,'
 pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
-qw_data <- readNWISqw(site_id = site_id,
+qw_data <- readNWISqw(siteNumbers = site_id,
                       parameterCd = pcodes_qw)
 ')
       }      
