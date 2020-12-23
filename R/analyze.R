@@ -102,7 +102,7 @@ filter_sites <- function(x, sum_col, num_years){
   
   if(!all(c("site_no", "year", sum_col) %in% names(x))) stop("Missing columns")
 
-  lev_va <- site_no <- year <- ".dplyr"
+  lev_va <- site_no <- year <- n_years <- ".dplyr"
 
   pick_sites <- x %>% 
     filter(!is.na(!!sym(sum_col))) %>% 

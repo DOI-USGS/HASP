@@ -13,7 +13,7 @@ daily_gwl_2yr_plot(
   month_breaks = FALSE,
   plot_title = "",
   y_axis_label = "",
-  flip_y = TRUE
+  flip_y = FALSE
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ from readNWISdv}
 \item{y_axis_label}{the label to use for the y axis}
 
 \item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
-Default is \code{TRUE}.}
+Default is \code{FALSE}.}
 }
 \value{
 a ggplot object with a ribbon indicating the historical daily range,
