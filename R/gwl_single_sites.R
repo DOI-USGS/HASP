@@ -138,6 +138,18 @@ gwl_plot_all <- function(gw_level_dv,
 
     }
     
+    gwl_data[, value_col_per] <- as.numeric(gwl_data[[value_col_per]])
+    
+    if(all(is.na(gwl_data[[value_col_per]]))){
+      
+      if(value_col_per == "lev_va") {
+        value_col_per <- "sl_lev_va"
+      } else if (value_col_per == "sl_lev_va"){
+        value_col_per <- "lev_va"
+      }
+      message("All data in the 'value column' is NA, switching to: ", value_col_per)
+    }
+    
     if(!all(c(date_col_per, value_col_per, approved_col_per) %in% names(gwl_data))){
       stop("gwl_data data frame doesn't include all specified columns")
     }
