@@ -7,11 +7,13 @@
 #' @param pcode character pcode to plot
 #' @param norm_range a numerical range to potentially group the data. If NA, no grouping is shown.
 #' @param plot_title character
+#' @param include_table logical whether or not to include the trend table in the upper left corner.
 #' @rdname chloridetrend
 #' @export
 #' @import ggplot2
 #' @importFrom scales comma
 #' @importFrom ggpmisc stat_poly_eq
+#' @importFrom ggpmisc geom_table
 #' @importFrom dataRetrieval readNWISpCode
 #' @examples 
 #' 
@@ -24,8 +26,9 @@
 #' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
 #' trend_plot(qw_data, plot_title)
 trend_plot <- function(qw_data, plot_title, 
-                        pcode = c("00940","99220"),
-                        norm_range = c(225,999)){
+                       pcode = c("00940","99220"),
+                       norm_range = c(225,999),
+                       include_table = TRUE){
   
   if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
@@ -99,9 +102,28 @@ trend_plot <- function(qw_data, plot_title,
                           labels = c("5 year", "20 year")) +
     guides(shape = guide_legend(order = 1),
            color = guide_legend(order = 1),
-           linetype = guide_legend(order = 2))
+           linetype = guide_legend(order = 2)) 
+  
+  if(include_table){
     
-    return(plot_out)
+    trend_results <- kendell_test_5_20_years(qw_sub, seasonal = FALSE,
+                                             date_col = "sample_dt", 
+                                             value_col = "result_va",
+                                             enough_5 = 1, enough_20 = 1)
+    
+    trend_results$tau <- signif(trend_results$tau, digits = 4)
+    trend_results$pValue <- signif(trend_results$pValue, digits = 4)
+    trend_results$slope <- signif(trend_results$slope, digits = 4)
+    trend_results$intercept <- signif(trend_results$intercept, digits = 4)
+    
+    plot_out <- plot_out +
+      ggpmisc::annotate(geom = "table", 
+             x = -Inf, y = Inf,
+             label = list(trend_results), 
+             vjust = 1, hjust = 0)
+  }
+    
+  return(plot_out)
   
 }
 
