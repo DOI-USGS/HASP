@@ -52,6 +52,7 @@ site_data_summary <- function(x, sum_col){
 #' @return data frame 
 #' @export
 #' @import dplyr
+#' @keywords internal
 #'
 #' @examples 
 #' aquifer_data <- aquifer_data

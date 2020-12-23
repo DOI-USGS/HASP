@@ -19,3 +19,4 @@ Get map info
 aquifer_data <- aquifer_data
 map_info <- prep_map_data(aquifer_data)
 }
+\keyword{internal}
