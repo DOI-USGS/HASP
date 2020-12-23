@@ -559,7 +559,7 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
 #'
 #' @examples
 #' 
-#' # site <- "263819081585801"
+#' site <- "263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
@@ -653,7 +653,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
                    "Provisional daily value" = "red",
                    "Approved daily value" = "navy")
   names(line_colors)[1] <- historical_name
-  ribbon_colors <- c("Approved Daily\nMin & Max" = "lightskyblue1")
+  ribbon_colors <- c("Historical Daily\nMin & Max" = "lightskyblue1")
   
   if(month_breaks) {
     x_label <- paste(as.character(plot_start, "%B %Y"), 
