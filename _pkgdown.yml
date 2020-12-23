@@ -62,6 +62,9 @@ reference:
       - explore_aquifers
       - explore_site
       - normalized_data
+      - first_day
       - last_day
       - mid_month
-      - filter_sites 
+      - water_year
+      - filter_sites
+      - monthly_mean 
