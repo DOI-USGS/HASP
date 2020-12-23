@@ -48,7 +48,7 @@ Plot the last two years of daily data
 }
 \examples{
 
-# site <- "263819081585801"
+site <- "263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
