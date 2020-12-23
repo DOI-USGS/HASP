@@ -42,7 +42,8 @@ Sc_Cl_plot <- function(qw_data, plot_title){
     geom_point(color = "blue") +
     stat_smooth(method = "lm", color = "black", 
                 formula = y ~ x , se = FALSE) +
-    hasp_framework(Cltitle, Sctitle, include_y_scale = TRUE,
+    hasp_framework(y_label = Cltitle, 
+                   x_label = Sctitle, include_y_scale = TRUE,
                    plot_title = plot_title,
                    zero_on_top = NA) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,

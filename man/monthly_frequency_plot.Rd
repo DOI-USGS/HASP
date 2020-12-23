@@ -12,7 +12,7 @@ monthly_frequency_plot(
   plot_title = "",
   plot_range = c("Past year"),
   y_axis_label = "",
-  flip_y = TRUE
+  flip_y = FALSE
 )
 }
 \arguments{
@@ -54,7 +54,8 @@ monthly_frequency <- monthly_frequency_plot(gw_level_dv,
                                              date_col = "Date",
                                              value_col = "X_62610_00001",
                                              approved_col = "X_62610_00001_cd",
-                                             plot_title = "L2701 Groundwater Level")
+                                             plot_title = "L2701 Groundwater Level",
+                                             flip_y = FALSE)
 monthly_frequency
 
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
