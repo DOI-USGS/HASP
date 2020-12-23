@@ -121,7 +121,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/HASP">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -147,7 +147,7 @@
     <p>Get USGS data based on aquiferCd</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_aquifer_data</span>(<span class='kw'>aquiferCd</span>, <span class='kw'>startDate</span>, <span class='kw'>endDate</span>)</pre>
+    <pre class="usage"><span class='fu'>get_aquifer_data</span><span class='op'>(</span><span class='va'>aquiferCd</span>, <span class='va'>startDate</span>, <span class='va'>endDate</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,11 +168,12 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>end_date</span> <span class='op'>&lt;-</span> <span class='st'>"2019-12-31"</span>
-<span class='kw'>start_date</span> <span class='op'>&lt;-</span> <span class='st'>"1989-12-31"</span>
+    <pre class="examples"><div class='input'><span class='va'>end_date</span> <span class='op'>&lt;-</span> <span class='st'>"2019-12-31"</span>
+<span class='va'>start_date</span> <span class='op'>&lt;-</span> <span class='st'>"1989-12-31"</span>
 
-<span class='kw'>aquiferCd</span> <span class='op'>&lt;-</span> <span class='st'>"S100CSLLWD"</span>
-<span class='co'>#aq_data &lt;- get_aquifer_data(aquiferCd, start_date, end_date)</span></div></pre>
+<span class='va'>aquiferCd</span> <span class='op'>&lt;-</span> <span class='st'>"S100CSLLWD"</span>
+<span class='co'>#aq_data &lt;- get_aquifer_data(aquiferCd, start_date, end_date)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -188,7 +189,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

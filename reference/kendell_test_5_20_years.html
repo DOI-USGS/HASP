@@ -122,7 +122,7 @@ Seasonal Kendall Trend Test." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/HASP">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -149,16 +149,16 @@ Seasonal Kendall Trend Test." />
 Seasonal Kendall Trend Test.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kendell_test_5_20_years</span>(
-  <span class='kw'>gwl</span>,
-  date_col = <span class='st'>"lev_dt"</span>,
-  value_col = <span class='st'>"sl_lev_va"</span>,
-  alpha = <span class='fl'>0.95</span>,
-  seasonal = <span class='fl'>TRUE</span>,
-  enough_5 = <span class='fl'>10</span>,
-  enough_20 = <span class='fl'>6</span>,
-  include_current_year = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span>
+  <span class='va'>gwl</span>,
+  date_col <span class='op'>=</span> <span class='st'>"lev_dt"</span>,
+  value_col <span class='op'>=</span> <span class='st'>"sl_lev_va"</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.95</span>,
+  seasonal <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  enough_5 <span class='op'>=</span> <span class='fl'>10</span>,
+  enough_20 <span class='op'>=</span> <span class='fl'>6</span>,
+  include_current_year <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,10 +214,12 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 <span class='co'># gw_level_data &lt;- dataRetrieval::readNWISgwl(site)</span>
 
 <span class='co'># Using package example data:</span>
-<span class='kw'>gwl_data</span> <span class='op'>&lt;-</span> <span class='kw'>L2701_example_data</span><span class='op'>$</span><span class='kw'>Discrete</span>
-<span class='fu'>kendell_test_5_20_years</span>(<span class='kw'>gwl_data</span>)</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
+<span class='va'>gwl_data</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span>
+<span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span><span class='va'>gwl_data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
 #&gt; 1  5-year trend          NA        NA          NA        NA            &lt;NA&gt;
-#&gt; 2 20-year trend -0.04106885 0.4894787 -0.05597039  102.0067 Not significant</div><div class='input'></div></pre>
+#&gt; 2 20-year trend -0.04106885 0.4894787 -0.05597039  102.0067 Not significant</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -233,7 +235,7 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
