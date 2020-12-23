@@ -8,7 +8,8 @@ trend_plot(
   qw_data,
   plot_title,
   pcode = c("00940", "99220"),
-  norm_range = c(225, 999)
+  norm_range = c(225, 999),
+  include_table = TRUE
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ must include columns sample_dt, parm_cd, result_va}
 \item{pcode}{character pcode to plot}
 
 \item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
+
+\item{include_table}{logical whether or not to include the trend table in the upper left corner.}
 }
 \description{
 Function creates the cloride over time plot with trends.
