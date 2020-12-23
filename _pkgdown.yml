@@ -60,7 +60,7 @@ reference:
       - theme_gwl
       - hasp_framework
       - explore_aquifers
-      - explore_sites
+      - explore_site
       - normalized_data
       - last_day
       - mid_month
