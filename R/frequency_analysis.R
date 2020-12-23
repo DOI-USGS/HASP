@@ -240,10 +240,9 @@ monthly_frequency_plot <- function(gw_level_dv,
     hasp_framework(x_label, y_label, plot_title = plot_title) +
     theme(axis.ticks.x = element_blank()) +
     guides(color = guide_legend(order = 1, 
-                                override.aes = list(shape = point_shapes,
-                                                    color = point_colors)),
+                                override.aes = list(shape = rev(point_shapes))),
            shape = FALSE,
-           fill = guide_legend(order = 2)) 
+           fill = guide_legend(order = 2))  
   if(flip_y){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
