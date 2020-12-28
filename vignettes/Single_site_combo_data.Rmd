@@ -66,7 +66,7 @@ kable(data_info)
 
 Using `dataRetrieval` code to get the data for this site:
 
-```{r getData, eval=FALSE}
+```{r getData, eval=TRUE}
 library(dataRetrieval)
 siteID <- "263819081585801"
 parameterCd <- "62610"
@@ -83,13 +83,15 @@ gwl_data <- readNWISgwl(siteID)
 pcodes_cl_sc <- c("00095","90095","00940","99220")
 qw_data <- readNWISqw(siteID,  pcodes_cl_sc)
 
+plot_title <- "L -2701\n263819081585801 "
+
 ```
 
 </td><td>
 
 Using the example data provided in the package:
 
-```{r getDataReal}
+```{r getDataReal, eval=FALSE}
 siteID <- "263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
@@ -101,7 +103,7 @@ gwl_data <- L2701_example_data$Discrete
 # QW:
 qw_data <- L2701_example_data$QW
 
-plot_title <- "L -2701\n263819081585801 "
+
 
 ```
 
