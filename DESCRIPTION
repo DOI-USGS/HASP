@@ -45,8 +45,9 @@ Suggests:
     testthat,
     knitr,
     kableExtra,
-    covr
-BugReports: https://code.usgs.gov/water/stats/hasp/issues
+    covr,
+    readxl
+BugReports: https://github.com/USGS-R/HASP/issues
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyLoad: yes

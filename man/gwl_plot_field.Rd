@@ -23,7 +23,7 @@ gwl_plot_all(
   y_label = "GWL",
   plot_title = "",
   add_trend = FALSE,
-  flip_y = TRUE
+  flip_y = FALSE
 )
 }
 \arguments{
@@ -90,7 +90,7 @@ gwl_plot_all(gw_level_dv,
              date_col = date_col, 
              value_col = value_col,
              approved_col = approved_col,
-             plot_title, flip_y = FALSE,
+             plot_title,
              add_trend = TRUE)
              
 gwl_plot_all(NULL, 
@@ -98,6 +98,6 @@ gwl_plot_all(NULL,
              date_col = "lev_dt", 
              value_col = "sl_lev_va",
              approved_col = "lev_age_cd",
-             plot_title, flip_y = FALSE)
+             plot_title)
 
 }

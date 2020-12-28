@@ -126,6 +126,9 @@ monthly_frequency_plot <- function(gw_level_dv,
   
   date <- Sys.Date()
   
+  #Convert date column to date just in case its a POSIXct:
+  gw_level_dv[[date_col]] <- as.Date(gw_level_dv[[date_col]])
+  
   # Calculate the percentiles
   site_statistics <- monthly_frequency_table(gw_level_dv, 
                                              date_col = date_col,

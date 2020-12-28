@@ -99,7 +99,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #'              date_col = date_col, 
 #'              value_col = value_col,
 #'              approved_col = approved_col,
-#'              plot_title, flip_y = FALSE,
+#'              plot_title,
 #'              add_trend = TRUE)
 #'              
 #' gwl_plot_all(NULL, 
@@ -107,7 +107,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #'              date_col = "lev_dt", 
 #'              value_col = "sl_lev_va",
 #'              approved_col = "lev_age_cd",
-#'              plot_title, flip_y = FALSE)
+#'              plot_title)
 #' 
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
@@ -115,7 +115,7 @@ gwl_plot_all <- function(gw_level_dv,
                          y_label = "GWL",
                          plot_title = "",
                          add_trend = FALSE,
-                         flip_y = TRUE){
+                         flip_y = FALSE){
   
   x1 <- x2 <- y1 <- y2 <- trend <- year <- Value <- Approve <- ".dplyr"
   Date <- is_na_after <- is_na_before <- is_point <- ".dplyr"
@@ -168,6 +168,9 @@ gwl_plot_all <- function(gw_level_dv,
     if(!all(c(date_col_dv, value_col_dv, approved_dv) %in% names(gw_level_dv))){
       stop("gw_level_dv data frame doesn't include all specified columns")
     }
+    
+    #Convert date column to date just in case its a POSIXct:
+    gw_level_dv[[date_col[1]]] <- as.Date(gw_level_dv[[date_col[1]]])
     
   }
   
