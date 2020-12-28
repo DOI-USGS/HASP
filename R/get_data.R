@@ -95,8 +95,6 @@ get_state_data <- function(state, aquiferCd, startDate, endDate){
 #' @param markdown logical. Use markdown formating or console-friendly.
 #' @export
 #' @importFrom dataRetrieval readNWISsite
-#' @importFrom dataRetrieval stateCdLookup
-#' @importFrom dataRetrieval countyCdLookup
 #' @import dplyr
 #'
 #' @examples 
@@ -132,9 +130,9 @@ site_summary <- function(siteID, markdown = FALSE){
     left_join(nat_aqfrs, by = "nat_aqfr_cd") %>% 
     left_join(rename(local_aqfr, 
                      local_aq = Aqfr_Name_prpr), by = "aqfr_cd") %>% 
-    mutate(state = stateCdLookup(state_cd, 
+    mutate(state = dataRetrieval::stateCdLookup(state_cd, 
                                  outputType = "fullName"),
-           county = countyCdLookup(state = state_cd,
+           county = dataRetrieval::countyCdLookup(state = state_cd,
                                    county = county_cd,
                                    outputType = "fullName"),
            lat_deg = substr(lat_va, start = 1, stop = 2),
