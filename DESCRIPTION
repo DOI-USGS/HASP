@@ -31,7 +31,6 @@ Imports:
     ggplot2,
     ggpmisc,
     leaflet,
-    scales,
     shiny,
     DT,
     shinyAce,

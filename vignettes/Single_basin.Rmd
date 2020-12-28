@@ -5,7 +5,7 @@ output:
 editor_options: 
   chunk_output_type: console
 vignette: >
-  %\VignetteIndexEntry{Example Basin}
+  %\VignetteIndexEntry{Composite Hydrograph}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---

@@ -11,7 +11,6 @@
 #' @rdname chloridetrend
 #' @export
 #' @import ggplot2
-#' @importFrom scales comma
 #' @importFrom ggpmisc stat_poly_eq
 #' @importFrom ggpmisc geom_table
 #' @importFrom dataRetrieval readNWISpCode

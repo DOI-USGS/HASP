@@ -5,11 +5,10 @@
 #'
 #' @param qw_data data frame returned from dataRetrieval::readNWISqw,
 #' must include columns sample_dt, parm_cd, result_va
-#' @param plot_title character
+#' @param plot_title character title for plot
 #' @rdname sc_cl
 #' @export
 #' @import ggplot2
-#' @importFrom scales comma
 #' @importFrom ggpmisc stat_poly_eq
 #' @importFrom dataRetrieval readNWISpCode
 #' @examples 

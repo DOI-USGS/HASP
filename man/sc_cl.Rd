@@ -19,7 +19,7 @@ qw_summary(qw_data, pcode, norm_range = NA)
 \item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
 must include columns sample_dt, parm_cd, result_va}
 
-\item{plot_title}{character}
+\item{plot_title}{character title for plot}
 
 \item{pcode}{character pcode to plot}
 

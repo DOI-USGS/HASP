@@ -1,11 +1,11 @@
 ---
-title: "Preparing HASP Data"
+title: "Preparing Data"
 output: 
   rmarkdown::html_vignette:
     toc: true
     number_sections: false
 vignette: >
-  %\VignetteIndexEntry{Prepare Data}
+  %\VignetteIndexEntry{Preparing Data}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -14,7 +14,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 library(knitr)
-
+library(HASP)
 opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
