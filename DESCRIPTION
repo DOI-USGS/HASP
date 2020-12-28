@@ -30,6 +30,7 @@ Imports:
     tidyr,
     ggplot2,
     ggpmisc,
+    scales,
     leaflet,
     shiny,
     DT,
