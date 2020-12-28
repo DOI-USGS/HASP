@@ -2,10 +2,12 @@
 #'
 #' Create composite hydrograph plot
 #' 
-#' @param x aquifer data
-#' @param sum_col column name
+#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' and the 3rd is defined by the sum_col argument.
+#' @param sum_col column name to do the analysis on. In data coming from 
+#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required
-#' @param plot_title character
+#' @param plot_title character title included on plot.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -47,10 +49,12 @@ plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
 #'
 #' Create composite hydrograph plot
 #' 
-#' @param x aquifer data
-#' @param sum_col column name
-#' @param num_years integer number of years required
-#' @param plot_title character
+#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' and the 3rd is defined by the sum_col argument.
+#' @param sum_col column name to do the analysis on. In data coming from 
+#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
+#' @param num_years integer number of years required to the analysis.
+#' @param plot_title character title of plot.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -94,8 +98,10 @@ plot_normalized_data <- function(x, sum_col, num_years, plot_title = ""){
 #'
 #' Map data used in composite hydrographs
 #' 
-#' @param x aquifer data
-#' @param sum_col column name
+#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' and the 3rd is defined by the sum_col argument.
+#' @param sum_col column name to do the analysis on. In data coming from 
+#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required
 #' @return leaflet object
 #' 

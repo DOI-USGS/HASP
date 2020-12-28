@@ -16,7 +16,7 @@ monthly_frequency_plot(
 )
 }
 \arguments{
-\item{gw_level_dv}{groundwater level data from \code{readNWISgwl}}
+\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained from \code{readNWISdv}}
 
 \item{date_col}{name of date column.}
 
@@ -37,7 +37,7 @@ Default is \code{TRUE}.}
 }
 \value{
 a ggplot with rectangles representing the historical monthly percentile,
-black triangles representing the hisotorical monthly median, and red diamonds
+black triangles representing the historical monthly median, and red diamonds
 showing the last year of groundwater level measurements.
 }
 \description{

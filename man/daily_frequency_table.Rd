@@ -7,8 +7,8 @@
 daily_frequency_table(gw_level_dv, date_col, value_col, approved_col)
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
-from readNWISdv}
+\item{gw_level_dv}{data frame, daily groundwater level data
+from \code{readNWISdv}}
 
 \item{date_col}{the heading of the date column.}
 

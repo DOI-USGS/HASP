@@ -1,6 +1,6 @@
 #' Create a table of monthly frequency analysis
 #' 
-#' @param gw_level_dv groundwater level data from \code{readNWISgwl}
+#' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
 #' @param date_col name of date column.
 #' @param value_col name of value column.
 #' @param approved_col name of column to get provisional/approved status.
@@ -65,7 +65,7 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 
 #' Plot monthly frequency analysis
 #' 
-#' @param gw_level_dv groundwater level data from \code{readNWISgwl}
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained from \code{readNWISdv}
 #' @param date_col name of date column.
 #' @param value_col name of value column.
 #' @param approved_col name of column to get provisional/approved status.
@@ -77,7 +77,7 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}. 
 #' @return a ggplot with rectangles representing the historical monthly percentile,
-#' black triangles representing the hisotorical monthly median, and red diamonds
+#' black triangles representing the historical monthly median, and red diamonds
 #' showing the last year of groundwater level measurements.
 #' 
 #' @import ggplot2
@@ -257,8 +257,8 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' 
 #' The weekly frequency analysis is based on daily values
 #' 
-#' @param gw_level_dv daily groundwater level data
-#' from readNWISdv
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
+#' from \code{readNWISdv}.
 #' @param date_col name of date column.
 #' @param value_col name of value column.
 #' @param approved_col name of column to get provisional/approved status.
@@ -322,8 +322,8 @@ weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_co
 #' 
 #' The weekly frequency analysis is based on daily data
 #' 
-#' @param gw_level_dv daily groundwater level data
-#' from readNWISdv
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
+#' from \code{readNWISdv}.
 #' @param date_col name of date column.
 #' @param value_col name of value column.
 #' @param approved_col name of column to get provisional/approved status.
@@ -535,8 +535,8 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
 
 #' Plot the last two years of daily data
 #'
-#' @param gw_level_dv daily groundwater level data
-#' from readNWISdv
+#' @param gw_level_dv data frame daily groundwater level data
+#' from \code{readNWISdv}
 #' @param date_col name of date column.
 #' @param value_col name of value column.
 #' @param approved_col name of column to get provisional/approved status. 
@@ -709,8 +709,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
 #' Give the historical max, mean, minimum, and number of available points
 #' for each day of the year
 #' 
-#' @param gw_level_dv daily groundwater level data
-#' from readNWISdv
+#' @param gw_level_dv data frame, daily groundwater level data
+#' from \code{readNWISdv}
 #' @param date_col the heading of the date column.
 #' @param value_col name of value column.
 #' @param approved_col name of column to get provisional/approved status.
@@ -830,8 +830,12 @@ daily_gwl_summary <- function(gw_level_dv, date_col, value_col, approved_col) {
 #' @param date a vector of dates
 #' 
 #' @return the first day of the month that given dates fall in
+#' @export
 #' 
-
+#' @examples 
+#' date <- as.Date("2020-12-28")
+#' first_day(date)
+#' 
 first_day <- function(date) {
   
   date <- as.POSIXlt(date)
@@ -852,8 +856,12 @@ first_day <- function(date) {
 #' @param date a vector of dates
 #' 
 #' @return the last day of the month that given dates fall in
-
-
+#' @export
+#' @examples 
+#' date <- as.Date("2020-12-28")
+#' last_day(date)
+#' last_day("2020-02-15")
+#' last_day("2019-02-15")
 last_day <- function(date) {
   
   date <- as.POSIXlt(date)
@@ -884,12 +892,18 @@ last_day <- function(date) {
 #' @param date a vector of dates
 #' 
 #' @return the middle day of the month the given dates fall in
-
+#' @export
+#' @examples 
+#' date <- as.Date("2020-12-28")
+#' mid_month(date)
+#' mid_month(c("2019-02-15", "2020-03-08", "2010-06-01"))
 mid_month <- function(date) {
   
-  mid <- lapply(date, function(x) { mean(c(x, last_day(x))) })
-  mid <- do.call(c, mid)
+  last_days <- last_day(date)
+  first_days <- first_day(date)
   
+  mid <- first_days + difftime(last_days, first_days)/2
+
   return(mid)
   
 }

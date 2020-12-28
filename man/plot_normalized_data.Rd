@@ -7,13 +7,15 @@
 plot_normalized_data(x, sum_col, num_years, plot_title = "")
 }
 \arguments{
-\item{x}{aquifer data}
+\item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+and the 3rd is defined by the sum_col argument.}
 
-\item{sum_col}{column name}
+\item{sum_col}{column name to do the analysis on. In data coming from 
+\code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".}
 
-\item{num_years}{integer number of years required}
+\item{num_years}{integer number of years required to the analysis.}
 
-\item{plot_title}{character}
+\item{plot_title}{character title of plot.}
 }
 \value{
 ggplot2 object
