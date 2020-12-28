@@ -88,7 +88,6 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #' @import dplyr
 #' @importFrom lubridate year
 #' @importFrom lubridate month
-#' @importFrom purrr reduce
 #' 
 #' @export
 #'
@@ -166,18 +165,20 @@ monthly_frequency_plot <- function(gw_level_dv,
   cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
-  plot_list <- list()
+  plot_list <- data.frame()
   for(i in seq_along(cols)) {
-    plot_list[[i]] <- site_statistics_pivot %>%
+    plot_data <- site_statistics_pivot %>%
       filter(name %in% cols[[i]]) %>%
       pivot_wider(id_cols = plot_month, names_from = name, values_from = value) %>%
       rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
       mutate(group = groups[i])
+    
+    plot_list <- bind_rows(plot_list, plot_data)
   }
   
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- reduce(plot_list, bind_rows) %>%
+  site_statistics_plot <- plot_list %>%
     mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
@@ -343,7 +344,6 @@ weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_co
 #' @import dplyr
 #' @importFrom lubridate year
 #' @importFrom lubridate month
-#' @importFrom purrr reduce
 #' 
 #' @export
 #'
@@ -410,18 +410,19 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
-  plot_list <- list()
+  plot_list <- data.frame()
   for(i in seq_along(cols)) {
-    plot_list[[i]] <- site_statistics_pivot %>%
+    plot_data <- site_statistics_pivot %>%
       filter(name %in% cols[[i]]) %>%
       pivot_wider(id_cols = plot_week, names_from = name, values_from = value) %>%
       rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
       mutate(group = groups[i])
+    plot_list <- bind_rows(plot_list, plot_data)
   }
   
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- reduce(plot_list, bind_rows) %>%
+  site_statistics_plot <- plot_list %>%
     mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
