@@ -10,9 +10,6 @@
 #' years of data; and the lowest monthly median and the highest monthly
 #' median.
 #' 
-#' @importFrom lubridate year
-#' @importFrom lubridate month
-#' @importFrom lubridate week
 #' @import dplyr
 #' 
 #' @export
@@ -39,9 +36,9 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
   
   gw_level_dv <- gw_level_dv %>%
     filter(grepl("A", !!sym(approved_col))) %>%
-    mutate(year = year(!!sym(date_col)),
-           month = month(!!sym(date_col)),
-           week = week(!!sym(date_col)))
+    mutate(year = as.POSIXlt(!!sym(date_col))$year + 1900,
+           month = as.POSIXlt(!!sym(date_col))$mon + 1,
+           week = as.POSIXlt(!!sym(date_col))$yday%/%7 + 1)
   
   annual_stats <- gw_level_dv %>%
     group_by(year, month) %>%
@@ -86,9 +83,6 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #' @import ggplot2
 #' @importFrom tidyr pivot_longer
 #' @import dplyr
-#' @importFrom lubridate year
-#' @importFrom lubridate month
-#' @importFrom purrr reduce
 #' 
 #' @export
 #'
@@ -126,7 +120,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   
   lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
     plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
-    ymax <- x <- y <- ".dplyr"
+    ymax <- x <- y <- year <- month <- ".dplyr"
   
   plot_range <- match.arg(plot_range)
   
@@ -143,7 +137,7 @@ monthly_frequency_plot <- function(gw_level_dv,
     plot_end <- last_day(date) + 1
     plot_start <- first_day(plot_end - 363)
   } else if(plot_range == "Calendar year") {
-    calendar_year <- as.character(date, format = "%Y")
+    calendar_year <- as.POSIXlt(date)$year + 1900
     plot_end <- as.Date(paste0(calendar_year, "-12-31"))
     plot_start <- as.Date(paste0(calendar_year, "-01-01"))
   }
@@ -155,7 +149,8 @@ monthly_frequency_plot <- function(gw_level_dv,
   
   # Add the first day of the month to the site_statistics table for plotting
   plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
-  plot_month_lookup <- data.frame(plot_month = plot_month, month = month(plot_month))
+  plot_month_lookup <- data.frame(plot_month = plot_month, 
+                                  month = as.POSIXlt(plot_month)$mon + 1)
   site_statistics <- left_join(site_statistics, plot_month_lookup, by = "month")
   
   # Set up the plot data for the percentile ranges (rectangle geometry)
@@ -166,18 +161,20 @@ monthly_frequency_plot <- function(gw_level_dv,
   cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
-  plot_list <- list()
+  plot_list <- data.frame()
   for(i in seq_along(cols)) {
-    plot_list[[i]] <- site_statistics_pivot %>%
+    plot_data <- site_statistics_pivot %>%
       filter(name %in% cols[[i]]) %>%
       pivot_wider(id_cols = plot_month, names_from = name, values_from = value) %>%
       rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
       mutate(group = groups[i])
+    
+    plot_list <- bind_rows(plot_list, plot_data)
   }
   
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- reduce(plot_list, bind_rows) %>%
+  site_statistics_plot <- plot_list %>%
     mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
@@ -208,10 +205,12 @@ monthly_frequency_plot <- function(gw_level_dv,
                     "Data point" = "red")
   
   # Create the plot labels
-  if(year(plot_start) == year(plot_end)) {
-    x_label <- as.character(year(plot_start))
+  start_year <- as.POSIXlt(plot_start)$year + 1900
+  end_year <- as.POSIXlt(plot_end)$year + 1900
+  if(start_year == end_year) {
+    x_label <- as.character(start_year)
   } else {
-    x_label <- paste(year(plot_start), year(plot_end), sep = " - ")
+    x_label <- paste(start_year, end_year, sep = " - ")
   }
   y_label <- y_axis_label
     
@@ -237,7 +236,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
-                 labels = month.abb[month(plot_month)]) +
+                 labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
     hasp_framework(x_label, y_label, plot_title = plot_title) +
     theme(axis.ticks.x = element_blank()) +
     guides(color = guide_legend(order = 1, 
@@ -263,9 +262,6 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' 
 #' @return a data frame of weekly frequency analysis
 #' 
-#' @importFrom lubridate year
-#' @importFrom lubridate month
-#' @importFrom lubridate week
 #' @import dplyr
 #' 
 #' @export
@@ -284,7 +280,7 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' head(weekly_frequency)
 weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_col) {
   
-  Date <- gw_level <- ".dplyr"
+  Date <- gw_level <- year <- week <- ".dplyr"
   
   if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
     stop("not all columns found in gw_level_dv")
@@ -292,8 +288,8 @@ weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_co
   
   gw_level_dv <- gw_level_dv %>%
     filter(grepl("A", !!sym(approved_col))) %>%
-    mutate(year = year(!!sym(date_col)),
-           week = week(!!sym(date_col)))
+    mutate(year = as.POSIXlt(!!sym(date_col))$year + 1900,
+           week = as.POSIXlt(!!sym(date_col))$yday%/%7 + 1 )
   
   annual_stats <- gw_level_dv %>%
     group_by(year, week) %>%
@@ -339,11 +335,9 @@ weekly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_co
 #' and points representing the historical median and daily values
 #' 
 #' @import ggplot2
-#' @import tidyr
 #' @import dplyr
-#' @importFrom lubridate year
-#' @importFrom lubridate month
-#' @importFrom purrr reduce
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_wider
 #' 
 #' @export
 #'
@@ -373,7 +367,7 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   
   Date <- nYears <- minMed <- maxMed <- name <- value <- group <-
     plot_week_med <- p50 <- gw_code <- gw_level <- x <- y <- 
-    plot_week_last <- ymin <- ymax <- ".dplyr"
+    plot_week_last <- ymin <- ymax <- week <- ".dplyr"
   
   plot_range <- match.arg(plot_range)
   
@@ -399,7 +393,8 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   
   # Add the first day of the week to the site_statistics table for plotting
   plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
-  plot_week_lookup <- data.frame(plot_week = plot_week, week = week(plot_week))
+  plot_week_lookup <- data.frame(plot_week = plot_week, 
+                                 week = as.POSIXlt(plot_week)$yday%/%7 + 1)
   site_statistics <- left_join(site_statistics, plot_week_lookup, by = "week")
   
   # Set up the plot data for the percentile ranges (rectangle geometry)
@@ -410,18 +405,19 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
-  plot_list <- list()
+  plot_list <- data.frame()
   for(i in seq_along(cols)) {
-    plot_list[[i]] <- site_statistics_pivot %>%
+    plot_data <- site_statistics_pivot %>%
       filter(name %in% cols[[i]]) %>%
       pivot_wider(id_cols = plot_week, names_from = name, values_from = value) %>%
       rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
       mutate(group = groups[i])
+    plot_list <- bind_rows(plot_list, plot_data)
   }
   
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- reduce(plot_list, bind_rows) %>%
+  site_statistics_plot <- plot_list %>%
     mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
@@ -436,7 +432,8 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   data_points <- gw_level_plot %>%
     mutate(gw_code = ifelse(grepl("A", !!sym(approved_col)), "Approved", "Provisional"),
            group = sprintf("%s daily value", gw_code)) %>%
-    rename(x = Date, y = !!sym(value_col)) %>%
+    rename(x = Date,
+           y = !!sym(value_col)) %>%
     select(x, y, group)
   point_data <- bind_rows(site_statistics_med, data_points) %>%
     mutate(group = factor(group,
@@ -459,17 +456,20 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
                     "Historical weekly median" = "springgreen4")
   
   # Create the plot labels
-  if(year(plot_start) == year(plot_end)) {
-    x_label <- as.character(year(plot_start))
+  year_start <- as.POSIXlt(plot_start)$year + 1900
+  year_end <- as.POSIXlt(plot_end)$year + 1900
+  
+  if(year_start == year_end) {
+    x_label <- as.character(year_start)
   } else {
-    x_label <- paste(year(plot_start), year(plot_end), sep = " - ")
+    x_label <- paste(year_start, year_end, sep = " - ")
   }
   y_label <- y_axis_label
   
   # Create the month breaks
   month_start <- seq(as.Date(plot_start), length = 12, by = "1 month")
   month_breaks <- mid_month(month_start)
-  month_labels <- month.abb[month(month_breaks)]
+  month_labels <- month.abb[as.POSIXlt(month_breaks)$mon + 1]
 
   order_groups <- c("Approved daily value",
                     "Provisional daily value",
@@ -615,6 +615,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
   # Pull the last two years of data & join with the historical data
   
   most_recent <- max(gw_level_dv[, date_col], na.rm = TRUE)
+  #TODO: check here!
   plot_start_year <- as.numeric(as.character(most_recent, format = "%Y")) - 2
   plot_start <- as.Date(paste0(plot_start_year, "-01-01"))
   
@@ -827,14 +828,14 @@ daily_gwl_summary <- function(gw_level_dv, date_col, value_col, approved_col) {
 #' 
 #' @return the first day of the month that given dates fall in
 #' 
-#' @importFrom lubridate year
-#' @importFrom lubridate month
 
 first_day <- function(date) {
   
+  date <- as.POSIXlt(date)
+  
   first_day_month <- as.Date(paste(
-    year(date),
-    month(date),
+    date$year + 1900,
+    date$mon + 1,
     1,
     sep = "-"
   ))
@@ -848,17 +849,25 @@ first_day <- function(date) {
 #' @param date a vector of dates
 #' 
 #' @return the last day of the month that given dates fall in
-#' 
-#' @importFrom lubridate days_in_month
-#' @importFrom lubridate year
-#' @importFrom lubridate month
+
 
 last_day <- function(date) {
   
+  date <- as.POSIXlt(date)
+  
+  year <- date$year + 1900
+  month <- date$mon + 1
+  
+  is_leap <- as.numeric((year %% 4 == 0 & year %% 100 != 0) | 
+                          year %% 400 == 0)
+  
+  total_day <- c(31, 28 + is_leap,
+                 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+  
   last_day_month <- as.Date(paste(
-    year(date),
-    month(date),
-    days_in_month(date),
+    year,
+    month,
+    total_day[month],
     sep = "-"
   ))
   

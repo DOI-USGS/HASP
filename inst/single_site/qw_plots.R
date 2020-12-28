@@ -171,7 +171,7 @@ qw_dt_plot <-  qw_plot(qw_data,
                        plot_title = plot_title)
 qw_dt_plot
 
-qw_table <- qw_summary(qw_data, pcode)
+qw_table <- qw_summary(qw_data, qw_pcodes)
 
 # To save:
 # Fiddle with height and width (in inches) for best results:

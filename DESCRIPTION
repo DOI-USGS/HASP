@@ -38,8 +38,6 @@ Imports:
     shinycssloaders,
     shinydashboard,
     EnvStats,
-    lubridate,
-    purrr,
     openxlsx,
     shinyWidgets
 Suggests:

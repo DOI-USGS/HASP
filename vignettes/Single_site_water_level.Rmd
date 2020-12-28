@@ -68,7 +68,7 @@ kable(data_info)
 
 Using `dataRetrieval` code to get the data for this site:
 
-```{r getData, eval=FALSE}
+```{r getData, eval=TRUE}
 library(dataRetrieval)
 siteID <- "263819081585801"
 parameterCd <- "62610"
@@ -81,13 +81,15 @@ gw_level_dv <- readNWISdv(siteID,
 # Field GWL measured:
 gwl_data <- readNWISgwl(siteID)
 
+site_title <- "L -2701\n263819081585801"
+
 ```
 
 </td><td>
 
 Using the example data provided in the package:
 
-```{r getDataReal}
+```{r getDataReal, eval=FALSE}
 siteID <- "263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
@@ -96,8 +98,6 @@ statCd <- "00001"
 gw_level_dv <-  L2701_example_data$Daily
 # Field
 gwl_data <- L2701_example_data$Discrete
-
-site_title <- "L -2701\n263819081585801"
 
 ```
 
