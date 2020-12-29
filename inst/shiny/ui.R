@@ -31,6 +31,10 @@ sidebar <- dashboardSidebar(
                   choices = c("sl_lev_va", "lev_va"), 
                   selected = "lev_va", 
                   label = "Data Column"),
+    numericInput("start_year",value = as.POSIXlt(Sys.Date())$year + 1870,
+                 label = "Starting Year"),
+    numericInput("end_year",value = as.POSIXlt(Sys.Date())$year + 1900,
+                 label = "Ending Year"),
     menuItem("Source code", icon = icon("file-code-o"), 
              href = "https://code.usgs.gov/water/stats/HASP"),
     actionButton("example_data", label = "Load Example Data")

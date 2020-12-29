@@ -15,3 +15,8 @@ the middle day of the month the given dates fall in
 \description{
 Find the middle of the month for a given date
 }
+\examples{
+date <- as.Date("2020-12-28")
+mid_month(date)
+mid_month(c("2019-02-15", "2020-03-08", "2010-06-01"))
+}

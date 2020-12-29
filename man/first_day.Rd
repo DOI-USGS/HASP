@@ -15,3 +15,8 @@ the first day of the month that given dates fall in
 \description{
 Find the first day of the month for a given date
 }
+\examples{
+date <- as.Date("2020-12-28")
+first_day(date)
+
+}

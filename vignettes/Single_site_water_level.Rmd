@@ -5,7 +5,7 @@ output:
 editor_options: 
   chunk_output_type: console
 vignette: >
-  %\VignetteIndexEntry{Water Level Single Site Information}
+  %\VignetteIndexEntry{Single Site Water Level}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---

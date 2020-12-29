@@ -15,3 +15,9 @@ the last day of the month that given dates fall in
 \description{
 Find the last day of the month for a given date
 }
+\examples{
+date <- as.Date("2020-12-28")
+last_day(date)
+last_day("2020-02-15")
+last_day("2019-02-15")
+}

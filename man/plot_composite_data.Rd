@@ -4,16 +4,19 @@
 \alias{plot_composite_data}
 \title{Plot composite hydrograph data}
 \usage{
-plot_composite_data(x, sum_col, num_years, plot_title = "")
+plot_composite_data(x, sum_col, num_years = NA, plot_title = "")
 }
 \arguments{
-\item{x}{aquifer data}
+\item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+and the 3rd is defined by the sum_col argument.}
 
-\item{sum_col}{column name}
+\item{sum_col}{column name to do the analysis on. In data coming from 
+\code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".}
 
-\item{num_years}{integer number of years required}
+\item{num_years}{integer number of years required. If \code{NA}, the 
+analysis will default to the range of the data in x.}
 
-\item{plot_title}{character}
+\item{plot_title}{character title included on plot.}
 }
 \value{
 ggplot2 object

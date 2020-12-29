@@ -2,10 +2,13 @@
 #'
 #' Create composite hydrograph plot
 #' 
-#' @param x aquifer data
-#' @param sum_col column name
-#' @param num_years integer number of years required
-#' @param plot_title character
+#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' and the 3rd is defined by the sum_col argument.
+#' @param sum_col column name to do the analysis on. In data coming from 
+#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
+#' @param num_years integer number of years required. If \code{NA}, the 
+#' analysis will default to the range of the data in x.
+#' @param plot_title character title included on plot.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -21,12 +24,24 @@
 #' aquifer_data$cal_year <- aquifer_data$year
 #' aquifer_data$year <- aquifer_data$water_year
 #' plot_composite_data(aquifer_data, sum_col, num_years)
-plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
+plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
   
   year <- value <- name <- ".dplyr"
   
+  if(!all(c("site_no", "year", sum_col) %in% names(x))){
+    stop("Not all required columns are provided")
+  }
+  
+  if(is.na(num_years)){
+    num_years <- diff(range(x$year))  
+  }
+  
   comp_data <- composite_data(x, sum_col, num_years)
   
+  if(nrow(comp_data) == 0){
+    stop("No sites had measurements for each of the years")
+  }
+
   plot_out <- ggplot(data = comp_data) +
     geom_line(aes(x = year, y = value, color = name)) +
     hasp_framework(x_label = "Years", include_y_scale = FALSE,
@@ -36,7 +51,8 @@ plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
                                         name = NULL)) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
-    scale_color_manual("EXPLANATION\nComposite Annual", 
+    scale_color_manual(paste0("EXPLANATION\nComposite Annual\n",
+                              attr(comp_data, "n_sites"), " sites"), 
                        values = c("red", "blue"), 
                        labels = levels(comp_data$name))
   
@@ -47,10 +63,13 @@ plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
 #'
 #' Create composite hydrograph plot
 #' 
-#' @param x aquifer data
-#' @param sum_col column name
-#' @param num_years integer number of years required
-#' @param plot_title character
+#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' and the 3rd is defined by the sum_col argument.
+#' @param sum_col column name to do the analysis on. In data coming from 
+#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
+#' @param num_years integer number of years required to the analysis. If \code{NA}, the 
+#' analysis will default to the range of the data in x.
+#' @param plot_title character title of plot.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -66,10 +85,18 @@ plot_composite_data <- function(x, sum_col, num_years, plot_title = ""){
 #' aquifer_data$cal_year <- aquifer_data$year
 #' aquifer_data$year <- aquifer_data$water_year
 #' plot_normalized_data(aquifer_data, sum_col, num_years)
-plot_normalized_data <- function(x, sum_col, num_years, plot_title = ""){
+plot_normalized_data <- function(x, sum_col, num_years = NA, plot_title = ""){
   
   year <- value <- name <- ".dplyr"
 
+  if(!all(c("site_no", "year", sum_col) %in% names(x))){
+    stop("Not all required columns are provided")
+  }
+  
+  if(is.na(num_years)){
+    num_years <- diff(range(x$year))  
+  }
+  
   norm_data <- normalized_data(x, sum_col, num_years)
   
   plot_out <- ggplot(data = norm_data) +
@@ -82,7 +109,8 @@ plot_normalized_data <- function(x, sum_col, num_years, plot_title = ""){
                                         name = NULL)) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
-    scale_color_manual("EXPLANATION\nPercent Variation", 
+    scale_color_manual(paste0("EXPLANATION\nPercent Variation\n", 
+                       attr(norm_data, "n_sites"), " sites"),
                        values = c("red", "blue"), 
                        labels = levels(norm_data$name))
   
@@ -94,8 +122,10 @@ plot_normalized_data <- function(x, sum_col, num_years, plot_title = ""){
 #'
 #' Map data used in composite hydrographs
 #' 
-#' @param x aquifer data
-#' @param sum_col column name
+#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' and the 3rd is defined by the sum_col argument.
+#' @param sum_col column name to do the analysis on. In data coming from 
+#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required
 #' @return leaflet object
 #' 

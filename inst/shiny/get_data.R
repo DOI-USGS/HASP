@@ -4,7 +4,17 @@ rawData_data <- reactiveValues(data = NULL,
 
 observeEvent(input$example_data,{
   rawData_data$example_data <- TRUE
-  rawData_data$data <- HASP::aquifer_data
+  
+  aquifer_data <- HASP::aquifer_data
+
+  updateNumericInput(session = session, 
+                     inputId = "end_year", value = max(aquifer_data[["year"]], na.rm = TRUE) - 1,
+                     max = max(max(aquifer_data[["year"]], na.rm = TRUE), na.rm = TRUE))
+  updateNumericInput(session = session, 
+                     inputId = "start_year", value = min(aquifer_data$year, na.rm = TRUE) + 2,
+                     min = min(aquifer_data$year, na.rm = TRUE))
+  
+  rawData_data$data <- aquifer_data
   rawData_data$aquifer_cd <- "Basin and Range basin-fill aquifers"
   updateSelectInput(session = session, inputId = "aquiferCd", 
                     selected = "Basin and Range basin-fill aquifers")
@@ -62,7 +72,13 @@ observeEvent(input$get_data,{
     
   }
 
-
+  updateNumericInput(session = session, 
+                     inputId = "end_year", value = max(aquifer_data$year, na.rm = TRUE),
+                     max = max(aquifer_data$year, na.rm = TRUE))
+  updateNumericInput(session = session, 
+                     inputId = "start_year", value = min(aquifer_data$year, na.rm = TRUE),
+                     min = min(aquifer_data$year, na.rm = TRUE))
+  
   if(nrow(aquifer_data) == 0){
     showNotification(paste("Not enough data for: ", aquiferCd), 
                      type = "message", duration = 5)
@@ -74,6 +90,7 @@ observeEvent(input$get_data,{
     rawData_data$aquifer_cd <- aquiferCd
     rawData_data$data <- aquifer_data
   }
+
   removeNotification(id = state)
   removeNotification(id = "load")
   

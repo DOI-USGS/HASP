@@ -17,8 +17,8 @@ daily_gwl_2yr_plot(
 )
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
-from readNWISdv}
+\item{gw_level_dv}{data frame daily groundwater level data
+from \code{readNWISdv}}
 
 \item{date_col}{name of date column.}
 
