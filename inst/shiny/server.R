@@ -64,6 +64,19 @@ shinyServer(function(input, output, session) {
     
   })
 
+  observe({
+    gwl_data <- rawData_data$data
+
+    if(all(is.na(gwl_data$sl_lev_va))){
+      updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
+    }
+    
+    if(all(is.na(gwl_data$lev_va))){
+      updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
+    }
+
+  })
+  
   callModule(graph_download_code, 'composite_graph', 
              plot_gg = comp_plot, 
              code_out = comp_plot_out, 
@@ -82,6 +95,9 @@ shinyServer(function(input, output, session) {
     long_name <- input$aquiferCd
     aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == long_name]
     
+    year_start <- input$start_year
+    year_end <- input$end_year
+    
     if(rawData_data$example_data){
       setup_code <- paste0('library(HASP)
 aquifer_data <- aquifer_data')
@@ -92,7 +108,9 @@ aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == long_nam
 aquifer_data <- get_aquifer_data(aquiferCd = "',aquiferCd,'",
                            startDate = "', start_date,'",
                            endDate = "', end_date, '")
-aquifer_data <- filter_sites(aquifer_data, sum_col = "lev_va",  num_years = 30)')      
+aquifer_data <- filter_sites(aquifer_data, 
+                             start_year = ',year_start,',
+                             end_year = ', year_end,')')      
     }
     
     setup_code

@@ -4,9 +4,18 @@ norm_plot <- reactive({
     need(!is.null(rawData_data$data), "Please select a data set")
   )
   
-  norm_plot <-  plot_normalized_data(rawData(), 
-                                     input$gwl_vals, 30) +
-    ggplot2::ggtitle(rawData_data$aquifer_cd)
+  x <- filter_sites(rawData(), input$gwl_vals, 
+                    start_year = input$start_year, 
+                    end_year = input$end_year)
+  
+  if(nrow(x) == 0){
+    showNotification("No sites have complete records within the start/end years",
+                     duration = 5)
+  }
+  
+  norm_plot <-  plot_normalized_data(x, 
+                                     input$gwl_vals, 
+                                     plot_title = rawData_data$aquifer_cd)
   
   return(norm_plot)
   
@@ -15,8 +24,9 @@ norm_plot <- reactive({
 norm_plot_out <- reactive({
   code_out <- paste0(setup(),'
 library(ggplot2)
-norm_plot <-  plot_normalized_data(aquifer_data, "lev_va", 30) +
-    ggtitle("',rawData_data$aquifer_cd,'")
+norm_plot <-  plot_normalized_data(aquifer_data, 
+                                   sum_col = "',input$gwl_vals,'",
+                                   plot_title ="',rawData_data$aquifer_cd,'")
 norm_plot
 # To save:
 # Fiddle with height and width (in inches) for best results:
