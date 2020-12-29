@@ -134,9 +134,7 @@ filter_sites <- function(x, sum_col, num_years = NA,
     num_years <- end_year - start_year
     warning("Supplied num_years was more than the data range.\nSwitching to num_year = ", num_years)
   }
-  
-  years = data.frame(year = start_year:end_year)
-  
+
   tots <- expand.grid(year = start_year:end_year,
               site_no = unique(pick_sites$site_no), stringsAsFactors = FALSE) %>% 
     data.frame()
