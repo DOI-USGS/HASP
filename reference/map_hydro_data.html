@@ -139,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Map data used in composite hydrographs</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/USGS-R/HASP/blob/master/R/visualize.R'><code>R/visualize.R</code></a></small>
     <div class="hidden name"><code>map_hydro_data.Rd</code></div>
     </div>
 
@@ -154,11 +154,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>aquifer data</p></td>
+      <td><p>aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+and the 3rd is defined by the sum_col argument.</p></td>
     </tr>
     <tr>
       <th>sum_col</th>
-      <td><p>column name</p></td>
+      <td><p>column name to do the analysis on. In data coming from 
+<code>dataRetrieval</code>, this is often either "sl_lev_va" or "lev_va".</p></td>
     </tr>
     <tr>
       <th>num_years</th>
