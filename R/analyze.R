@@ -223,6 +223,7 @@ composite_data <- function(x, sum_col, num_years){
                          labels = c("Median",
                                     "Mean") ))
   
+  attr(composite, "n_sites") <- n_sites
   
   return(composite)
 }
@@ -288,6 +289,7 @@ normalized_data <- function(x, sum_col, num_years){
                          labels = c("Median",
                                     "Mean") ))
   
+  attr(norm_composite, "n_sites") <- n_sites
   return(norm_composite)
 }
 

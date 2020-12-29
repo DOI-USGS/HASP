@@ -41,7 +41,7 @@ plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
   if(nrow(comp_data) == 0){
     stop("No sites had measurements for each of the years")
   }
-  
+
   plot_out <- ggplot(data = comp_data) +
     geom_line(aes(x = year, y = value, color = name)) +
     hasp_framework(x_label = "Years", include_y_scale = FALSE,
@@ -51,7 +51,8 @@ plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
                                         name = NULL)) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
-    scale_color_manual("EXPLANATION\nComposite Annual", 
+    scale_color_manual(paste0("EXPLANATION\nComposite Annual\n",
+                              attr(comp_data, "n_sites"), " sites"), 
                        values = c("red", "blue"), 
                        labels = levels(comp_data$name))
   
@@ -108,7 +109,8 @@ plot_normalized_data <- function(x, sum_col, num_years = NA, plot_title = ""){
                                         name = NULL)) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
-    scale_color_manual("EXPLANATION\nPercent Variation", 
+    scale_color_manual(paste0("EXPLANATION\nPercent Variation\n", 
+                       attr(norm_data, "n_sites"), " sites"),
                        values = c("red", "blue"), 
                        labels = levels(norm_data$name))
   

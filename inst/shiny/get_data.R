@@ -8,10 +8,10 @@ observeEvent(input$example_data,{
   aquifer_data <- HASP::aquifer_data
 
   updateNumericInput(session = session, 
-                     inputId = "end_year", value = max(aquifer_data[["year"]], na.rm = TRUE),
+                     inputId = "end_year", value = max(aquifer_data[["year"]], na.rm = TRUE) - 1,
                      max = max(max(aquifer_data[["year"]], na.rm = TRUE), na.rm = TRUE))
   updateNumericInput(session = session, 
-                     inputId = "start_year", value = min(aquifer_data$year, na.rm = TRUE),
+                     inputId = "start_year", value = min(aquifer_data$year, na.rm = TRUE) + 2,
                      min = min(aquifer_data$year, na.rm = TRUE))
   
   rawData_data$data <- aquifer_data
