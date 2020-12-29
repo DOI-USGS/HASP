@@ -88,7 +88,12 @@ prep_map_data <- function(x ){
 #' 
 #' @param x aquifer data
 #' @param sum_col column name
-#' @param num_years integer number of years required
+#' @param num_years integer number of years required. This can be
+#' \code{NA}, in which case the filter will use the full range of the data.
+#' @param start_year integer the first year to filter from. If \code{NA},
+#' the filter will use the minimum from the data.
+#' @param end_year integer the last year to filter from. If \code{NA},
+#' the filter will use the last year.
 #' @return data frame filter of x
 #' @export
 #' @examples 
@@ -97,7 +102,8 @@ prep_map_data <- function(x ){
 #' num_years <- 30
 #' 
 #' aq_data <- filter_sites(aquifer_data, sum_col, num_years)
-filter_sites <- function(x, sum_col, num_years){
+filter_sites <- function(x, sum_col, num_years = NA, 
+                         start_year = NA, end_year = NA){
   
   if(nrow(x) == 0) stop("No data")
   
@@ -111,14 +117,34 @@ filter_sites <- function(x, sum_col, num_years){
     summarize(n_meas = n()) %>% 
     ungroup() 
   
-  years = data.frame(year = min(pick_sites$year):max(pick_sites$year))
+  #if the user doesn't define start/end, use the whole thing
+  if(is.na(start_year)){
+    start_year <- min(pick_sites$year)
+  }
   
-  tots <- expand.grid(year = min(pick_sites$year):max(pick_sites$year),
+  if(is.na(end_year)){
+    end_year <- max(pick_sites$year)
+  }
+  
+  if(is.na(num_years)){
+    num_years <- end_year - start_year
+  }
+  
+  if(num_years > end_year - start_year){
+    num_years <- end_year - start_year
+    warning("Supplied num_years was more than the data range.\nSwitching to num_year = ", num_years)
+  }
+  
+  years = data.frame(year = start_year:end_year)
+  
+  tots <- expand.grid(year = start_year:end_year,
               site_no = unique(pick_sites$site_no), stringsAsFactors = FALSE) %>% 
     data.frame()
   
   pick_sites_comp <- pick_sites %>% 
-    right_join(tots, by = c("year", "site_no"))
+    right_join(tots, by = c("year", "site_no")) %>% 
+    filter(year >= start_year,
+           year <= end_year)
   
   sites_incomplete <- unique(pick_sites_comp$site_no[is.na(pick_sites_comp$n_meas)])
   sites_complete <- unique(pick_sites_comp$site_no)
@@ -133,7 +159,9 @@ filter_sites <- function(x, sum_col, num_years){
     pull(site_no)
     
   aquifer_data <- x %>% 
-    filter(site_no %in% pick_sites_comp_sum)
+    filter(site_no %in% pick_sites_comp_sum) %>% 
+    filter(year >= start_year,
+           year <= end_year)
   
   if("siteInfo" %in% names(attributes(x))){
     siteInfo <- attr(x, "siteInfo") %>% 

@@ -4,7 +4,7 @@
 \alias{plot_normalized_data}
 \title{Plot normalized composite hydrograph data}
 \usage{
-plot_normalized_data(x, sum_col, num_years, plot_title = "")
+plot_normalized_data(x, sum_col, num_years = NA, plot_title = "")
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
@@ -13,7 +13,8 @@ and the 3rd is defined by the sum_col argument.}
 \item{sum_col}{column name to do the analysis on. In data coming from 
 \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".}
 
-\item{num_years}{integer number of years required to the analysis.}
+\item{num_years}{integer number of years required to the analysis. If \code{NA}, the 
+analysis will default to the range of the data in x.}
 
 \item{plot_title}{character title of plot.}
 }

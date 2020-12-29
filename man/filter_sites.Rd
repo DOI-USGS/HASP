@@ -4,14 +4,21 @@
 \alias{filter_sites}
 \title{filter_sites}
 \usage{
-filter_sites(x, sum_col, num_years)
+filter_sites(x, sum_col, num_years = NA, start_year = NA, end_year = NA)
 }
 \arguments{
 \item{x}{aquifer data}
 
 \item{sum_col}{column name}
 
-\item{num_years}{integer number of years required}
+\item{num_years}{integer number of years required. This can be
+\code{NA}, in which case the filter will use the full range of the data.}
+
+\item{start_year}{integer the first year to filter from. If \code{NA},
+the filter will use the minimum from the data.}
+
+\item{end_year}{integer the last year to filter from. If \code{NA},
+the filter will use the last year.}
 }
 \value{
 data frame filter of x
