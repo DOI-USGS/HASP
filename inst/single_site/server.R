@@ -112,15 +112,13 @@ gw_level_dv <- readNWISdv(siteNumbers = site_id,
 gwl_data <- readNWISgwl(siteNumbers = site_id)
 
 plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
-                    site_id, sep = "\\\\n")') 
-      
-      if(!isTRUE(is.null(rawData_data$qw_data))){
-        setup_code <- paste0(setup_code,'
+                    site_id, sep = "\\\\n")
+
 pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
 qw_data <- readNWISqw(siteNumbers = site_id,
                       parameterCd = pcodes_qw)
 ')
-      }      
+        
     }
     
     setup_code
