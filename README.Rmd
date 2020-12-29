@@ -34,7 +34,7 @@ https://fl.water.usgs.gov/mapper/
 ## Sample workflow
 
 ### Single site workflows:
-```{r singleSiteShow, echo=TRUE, eval=FALSE}
+```{r singleSiteShow, echo=TRUE, eval=TRUE}
 library(HASP)
 library(dataRetrieval)
 site <- "263819081585801"
@@ -57,14 +57,6 @@ qw_data <- dataRetrieval::readNWISqw(site,
 
 ```
 
-```{r singleSite, echo=FALSE, eval=TRUE}
-library(HASP)
-
-gwl_data <- L2701_example_data$Discrete
-dv <- L2701_example_data$Daily
-qw_data <- L2701_example_data$QW
-
-```
 
 ```{r graphs, echo=TRUE, eval=TRUE}
 

@@ -8,6 +8,10 @@ navbar:
     href: reference/index.html
   - text: Articles
     menu:
+    - text: Prepare External Data
+      href: articles/PrepareData.html
+    - text: Introduction to Shiny App
+      href: articles/shinyApp.html
     - text: Single Site
       href: articles/Single_site_combo_data.html
     - text: Water Level
