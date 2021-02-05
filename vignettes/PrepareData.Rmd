@@ -60,7 +60,7 @@ names(qw_data)
 ## Call `HASP` functions
 
 ```{r}
-monthly_frequency_plot(daily_data,
+monthly_frequency_plot(gw_level_dv = daily_data,
                        date_col = "Date",
                        value_col = "Value",
                        approved_col = "Remark",
