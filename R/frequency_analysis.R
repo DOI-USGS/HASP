@@ -124,7 +124,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   
   plot_range <- match.arg(plot_range)
   
-  date <- Sys.Date()
+  date <- max(gw_level_dv[[date_col]], na.rm = TRUE)
   
   #Convert date column to date just in case its a POSIXct:
   gw_level_dv[[date_col]] <- as.Date(gw_level_dv[[date_col]])
@@ -374,7 +374,7 @@ weekly_frequency_plot <- function(gw_level_dv, date_col, value_col, approved_col
   
   plot_range <- match.arg(plot_range)
   
-  date <- Sys.Date()
+  date <- max(gw_level_dv[[date_col]], na.rm = TRUE)
   
   # Calculate the percentiles
   site_statistics <- weekly_frequency_table(gw_level_dv, date_col, 

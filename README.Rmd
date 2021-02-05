@@ -31,6 +31,8 @@ Hydrologic AnalySis Package
 Inspiration:
 https://fl.water.usgs.gov/mapper/
 
+See [https://usgs-r.github.io/HASP/](https://usgs-r.github.io/HASP/) for more information! 
+
 ## Sample workflow
 
 ### Single site workflows:

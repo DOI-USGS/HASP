@@ -11,6 +11,8 @@ Hydrologic AnalySis Package
 
 Inspiration: <https://fl.water.usgs.gov/mapper/>
 
+See <https://usgs-r.github.io/HASP/> for more information!
+
 ## Sample workflow
 
 ### Single site workflows:
@@ -37,7 +39,6 @@ qw_data <- dataRetrieval::readNWISqw(site,
 ```
 
 ``` r
-
 y_axis_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
 monthly_frequency_plot(dv,
@@ -51,7 +52,6 @@ monthly_frequency_plot(dv,
 ![](man/figures/README-graphs-1.png)<!-- -->
 
 ``` r
-
 gwl_plot_all(dv, gwl_data, 
              date_col = c("Date", "lev_dt"),
              value_col = c("X_62610_00001", "sl_lev_va"),
@@ -64,7 +64,6 @@ gwl_plot_all(dv, gwl_data,
 ![](man/figures/README-graphs-2.png)<!-- -->
 
 ``` r
-
 Sc_Cl_plot(qw_data, "L2701_example_data")
 ```
 
@@ -79,7 +78,6 @@ trend_plot(qw_data, plot_title = "L2701_example_data")
 ### Composite workflows:
 
 ``` r
-
 #included sample data:
 
 aquifer_data <- aquifer_data
@@ -92,7 +90,6 @@ plot_composite_data(aquifer_data, sum_col, num_years)
 ![](man/figures/README-example-1.png)<!-- -->
 
 ``` r
-
 plot_normalized_data(aquifer_data, sum_col, num_years)
 ```
 
@@ -101,9 +98,7 @@ plot_normalized_data(aquifer_data, sum_col, num_years)
 ## Shiny App
 
 <p align="center">
-
 <img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo">
-
 </p>
 
 ## Installation of R and RStudio
@@ -117,9 +112,9 @@ Instructions](https://owi.usgs.gov/R/training-curriculum/installr/)
 
 Useful links:
 
-  - [Download R Windows](https://cran.r-project.org/bin/windows/base/)
-  - [Download R Mac](https://cran.r-project.org/bin/macosx/)
-  - [Download
+-   [Download R Windows](https://cran.r-project.org/bin/windows/base/)
+-   [Download R Mac](https://cran.r-project.org/bin/macosx/)
+-   [Download
     RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 ## Installation of HASP
