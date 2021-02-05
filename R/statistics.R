@@ -47,7 +47,7 @@ kendell_test_5_20_years <- function(gwl,
   gwl$year <- as.numeric(format(gwl[[date_col]], "%Y"))
   
   if(!include_current_year) {
-    current_year <- as.numeric(format(Sys.Date(), "%Y"))
+    current_year <- max(gwl$year, na.rm = TRUE)
     gwl <- gwl[gwl$year != current_year, ]
   }
 
