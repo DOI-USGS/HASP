@@ -1,11 +1,11 @@
 ---
-title: "Principle Aquifers"
+title: "Principal Aquifers"
 output: 
   rmarkdown::html_vignette
 editor_options: 
   chunk_output_type: console
 vignette: >
-  %\VignetteIndexEntry{Principle Aquifers}
+  %\VignetteIndexEntry{Principal Aquifers}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 ---
