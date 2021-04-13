@@ -37,7 +37,7 @@ NULL
 NULL
 # Example to get the data:
 # start_date <- "1988-10-01"
-# end_date <- "2019-12-31"
+# end_date <- "2021-01-01"
 # aquiferCd <- "N100BSNRGB"
 # aquifer_data <- get_aquifer_data(aquiferCd, start_date, end_date)
 # save(aquifer_data, file = "data/aquifer_data.RData", compress = "xz")

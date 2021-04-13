@@ -656,7 +656,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
                    "Provisional daily value" = "red",
                    "Approved daily value" = "navy")
   names(line_colors)[1] <- historical_name
-  ribbon_colors <- c("Historical Daily\nMin & Max" = "lightskyblue1")
+  ribbon_colors <- c("Approved Daily\nMin & Max" = "lightskyblue1")
   
   if(month_breaks) {
     x_label <- paste(as.character(plot_start, "%B %Y"), 

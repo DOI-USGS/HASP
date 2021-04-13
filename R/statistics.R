@@ -17,6 +17,10 @@
 #' @param alpha the confidence level to use for statistical significance
 #' @param include_current_year a logical indicating whether to include data from
 #' the current calendar year in the test.
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.s
 #' @importFrom stats as.formula
 #' @return a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
 #' 
@@ -29,9 +33,10 @@
 #' 
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
-#' kendell_test_5_20_years(gwl_data)
+#' kendell_test_5_20_years(gwl_data, parameter_cd_gwl = "62610")
 #' 
 kendell_test_5_20_years <- function(gwl, 
+                                    parameter_cd_gwl = NA,
                                     date_col = "lev_dt",
                                     value_col = "sl_lev_va",
                                     alpha = 0.95,
@@ -44,6 +49,9 @@ kendell_test_5_20_years <- function(gwl,
   if(!all(c(date_col, value_col) %in% names(gwl))) {
     stop("gwl should include ", date_col, " and ", value_col, " columns")
   }
+  
+  gwl <- filter_pcode(gwl, parameter_cd_gwl)
+  
   gwl$year <- as.numeric(format(gwl[[date_col]], "%Y"))
   
   if(!include_current_year) {

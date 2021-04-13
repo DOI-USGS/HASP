@@ -12,11 +12,13 @@
 #' @import dplyr
 #'
 #' @examples 
-#' end_date <- "2019-12-31"
+#' end_date <- "2021-01-01"
 #' start_date <- "1989-12-31"
 #'
 #' aquiferCd <- "S100CSLLWD"
-#' #aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+#' \donttest{
+#' aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+#' }
 get_aquifer_data <- function(aquiferCd, startDate, endDate){
   
   aquifer_data <- data.frame()
@@ -68,7 +70,8 @@ get_state_data <- function(state, aquiferCd, startDate, endDate){
                          service = "gwlevels",
                          startDate= startDate,
                          endDate = endDate,
-                         aquiferCd = aquiferCd)
+                         aquiferCd = aquiferCd,
+                         format = "rdb")
   
   state_data <- levels[ , c("lev_va", "sl_lev_va", "lev_dt", "site_no")]
 
