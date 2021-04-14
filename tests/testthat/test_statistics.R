@@ -95,8 +95,8 @@ test_that("trend segments",{
   qw_data <- L2701_example_data$QW
   
   seg_df <- create_segs(qw_data)
-  expect_true(all(seg_df$x1 == c(2014,1999)))
-  expect_true(all(seg_df$x2 == c(2019,2019)))
+  expect_true(all(seg_df$x1 == c(2015,2000)))
+  expect_true(all(seg_df$x2 == c(2020,2020)))
   expect_true(all(seg_df$years == c(5,20)))
   expect_true(all(seg_df$trend == c("5-year trend",
                                  "20-year trend")))
@@ -104,13 +104,13 @@ test_that("trend segments",{
   seg_df_dv <- create_segs(gw_level_dv, 
                         date_col = "Date", 
                         value_col = "X_62610_00001")
-  expect_true(all(seg_df_dv$x1 == c(2015,2000)))
-  expect_true(all(seg_df_dv$x2 == c(2020,2020)))
+  expect_true(all(seg_df_dv$x1 == c(2016,2001)))
+  expect_true(all(seg_df_dv$x2 == c(2021,2021)))
   expect_true(all(seg_df_dv$years == c(5,20)))
   expect_true(all(seg_df_dv$trend == c("5-year trend",
                                     "20-year trend")))
-  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-25.4, -29.5)))
-  expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-17, -23.9)))
+  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-22.7, -31.1)))
+  expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-18.3, -21.8)))
   
   gw_monthly <- monthly_mean(gw_level_dv, 
                              date_col = "Date", 
@@ -128,13 +128,13 @@ test_that("trend segments",{
                         date_col = "mid_date",
                         value_col = "mean_va")
   
-  expect_true(all(seg_df_month$x1 == c(2015,2000)))
-  expect_true(all(seg_df_month$x2 == c(2020,2020)))
+  expect_true(all(seg_df_month$x1 == c(2016,2001)))
+  expect_true(all(seg_df_month$x2 == c(2021,2021)))
   expect_true(all(seg_df_month$years == c(5,20)))
   expect_true(all(seg_df_month$trend == c("5-year trend",
                                        "20-year trend")))
-  expect_true(all(signif(seg_df_month$y1, digits = 3) == c(-26, -29.5)))
-  expect_true(all(signif(seg_df_month$y2, digits = 3) == c(-17.5, -24.1)))
+  expect_true(all(signif(seg_df_month$y1, digits = 3) == c(-22.8, -31.1)))
+  expect_true(all(signif(seg_df_month$y2, digits = 3) == c(-18.4, -21.8)))
   
   
 })
