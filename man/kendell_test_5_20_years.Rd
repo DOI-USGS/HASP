@@ -6,6 +6,7 @@
 \usage{
 kendell_test_5_20_years(
   gwl,
+  parameter_cd_gwl = NA,
   date_col = "lev_dt",
   value_col = "sl_lev_va",
   alpha = 0.95,
@@ -18,6 +19,11 @@ kendell_test_5_20_years(
 \arguments{
 \item{gwl}{data frame that must include a numeric column defined by "value_col",
 and a Date or POSIXct column defined by "date_col"}
+
+\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
+named "parameter_cd". If the
+data doesn't come directly from NWIS services, this can be set to \code{NA},
+and this argument will be ignored.}
 
 \item{date_col}{name of date column.}
 
@@ -53,6 +59,6 @@ for the 20-year test. The current calendar year is excluded by default.
 
 # Using package example data:
 gwl_data <- L2701_example_data$Discrete
-kendell_test_5_20_years(gwl_data)
+kendell_test_5_20_years(gwl_data, parameter_cd_gwl = "62610")
 
 }

@@ -3,10 +3,10 @@ Type: Package
 Title: Hydrologic AnalySis Package
 Version: 0.0.0.0001
 Authors@R: c(person("Scott", "Prinos", 
-                     role = c("aut","cre"),
+                     role = c("aut"),
                      email = "stprinos@usgs.gov"),
              person("Laura", "DeCicco", 
-                     role = c("aut"),
+                     role = c("aut", "cre"),
                      email = "ldecicco@usgs.gov",
                      comment=c(ORCID="0000-0002-3915-9487")),
              person("Patrick", "Eslick", 

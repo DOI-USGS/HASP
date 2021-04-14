@@ -71,7 +71,9 @@ monthly_frequency_plot(dv,
                        plot_title = "L2701_example_data",
                        y_axis_label = y_axis_label)
 
-gwl_plot_all(dv, gwl_data, 
+gwl_plot_all(gw_level_dv = dv, 
+             gwl_data = gwl_data, 
+             parameter_cd_gwl = "62610",
              date_col = c("Date", "lev_dt"),
              value_col = c("X_62610_00001", "sl_lev_va"),
              approved_col = c("X_62610_00001_cd",

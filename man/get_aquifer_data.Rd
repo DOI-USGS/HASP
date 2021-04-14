@@ -17,9 +17,11 @@ get_aquifer_data(aquiferCd, startDate, endDate)
 Get USGS data based on aquiferCd
 }
 \examples{
-end_date <- "2019-12-31"
+end_date <- "2021-01-01"
 start_date <- "1989-12-31"
 
 aquiferCd <- "S100CSLLWD"
-#aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+\donttest{
+aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+}
 }

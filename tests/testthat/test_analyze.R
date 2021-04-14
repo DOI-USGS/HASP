@@ -7,7 +7,7 @@ format_2 <- function(x){
 test_that("Site summaries", {
   aquifer_data <- aquifer_data
 
-  summary_info2 <- site_data_summary(aquifer_data, "lev_va")
+  summary_info2 <- site_data_summary(aquifer_data, "lev_va", "72019")
   expect_type(summary_info2, "list")
   
   expect_true(all(names(summary_info2) %in% 
@@ -17,12 +17,12 @@ test_that("Site summaries", {
                       "p90",  "count")))
   
   expect_equal(format_2(summary_info2$min_site[1]), 3.26)
-  expect_equal(format_2(summary_info2$max_site[1]), 7.9)
-  expect_equal(format_2(summary_info2$mean_site[1]),5.37)
-  expect_equal(format_2(summary_info2$p10[1]), 4.43)
+  expect_equal(format_2(summary_info2$max_site[1]), 7.93)
+  expect_equal(format_2(summary_info2$mean_site[1]),5.4)
+  expect_equal(format_2(summary_info2$p10[1]), 4.45)
   expect_equal(format_2(summary_info2$p25[1]), 4.57)
-  expect_equal(format_2(summary_info2$p75[1]), 6.46)
-  expect_equal(format_2(summary_info2$p90[1]), 7.12)
+  expect_equal(format_2(summary_info2$p75[1]), 6.51)
+  expect_equal(format_2(summary_info2$p90[1]), 7.13)
   
   
 })
@@ -31,7 +31,8 @@ test_that("QW summaries", {
   
   qw_data <- L2701_example_data$QW
   
-  x <- qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
+  x <- qw_summary(qw_data, pcode = c("00940","99220"), 
+                  norm_range = c(225,999))
   
   expect_true(all(x$Analysis == c("Date of first sample",                           
                                      "First sample result (mg/l)",                     
@@ -47,9 +48,9 @@ test_that("QW summaries", {
                                      "Third quartile (mg/l)",                          
                                      "Number of samples")))
   
-  expect_true(all(x$Result == c("1978-09-06", "52", "2019-04-17", "113", "",          
-                                  "", "14", "113", "59.3", "54",        
-                                  "58", "67.5", "78")))
+  expect_true(all(x$Result == c("1978-09-06", "52", "2020-04-28", "114", "",          
+                                  "", "14", "114", "60", "54",        
+                                  "58", "68", "79")))
   
   y <- qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)
   
@@ -60,9 +61,9 @@ test_that("QW summaries", {
                                    "Median (uS/cm @25C)", "Third quartile (uS/cm @25C)",     
                                    "Number of samples")))
   
-  expect_true(all(y$Result == c("1979-05-09", "580", "2019-04-17", "748", "176",       
-                                "785", "550", "543", "560", "568",       
-                                "388")))
+  expect_true(all(y$Result == c("1979-05-09", "580", "2020-04-28", "765", "176",       
+                                "785", "551", "543", "560", "569",       
+                                "390")))
   
   
 })
@@ -88,7 +89,8 @@ test_that("Filter sites", {
   sum_col <- "lev_va"
   num_years <- 30
   
-  aq_data <- filter_sites(aquifer_data, sum_col, num_years)
+  aq_data <- filter_sites(aquifer_data, sum_col, num_years, 
+                          parameter_cd_gwl = "72019")
   
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
@@ -107,12 +109,13 @@ test_that("Composite hydrodata", {
   sum_col <- "lev_va"
   num_years <- 30
   
-  comp_data <- composite_data(aquifer_data, sum_col, num_years)
+  comp_data <- composite_data(aquifer_data, sum_col, num_years, 
+                              parameter_cd_gwl = "72019")
   
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(comp_data$value[1]), 149.92)
+  expect_equal(format_2(comp_data$value[1]), 136.38)
 })
 
 test_that("Normalized composite hydrodata", {
@@ -121,12 +124,13 @@ test_that("Normalized composite hydrodata", {
   sum_col <- "lev_va"
   num_years <- 30
   
-  norm_data <- normalized_data(aquifer_data, sum_col, num_years)
+  norm_data <- normalized_data(aquifer_data, sum_col, num_years,
+                               parameter_cd_gwl = "72019")
   
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(norm_data$value[1]), 0.1)
+  expect_equal(format_2(norm_data$value[1]), 0.08)
 })
 
 

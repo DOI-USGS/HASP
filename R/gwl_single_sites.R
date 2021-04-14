@@ -6,6 +6,10 @@
 #' @param plot_title character
 #' @param date_col name of date column. Default is "lev_dt".
 #' @param value_col name of value column. Default is "sl_lev_va".
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' @param approved_col name of column to get provisional/approved status.
 #' Default is "lev_age_cd".
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
@@ -22,18 +26,31 @@
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' gwl_plot_field(gwl_data, plot_title, flip_y = FALSE)
+#' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+#' gwl_plot_field(gwl_data, paste(plot_title,
+#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
+#'                parameter_cd_gwl = "62610",
+#'                flip_y = FALSE)
+#' gwl_plot_field(gwl_data,  paste(plot_title,
+#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
+#'                parameter_cd_gwl = "62611",
+#'                flip_y = FALSE)
+#' gwl_plot_field(gwl_data,  paste(plot_title,
+#'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
+#'                parameter_cd_gwl = "72019",
+#'                value_col = "lev_va")
 gwl_plot_field <- function(gwl_data, plot_title = "",
-                              date_col = "lev_dt",
-                              value_col = "sl_lev_va",
-                              approved_col = "lev_age_cd",
-                              flip_y = TRUE){
+                           date_col = "lev_dt",
+                           value_col = "sl_lev_va",
+                           parameter_cd_gwl = NA,
+                           approved_col = "lev_age_cd",
+                           flip_y = TRUE){
   
   if(!all(c(date_col, value_col, approved_col, "sl_datum_cd") %in% names(gwl_data))){
     stop("data frame gwl_data doesn't include all mandatory columns")
   }
   
-  year <- ".dplyr"
+  gwl_data <- filter_pcode(gwl_data, parameter_cd_gwl)
 
   datum <- unique(gwl_data$sl_datum_cd)
   y_label <- sprintf("Elevation above %s, feet", datum)
@@ -76,9 +93,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #' gw_level_dv <- L2701_example_data$Daily
 #' gwl_data <- L2701_example_data$Discrete
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' 
-#' y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm
-#' 
+#' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 #' date_col = "Date"
 #' value_col = "X_62610_00001"
 #' approved_col = "X_62610_00001_cd"
@@ -88,7 +103,8 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #'              date_col = date_col, 
 #'              value_col = value_col,
 #'              approved_col = approved_col,
-#'              plot_title, flip_y = FALSE) 
+#'              plot_title = plot_title,
+#'              flip_y = FALSE) 
 #'
 #' date_col = c("Date", "lev_dt")
 #' value_col = c("X_62610_00001", "sl_lev_va")
@@ -96,22 +112,27 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              gwl_data, 
+#'              parameter_cd_gwl = "62610",
 #'              date_col = date_col, 
 #'              value_col = value_col,
 #'              approved_col = approved_col,
-#'              plot_title,
+#'              plot_title = paste(plot_title,
+#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
 #'              add_trend = TRUE)
 #'              
 #' gwl_plot_all(NULL, 
 #'              gwl_data, 
+#'              parameter_cd_gwl = "62610",
 #'              date_col = "lev_dt", 
 #'              value_col = "sl_lev_va",
 #'              approved_col = "lev_age_cd",
-#'              plot_title)
+#'              plot_title = paste(plot_title,
+#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
 #' 
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
                          date_col, value_col, approved_col,
+                         parameter_cd_gwl = NA,
                          y_label = "GWL",
                          plot_title = "",
                          add_trend = FALSE,
@@ -137,6 +158,8 @@ gwl_plot_all <- function(gw_level_dv,
       approved_col_per <- approved_col[1]
 
     }
+    
+    gwl_data <- filter_pcode(gwl_data, parameter_cd_gwl)
     
     gwl_data[, value_col_per] <- as.numeric(gwl_data[[value_col_per]])
     
@@ -280,5 +303,26 @@ zero_on_top <- function(x){
     }
   }
   return(on_top)
+}
+
+filter_pcode <- function(df, pcode){
+  
+  if("parameter_cd" %in% names(df)){
+    if(!all(is.na(pcode))){
+      pcode <- dataRetrieval::zeroPad(pcode, 5)
+      df <- df[!is.na(df$parameter_cd) & 
+                 df$parameter_cd %in% pcode, ]
+    } else if(all(is.na(pcode)) &
+              length(unique(df$parameter_cd)) > 1){
+      warning("Multiple parameter codes detected in column 'parameter_cd',
+            and a parameter code is not specified in 'parameter_cd_gwl'")
+    }
+  } else {
+    if(!all(is.na(pcode))){
+      message("gwl_data data frame does not contain a 'parameter_cd' column,
+            yet 'parameter_cd_gwl' is defined. Ignoring 'parameter_cd_gwl' argument.")
+    }
+  }
+  return(df)
 }
 

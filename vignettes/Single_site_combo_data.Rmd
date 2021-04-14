@@ -228,23 +228,26 @@ kable(daily_summary_table)
 ## Field Groundwater Level Data
 
 ```{r fieldPlotDisplay, eval=FALSE}
-gwl_plot_field(gwl_data, plot_title, flip_y = FALSE)
+gwl_plot_field(gwl_data, plot_title, flip_y = FALSE, 
+               parameter_cd_gwl = "62610")
 
-site_data_summary(gwl_data, "sl_lev_va")
+site_data_summary(gwl_data, "sl_lev_va", parameter_cd_gwl = "62610")
 ```
 
 <table>
 <tr><td>
 
 ```{r fieldPlot, echo=FALSE}
-gwl_plot_field(gwl_data, plot_title, flip_y = FALSE)
+gwl_plot_field(gwl_data, plot_title, flip_y = FALSE, 
+               parameter_cd_gwl = "62610")
 ```
 
 </td><td>
 
 ```{r fieldTable, echo=FALSE}
 siteField <- site_data_summary(gwl_data, 
-                                  "sl_lev_va") %>% 
+                               sum_col = "sl_lev_va", 
+                               parameter_cd_gwl = "62610") %>% 
   select(Minimum = min_site, 	
          `1st` = p25, 
          Median = p50,
@@ -272,6 +275,7 @@ gwl_plot_all(gw_level_dv,
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
              plot_title = plot_title, 
+             parameter_cd_gwl = "62610",
              flip_y = FALSE)
 
 site_data_summary(gw_level_dv, "X_62610_00001")
@@ -291,6 +295,7 @@ gwl_plot_all(gw_level_dv,
              approved_col = c("X_62610_00001_cd",
                               "lev_age_cd"),
              plot_title = plot_title,
+             parameter_cd_gwl = "62610",
              flip_y = FALSE)
 
 ```

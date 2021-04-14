@@ -37,7 +37,7 @@ NULL
 NULL
 # Example to get the data:
 # start_date <- "1988-10-01"
-# end_date <- "2019-12-31"
+# end_date <- "2021-01-01"
 # aquiferCd <- "N100BSNRGB"
 # aquifer_data <- get_aquifer_data(aquiferCd, start_date, end_date)
 # save(aquifer_data, file = "data/aquifer_data.RData", compress = "xz")
@@ -82,7 +82,7 @@ NULL
 #' 
 #' Example data from site 263819081585801 L-2701. Data is a named list of
 #' "Daily" for daily groundwater level at the site and "Discrete" for discrete
-#' groundwater level measurements fromt he site
+#' groundwater level measurements from the site. Updated April 9, 2021.
 #' 
 #' @name L2701_example_data
 #' @rdname example_data
@@ -96,7 +96,7 @@ NULL
 # library(dataRetrieval)
 # site <- "263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
-# site_data <- dataRetrieval::readNWISqw(site, 
+# site_data <- dataRetrieval::readNWISqw(site,
 #                                        parameterCd)
 # gwl_data <- dataRetrieval::readNWISgwl(site)
 # parameterCd <- "62610"

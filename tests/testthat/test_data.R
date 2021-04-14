@@ -38,13 +38,13 @@ test_that("Data", {
                     c("aqfr_cd",
                       "Aqfr_Name_prpr")))
   
-  expect_equal(nrow(L2701_example_data[["Daily"]]), 14440)
-  expect_equal(nrow(L2701_example_data[["Discrete"]]), 446)
-  expect_equal(nrow(L2701_example_data[["QW"]]), 466)
+  expect_equal(nrow(L2701_example_data[["Daily"]]), 14807)
+  expect_equal(nrow(L2701_example_data[["Discrete"]]), 1362)
+  expect_equal(nrow(L2701_example_data[["QW"]]), 469)
   
   expect_equal(ncol(L2701_example_data[["Daily"]]), 5)
-  expect_equal(ncol(L2701_example_data[["Discrete"]]), 18)
-  expect_equal(ncol(L2701_example_data[["QW"]]), 34)
+  expect_equal(ncol(L2701_example_data[["Discrete"]]), 19)
+  expect_equal(ncol(L2701_example_data[["QW"]]), 36)
   
 })
 

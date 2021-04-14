@@ -7,7 +7,7 @@
 \description{
 Example data from site 263819081585801 L-2701. Data is a named list of
 "Daily" for daily groundwater level at the site and "Discrete" for discrete
-groundwater level measurements fromt he site
+groundwater level measurements from the site. Updated April 9, 2021.
 }
 \examples{
 head(L2701_example_data$Daily)
