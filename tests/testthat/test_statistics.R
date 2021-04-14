@@ -70,9 +70,9 @@ test_that("Daily summary table", {
                                            value_col = "X_62610_00001",
                                            approved_col = "X_62610_00001_cd")
   expect_equal(nrow(daily_summary_table), 1)
-  expect_equal(daily_summary_table$percent_complete, 95)
+  expect_equal(daily_summary_table$percent_complete, 96)
   expect_equal(daily_summary_table$begin_date, as.Date("1978-10-01"))
-  expect_equal(daily_summary_table$p25, -28.56, tolerance = 0.005)
+  expect_equal(daily_summary_table$p25, -28.4, tolerance = 0.005)
   expect_equal(daily_summary_table$highest_level, -2.81, tolerance = 0.05)
   
 })
@@ -94,14 +94,14 @@ test_that("trend segments",{
   gw_level_dv <- L2701_example_data$Daily
   qw_data <- L2701_example_data$QW
   
-  seg_df <- create_segs(qw_data)
+  seg_df <- HASP:::create_segs(qw_data)
   expect_true(all(seg_df$x1 == c(2015,2000)))
   expect_true(all(seg_df$x2 == c(2020,2020)))
   expect_true(all(seg_df$years == c(5,20)))
   expect_true(all(seg_df$trend == c("5-year trend",
                                  "20-year trend")))
   
-  seg_df_dv <- create_segs(gw_level_dv, 
+  seg_df_dv <- HASP:::create_segs(gw_level_dv, 
                         date_col = "Date", 
                         value_col = "X_62610_00001")
   expect_true(all(seg_df_dv$x1 == c(2016,2001)))
@@ -124,7 +124,7 @@ test_that("trend segments",{
   expect_type(gw_monthly$n_days, "integer")
   expect_true(gw_monthly$mid_date[1] == as.Date("1978-10-15"))
   
-  seg_df_month <- create_segs(gw_monthly, 
+  seg_df_month <- HASP:::create_segs(gw_monthly, 
                         date_col = "mid_date",
                         value_col = "mean_va")
   
