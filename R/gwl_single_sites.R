@@ -313,7 +313,7 @@ filter_pcode <- function(df, pcode){
       df <- df[!is.na(df$parameter_cd) & 
                  df$parameter_cd %in% pcode, ]
     } else if(all(is.na(pcode)) &
-              length(unique(gwl_data$parameter_cd)) > 1){
+              length(unique(df$parameter_cd)) > 1){
       warning("Multiple parameter codes detected in column 'parameter_cd',
             and a parameter code is not specified in 'parameter_cd_gwl'")
     }
