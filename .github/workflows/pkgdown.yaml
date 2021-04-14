@@ -40,7 +40,14 @@ jobs:
 
       - name: Deploy package
         run: |
+          rmarkdown::render("README.Rmd", output_format = "md_document")
           Sys.setenv(CI = FALSE)
           options(rmarkdown.html_vignette.check_title = FALSE)
           pkgdown::deploy_to_branch(new_process = FALSE)
         shell: Rscript {0}
+        
+        - name: commit rendered README
+        run: |
+          git add README.md man/figures/README-*
+          git commit -m "Re-build README.md" || echo "No changes to commit"
+          git push origin master || echo "No changes to commit"
