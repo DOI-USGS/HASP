@@ -20,7 +20,7 @@
 #' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
 #' named "parameter_cd". If the
 #' data doesn't come directly from NWIS services, this can be set to \code{NA},
-#' and this argument will be ignored.s
+#' and this argument will be ignored.
 #' @importFrom stats as.formula
 #' @return a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
 #' 

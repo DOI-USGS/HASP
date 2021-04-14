@@ -146,6 +146,10 @@ plot_normalized_data <- function(x, sum_col, num_years = NA,
 #' @param sum_col column name to do the analysis on. In data coming from 
 #' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.s
 #' @return leaflet object
 #' 
 #' @import leaflet

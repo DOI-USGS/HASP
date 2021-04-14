@@ -23,7 +23,7 @@ and a Date or POSIXct column defined by "date_col"}
 \item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
 named "parameter_cd". If the
 data doesn't come directly from NWIS services, this can be set to \code{NA},
-and this argument will be ignored.s}
+and this argument will be ignored.}
 
 \item{date_col}{name of date column.}
 

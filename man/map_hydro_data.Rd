@@ -14,6 +14,11 @@ and the 3rd is defined by the sum_col argument.}
 \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".}
 
 \item{num_years}{integer number of years required}
+
+\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
+named "parameter_cd". If the
+data doesn't come directly from NWIS services, this can be set to \code{NA},
+and this argument will be ignored.s}
 }
 \value{
 leaflet object
