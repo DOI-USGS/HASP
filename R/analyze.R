@@ -6,6 +6,10 @@
 #' 
 #' @param x data frame
 #' @param sum_col column name
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' 
 #' @return data frame with 10 columns 
 #' @export
@@ -16,14 +20,16 @@
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' sum_col <- "lev_va"
-#' summary_info <- site_data_summary(aquifer_data, sum_col)
-site_data_summary <- function(x, sum_col){
+#' summary_info <- site_data_summary(aquifer_data, sum_col, "72019")
+site_data_summary <- function(x, sum_col, parameter_cd_gwl = NA){
 
   site_no <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
   if(!all(c("site_no", sum_col) %in% names(x))) stop("Missing columns")
+  
+  x <- filter_pcode(x, parameter_cd_gwl)
   
   summaries <- group_by(x, site_no)
   
@@ -94,6 +100,10 @@ prep_map_data <- function(x ){
 #' the filter will use the minimum from the data.
 #' @param end_year integer the last year to filter from. If \code{NA},
 #' the filter will use the last year.
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' @return data frame filter of x
 #' @export
 #' @examples 
@@ -101,16 +111,20 @@ prep_map_data <- function(x ){
 #' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' aq_data <- filter_sites(aquifer_data, sum_col, num_years)
+#' aq_data <- filter_sites(aquifer_data, sum_col, num_years, 
+#'                         parameter_cd_gwl = "72019")
 filter_sites <- function(x, sum_col, num_years = NA, 
-                         start_year = NA, end_year = NA){
+                         start_year = NA, end_year = NA,
+                         parameter_cd_gwl = NA){
   
   if(nrow(x) == 0) stop("No data")
   
   if(!all(c("site_no", "year", sum_col) %in% names(x))) stop("Missing columns")
 
   lev_va <- site_no <- year <- n_years <- ".dplyr"
-
+  
+  x <- filter_pcode(x, parameter_cd_gwl)
+  
   pick_sites <- x %>% 
     filter(!is.na(!!sym(sum_col))) %>% 
     group_by(site_no, year) %>% 
@@ -179,6 +193,10 @@ filter_sites <- function(x, sum_col, num_years = NA,
 #' @param x aquifer data
 #' @param sum_col column name
 #' @param num_years integer number of years required
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' @return data frame with year, name, and value
 #' 
 #' @importFrom tidyr pivot_longer
@@ -188,9 +206,11 @@ filter_sites <- function(x, sum_col, num_years = NA,
 #' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' comp_data <- composite_data(aquifer_data, sum_col, num_years)
+#' comp_data <- composite_data(aquifer_data, sum_col, num_years,
+#'                             parameter_cd_gwl = "72019")
 #' 
-composite_data <- function(x, sum_col, num_years){
+composite_data <- function(x, sum_col, num_years, 
+                           parameter_cd_gwl = NA){
   
   year <- site_no <- n_sites_year <- med_site <- name <- ".dplyr"
   
@@ -198,7 +218,9 @@ composite_data <- function(x, sum_col, num_years){
   
   if(!all(c("site_no", "year", sum_col) %in% names(x))) stop("Missing columns")
 
-  x <- filter_sites(x, sum_col, num_years)
+
+  x <- filter_sites(x, sum_col, num_years,
+                    parameter_cd_gwl = parameter_cd_gwl)
   
   if(nrow(x) == 0){
     stop("No data in ", sum_col)
@@ -237,6 +259,10 @@ composite_data <- function(x, sum_col, num_years){
 #' @param x aquifer data
 #' @param sum_col column name
 #' @param num_years integer number of years required
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' @return data frame with year, name, and value
 #' @importFrom tidyr pivot_longer
 #' @export
@@ -245,8 +271,9 @@ composite_data <- function(x, sum_col, num_years){
 #' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' norm_data <- normalized_data(aquifer_data, sum_col, num_years)
-normalized_data <- function(x, sum_col, num_years){
+#' norm_data <- normalized_data(aquifer_data, sum_col, num_years, 
+#'                              parameter_cd_gwl = "72019")
+normalized_data <- function(x, sum_col, num_years, parameter_cd_gwl = NA){
   
   year <- site_no <- n_sites_year <- mean_site <- max_site <- min_site <- x_norm <- med_site <- name <- ".dplyr"
   mean_med <- max_med <- min_med <- ".dplyr"
@@ -255,7 +282,7 @@ normalized_data <- function(x, sum_col, num_years){
   
   if(!all(c("site_no", "year", sum_col) %in% names(x))) stop("Missing columns")
   
-  x <- filter_sites(x, sum_col, num_years)
+  x <- filter_sites(x, sum_col, num_years, parameter_cd_gwl = parameter_cd_gwl)
   
   if(nrow(x) == 0){
     stop("No data in ", sum_col)
@@ -263,7 +290,7 @@ normalized_data <- function(x, sum_col, num_years){
   
   n_sites <- length(unique(x$site_no))
   
-  year_summaries <- site_data_summary(x, sum_col)
+  year_summaries <- site_data_summary(x, sum_col, parameter_cd_gwl = parameter_cd_gwl)
   
   norm_composite <- x %>% 
     group_by(year, site_no) %>% 

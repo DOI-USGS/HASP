@@ -4,7 +4,7 @@
 \alias{normalized_data}
 \title{Composite normalized hydrograph data}
 \usage{
-normalized_data(x, sum_col, num_years)
+normalized_data(x, sum_col, num_years, parameter_cd_gwl = NA)
 }
 \arguments{
 \item{x}{aquifer data}
@@ -12,6 +12,11 @@ normalized_data(x, sum_col, num_years)
 \item{sum_col}{column name}
 
 \item{num_years}{integer number of years required}
+
+\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
+named "parameter_cd". If the
+data doesn't come directly from NWIS services, this can be set to \code{NA},
+and this argument will be ignored.}
 }
 \value{
 data frame with year, name, and value
@@ -27,5 +32,6 @@ aquifer_data <- aquifer_data
 sum_col <- "lev_va"
 num_years <- 30
 
-norm_data <- normalized_data(aquifer_data, sum_col, num_years)
+norm_data <- normalized_data(aquifer_data, sum_col, num_years, 
+                             parameter_cd_gwl = "72019")
 }

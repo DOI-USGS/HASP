@@ -9,6 +9,10 @@
 #' @param num_years integer number of years required. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title included on plot.
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -18,13 +22,19 @@
 #' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' comp_data <- plot_composite_data(aquifer_data, sum_col, num_years)
+#' comp_data <- plot_composite_data(aquifer_data, sum_col, num_years, 
+#'                     parameter_cd_gwl = "72019", 
+#'                     plot_title = "Calendar Year")
 #' comp_data
-#' #' # Do it on a water year:
+#' # Do it on a water year:
 #' aquifer_data$cal_year <- aquifer_data$year
 #' aquifer_data$year <- aquifer_data$water_year
-#' plot_composite_data(aquifer_data, sum_col, num_years)
-plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
+#' plot_composite_data(aquifer_data, sum_col, num_years, 
+#'                     parameter_cd_gwl = "72019", 
+#'                     plot_title = "Water Year")
+plot_composite_data <- function(x, sum_col, 
+                                num_years = NA, plot_title = "",
+                                parameter_cd_gwl = NA){
   
   year <- value <- name <- ".dplyr"
   
@@ -36,7 +46,10 @@ plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
     num_years <- diff(range(x$year))  
   }
   
-  comp_data <- composite_data(x, sum_col, num_years)
+  comp_data <- composite_data(x,
+                              sum_col = sum_col, 
+                              num_years = num_years,
+                              parameter_cd_gwl = parameter_cd_gwl)
   
   if(nrow(comp_data) == 0){
     stop("No sites had measurements for each of the years")
@@ -70,6 +83,10 @@ plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
 #' @param num_years integer number of years required to the analysis. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title of plot.
+#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
+#' named "parameter_cd". If the
+#' data doesn't come directly from NWIS services, this can be set to \code{NA},
+#' and this argument will be ignored.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
@@ -79,13 +96,15 @@ plot_composite_data <- function(x, sum_col, num_years = NA, plot_title = ""){
 #' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' norm_data <- plot_normalized_data(aquifer_data, sum_col, num_years)
+#' norm_data <- plot_normalized_data(aquifer_data, sum_col,
+#'                                   num_years, parameter_cd_gwl = "72019")
 #' norm_data
 #' 
 #' aquifer_data$cal_year <- aquifer_data$year
 #' aquifer_data$year <- aquifer_data$water_year
-#' plot_normalized_data(aquifer_data, sum_col, num_years)
-plot_normalized_data <- function(x, sum_col, num_years = NA, plot_title = ""){
+#' plot_normalized_data(aquifer_data, sum_col, num_years, parameter_cd_gwl = "72019")
+plot_normalized_data <- function(x, sum_col, num_years = NA,
+                                 plot_title = "", parameter_cd_gwl = NA){
   
   year <- value <- name <- ".dplyr"
 
@@ -97,7 +116,7 @@ plot_normalized_data <- function(x, sum_col, num_years = NA, plot_title = ""){
     num_years <- diff(range(x$year))  
   }
   
-  norm_data <- normalized_data(x, sum_col, num_years)
+  norm_data <- normalized_data(x, sum_col, num_years, parameter_cd_gwl = parameter_cd_gwl)
   
   plot_out <- ggplot(data = norm_data) +
     geom_line(aes(x = year, y = value, color = name)) +
@@ -136,11 +155,11 @@ plot_normalized_data <- function(x, sum_col, num_years = NA, plot_title = ""){
 #' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' map_data <- map_hydro_data(aquifer_data, sum_col, num_years)
+#' map_data <- map_hydro_data(aquifer_data, sum_col, num_years, "72019")
 #' map_data
-map_hydro_data <- function(x, sum_col, num_years){
+map_hydro_data <- function(x, sum_col, num_years, parameter_cd_gwl){
   
-  x <- filter_sites(x, sum_col, num_years)
+  x <- filter_sites(x, sum_col, num_years, parameter_cd_gwl = parameter_cd_gwl)
   
   map_data <- prep_map_data(x)
 

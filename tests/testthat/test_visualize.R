@@ -5,8 +5,10 @@ test_that("Composite Graphs", {
   sum_col <- "lev_va"
   num_years <- 30
  
-  comp_data <- plot_composite_data(aquifer_data, sum_col, num_years)
-  norm_data <- plot_normalized_data(aquifer_data, sum_col, num_years)
+  comp_data <- plot_composite_data(aquifer_data, sum_col, num_years,
+                                   parameter_cd_gwl = "72019")
+  norm_data <- plot_normalized_data(aquifer_data, sum_col, num_years,
+                                    parameter_cd_gwl = "72019")
   
   expect_true(all(names(comp_data$data) %in% c("year","name","value")))
   expect_true(all(names(norm_data$data) %in% c("year","name","value")))
@@ -23,7 +25,7 @@ test_that("Map", {
   sum_col <- "lev_va"
   num_years <- 30
   
-  map <- map_hydro_data(aquifer_data, sum_col, num_years)
+  map <- map_hydro_data(aquifer_data, sum_col, num_years, "72019")
   
   expect_true(all(class(map) %in% c("leaflet","htmlwidget")))
 
@@ -54,10 +56,10 @@ test_that("SC Chloride graphs and table", {
 
 test_that("Monthly frequency plot", {
   
-  plot <- monthly_frequency_plot(L2701_example_data$Discrete,
-                                 date_col = "lev_dt",
-                                 value_col = "sl_lev_va",
-                                 approved_col = "lev_age_cd")
+  plot <- monthly_frequency_plot(L2701_example_data$Daily,
+                                 date_col = "Date",
+                                 value_col = "X_62610_00001",
+                                 approved_col = "X_62610_00001_cd")
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
@@ -84,7 +86,7 @@ test_that("Field gwl plot", {
   
   gwl_data <- L2701_example_data$Discrete
   plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-  plot_out <- gwl_plot_field(gwl_data, plot_title)
+  plot_out <- gwl_plot_field(gwl_data, plot_title, parameter_cd_gwl = "62610")
   
   dv <- L2701_example_data$Daily
   plot2 <- gwl_plot_all(dv, gwl_data,
@@ -93,7 +95,7 @@ test_that("Field gwl plot", {
                                       "sl_lev_va"),
                         approved_col = c("X_62610_00001_cd",
                                          "lev_age_cd"),
-                        plot_title = "title")
+                        plot_title = "title", parameter_cd_gwl = "62610")
   
   expect_true(all(c("lev_dt", "sl_lev_va", "lev_age_cd") %in%
                     names(plot_out[["data"]])))
@@ -110,6 +112,7 @@ test_that("Field gwl plot", {
                                   approved_col = c("X_62610_00001_cd",
                                                    "lev_age_cd"),
                                   plot_title = "title",
+                                  parameter_cd_gwl = "62610",
                                   add_trend = TRUE)
   
   plot_data_elements <- unlist(lapply(plot_with_trend$layers, function(x) {names(x$data)}))
@@ -122,7 +125,9 @@ test_that("Field gwl plot", {
                                 date_col = "lev_dt",
                                 value_col = "sl_lev_va",
                                 approved_col = "lev_age_cd",
-                                plot_title = "title", add_trend = FALSE)
+                                plot_title = "title",
+                                parameter_cd_gwl = "62610",
+                                add_trend = FALSE)
   plot_elements <- unlist(lapply(plot_with_gwl$layers, function(x) {names(x$data)}))
   expect_true(all(c("lev_dt", "sl_lev_va", "year") %in%
                     plot_elements))

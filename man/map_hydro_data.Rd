@@ -4,7 +4,7 @@
 \alias{map_hydro_data}
 \title{Map data used in composite hydrographs}
 \usage{
-map_hydro_data(x, sum_col, num_years)
+map_hydro_data(x, sum_col, num_years, parameter_cd_gwl)
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
@@ -26,6 +26,6 @@ aquifer_data <- aquifer_data
 sum_col <- "lev_va"
 num_years <- 30
 
-map_data <- map_hydro_data(aquifer_data, sum_col, num_years)
+map_data <- map_hydro_data(aquifer_data, sum_col, num_years, "72019")
 map_data
 }

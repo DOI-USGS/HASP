@@ -307,20 +307,21 @@ zero_on_top <- function(x){
 
 filter_pcode <- function(df, pcode){
   
-  if("parameter_cd" %in% names(df) &
-     !all(is.na(pcode))){
-    pcode <- dataRetrieval::zeroPad(pcode, 5)
-    df <- df[!is.na(df$parameter_cd) & 
-               df$parameter_cd %in% pcode, ]
-  } else if("parameter_cd" %in% names(df) & 
-            all(is.na(pcode)) &
-            length(unique(gwl_data$parameter_cd)) > 1){
-    warning("Multiple parameter codes detected in column 'parameter_cd',
+  if("parameter_cd" %in% names(df)){
+    if(!all(is.na(pcode))){
+      pcode <- dataRetrieval::zeroPad(pcode, 5)
+      df <- df[!is.na(df$parameter_cd) & 
+                 df$parameter_cd %in% pcode, ]
+    } else if(all(is.na(pcode)) &
+              length(unique(gwl_data$parameter_cd)) > 1){
+      warning("Multiple parameter codes detected in column 'parameter_cd',
             and a parameter code is not specified in 'parameter_cd_gwl'")
-  } else if (!("parameter_cd" %in% names(df)) & 
-             !all(is.na(pcode))){
-    message("gwl_data data frame does not contain a 'parameter_cd' column,
+    }
+  } else {
+    if(!all(is.na(pcode))){
+      message("gwl_data data frame does not contain a 'parameter_cd' column,
             yet 'parameter_cd_gwl' is defined. Ignoring 'parameter_cd_gwl' argument.")
+    }
   }
   return(df)
 }

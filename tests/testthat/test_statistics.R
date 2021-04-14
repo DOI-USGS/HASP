@@ -8,21 +8,22 @@ test_that("Kendall Seasonal Trend", {
                              lev_dt > as.Date("2010-01-01"),
                              lev_dt < as.Date("2014-01-01"))
   
-  test1 <- kendell_test_5_20_years(gw_level_data)
-  test2 <- expect_message(kendell_test_5_20_years(less_data))
+  test1 <- kendell_test_5_20_years(gw_level_data, parameter_cd_gwl = "62610")
+  test2 <- expect_message(kendell_test_5_20_years(less_data, parameter_cd_gwl = "62610"))
   
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test1)))
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test2)))
   
   expect_true(all(is.na(c(test2$tau, test2$pValue, test2$slope, test2$intercept, test2$trend))))
-  expect_true(-0.0411 == signif(test1$tau[2], digits = 3))
-  expect_true(0.489 == signif(test1$pValue[2], digits = 3))
-  expect_true(-0.0560 == signif(test1$slope[2], digits = 3))
-  expect_true(102 == signif(test1$intercept[2], digits = 3))
-  expect_true("Not significant" == test1$trend[2])
+  expect_true(0.0954 == signif(test1$tau[2], digits = 3))
+  expect_true(0.0254 == signif(test1$pValue[2], digits = 3))
+  expect_true(0.22 == signif(test1$slope[2], digits = 3))
+  expect_true(-435 == signif(test1$intercept[2], digits = 3))
+  expect_true("Up" == test1$trend[2])
   
-  test3 <- kendell_test_5_20_years(gw_level_data, seasonal = FALSE)
-  expect_true(0.0625 == signif(test3$tau[2], digits = 3))
+  test3 <- kendell_test_5_20_years(gw_level_data, seasonal = FALSE,
+                                   parameter_cd_gwl = "62610")
+  expect_true(0.152 == signif(test3$tau[2], digits = 3))
   
   qw_data <- L2701_example_data$QW
   test4 <- kendell_test_5_20_years(qw_data, seasonal = FALSE, 
@@ -40,20 +41,25 @@ test_that("Weekly frequency table", {
                                 value_col = "X_62610_00001",
                                 approved_col = "X_62610_00001_cd")
   expect_equal(as.numeric(head(wft$p25, 6)), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
-  expect_equal(as.numeric(head(wft$nYears, 6)), c(39, 40, 40, 40, 41, 41))
+  expect_equal(as.numeric(head(wft$nYears, 6)), c(40, 41, 41, 41, 42, 42))
   expect_equal(tail(wft$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
   
 })
 
 test_that("Monthly frequency table", {
   
-  mft <- monthly_frequency_table(L2701_example_data$Discrete,
-                                 date_col = "lev_dt",
-                                 value_col = "sl_lev_va",
-                                 approved_col = "lev_age_cd")
-  expect_equal(as.numeric(head(mft$p75, 6)), c(-20.3, -22.6, -24.1, -26.2, -29.4, -24.3), tolerance = 0.05)
-  expect_equal(as.numeric(head(mft$nYears, 6)), c(22, 28, 26, 33, 28, 30))
-  expect_equal(tail(mft$maxMed, 6), c(-16.7, -12.3, -15.3, -4.83, -10.8, -16.2), tolerance = 0.05)
+  mft <- monthly_frequency_table(L2701_example_data$Daily,
+                                 date_col = "Date",
+                                 value_col = "X_62610_00001",
+                                 approved_col = "X_62610_00001_cd")
+  expect_equal(as.numeric(head(mft$p75, 6)),
+               c(-18.0575, -19.0500, -20.2625, -22.0500, -23.5100, -21.0200),
+               tolerance = 0.05)
+  expect_equal(as.numeric(head(mft$nYears, 6)),
+               c(41, 42, 42, 42, 42, 41))
+  expect_equal(tail(mft$maxMed, 6),
+               c(-6.790, -4.820, -3.240, -4.800, -4.535, -4.860),
+               tolerance = 0.05)
   
 })
 

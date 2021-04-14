@@ -71,14 +71,15 @@ get_state_data <- function(state, aquiferCd, startDate, endDate){
                          startDate= startDate,
                          endDate = endDate,
                          aquiferCd = aquiferCd,
-                         format = "rdb")
+                         format = "rdb,3.0")
   
-  state_data <- levels[ , c("lev_va", "sl_lev_va", "lev_dt", "site_no")]
+  state_data <- levels[ , c("lev_va", "sl_lev_va", "lev_dt", "site_no", "parameter_cd")]
 
   state_data$state_call <- state
   state_data$lev_va <- as.numeric(state_data$lev_va)
   state_data$sl_lev_va <- as.numeric(state_data$sl_lev_va)
   state_data$lev_dt <- as.character(state_data$lev_dt)
+  state_data$parameter_cd <- as.character(state_data$parameter_cd)
   
   state_data$year <- as.numeric(sapply(strsplit(state_data$lev_dt, 
                                                 split = "-"), 
