@@ -46,7 +46,7 @@ jobs:
           pkgdown::deploy_to_branch(new_process = FALSE)
         shell: Rscript {0}
         
-        - name: commit rendered README
+      - name: commit rendered README
         run: |
           git add README.md man/figures/README-*
           git commit -m "Re-build README.md" || echo "No changes to commit"
