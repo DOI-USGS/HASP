@@ -37,10 +37,9 @@ gwl_plot_all(
 
 \item{value_col}{name of value column. Default is "sl_lev_va".}
 
-\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
-named "parameter_cd". If the
-data doesn't come directly from NWIS services, this can be set to \code{NA},
-and this argument will be ignored.}
+\item{parameter_cd_gwl}{Parameter code to be filtered to in a column specifically
+named "parameter_cd". If the data doesn't come directly from NWIS services, this 
+can be set to \code{NA},and this argument will be ignored.}
 
 \item{approved_col}{name of column to get provisional/approved status.
 Default is "lev_age_cd".}

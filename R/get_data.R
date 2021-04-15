@@ -6,6 +6,7 @@
 #' @param aquiferCd character
 #' @param startDate date or string
 #' @param endDate date of string 
+#' @param parameter_cd 5-digit character USGS parameter code.
 #' @export
 #' @importFrom dataRetrieval readNWISdata
 #' @importFrom dataRetrieval readNWISsite
@@ -19,7 +20,8 @@
 #' \donttest{
 #' aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
 #' }
-get_aquifer_data <- function(aquiferCd, startDate, endDate){
+get_aquifer_data <- function(aquiferCd, startDate, endDate, 
+                             parameter_cd = "72019"){
   
   aquifer_data <- data.frame()
   site_data <- data.frame()
@@ -36,7 +38,8 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate){
         get_state_data(state = state, 
                        aquiferCd = aquiferCd, 
                        startDate = startDate,
-                       endDate = endDate)
+                       endDate = endDate,
+                       parameter_cd = parameter_cd)
       }, 
       error = function(e){ 
         cat(state, "errored \n")
@@ -64,31 +67,69 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate){
 }
 
 
-get_state_data <- function(state, aquiferCd, startDate, endDate){
+get_state_data <- function(state, aquiferCd, 
+                           startDate, endDate, parameter_cd){
 
+  lev_age_cd <- lev_dt <- site_no <- agency_cd <- tz_cd <- ".dplyr"
+  dateTime <- state_call <- value <- year <- ".dplyr" 
+  
   levels <- readNWISdata(stateCd = state, 
+                         parameterCd = parameter_cd,
                          service = "gwlevels",
                          startDate= startDate,
                          endDate = endDate,
-                         aquiferCd = aquiferCd,
-                         format = "rdb,3.0")
+                         aquiferCd = aquiferCd)
   
-  state_data <- levels[ , c("lev_va", "sl_lev_va", "lev_dt", "site_no", "parameter_cd")]
+  levels_dv <- readNWISdata(stateCd = state, 
+                         service = "dv",
+                         parameterCd = parameter_cd,
+                         statCd = "00003",
+                         startDate= startDate,
+                         endDate = endDate,
+                         aquiferCd = aquiferCd)
+  val_col <- ifelse(parameter_cd == "72019", "lev_va", "sl_lev_va")
+  
+  if(nrow(levels) > 0){
+    state_data <- levels[ , c(val_col, "lev_dt", "site_no", "lev_age_cd")]
+    
+    state_data <- levels %>% 
+      filter(lev_age_cd == "A") %>% 
+      select(lev_dt, site_no, {{val_col}}) %>% 
+      mutate(state_call = state,
+             value = as.numeric(!!sym(val_col)),
+             lev_dt = as.character(lev_dt),
+             year = as.numeric(sapply(strsplit(lev_dt, 
+                                               split = "-"), 
+                                      function(x) x[1])),
+             water_year = water_year(lev_dt),
+             lev_dt = as.Date(lev_dt)) %>% 
+      select(-{{val_col}})
+  } else {
+    state_data <- data.frame()
+  }
+  
+  if(nrow(levels_dv) > 0){
+    val_col_dv <- paste0("X_", parameter_cd, "_00003")
+    
+    state_dv <- levels_dv %>% 
+      select(-agency_cd, -tz_cd) %>%
+      mutate(year = as.numeric(format(dateTime, "%Y")),
+             water_year = water_year(dateTime),
+             dateTime = as.character(as.Date(dateTime)),
+             state_call = state,
+             value = as.numeric(!!sym(val_col_dv)),
+             lev_dt = as.Date(dateTime)) %>% 
+      select(lev_dt, site_no, state_call, value, year, water_year)
+    
+  } else {
+    state_dv = data.frame()
+  }
+  
 
-  state_data$state_call <- state
-  state_data$lev_va <- as.numeric(state_data$lev_va)
-  state_data$sl_lev_va <- as.numeric(state_data$sl_lev_va)
-  state_data$lev_dt <- as.character(state_data$lev_dt)
-  state_data$parameter_cd <- as.character(state_data$parameter_cd)
+  state_data_tots <- bind_rows(state_data, 
+                               state_dv)
   
-  state_data$year <- as.numeric(sapply(strsplit(state_data$lev_dt, 
-                                                split = "-"), 
-                                       function(x) x[1]))
-  
-  
-  state_data$water_year <- water_year(state_data$lev_dt)
-  
-  return(state_data)
+  return(state_data_tots)
 }
 
 #' site_summary

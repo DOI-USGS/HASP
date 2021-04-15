@@ -4,19 +4,10 @@
 \alias{filter_sites}
 \title{filter_sites}
 \usage{
-filter_sites(
-  x,
-  sum_col,
-  num_years = NA,
-  start_year = NA,
-  end_year = NA,
-  parameter_cd_gwl = NA
-)
+filter_sites(x, num_years = NA, start_year = NA, end_year = NA)
 }
 \arguments{
 \item{x}{aquifer data}
-
-\item{sum_col}{column name}
 
 \item{num_years}{integer number of years required. This can be
 \code{NA}, in which case the filter will use the full range of the data.}
@@ -26,11 +17,6 @@ the filter will use the minimum from the data.}
 
 \item{end_year}{integer the last year to filter from. If \code{NA},
 the filter will use the last year.}
-
-\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
-named "parameter_cd". If the
-data doesn't come directly from NWIS services, this can be set to \code{NA},
-and this argument will be ignored.}
 }
 \value{
 data frame filter of x
@@ -40,9 +26,7 @@ Filter down to sites with num_years of data
 }
 \examples{
 aquifer_data <- aquifer_data
-sum_col <- "lev_va"
 num_years <- 30
 
-aq_data <- filter_sites(aquifer_data, sum_col, num_years, 
-                        parameter_cd_gwl = "72019")
+aq_data <- filter_sites(aquifer_data, num_years)
 }

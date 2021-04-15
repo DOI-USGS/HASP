@@ -4,30 +4,16 @@
 \alias{plot_composite_data}
 \title{Plot composite hydrograph data}
 \usage{
-plot_composite_data(
-  x,
-  sum_col,
-  num_years = NA,
-  plot_title = "",
-  parameter_cd_gwl = NA
-)
+plot_composite_data(x, num_years = NA, plot_title = "")
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
-and the 3rd is defined by the sum_col argument.}
-
-\item{sum_col}{column name to do the analysis on. In data coming from 
-\code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".}
+and "value".}
 
 \item{num_years}{integer number of years required. If \code{NA}, the 
 analysis will default to the range of the data in x.}
 
 \item{plot_title}{character title included on plot.}
-
-\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
-named "parameter_cd". If the
-data doesn't come directly from NWIS services, this can be set to \code{NA},
-and this argument will be ignored.}
 }
 \value{
 ggplot2 object
@@ -37,17 +23,14 @@ Create composite hydrograph plot
 }
 \examples{
 aquifer_data <- aquifer_data
-sum_col <- "lev_va"
 num_years <- 30
 
-comp_data <- plot_composite_data(aquifer_data, sum_col, num_years, 
-                    parameter_cd_gwl = "72019", 
+comp_data <- plot_composite_data(aquifer_data, num_years, 
                     plot_title = "Calendar Year")
 comp_data
 # Do it on a water year:
 aquifer_data$cal_year <- aquifer_data$year
 aquifer_data$year <- aquifer_data$water_year
-plot_composite_data(aquifer_data, sum_col, num_years, 
-                    parameter_cd_gwl = "72019", 
+plot_composite_data(aquifer_data, num_years, 
                     plot_title = "Water Year")
 }

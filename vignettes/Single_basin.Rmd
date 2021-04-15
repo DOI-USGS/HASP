@@ -71,9 +71,7 @@ aquifer_data <- aquifer_data
 
 ```{r mapIt}
 
-map <- map_hydro_data(aquifer_data,
-                      "lev_va", 30, 
-                      parameter_cd_gwl = "72019")
+map <- map_hydro_data(aquifer_data, 30)
 map
 
 ```
@@ -82,8 +80,7 @@ map
 
 ```{r graphIt}
 
-plot_composite_data(aquifer_data, "lev_va", 30,
-                    parameter_cd_gwl = "72019") +
+plot_composite_data(aquifer_data, 30) +
     ggtitle(label = aquifer_long_name)
 
 ```
@@ -93,7 +90,6 @@ plot_composite_data(aquifer_data, "lev_va", 30,
 
 ```{r norm}
 
-plot_normalized_data(aquifer_data, "lev_va", 30, 
-                     parameter_cd_gwl = "72019") +
+plot_normalized_data(aquifer_data, 30) +
   ggtitle(label = aquifer_long_name)
 ```

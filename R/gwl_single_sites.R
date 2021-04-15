@@ -6,10 +6,9 @@
 #' @param plot_title character
 #' @param date_col name of date column. Default is "lev_dt".
 #' @param value_col name of value column. Default is "sl_lev_va".
-#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
-#' named "parameter_cd". If the
-#' data doesn't come directly from NWIS services, this can be set to \code{NA},
-#' and this argument will be ignored.
+#' @param parameter_cd_gwl Parameter code to be filtered to in a column specifically
+#' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
+#' can be set to \code{NA},and this argument will be ignored.
 #' @param approved_col name of column to get provisional/approved status.
 #' Default is "lev_age_cd".
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
