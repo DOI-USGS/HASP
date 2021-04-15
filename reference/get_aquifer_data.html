@@ -76,9 +76,18 @@
 </script>
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -155,7 +164,7 @@
     <p>Get USGS data based on aquiferCd</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_aquifer_data</span><span class='op'>(</span><span class='va'>aquiferCd</span>, <span class='va'>startDate</span>, <span class='va'>endDate</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_aquifer_data</span><span class='op'>(</span><span class='va'>aquiferCd</span>, <span class='va'>startDate</span>, <span class='va'>endDate</span>, parameter_cd <span class='op'>=</span> <span class='st'>"72019"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,15 +181,21 @@
       <th>endDate</th>
       <td><p>date of string</p></td>
     </tr>
+    <tr>
+      <th>parameter_cd</th>
+      <td><p>5-digit character USGS parameter code.</p></td>
+    </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>end_date</span> <span class='op'>&lt;-</span> <span class='st'>"2019-12-31"</span>
+    <pre class="examples"><div class='input'><span class='va'>end_date</span> <span class='op'>&lt;-</span> <span class='st'>"2021-01-01"</span>
 <span class='va'>start_date</span> <span class='op'>&lt;-</span> <span class='st'>"1989-12-31"</span>
 
 <span class='va'>aquiferCd</span> <span class='op'>&lt;-</span> <span class='st'>"S100CSLLWD"</span>
-<span class='co'>#aq_data &lt;- get_aquifer_data(aquiferCd, start_date, end_date)</span>
+<span class='co'># \donttest{</span>
+<span class='va'>aq_data</span> <span class='op'>&lt;-</span> <span class='fu'>get_aquifer_data</span><span class='op'>(</span><span class='va'>aquiferCd</span>, <span class='va'>start_date</span>, <span class='va'>end_date</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Getting data from: Alabama</span></div><div class='output co'>#&gt; <span class='message'>Getting data from: Florida</span></div><div class='output co'>#&gt; <span class='message'>Getting data from: Louisiana</span></div><div class='output co'>#&gt; <span class='message'>Getting data from: Mississippi</span></div><div class='output co'>#&gt; <span class='message'>Getting data from: Texas</span></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -193,11 +208,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
+  <p><p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -205,6 +220,8 @@
 
   
 
+
+  
 
   </body>
 </html>

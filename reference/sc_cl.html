@@ -77,9 +77,18 @@ and combination plots and tables for a single site." />
 </script>
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -157,13 +166,13 @@ and combination plots and tables for a single site." />
 and combination plots and tables for a single site.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Sc_Cl_plot</span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'><a href='sc_cl.html'>Sc_Cl_plot</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span><span class='op'>)</span>
 
-<span class='fu'>Sc_Cl_table</span><span class='op'>(</span><span class='va'>qw_data</span><span class='op'>)</span>
+<span class='fu'><a href='sc_cl.html'>Sc_Cl_table</a></span><span class='op'>(</span><span class='va'>qw_data</span><span class='op'>)</span>
 
-<span class='fu'>qw_plot</span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00095"</span>, <span class='st'>"90095"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='sc_cl.html'>qw_plot</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00095"</span>, <span class='st'>"90095"</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>qw_summary</span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>pcode</span>, norm_range <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre>
+<span class='fu'><a href='sc_cl.html'>qw_summary</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>pcode</span>, norm_range <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,40 +206,40 @@ must include columns sample_dt, parm_cd, result_va</p></td>
 <span class='co'># Using package example data:</span>
 <span class='va'>qw_data</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>QW</span>
 <span class='va'>plot_title</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='st'>"siteInfo"</span><span class='op'>)</span><span class='op'>[[</span><span class='st'>"station_nm"</span><span class='op'>]</span><span class='op'>]</span>, <span class='st'>": Specific Conductance vs Chloride"</span><span class='op'>)</span>
-<span class='fu'>Sc_Cl_plot</span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span><span class='op'>)</span>
+<span class='fu'><a href='sc_cl.html'>Sc_Cl_plot</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span><span class='op'>)</span>
 </div><div class='img'><img src='sc_cl-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='va'>sc_cl</span> <span class='op'>&lt;-</span> <span class='fu'>Sc_Cl_table</span><span class='op'>(</span><span class='va'>qw_data</span><span class='op'>)</span>
+<span class='va'>sc_cl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sc_cl.html'>Sc_Cl_table</a></span><span class='op'>(</span><span class='va'>qw_data</span><span class='op'>)</span>
 <span class='va'>plot_title</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='st'>"siteInfo"</span><span class='op'>)</span><span class='op'>[[</span><span class='st'>"station_nm"</span><span class='op'>]</span><span class='op'>]</span>
-<span class='fu'>qw_plot</span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00095"</span>, <span class='st'>"90095"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='sc_cl-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>qw_plot</span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00940"</span>,<span class='st'>"99220"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='sc_cl.html'>qw_plot</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00095"</span>, <span class='st'>"90095"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='sc_cl-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='sc_cl.html'>qw_plot</a></span><span class='op'>(</span><span class='va'>qw_data</span>, <span class='va'>plot_title</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00940"</span>,<span class='st'>"99220"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='sc_cl-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>qw_summary</span><span class='op'>(</span><span class='va'>qw_data</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00940"</span>,<span class='st'>"99220"</span><span class='op'>)</span>, norm_range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>225</span>,<span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='sc_cl.html'>qw_summary</a></span><span class='op'>(</span><span class='va'>qw_data</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00940"</span>,<span class='st'>"99220"</span><span class='op'>)</span>, norm_range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>225</span>,<span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                                           Analysis     Result
 #&gt; 1                             Date of first sample 1978-09-06
 #&gt; 2                       First sample result (mg/l)         52
-#&gt; 3                              Date of last sample 2019-04-17
-#&gt; 4                        Last sample result (mg/l)        113
+#&gt; 3                              Date of last sample 2020-04-28
+#&gt; 4                        Last sample result (mg/l)        114
 #&gt; 5     Date of first sample within  225 to 999 mg/l           
 #&gt; 6  Date of first sample with  1000 mg/l or greater           
 #&gt; 7                                   Minimum (mg/l)         14
-#&gt; 8                                   Maximum (mg/l)        113
-#&gt; 9                                      Mean (mg/l)       59.3
+#&gt; 8                                   Maximum (mg/l)        114
+#&gt; 9                                      Mean (mg/l)         60
 #&gt; 10                           First quartile (mg/l)         54
 #&gt; 11                                   Median (mg/l)         58
-#&gt; 12                           Third quartile (mg/l)       67.5
-#&gt; 13                               Number of samples         78</div><div class='input'><span class='fu'>qw_summary</span><span class='op'>(</span><span class='va'>qw_data</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00095"</span>,<span class='st'>"90095"</span><span class='op'>)</span>, norm_range <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
+#&gt; 12                           Third quartile (mg/l)         68
+#&gt; 13                               Number of samples         79</div><div class='input'><span class='fu'><a href='sc_cl.html'>qw_summary</a></span><span class='op'>(</span><span class='va'>qw_data</span>, pcode <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"00095"</span>,<span class='st'>"90095"</span><span class='op'>)</span>, norm_range <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                            Analysis     Result
 #&gt; 1              Date of first sample 1979-05-09
 #&gt; 2  First sample result (uS/cm @25C)        580
-#&gt; 3               Date of last sample 2019-04-17
-#&gt; 4   Last sample result (uS/cm @25C)        748
+#&gt; 3               Date of last sample 2020-04-28
+#&gt; 4   Last sample result (uS/cm @25C)        765
 #&gt; 5              Minimum (uS/cm @25C)        176
 #&gt; 6              Maximum (uS/cm @25C)        785
-#&gt; 7                 Mean (uS/cm @25C)        550
+#&gt; 7                 Mean (uS/cm @25C)        551
 #&gt; 8       First quartile (uS/cm @25C)        543
 #&gt; 9               Median (uS/cm @25C)        560
-#&gt; 10      Third quartile (uS/cm @25C)        568
-#&gt; 11                Number of samples        388</div></pre>
+#&gt; 10      Third quartile (uS/cm @25C)        569
+#&gt; 11                Number of samples        390</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -242,11 +251,11 @@ must include columns sample_dt, parm_cd, result_va</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
+  <p><p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -254,6 +263,8 @@ must include columns sample_dt, parm_cd, result_va</p></td>
 
   
 
+
+  
 
   </body>
 </html>

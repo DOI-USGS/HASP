@@ -49,7 +49,7 @@
 <meta property="og:title" content="Example groundwater level data — L2701_example_data" />
 <meta property="og:description" content="Example data from site 263819081585801 L-2701. Data is a named list of
 &quot;Daily&quot; for daily groundwater level at the site and &quot;Discrete&quot; for discrete
-groundwater level measurements fromt he site" />
+groundwater level measurements from the site. Updated April 9, 2021." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -78,9 +78,18 @@ groundwater level measurements fromt he site" />
 </script>
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -156,7 +165,7 @@ groundwater level measurements fromt he site" />
     <div class="ref-description">
     <p>Example data from site 263819081585801 L-2701. Data is a named list of
 "Daily" for daily groundwater level at the site and "Discrete" for discrete
-groundwater level measurements fromt he site</p>
+groundwater level measurements from the site. Updated April 9, 2021.</p>
     </div>
 
 
@@ -172,26 +181,33 @@ groundwater level measurements fromt he site</p>
 #&gt; 5      USGS 263819081585801 1978-10-05         -4.57                A
 #&gt; 6      USGS 263819081585801 1978-10-06         -4.91                A</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   agency_cd         site_no site_tp_cd     lev_dt lev_tm lev_tz_cd_reported
-#&gt; 1      USGS 263819081585801         GW 1982-10-12  09:15                EDT
-#&gt; 2      USGS 263819081585801         GW 1983-05-11  11:50                EDT
-#&gt; 3      USGS 263819081585801         GW 1983-11-02  11:30                EST
-#&gt; 4      USGS 263819081585801         GW 1984-04-12  11:30                EST
-#&gt; 5      USGS 263819081585801         GW 1984-10-24  10:05                EDT
-#&gt; 6      USGS 263819081585801         GW 1985-05-03  15:45                EDT
+#&gt; 1      USGS 263819081585801         GW 1982-10-12  13:15                UTC
+#&gt; 2      USGS 263819081585801         GW 1982-10-12  13:15                UTC
+#&gt; 3      USGS 263819081585801         GW 1982-10-12  13:15                UTC
+#&gt; 4      USGS 263819081585801         GW 1983-05-11  15:50                UTC
+#&gt; 5      USGS 263819081585801         GW 1983-05-11  15:50                UTC
+#&gt; 6      USGS 263819081585801         GW 1983-05-11  15:50                UTC
 #&gt;   lev_va sl_lev_va sl_datum_cd lev_status_cd lev_agency_cd lev_dt_acy_cd
-#&gt; 1     NA    -10.40      NGVD29          &lt;NA&gt;          USGS             m
-#&gt; 2     NA    -18.50      NGVD29          &lt;NA&gt;          USGS             m
-#&gt; 3     NA    -21.06      NGVD29          &lt;NA&gt;          USGS             m
-#&gt; 4     NA    -23.58      NGVD29          &lt;NA&gt;          USGS             m
-#&gt; 5     NA    -15.07      NGVD29          &lt;NA&gt;          USGS             m
-#&gt; 6     NA    -18.93      NGVD29          &lt;NA&gt;          USGS             m
-#&gt;   lev_acy_cd lev_src_cd lev_meth_cd lev_age_cd        lev_dateTime lev_tz_cd
-#&gt; 1          2          S           S          A 1982-10-12 13:15:00       UTC
-#&gt; 2          2          S           S          A 1983-05-11 15:50:00       UTC
-#&gt; 3          2          S           S          A 1983-11-02 15:30:00       UTC
-#&gt; 4          2          S           S          A 1984-04-12 15:30:00       UTC
-#&gt; 5          2          S           S          A 1984-10-24 14:05:00       UTC
-#&gt; 6          2          S           S          A 1985-05-03 19:45:00       UTC</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>QW</span><span class='op'>)</span>
+#&gt; 1     NA    -10.40      NGVD29             1          USGS             m
+#&gt; 2     NA    -11.59      NAVD88             1          USGS             m
+#&gt; 3   23.4        NA        &lt;NA&gt;             1          USGS             m
+#&gt; 4     NA    -18.50      NGVD29             1          USGS             m
+#&gt; 5     NA    -19.69      NAVD88             1          USGS             m
+#&gt; 6   31.5        NA        &lt;NA&gt;             1          USGS             m
+#&gt;   lev_acy_cd lev_src_cd lev_meth_cd lev_age_cd parameter_cd        lev_dateTime
+#&gt; 1       &lt;NA&gt;          S           S          A        62610 1982-10-12 13:15:00
+#&gt; 2       &lt;NA&gt;          S           S          A        62611 1982-10-12 13:15:00
+#&gt; 3       &lt;NA&gt;          S           S          A        72019 1982-10-12 13:15:00
+#&gt; 4       &lt;NA&gt;          S           S          A        62610 1983-05-11 15:50:00
+#&gt; 5       &lt;NA&gt;          S           S          A        62611 1983-05-11 15:50:00
+#&gt; 6       &lt;NA&gt;          S           S          A        72019 1983-05-11 15:50:00
+#&gt;   lev_tz_cd
+#&gt; 1       UTC
+#&gt; 2       UTC
+#&gt; 3       UTC
+#&gt; 4       UTC
+#&gt; 5       UTC
+#&gt; 6       UTC</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>QW</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   agency_cd         site_no  sample_dt sample_tm sample_end_dt sample_end_tm
 #&gt; 1      USGS 263819081585801 1978-09-06     16:30            NA          &lt;NA&gt;
 #&gt; 2      USGS 263819081585801 1979-05-09     15:00            NA          &lt;NA&gt;
@@ -199,41 +215,48 @@ groundwater level measurements fromt he site</p>
 #&gt; 4      USGS 263819081585801 1981-05-20     14:15            NA          &lt;NA&gt;
 #&gt; 5      USGS 263819081585801 1981-05-20     14:15            NA          &lt;NA&gt;
 #&gt; 6      USGS 263819081585801 1981-05-20     14:15            NA          &lt;NA&gt;
-#&gt;   sample_start_time_datum_cd tm_datum_rlbty_cd coll_ent_cd medium_cd project_cd
-#&gt; 1                        EDT                 T    USGS-WRD        WG       &lt;NA&gt;
-#&gt; 2                        EDT                 T    USGS-WRD        WG       &lt;NA&gt;
-#&gt; 3                        EDT                 T    USGS-WRD        WG       &lt;NA&gt;
-#&gt; 4                        EDT                 T    USGS-WRD        WG       &lt;NA&gt;
-#&gt; 5                        EDT                 T    USGS-WRD        WG       &lt;NA&gt;
-#&gt; 6                        EDT                 T    USGS-WRD        WG       &lt;NA&gt;
-#&gt;    aqfr_cd tu_id body_part_id hyd_cond_cd samp_type_cd hyd_event_cd
-#&gt; 1 122HTRNN  &lt;NA&gt;         &lt;NA&gt;           A            9            9
-#&gt; 2 122HTRNN  &lt;NA&gt;         &lt;NA&gt;           A            9            9
-#&gt; 3 122HTRNN  &lt;NA&gt;         &lt;NA&gt;           A            9            9
-#&gt; 4 122HTRNN  &lt;NA&gt;         &lt;NA&gt;           A            9            9
-#&gt; 5 122HTRNN  &lt;NA&gt;         &lt;NA&gt;           A            9            9
-#&gt; 6 122HTRNN  &lt;NA&gt;         &lt;NA&gt;           A            9            9
-#&gt;   sample_lab_cm_tx parm_cd remark_cd result_va val_qual_tx meth_cd dqi_cd
-#&gt; 1             &lt;NA&gt;   00940      &lt;NA&gt;        52        &lt;NA&gt;    &lt;NA&gt;      S
-#&gt; 2             &lt;NA&gt;   00095      &lt;NA&gt;       580        &lt;NA&gt;    &lt;NA&gt;      A
-#&gt; 3             &lt;NA&gt;   00940      &lt;NA&gt;        50        &lt;NA&gt;    &lt;NA&gt;      S
-#&gt; 4             &lt;NA&gt;   00095      &lt;NA&gt;       535        &lt;NA&gt;    &lt;NA&gt;      A
-#&gt; 5             &lt;NA&gt;   00940      &lt;NA&gt;        54        &lt;NA&gt;    &lt;NA&gt;      S
-#&gt; 6             &lt;NA&gt;   90095      &lt;NA&gt;       537        &lt;NA&gt;    &lt;NA&gt;      A
-#&gt;   rpt_lev_va rpt_lev_cd lab_std_va prep_set_no prep_dt anl_set_no anl_dt
-#&gt; 1         NA       &lt;NA&gt;         NA          NA      NA         NA     NA
-#&gt; 2         NA       &lt;NA&gt;         NA          NA      NA         NA     NA
-#&gt; 3         NA       &lt;NA&gt;         NA          NA      NA         NA     NA
-#&gt; 4         NA       &lt;NA&gt;         NA          NA      NA         NA     NA
-#&gt; 5         NA       &lt;NA&gt;         NA          NA      NA         NA     NA
-#&gt; 6         NA       &lt;NA&gt;         NA          NA      NA         NA     NA
-#&gt;   result_lab_cm_tx anl_ent_cd       startDateTime
-#&gt; 1             &lt;NA&gt;       &lt;NA&gt; 1978-09-06 16:30:00
-#&gt; 2             &lt;NA&gt;       &lt;NA&gt; 1979-05-09 15:00:00
-#&gt; 3             &lt;NA&gt;       &lt;NA&gt; 1979-05-09 15:00:00
-#&gt; 4             &lt;NA&gt;       &lt;NA&gt; 1981-05-20 14:15:00
-#&gt; 5             &lt;NA&gt;       &lt;NA&gt; 1981-05-20 14:15:00
-#&gt; 6             &lt;NA&gt;       &lt;NA&gt; 1981-05-20 14:15:00</div></pre>
+#&gt;   tm_datum_rlbty_cd coll_ent_cd medium_cd project_cd  aqfr_cd tu_id
+#&gt; 1                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;
+#&gt; 2                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;
+#&gt; 3                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;
+#&gt; 4                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;
+#&gt; 5                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;
+#&gt; 6                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;
+#&gt;   body_part_id hyd_cond_cd samp_type_cd hyd_event_cd sample_lab_cm_tx parm_cd
+#&gt; 1         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00940
+#&gt; 2         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00095
+#&gt; 3         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00940
+#&gt; 4         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00095
+#&gt; 5         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00940
+#&gt; 6         &lt;NA&gt;           A            9            9             &lt;NA&gt;   90095
+#&gt;   remark_cd result_va val_qual_tx meth_cd dqi_cd rpt_lev_va rpt_lev_cd
+#&gt; 1      &lt;NA&gt;        52        &lt;NA&gt;    &lt;NA&gt;      S         NA       &lt;NA&gt;
+#&gt; 2      &lt;NA&gt;       580        &lt;NA&gt;    &lt;NA&gt;      A         NA       &lt;NA&gt;
+#&gt; 3      &lt;NA&gt;        50        &lt;NA&gt;    &lt;NA&gt;      S         NA       &lt;NA&gt;
+#&gt; 4      &lt;NA&gt;       535        &lt;NA&gt;    &lt;NA&gt;      A         NA       &lt;NA&gt;
+#&gt; 5      &lt;NA&gt;        54        &lt;NA&gt;    &lt;NA&gt;      S         NA       &lt;NA&gt;
+#&gt; 6      &lt;NA&gt;       537        &lt;NA&gt;    &lt;NA&gt;      A         NA       &lt;NA&gt;
+#&gt;   lab_std_va prep_set_no prep_dt anl_set_no anl_dt result_lab_cm_tx anl_ent_cd
+#&gt; 1         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;
+#&gt; 2         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;
+#&gt; 3         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;
+#&gt; 4         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;
+#&gt; 5         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;
+#&gt; 6         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;
+#&gt;   sample_start_time_datum_cd_reported sample_end_time_datum_cd_reported
+#&gt; 1                                 EDT                               EDT
+#&gt; 2                                 EDT                               EDT
+#&gt; 3                                 EDT                               EDT
+#&gt; 4                                 EDT                               EDT
+#&gt; 5                                 EDT                               EDT
+#&gt; 6                                 EDT                               EDT
+#&gt;         startDateTime tz_cd
+#&gt; 1 1978-09-06 20:30:00   UTC
+#&gt; 2 1979-05-09 19:00:00   UTC
+#&gt; 3 1979-05-09 19:00:00   UTC
+#&gt; 4 1981-05-20 18:15:00   UTC
+#&gt; 5 1981-05-20 18:15:00   UTC
+#&gt; 6 1981-05-20 18:15:00   UTC</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -245,11 +268,11 @@ groundwater level measurements fromt he site</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
+  <p><p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -257,6 +280,8 @@ groundwater level measurements fromt he site</p>
 
   
 
+
+  
 
   </body>
 </html>

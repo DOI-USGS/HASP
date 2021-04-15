@@ -32,6 +32,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -80,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/USGS-R/HASP">
+  <a href="https://github.com/USGS-R/HASP" class="external-link">
     <span class="fas fa-github fa-lg"></span>
      
   </a>
@@ -101,7 +103,7 @@
       <h1 data-toc-skip>Single Site Data Availability</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/master/vignettes/Single_site_combo_data.Rmd"><code>vignettes/Single_site_combo_data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/master/vignettes/Single_site_combo_data.Rmd" class="external-link"><code>vignettes/Single_site_combo_data.Rmd</code></a></small>
       <div class="hidden name"><code>Single_site_combo_data.Rmd</code></div>
 
     </div>
@@ -117,7 +119,7 @@ body {
 }
 </style>
 <p>This vignette shows how to use <code>HASP</code> and other R tools to reproduce:</p>
-<p><a href="https://fl.water.usgs.gov/mapper/site_info.php?site=263819081585801&amp;stationType=gw" class="uri">https://fl.water.usgs.gov/mapper/site_info.php?site=263819081585801&amp;stationType=gw</a></p>
+<p><a href="https://fl.water.usgs.gov/mapper/site_info.php?site=263819081585801&amp;stationType=gw" class="external-link uri">https://fl.water.usgs.gov/mapper/site_info.php?site=263819081585801&amp;stationType=gw</a></p>
 <p>This page merges information from USGS Groundwater Watch website and USGS Water Science Centers.</p>
 <div id="site-information" class="section level2">
 <h2 class="hasAnchor">
@@ -125,7 +127,7 @@ body {
 <table class="table"><tr>
 <td>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
 
 <span class="va">siteID</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
 <span class="va">site_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_summary.html">site_summary</a></span><span class="op">(</span><span class="va">siteID</span>, markdown <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -144,13 +146,13 @@ body {
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/wys_rpt?site_no=263819081585801">Water-Year Summary</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/wys_rpt?site_no=263819081585801" class="external-link">Water-Year Summary</a></td>
 <td align="left">2006-01-01</td>
 <td align="left">2020-01-01</td>
 <td align="right">15</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=263819081585801">Daily Data</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=263819081585801" class="external-link">Daily Data</a></td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right"></td>
@@ -158,25 +160,25 @@ body {
 <tr class="odd">
 <td align="left">Groundwater level above NGVD 1929, feet</td>
 <td align="left">1978-10-01</td>
-<td align="left">2020-12-29</td>
-<td align="right">14746</td>
+<td align="left">2021-02-28</td>
+<td align="right">14807</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=263819081585801">Field groundwater-level measurements</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=263819081585801" class="external-link">Field groundwater-level measurements</a></td>
 <td align="left">1982-10-12</td>
-<td align="left">2020-12-30</td>
-<td align="right">453</td>
+<td align="left">2021-03-01</td>
+<td align="right">454</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801">Field/Lab water-quality samples</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
 <td align="left">1978-09-06</td>
 <td align="left">2020-04-28</td>
 <td align="right">470</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=263819081585801">Current / Historical Observations</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=263819081585801" class="external-link">Current / Historical Observations</a></td>
 <td align="left">2007-10-01</td>
-<td align="left">2020-12-30</td>
+<td align="left">2021-03-01</td>
 <td align="right"></td>
 </tr>
 </tbody>
@@ -191,21 +193,21 @@ body {
 <td>
 <p>Using <code>dataRetrieval</code> code to get the data for this site:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span>
 <span class="va">siteID</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
 <span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span>
 <span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span>
 <span class="co"># Daily data:</span>
-<span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteID</span>,
+<span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></span><span class="op">(</span><span class="va">siteID</span>,
                           <span class="va">parameterCd</span>,
                           statCd <span class="op">=</span> <span class="va">statCd</span><span class="op">)</span>
 
 <span class="co"># Field measured:</span>
-<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span><span class="op">(</span><span class="va">siteID</span><span class="op">)</span>
+<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></span><span class="op">(</span><span class="va">siteID</span><span class="op">)</span>
 
 <span class="co"># Water quality data:</span>
-<span class="va">pcodes_cl_sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>
-<span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISqw.html">readNWISqw</a></span><span class="op">(</span><span class="va">siteID</span>,  <span class="va">pcodes_cl_sc</span><span class="op">)</span>
+<span class="va">pcodes_cl_sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>
+<span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISqw.html" class="external-link">readNWISqw</a></span><span class="op">(</span><span class="va">siteID</span>,  <span class="va">pcodes_cl_sc</span><span class="op">)</span>
 
 <span class="va">plot_title</span> <span class="op">&lt;-</span> <span class="st">"L -2701\n263819081585801 "</span></code></pre></div>
 </td>
@@ -365,7 +367,7 @@ body {
 <td align="left">Oct</td>
 <td align="right">-35.9</td>
 <td align="right">-26.7</td>
-<td align="right">-21.5</td>
+<td align="right">-21.4</td>
 <td align="right">-16.5</td>
 <td align="right">-12.8</td>
 <td align="right">-9.6</td>
@@ -375,24 +377,24 @@ body {
 <tr class="odd">
 <td align="left">Nov</td>
 <td align="right">-41.3</td>
-<td align="right">-32.0</td>
-<td align="right">-25.9</td>
-<td align="right">-21.1</td>
-<td align="right">-16.8</td>
+<td align="right">-31.8</td>
+<td align="right">-25.7</td>
+<td align="right">-20.9</td>
+<td align="right">-16.5</td>
 <td align="right">-10.3</td>
 <td align="right">-4.5</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="even">
 <td align="left">Dec</td>
 <td align="right">-42.4</td>
-<td align="right">-32.9</td>
-<td align="right">-28.3</td>
-<td align="right">-21.9</td>
-<td align="right">-17.4</td>
-<td align="right">-11.6</td>
+<td align="right">-32.8</td>
+<td align="right">-27.9</td>
+<td align="right">-21.6</td>
+<td align="right">-17.2</td>
+<td align="right">-12.9</td>
 <td align="right">-4.9</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 </tbody>
 </table>
@@ -436,13 +438,13 @@ body {
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">1978-10-01</td>
-<td align="left">2020-10-20</td>
-<td align="right">14676</td>
+<td align="left">2020-12-29</td>
+<td align="right">14746</td>
 <td align="right">96</td>
 <td align="right">-51.08</td>
-<td align="right">-28.4225</td>
-<td align="right">-21.93</td>
-<td align="right">-16.96</td>
+<td align="right">-28.38</td>
+<td align="right">-21.89</td>
+<td align="right">-16.8625</td>
 <td align="right">-2.81</td>
 </tr></tbody>
 </table>
@@ -453,9 +455,10 @@ body {
 <h2 class="hasAnchor">
 <a href="#field-groundwater-level-data" class="anchor"></a>Field Groundwater Level Data</h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_field</a></span><span class="op">(</span><span class="va">gwl_data</span>, <span class="va">plot_title</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_field</a></span><span class="op">(</span><span class="va">gwl_data</span>, <span class="va">plot_title</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span>, 
+               parameter_cd_gwl <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="va">gwl_data</span>, <span class="st">"sl_lev_va"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="va">gwl_data</span>, <span class="st">"sl_lev_va"</span>, parameter_cd_gwl <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_combo_data_files/figure-html/fieldPlot-1.png" width="576"></p>
@@ -471,11 +474,11 @@ body {
 <th align="right">Maximum</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-51.3</td>
-<td align="right">-32.2</td>
-<td align="right">-26.1</td>
-<td align="right">-26.6</td>
-<td align="right">-20.4</td>
+<td align="right">-52.5</td>
+<td align="right">-32.5</td>
+<td align="right">-26.5</td>
+<td align="right">-27.1</td>
+<td align="right">-21.1</td>
 <td align="right">-4.8</td>
 </tr></tbody>
 </table>
@@ -485,16 +488,17 @@ body {
 <h3 class="hasAnchor">
 <a href="#period-of-record---all-data-types" class="anchor"></a>Period of Record - All Data Types</h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
+<code class="sourceCode R"><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
 
 <span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
              <span class="va">gwl_data</span>, 
              y_label <span class="op">=</span> <span class="va">y_label</span>,
-             date_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Date"</span>, <span class="st">"lev_dt"</span><span class="op">)</span>,
-             value_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span><span class="op">)</span>,
-             approved_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"X_62610_00001_cd"</span>,
+             date_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Date"</span>, <span class="st">"lev_dt"</span><span class="op">)</span>,
+             value_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span><span class="op">)</span>,
+             approved_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X_62610_00001_cd"</span>,
                               <span class="st">"lev_age_cd"</span><span class="op">)</span>,
              plot_title <span class="op">=</span> <span class="va">plot_title</span>, 
+             parameter_cd_gwl <span class="op">=</span> <span class="st">"62610"</span>,
              flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, <span class="st">"X_62610_00001"</span><span class="op">)</span></code></pre></div>
@@ -514,10 +518,10 @@ body {
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">-51.1</td>
-<td align="right">-28.4</td>
-<td align="right">-21.9</td>
+<td align="right">-28.3</td>
+<td align="right">-21.8</td>
 <td align="right">-22.7</td>
-<td align="right">-16.9</td>
+<td align="right">-16.8</td>
 <td align="right">-2.8</td>
 </tr></tbody>
 </table>
@@ -532,21 +536,21 @@ body {
 <h3 class="hasAnchor">
 <a href="#chloride" class="anchor"></a>Chloride</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/trend_plot.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, 
+<code class="sourceCode R"><span class="fu"><a href="../reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, 
            plot_title <span class="op">=</span> <span class="va">plot_title</span>, 
-           pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>
+           pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/kendell_test_5_20_years.html">kendell_test_5_20_years</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">qw_data</span>, 
-                                      <span class="va">parm_cd</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>, 
+<span class="fu"><a href="../reference/kendell_test_5_20_years.html">kendell_test_5_20_years</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qw_data</span>, 
+                                      <span class="va">parm_cd</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>, 
                         seasonal <span class="op">=</span> <span class="cn">TRUE</span>,
                         enough_5 <span class="op">=</span> <span class="fl">1</span>,
                         enough_20 <span class="op">=</span> <span class="fl">1</span>,
                         date_col <span class="op">=</span> <span class="st">"sample_dt"</span>,
                         value_col <span class="op">=</span> <span class="st">"result_va"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/Sc_Cl_plot.html">qw_summary</a></span><span class="op">(</span><span class="va">qw_data</span>, 
-           pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>,
-           norm_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">225</span>,<span class="fl">999</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/sc_cl.html">qw_summary</a></span><span class="op">(</span><span class="va">qw_data</span>, 
+           pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>,
+           norm_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">225</span>,<span class="fl">999</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_combo_data_files/figure-html/chloride_plotSHOW-1.png" width="576"></p>
@@ -647,10 +651,10 @@ body {
 <h3 class="hasAnchor">
 <a href="#specific-conductance" class="anchor"></a>Specific Conductance</h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Sc_Cl_plot.html">qw_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"Specific Conductance"</span>, 
-        pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00095"</span>, <span class="st">"90095"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/Sc_Cl_plot.html">qw_summary</a></span><span class="op">(</span><span class="va">qw_data</span>, 
-           pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="fu"><a href="../reference/sc_cl.html">qw_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"Specific Conductance"</span>, 
+        pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>, <span class="st">"90095"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/sc_cl.html">qw_summary</a></span><span class="op">(</span><span class="va">qw_data</span>, 
+           pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span><span class="op">)</span>,
            norm_range <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
@@ -716,9 +720,9 @@ body {
 <h3 class="hasAnchor">
 <a href="#specific-conductance-vs-chloride" class="anchor"></a>Specific Conductance vs Chloride</h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Sc_Cl_plot.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="va">plot_title</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="va">plot_title</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/Sc_Cl_plot.html">Sc_Cl_table</a></span><span class="op">(</span><span class="va">qw_data</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/sc_cl.html">Sc_Cl_table</a></span><span class="op">(</span><span class="va">qw_data</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_combo_data_files/figure-html/salityPlotDisplay-1.png" width="576"></p>
@@ -800,11 +804,13 @@ body {
 
 
       <footer><div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
+  <p></p>
+<p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -812,6 +818,8 @@ body {
 
   
 
+
+  
 
   </body>
 </html>

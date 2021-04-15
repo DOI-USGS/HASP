@@ -77,9 +77,18 @@ Seasonal Kendall Trend Test." />
 </script>
 
 
+<!-- dependencies from examples -->
+
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -159,6 +168,7 @@ Seasonal Kendall Trend Test.</p>
 
     <pre class="usage"><span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span>
   <span class='va'>gwl</span>,
+  parameter_cd_gwl <span class='op'>=</span> <span class='cn'>NA</span>,
   date_col <span class='op'>=</span> <span class='st'>"lev_dt"</span>,
   value_col <span class='op'>=</span> <span class='st'>"sl_lev_va"</span>,
   alpha <span class='op'>=</span> <span class='fl'>0.95</span>,
@@ -175,6 +185,12 @@ Seasonal Kendall Trend Test.</p>
       <th>gwl</th>
       <td><p>data frame that must include a numeric column defined by "value_col",
 and a Date or POSIXct column defined by "date_col"</p></td>
+    </tr>
+    <tr>
+      <th>parameter_cd_gwl</th>
+      <td><p>Parameter code to be filtered to in a column specifically
+named "parameter_cd". If the data doesn't come directly from NWIS services, this 
+can be set to <code>NA</code>,and this argument will be ignored.</p></td>
     </tr>
     <tr>
       <th>date_col</th>
@@ -223,10 +239,10 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 
 <span class='co'># Using package example data:</span>
 <span class='va'>gwl_data</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span>
-<span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span><span class='va'>gwl_data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test         tau    pValue       slope intercept           trend
-#&gt; 1  5-year trend          NA        NA          NA        NA            &lt;NA&gt;
-#&gt; 2 20-year trend -0.04106885 0.4894787 -0.05597039  102.0067 Not significant</div><div class='input'>
+<span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span><span class='va'>gwl_data</span>, parameter_cd_gwl <span class='op'>=</span> <span class='st'>"62610"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test        tau     pValue   slope intercept trend
+#&gt; 1  5-year trend         NA         NA      NA        NA  &lt;NA&gt;
+#&gt; 2 20-year trend 0.09542715 0.02535468 0.22025 -434.6089    Up</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -239,11 +255,11 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
+  <p><p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -251,6 +267,8 @@ for the 20-year test. The current calendar year is excluded by default.</p>
 
   
 
+
+  
 
   </body>
 </html>
