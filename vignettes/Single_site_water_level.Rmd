@@ -234,7 +234,9 @@ gwl_plot_all(gw_level_dv,
              plot_title = site_title,
              add_trend = TRUE, flip_y = FALSE)
 
-site_data_summary(gw_level_dv, "X_62610_00001")
+gw_level_dv %>% 
+  rename(value = X_62610_00001) %>% 
+  site_data_summary()
 
 gw_monthly <- monthly_mean(gw_level_dv)
 
@@ -270,7 +272,9 @@ gwl_plot_all(gw_level_dv, gwl_data,
 Summary statistics for maximum daily water level measurements:
 
 ```{r siteStatsDaily, echo=FALSE}
-siteDV <- site_data_summary(gw_level_dv, "X_62610_00001") %>% 
+siteDV <- gw_level_dv %>%
+  rename(value = X_62610_00001) %>% 
+  site_data_summary() %>% 
   select(Minimum = min_site, 	
          `1st` = p25, 
          Median = p50,
@@ -332,7 +336,9 @@ gwl_plot_all(NULL, gwl_data,
 Summary statistics for manual water level measurements
 
 ```{r manualTable, echo=FALSE}
-quantiles <- site_data_summary(gwl_data, "sl_lev_va") %>% 
+quantiles <- gwl_data %>% 
+  rename(value = sl_lev_va) %>% 
+  site_data_summary() %>% 
   select(Minimum = min_site, 	
          `1st` = p25, 
          Median = p50,
