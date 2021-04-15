@@ -3,7 +3,7 @@
 #' Create composite hydrograph plot
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
-#' and the 3rd is defined by the sum_col argument.
+#' and "value".
 #' @param num_years integer number of years required. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title included on plot.
@@ -64,7 +64,7 @@ plot_composite_data <- function(x,
 #' Create composite hydrograph plot
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
-#' and the 3rd is defined by the sum_col argument.
+#' and "value".
 #' @param num_years integer number of years required to the analysis. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title of plot.
@@ -121,7 +121,7 @@ plot_normalized_data <- function(x, num_years = NA,
 #' Map data used in composite hydrographs
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
-#' and the 3rd is defined by the sum_col argument.
+#' and "value".
 #' @param num_years integer number of years required
 #' @return leaflet object
 #' 
@@ -131,7 +131,7 @@ plot_normalized_data <- function(x, num_years = NA,
 #' aquifer_data <- aquifer_data
 #' num_years <- 30
 #' 
-#' map_data <- map_hydro_data(aquifer_data, sum_col, num_years, "72019")
+#' map_data <- map_hydro_data(aquifer_data, num_years)
 #' map_data
 map_hydro_data <- function(x, num_years){
   

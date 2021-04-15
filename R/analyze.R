@@ -2,7 +2,7 @@
 #' site_data_summary
 #'
 #' Get summaries of data by site. Requires a column site_no, and will
-#' take the summaries on the user-defined column based on the sum_col argument.
+#' take the summaries
 #' 
 #' @param x data frame
 #' @return data frame with 10 columns 
@@ -16,7 +16,7 @@
 #' summary_info <- site_data_summary(aquifer_data)
 site_data_summary <- function(x){
 
-  site_no <- ".dplyr"
+  site_no <- value <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
@@ -199,7 +199,7 @@ composite_data <- function(x, num_years){
   x <- filter_sites(x, num_years)
   
   if(nrow(x) == 0){
-    stop("No data in ", sum_col)
+    stop("No data ")
   }
   
   n_sites <- length(unique(x$site_no))
@@ -245,17 +245,15 @@ composite_data <- function(x, num_years){
 normalized_data <- function(x, num_years){
   
   year <- site_no <- n_sites_year <- mean_site <- max_site <- min_site <- x_norm <- med_site <- name <- ".dplyr"
-  mean_med <- max_med <- min_med <- ".dplyr"
+  mean_med <- max_med <- min_med <- value <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
   if(!all(c("site_no", "year", "value") %in% names(x))) stop("Missing columns")
 
   if(nrow(x) == 0){
-    stop("No data in ", sum_col)
+    stop("No data")
   }
-  
-  
   
   x <- filter_sites(x, num_years)
   n_sites <- length(unique(x$site_no))

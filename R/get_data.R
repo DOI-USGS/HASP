@@ -66,8 +66,12 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 }
 
 
-get_state_data <- function(state, aquiferCd, startDate, endDate, parameter_cd){
+get_state_data <- function(state, aquiferCd, 
+                           startDate, endDate, parameter_cd){
 
+  lev_age_cd <- lev_dt <- site_no <- agency_cd <- tz_cd <- ".dplyr"
+  dateTime <- state_call <- value <- year <- ".dplyr" 
+  
   levels <- readNWISdata(stateCd = state, 
                          parameterCd = parameter_cd,
                          service = "gwlevels",
