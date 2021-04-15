@@ -12,6 +12,8 @@ get_aquifer_data(aquiferCd, startDate, endDate, parameter_cd = "72019")
 \item{startDate}{date or string}
 
 \item{endDate}{date of string}
+
+\item{parameter_cd}{5-digit character USGS parameter code.}
 }
 \description{
 Get USGS data based on aquiferCd

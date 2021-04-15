@@ -8,7 +8,7 @@ plot_normalized_data(x, num_years = NA, plot_title = "")
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
-and the 3rd is defined by the sum_col argument.}
+and "value".}
 
 \item{num_years}{integer number of years required to the analysis. If \code{NA}, the 
 analysis will default to the range of the data in x.}

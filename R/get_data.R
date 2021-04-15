@@ -6,6 +6,7 @@
 #' @param aquiferCd character
 #' @param startDate date or string
 #' @param endDate date of string 
+#' @param parameter_cd 5-digit character USGS parameter code.
 #' @export
 #' @importFrom dataRetrieval readNWISdata
 #' @importFrom dataRetrieval readNWISsite

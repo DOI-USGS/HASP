@@ -8,7 +8,7 @@ map_hydro_data(x, num_years)
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
-and the 3rd is defined by the sum_col argument.}
+and "value".}
 
 \item{num_years}{integer number of years required}
 }
@@ -22,6 +22,6 @@ Map data used in composite hydrographs
 aquifer_data <- aquifer_data
 num_years <- 30
 
-map_data <- map_hydro_data(aquifer_data, sum_col, num_years, "72019")
+map_data <- map_hydro_data(aquifer_data, num_years)
 map_data
 }

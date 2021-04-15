@@ -14,7 +14,7 @@ data frame with 10 columns
 }
 \description{
 Get summaries of data by site. Requires a column site_no, and will
-take the summaries on the user-defined column based on the sum_col argument.
+take the summaries
 }
 \examples{
 aquifer_data <- aquifer_data
