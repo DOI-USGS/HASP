@@ -104,7 +104,7 @@ filter_sites <- function(x, num_years = NA,
   
   if(!all(c("site_no", "year", "value") %in% names(x))) stop("Missing columns")
 
-  lev_va <- site_no <- year <- n_years <- ".dplyr"
+  lev_va <- site_no <- year <- value <- n_years <- ".dplyr"
 
   pick_sites <- x %>% 
     filter(!is.na(value)) %>% 
@@ -190,7 +190,7 @@ filter_sites <- function(x, num_years = NA,
 #' 
 composite_data <- function(x, num_years){
   
-  year <- site_no <- n_sites_year <- med_site <- name <- ".dplyr"
+  year <- site_no <- n_sites_year <- med_site <- value <- name <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
