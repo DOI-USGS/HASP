@@ -48,24 +48,23 @@ test_that("Data", {
   
 })
 
-test_that("Get Data", {
-  skip_on_cran()
-  
-  end_date <- "2019-12-31"
-  state_date <- "1989-12-31"
-
-  aquiferCd <- "S100CSLLWD"
+# test_that("Get Data", {
+#   skip_on_cran()
+#   
+#   end_date <- "2019-12-31"
+#   state_date <- "1989-12-31"
+# 
+#   aquiferCd <- "S100CSLLWD"
   # Let's add this later...it's really sloooow:
   # aq_data <- get_aquifer_data(aquiferCd, state_date, end_date)  
   # 
   # expect_type(aq_data, "list")
-  # expect_true(all(names(aq_data) %in% c("lev_va",
-  #                                       "sl_lev_va",
+  # expect_true(all(names(aq_data) %in% c("value",
   #                                       "lev_dt",
   #                                       "site_no",
   #                                       "state_call",
   #                                       "year" )))
-})
+# })
 
 test_that("Get site summaries", {
   skip_on_cran()

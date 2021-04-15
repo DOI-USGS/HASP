@@ -7,7 +7,7 @@ format_2 <- function(x){
 test_that("Site summaries", {
   aquifer_data <- aquifer_data
 
-  summary_info2 <- site_data_summary(aquifer_data, "lev_va", "72019")
+  summary_info2 <- site_data_summary(aquifer_data)
   expect_type(summary_info2, "list")
   
   expect_true(all(names(summary_info2) %in% 
@@ -70,7 +70,6 @@ test_that("QW summaries", {
 
 test_that("Map info", {
   aquifer_data <- aquifer_data
-  sum_col <- "lev_va"
   map_info <- prep_map_data(aquifer_data)
   
   expect_true(all(c("popup","station_nm", 
@@ -86,11 +85,9 @@ test_that("Map info", {
 test_that("Filter sites", {
   
   aquifer_data <- aquifer_data
-  sum_col <- "lev_va"
   num_years <- 30
   
-  aq_data <- filter_sites(aquifer_data, sum_col, num_years, 
-                          parameter_cd_gwl = "72019")
+  aq_data <- filter_sites(aquifer_data, num_years)
   
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
@@ -106,26 +103,22 @@ test_that("Filter sites", {
 test_that("Composite hydrodata", {
   
   aquifer_data <- aquifer_data
-  sum_col <- "lev_va"
   num_years <- 30
   
-  comp_data <- composite_data(aquifer_data, sum_col, num_years, 
-                              parameter_cd_gwl = "72019")
+  comp_data <- composite_data(aquifer_data, num_years)
   
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(comp_data$value[1]), 136.38)
+  expect_equal(format_2(comp_data$value[1]), 149.63)
 })
 
 test_that("Normalized composite hydrodata", {
   
   aquifer_data <- aquifer_data
-  sum_col <- "lev_va"
   num_years <- 30
   
-  norm_data <- normalized_data(aquifer_data, sum_col, num_years,
-                               parameter_cd_gwl = "72019")
+  norm_data <- normalized_data(aquifer_data, num_years)
   
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",

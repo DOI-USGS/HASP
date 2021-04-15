@@ -4,17 +4,10 @@
 \alias{site_data_summary}
 \title{site_data_summary}
 \usage{
-site_data_summary(x, sum_col, parameter_cd_gwl = NA)
+site_data_summary(x)
 }
 \arguments{
 \item{x}{data frame}
-
-\item{sum_col}{column name}
-
-\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
-named "parameter_cd". If the
-data doesn't come directly from NWIS services, this can be set to \code{NA},
-and this argument will be ignored.}
 }
 \value{
 data frame with 10 columns
@@ -25,6 +18,5 @@ take the summaries on the user-defined column based on the sum_col argument.
 }
 \examples{
 aquifer_data <- aquifer_data
-sum_col <- "lev_va"
-summary_info <- site_data_summary(aquifer_data, sum_col, "72019")
+summary_info <- site_data_summary(aquifer_data)
 }

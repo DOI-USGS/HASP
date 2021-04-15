@@ -20,10 +20,9 @@ kendell_test_5_20_years(
 \item{gwl}{data frame that must include a numeric column defined by "value_col",
 and a Date or POSIXct column defined by "date_col"}
 
-\item{parameter_cd_gwl}{Parameter code(s) to be filtered to in a column specifically
-named "parameter_cd". If the
-data doesn't come directly from NWIS services, this can be set to \code{NA},
-and this argument will be ignored.}
+\item{parameter_cd_gwl}{Parameter code to be filtered to in a column specifically
+named "parameter_cd". If the data doesn't come directly from NWIS services, this 
+can be set to \code{NA},and this argument will be ignored.}
 
 \item{date_col}{name of date column.}
 

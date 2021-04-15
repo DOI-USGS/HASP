@@ -159,9 +159,7 @@ qw_summary <- function(qw_data, pcode,
         last_sample = max(qw_sub$sample_dt, na.rm = TRUE),
         last_sample_result = qw_sub$result_va[nrow(qw_sub)]
       ) %>%  
-    bind_cols(site_data_summary(qw_sub, 
-                                sum_col = "result_va",
-                                parameter_cd_gwl = NA))
+    bind_cols(site_data_summary(rename(qw_sub, value = result_va)))
   
   Analysis = c("Date of first sample",
                paste0("First sample result (",unit_meas,")"),

@@ -4,7 +4,7 @@
 \alias{get_aquifer_data}
 \title{get_aquifer_data}
 \usage{
-get_aquifer_data(aquiferCd, startDate, endDate)
+get_aquifer_data(aquiferCd, startDate, endDate, parameter_cd = "72019")
 }
 \arguments{
 \item{aquiferCd}{character}

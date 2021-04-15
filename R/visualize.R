@@ -4,41 +4,31 @@
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
 #' and the 3rd is defined by the sum_col argument.
-#' @param sum_col column name to do the analysis on. In data coming from 
-#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title included on plot.
-#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
-#' named "parameter_cd". If the
-#' data doesn't come directly from NWIS services, this can be set to \code{NA},
-#' and this argument will be ignored.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
-#' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' comp_data <- plot_composite_data(aquifer_data, sum_col, num_years, 
-#'                     parameter_cd_gwl = "72019", 
+#' comp_data <- plot_composite_data(aquifer_data, num_years, 
 #'                     plot_title = "Calendar Year")
 #' comp_data
 #' # Do it on a water year:
 #' aquifer_data$cal_year <- aquifer_data$year
 #' aquifer_data$year <- aquifer_data$water_year
-#' plot_composite_data(aquifer_data, sum_col, num_years, 
-#'                     parameter_cd_gwl = "72019", 
+#' plot_composite_data(aquifer_data, num_years, 
 #'                     plot_title = "Water Year")
-plot_composite_data <- function(x, sum_col, 
-                                num_years = NA, plot_title = "",
-                                parameter_cd_gwl = NA){
+plot_composite_data <- function(x, 
+                                num_years = NA, plot_title = ""){
   
   year <- value <- name <- ".dplyr"
   
-  if(!all(c("site_no", "year", sum_col) %in% names(x))){
+  if(!all(c("site_no", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
   }
   
@@ -46,10 +36,7 @@ plot_composite_data <- function(x, sum_col,
     num_years <- diff(range(x$year))  
   }
   
-  comp_data <- composite_data(x,
-                              sum_col = sum_col, 
-                              num_years = num_years,
-                              parameter_cd_gwl = parameter_cd_gwl)
+  comp_data <- composite_data(x, num_years = num_years)
   
   if(nrow(comp_data) == 0){
     stop("No sites had measurements for each of the years")
@@ -78,37 +65,29 @@ plot_composite_data <- function(x, sum_col,
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
 #' and the 3rd is defined by the sum_col argument.
-#' @param sum_col column name to do the analysis on. In data coming from 
-#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required to the analysis. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title of plot.
-#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
-#' named "parameter_cd". If the
-#' data doesn't come directly from NWIS services, this can be set to \code{NA},
-#' and this argument will be ignored.
 #' @return ggplot2 object
 #' 
 #' @import ggplot2
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
-#' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
-#' norm_data <- plot_normalized_data(aquifer_data, sum_col,
-#'                                   num_years, parameter_cd_gwl = "72019")
+#' norm_data <- plot_normalized_data(aquifer_data, num_years)
 #' norm_data
 #' 
 #' aquifer_data$cal_year <- aquifer_data$year
 #' aquifer_data$year <- aquifer_data$water_year
-#' plot_normalized_data(aquifer_data, sum_col, num_years, parameter_cd_gwl = "72019")
-plot_normalized_data <- function(x, sum_col, num_years = NA,
-                                 plot_title = "", parameter_cd_gwl = NA){
+#' plot_normalized_data(aquifer_data, num_years = num_years)
+plot_normalized_data <- function(x, num_years = NA,
+                                 plot_title = ""){
   
   year <- value <- name <- ".dplyr"
 
-  if(!all(c("site_no", "year", sum_col) %in% names(x))){
+  if(!all(c("site_no", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
   }
   
@@ -116,7 +95,7 @@ plot_normalized_data <- function(x, sum_col, num_years = NA,
     num_years <- diff(range(x$year))  
   }
   
-  norm_data <- normalized_data(x, sum_col, num_years, parameter_cd_gwl = parameter_cd_gwl)
+  norm_data <- normalized_data(x, num_years =  num_years)
   
   plot_out <- ggplot(data = norm_data) +
     geom_line(aes(x = year, y = value, color = name)) +
@@ -143,27 +122,20 @@ plot_normalized_data <- function(x, sum_col, num_years = NA,
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
 #' and the 3rd is defined by the sum_col argument.
-#' @param sum_col column name to do the analysis on. In data coming from 
-#' \code{dataRetrieval}, this is often either "sl_lev_va" or "lev_va".
 #' @param num_years integer number of years required
-#' @param parameter_cd_gwl Parameter code(s) to be filtered to in a column specifically
-#' named "parameter_cd". If the
-#' data doesn't come directly from NWIS services, this can be set to \code{NA},
-#' and this argument will be ignored.s
 #' @return leaflet object
 #' 
 #' @import leaflet
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
-#' sum_col <- "lev_va"
 #' num_years <- 30
 #' 
 #' map_data <- map_hydro_data(aquifer_data, sum_col, num_years, "72019")
 #' map_data
-map_hydro_data <- function(x, sum_col, num_years, parameter_cd_gwl){
+map_hydro_data <- function(x, num_years){
   
-  x <- filter_sites(x, sum_col, num_years, parameter_cd_gwl = parameter_cd_gwl)
+  x <- filter_sites(x, num_years)
   
   map_data <- prep_map_data(x)
 
