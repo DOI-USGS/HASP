@@ -97,7 +97,6 @@ plot_composite_data(aquifer_data, num_years)
 ``` r
 
 plot_normalized_data(aquifer_data, num_years)
-
 ```
 
 ![](man/figures/README-example-2.png)<!-- -->
