@@ -87,17 +87,17 @@ trend_plot(qw_data, plot_title = "L2701_example_data")
 #included sample data:
 
 aquifer_data <- aquifer_data
-sum_col <- "lev_va"
 num_years <- 30
 
-plot_composite_data(aquifer_data, sum_col, num_years)
+plot_composite_data(aquifer_data, num_years)
 ```
 
 ![](man/figures/README-example-1.png)<!-- -->
 
 ``` r
 
-plot_normalized_data(aquifer_data, sum_col, num_years)
+plot_normalized_data(aquifer_data, num_years)
+
 ```
 
 ![](man/figures/README-example-2.png)<!-- -->
