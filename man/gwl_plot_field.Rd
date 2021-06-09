@@ -43,6 +43,9 @@ can be set to \code{NA},and this argument will be ignored.}
 
 \item{date_col}{name of date column. Default is "lev_dt".}
 
+\item{value_col}{name of value column. If NA, the code will attempt to autogenerate
+based on parameter_cd_gwl.}
+
 \item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
 
@@ -51,6 +54,8 @@ Default is \code{TRUE}.}
 \item{gw_level_dv}{daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.}
 
 \item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
+
+\item{approval_col}{name of approval column. Default is "lev_age_cd".}
 }
 \description{
 Function to create the field groundwater level data plot.

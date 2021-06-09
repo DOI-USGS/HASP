@@ -6,7 +6,10 @@
 #' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
 #' approval code), and a column representing the measured value (either lev_va,
 #' sl_lev_va, or value).
+#' @param value_col name of value column. If NA, the code will attempt to autogenerate
+#' based on parameter_cd_gwl.
 #' @param date_col name of date column. Default is "lev_dt".
+#' @param approval_col name of approval column. Default is "lev_age_cd".
 #' @param plot_title character
 #' @param parameter_cd_gwl Parameter code to be filtered to in a column specifically
 #' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
