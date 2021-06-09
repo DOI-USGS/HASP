@@ -77,9 +77,6 @@ Seasonal Kendall Trend Test." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -166,7 +163,7 @@ Seasonal Kendall Trend Test." />
 Seasonal Kendall Trend Test.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span>
   <span class='va'>gwl</span>,
   parameter_cd_gwl <span class='op'>=</span> <span class='cn'>NA</span>,
   date_col <span class='op'>=</span> <span class='st'>"lev_dt"</span>,
@@ -176,7 +173,7 @@ Seasonal Kendall Trend Test.</p>
   enough_5 <span class='op'>=</span> <span class='fl'>10</span>,
   enough_20 <span class='op'>=</span> <span class='fl'>6</span>,
   include_current_year <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -233,17 +230,19 @@ the current calendar year in the test.</p></td>
 for the 20-year test. The current calendar year is excluded by default.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># site &lt;- "260041080093102"</span>
-<span class='co'># gw_level_data &lt;- dataRetrieval::readNWISgwl(site)</span>
-
-<span class='co'># Using package example data:</span>
-<span class='va'>gwl_data</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span>
-<span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span><span class='va'>gwl_data</span>, parameter_cd_gwl <span class='op'>=</span> <span class='st'>"62610"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Not enough measurements in each of the the last 5 years to proceed</span></div><div class='output co'>#&gt;            test        tau     pValue   slope intercept trend
-#&gt; 1  5-year trend         NA         NA      NA        NA  &lt;NA&gt;
-#&gt; 2 20-year trend 0.09542715 0.02535468 0.22025 -434.6089    Up</div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
+<span class='r-in'><span class='co'># site &lt;- "260041080093102"</span></span>
+<span class='r-in'><span class='co'># gw_level_data &lt;- dataRetrieval::readNWISgwl(site)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Using package example data:</span></span>
+<span class='r-in'><span class='va'>gwl_data</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span></span>
+<span class='r-in'><span class='fu'>kendell_test_5_20_years</span><span class='op'>(</span><span class='va'>gwl_data</span>, parameter_cd_gwl <span class='op'>=</span> <span class='st'>"62610"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Not enough measurements in each of the the last 5 years to proceed</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            test        tau     pValue   slope intercept trend</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  5-year trend         NA         NA      NA        NA  &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 20-year trend 0.09542715 0.02535468 0.22025 -434.6089    Up</span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -78,9 +78,6 @@ markerTable raw data" />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -179,30 +176,33 @@ markerTable raw data" />
 <p>data frame with columns trendType, trend, markerDescription, r_lwd</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>nat_aqfr_state</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   Country State nat_aqfr_cd                            long_name other_cd
-#&gt; 1      US     1  N100ALLUVL                    Alluvial aquifers 20170106
-#&gt; 2      US     1  S100CSLLWD      Coastal lowlands aquifer system 20050203
-#&gt; 3      US     1  S400FLORDN              Floridan aquifer system 20050203
-#&gt; 4      US     1  S100MSEMBM Mississippi embayment aquifer system 20050203
-#&gt; 5      US     1  N500MSSPPI               Mississippian aquifers 20050203
-#&gt; 6      US     1  N9999OTHER                       Other aquifers 20050627</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>summary_aquifers</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 4</span><span>
-#&gt;   long_name                               nat_aqfr_cd state_indexes states    
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> Ada-Vamoosa aquifer                     N300ADAVMS  </span><span style='color: #949494;'>&lt;int [1]&gt;</span><span>     </span><span style='color: #949494;'>&lt;chr [1]&gt;</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Alaska unconsolidated-deposit aquifers  N100AKUNCD  </span><span style='color: #949494;'>&lt;int [1]&gt;</span><span>     </span><span style='color: #949494;'>&lt;chr [1]&gt;</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> Alluvial aquifers                       N100ALLUVL  </span><span style='color: #949494;'>&lt;int [25]&gt;</span><span>    </span><span style='color: #949494;'>&lt;chr [25]&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> Arbuckle-Simpson aquifer                N400ABKSMP  </span><span style='color: #949494;'>&lt;int [1]&gt;</span><span>     </span><span style='color: #949494;'>&lt;chr [1]&gt;</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> Basin and Range basin-fill aquifers     N100BSNRGB  </span><span style='color: #949494;'>&lt;int [7]&gt;</span><span>     </span><span style='color: #949494;'>&lt;chr [7]&gt;</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> Basin and Range carbonate-rock aquifers N400BSNRGC  </span><span style='color: #949494;'>&lt;int [5]&gt;</span><span>     </span><span style='color: #949494;'>&lt;chr [5]&gt;</span><span> </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>local_aqfr</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   aqfr_cd              Aqfr_Name_prpr
-#&gt; 1 100CNZC            Cenozoic Erathem
-#&gt; 2 110NRSD    Nonartesian Sand Aquifer
-#&gt; 3 110SAQS    Surficial Aquifer System
-#&gt; 4 111HCPC Holocene-Pleistocene Series
-#&gt; 5 111NRSD    Nonartesian Sand Aquifer
-#&gt; 6 112ANSS         Anastasia Formation</div></span></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>nat_aqfr_state</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Country State nat_aqfr_cd                            long_name other_cd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      US     1  N100ALLUVL                    Alluvial aquifers 20170106</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      US     1  S100CSLLWD      Coastal lowlands aquifer system 20050203</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      US     1  S400FLORDN              Floridan aquifer system 20050203</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      US     1  S100MSEMBM Mississippi embayment aquifer system 20050203</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      US     1  N500MSSPPI               Mississippian aquifers 20050203</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      US     1  N9999OTHER                       Other aquifers 20050627</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>summary_aquifers</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 6 x 4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   long_name                               nat_aqfr_cd state_indexes states    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;list&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;list&gt;</span>    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Ada-Vamoosa aquifer                     N300ADAVMS  <span style='color: #949494;'>&lt;int [1]&gt;</span>     <span style='color: #949494;'>&lt;chr [1]&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> Alaska unconsolidated-deposit aquifers  N100AKUNCD  <span style='color: #949494;'>&lt;int [1]&gt;</span>     <span style='color: #949494;'>&lt;chr [1]&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> Alluvial aquifers                       N100ALLUVL  <span style='color: #949494;'>&lt;int [25]&gt;</span>    <span style='color: #949494;'>&lt;chr [25]&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> Arbuckle-Simpson aquifer                N400ABKSMP  <span style='color: #949494;'>&lt;int [1]&gt;</span>     <span style='color: #949494;'>&lt;chr [1]&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span> Basin and Range basin-fill aquifers     N100BSNRGB  <span style='color: #949494;'>&lt;int [7]&gt;</span>     <span style='color: #949494;'>&lt;chr [7]&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span> Basin and Range carbonate-rock aquifers N400BSNRGC  <span style='color: #949494;'>&lt;int [5]&gt;</span>     <span style='color: #949494;'>&lt;chr [5]&gt;</span> </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>local_aqfr</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   aqfr_cd              Aqfr_Name_prpr</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 100CNZC            Cenozoic Erathem</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 110NRSD    Nonartesian Sand Aquifer</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 110SAQS    Surficial Aquifer System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 111HCPC Holocene-Pleistocene Series</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 111NRSD    Nonartesian Sand Aquifer</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 112ANSS         Anastasia Formation</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

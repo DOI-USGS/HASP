@@ -76,9 +76,6 @@
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -164,16 +161,17 @@
     <p>The weekly frequency analysis is based on daily data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>weekly_frequency_plot</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>weekly_frequency_plot</span><span class='op'>(</span>
   <span class='va'>gw_level_dv</span>,
-  <span class='va'>date_col</span>,
-  <span class='va'>value_col</span>,
-  <span class='va'>approved_col</span>,
+  parameter_cd <span class='op'>=</span> <span class='cn'>NA</span>,
+  date_col <span class='op'>=</span> <span class='cn'>NA</span>,
+  value_col <span class='op'>=</span> <span class='cn'>NA</span>,
+  approved_col <span class='op'>=</span> <span class='cn'>NA</span>,
   plot_range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Past year"</span>, <span class='st'>"Calendar year"</span><span class='op'>)</span>,
   plot_title <span class='op'>=</span> <span class='st'>""</span>,
   y_axis_label <span class='op'>=</span> <span class='st'>""</span>,
   flip_y <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,12 +182,21 @@
 from <code>readNWISdv</code>.</p></td>
     </tr>
     <tr>
+      <th>parameter_cd</th>
+      <td><p>If data in gw_level_dv comes from NWIS, the parameter_cd 
+can be used to define the value_col.
+ If the data doesn't come directly from NWIS services, this 
+can be set to <code>NA</code>,and this argument will be ignored.</p></td>
+    </tr>
+    <tr>
       <th>date_col</th>
-      <td><p>name of date column.</p></td>
+      <td><p>the heading of the date column. The default is <code>NA</code>,
+which the code will try to get the column name automatically.</p></td>
     </tr>
     <tr>
       <th>value_col</th>
-      <td><p>name of value column.</p></td>
+      <td><p>name of value column. The default is <code>NA</code>,
+which the code will try to get the column name automatically.</p></td>
     </tr>
     <tr>
       <th>approved_col</th>
@@ -222,23 +229,23 @@ Default is <code>FALSE</code>.</p></td>
 and points representing the historical median and daily values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># site &lt;- "263819081585801"</span>
-<span class='va'>p_code_dv</span> <span class='op'>&lt;-</span> <span class='st'>"62610"</span>
-<span class='va'>statCd</span> <span class='op'>&lt;-</span> <span class='st'>"00001"</span>
-<span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
-<span class='va'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Daily</span>
-<span class='fu'>weekly_frequency_plot</span><span class='op'>(</span><span class='va'>gw_level_dv</span>, 
-                      date_col <span class='op'>=</span> <span class='st'>"Date"</span>,
-                      value_col <span class='op'>=</span> <span class='st'>"X_62610_00001"</span>,
-                      approved_col <span class='op'>=</span> <span class='st'>"X_62610_00001_cd"</span><span class='op'>)</span>
-</div><div class='img'><img src='weekly_frequency_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>                      
-<span class='fu'>weekly_frequency_plot</span><span class='op'>(</span><span class='va'>gw_level_dv</span>, 
-                      date_col <span class='op'>=</span> <span class='st'>"Date"</span>,
-                      value_col <span class='op'>=</span> <span class='st'>"X_62610_00001"</span>,
-                      approved_col <span class='op'>=</span> <span class='st'>"X_62610_00001_cd"</span><span class='op'>)</span>
-</div><div class='img'><img src='weekly_frequency_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
+<span class='r-in'><span class='co'># site &lt;- "263819081585801"</span></span>
+<span class='r-in'><span class='va'>p_code_dv</span> <span class='op'>&lt;-</span> <span class='st'>"62610"</span></span>
+<span class='r-in'><span class='va'>statCd</span> <span class='op'>&lt;-</span> <span class='st'>"00001"</span></span>
+<span class='r-in'><span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span></span>
+<span class='r-in'><span class='va'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Daily</span></span>
+<span class='r-in'><span class='fu'>weekly_frequency_plot</span><span class='op'>(</span><span class='va'>gw_level_dv</span>, </span>
+<span class='r-in'>                      date_col <span class='op'>=</span> <span class='st'>"Date"</span>,</span>
+<span class='r-in'>                      value_col <span class='op'>=</span> <span class='st'>"X_62610_00001"</span>,</span>
+<span class='r-in'>                      approved_col <span class='op'>=</span> <span class='st'>"X_62610_00001_cd"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='weekly_frequency_plot-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'>                      </span>
+<span class='r-in'><span class='fu'>weekly_frequency_plot</span><span class='op'>(</span><span class='va'>gw_level_dv</span>, </span>
+<span class='r-in'>                      parameter_cd <span class='op'>=</span> <span class='st'>"62610"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='weekly_frequency_plot-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

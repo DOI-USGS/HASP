@@ -123,7 +123,7 @@ body {
 <p>This page merges information from USGS Groundwater Watch website and USGS Water Science Centers.</p>
 <div id="site-information" class="section level2">
 <h2 class="hasAnchor">
-<a href="#site-information" class="anchor"></a>Site Information</h2>
+<a href="#site-information" class="anchor" aria-hidden="true"></a>Site Information</h2>
 <table class="table"><tr>
 <td>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -160,25 +160,25 @@ body {
 <tr class="odd">
 <td align="left">Groundwater level above NGVD 1929, feet</td>
 <td align="left">1978-10-01</td>
-<td align="left">2021-02-28</td>
-<td align="right">14807</td>
+<td align="left">2021-04-26</td>
+<td align="right">14864</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=263819081585801" class="external-link">Field groundwater-level measurements</a></td>
 <td align="left">1982-10-12</td>
-<td align="left">2021-03-01</td>
-<td align="right">454</td>
+<td align="left">2021-04-27</td>
+<td align="right">457</td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
 <td align="left">1978-09-06</td>
-<td align="left">2020-04-28</td>
-<td align="right">470</td>
+<td align="left">2021-04-27</td>
+<td align="right">471</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=263819081585801" class="external-link">Current / Historical Observations</a></td>
 <td align="left">2007-10-01</td>
-<td align="left">2021-03-01</td>
+<td align="left">2021-04-27</td>
 <td align="right"></td>
 </tr>
 </tbody>
@@ -188,7 +188,7 @@ body {
 </div>
 <div id="get-data-using-dataretrieval" class="section level2">
 <h2 class="hasAnchor">
-<a href="#get-data-using-dataretrieval" class="anchor"></a>Get data using dataRetrieval</h2>
+<a href="#get-data-using-dataretrieval" class="anchor" aria-hidden="true"></a>Get data using dataRetrieval</h2>
 <table class="table"><tr>
 <td>
 <p>Using <code>dataRetrieval</code> code to get the data for this site:</p>
@@ -229,23 +229,19 @@ body {
 </div>
 <div id="groundwater-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#groundwater-data" class="anchor"></a>Groundwater Data</h2>
+<a href="#groundwater-data" class="anchor" aria-hidden="true"></a>Groundwater Data</h2>
 <div id="monthly-frequency" class="section level3">
 <h3 class="hasAnchor">
-<a href="#monthly-frequency" class="anchor"></a>Monthly Frequency</h3>
+<a href="#monthly-frequency" class="anchor" aria-hidden="true"></a>Monthly Frequency</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>,
-                       date_col <span class="op">=</span> <span class="st">"Date"</span>,
-                       value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,
-                       approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span>,
+                       parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
                        plot_title <span class="op">=</span> <span class="va">plot_title</span>,
                        plot_range <span class="op">=</span> <span class="st">"Past year"</span>,
                        y_axis_label <span class="op">=</span> <span class="st">"Groundwater level above NGVD 1929, feet"</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/monthly_frequency_table.html">monthly_frequency_table</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
-                        date_col <span class="op">=</span> <span class="st">"Date"</span>,
-                        value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,
-                        approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span><span class="op">)</span></code></pre></div>
+                        parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_combo_data_files/figure-html/monthlyFreqPlot-1.png" width="576"></p>
@@ -267,24 +263,24 @@ body {
 <tr class="odd">
 <td align="left">Jan</td>
 <td align="right">-41.8</td>
-<td align="right">-32.6</td>
-<td align="right">-29.1</td>
-<td align="right">-21.6</td>
-<td align="right">-18.1</td>
-<td align="right">-13.7</td>
+<td align="right">-32.4</td>
+<td align="right">-29.0</td>
+<td align="right">-21.4</td>
+<td align="right">-17.7</td>
+<td align="right">-13.8</td>
 <td align="right">-5.7</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="left">Feb</td>
 <td align="right">-42.8</td>
-<td align="right">-32.7</td>
-<td align="right">-29.3</td>
-<td align="right">-22.3</td>
-<td align="right">-19.0</td>
-<td align="right">-12.4</td>
+<td align="right">-32.6</td>
+<td align="right">-29.2</td>
+<td align="right">-22.1</td>
+<td align="right">-18.8</td>
+<td align="right">-12.5</td>
 <td align="right">-7.2</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="odd">
 <td align="left">Mar</td>
@@ -388,7 +384,7 @@ body {
 <tr class="even">
 <td align="left">Dec</td>
 <td align="right">-42.4</td>
-<td align="right">-32.8</td>
+<td align="right">-32.7</td>
 <td align="right">-27.9</td>
 <td align="right">-21.6</td>
 <td align="right">-17.2</td>
@@ -404,7 +400,7 @@ body {
 </div>
 <div id="daily-2-year-plot" class="section level2">
 <h2 class="hasAnchor">
-<a href="#daily-2-year-plot" class="anchor"></a>Daily 2 year plot</h2>
+<a href="#daily-2-year-plot" class="anchor" aria-hidden="true"></a>Daily 2 year plot</h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/daily_gwl_2yr_plot.html">daily_gwl_2yr_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
                    date_col <span class="op">=</span> <span class="st">"Date"</span>,
@@ -416,9 +412,7 @@ body {
                    y_axis_label <span class="op">=</span> <span class="st">"Groundwater level above NGVD 1929, feet"</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/daily_gwl_summary.html">daily_gwl_summary</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
-                  date_col <span class="op">=</span> <span class="st">"Date"</span>, 
-                  value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>, 
-                  approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span><span class="op">)</span></code></pre></div>
+                  parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_combo_data_files/figure-html/dailyPlotShow-1.png" width="864"></p>
@@ -438,13 +432,13 @@ body {
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">1978-10-01</td>
-<td align="left">2020-12-29</td>
-<td align="right">14746</td>
+<td align="left">2021-02-28</td>
+<td align="right">14807</td>
 <td align="right">96</td>
 <td align="right">-51.08</td>
-<td align="right">-28.38</td>
-<td align="right">-21.89</td>
-<td align="right">-16.8625</td>
+<td align="right">-28.34</td>
+<td align="right">-21.84</td>
+<td align="right">-16.84</td>
 <td align="right">-2.81</td>
 </tr></tbody>
 </table>
@@ -453,7 +447,7 @@ body {
 </div>
 <div id="field-groundwater-level-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#field-groundwater-level-data" class="anchor"></a>Field Groundwater Level Data</h2>
+<a href="#field-groundwater-level-data" class="anchor" aria-hidden="true"></a>Field Groundwater Level Data</h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_field</a></span><span class="op">(</span><span class="va">gwl_data</span>, <span class="va">plot_title</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span>, 
                parameter_cd_gwl <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span>
@@ -486,19 +480,15 @@ body {
 </tr></table>
 <div id="period-of-record---all-data-types" class="section level3">
 <h3 class="hasAnchor">
-<a href="#period-of-record---all-data-types" class="anchor"></a>Period of Record - All Data Types</h3>
+<a href="#period-of-record---all-data-types" class="anchor" aria-hidden="true"></a>Period of Record - All Data Types</h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
 
 <span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
              <span class="va">gwl_data</span>, 
              y_label <span class="op">=</span> <span class="va">y_label</span>,
-             date_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Date"</span>, <span class="st">"lev_dt"</span><span class="op">)</span>,
-             value_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X_62610_00001"</span>, <span class="st">"sl_lev_va"</span><span class="op">)</span>,
-             approved_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X_62610_00001_cd"</span>,
-                              <span class="st">"lev_age_cd"</span><span class="op">)</span>,
              plot_title <span class="op">=</span> <span class="va">plot_title</span>, 
-             parameter_cd_gwl <span class="op">=</span> <span class="st">"62610"</span>,
+             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
              flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, <span class="st">"X_62610_00001"</span><span class="op">)</span></code></pre></div>
@@ -520,8 +510,8 @@ body {
 <td align="right">-51.1</td>
 <td align="right">-28.3</td>
 <td align="right">-21.8</td>
-<td align="right">-22.7</td>
-<td align="right">-16.8</td>
+<td align="right">-22.6</td>
+<td align="right">-16.9</td>
 <td align="right">-2.8</td>
 </tr></tbody>
 </table>
@@ -531,17 +521,17 @@ body {
 </div>
 <div id="salinity-data-and-analysis" class="section level2">
 <h2 class="hasAnchor">
-<a href="#salinity-data-and-analysis" class="anchor"></a>Salinity Data and Analysis</h2>
+<a href="#salinity-data-and-analysis" class="anchor" aria-hidden="true"></a>Salinity Data and Analysis</h2>
 <div id="chloride" class="section level3">
 <h3 class="hasAnchor">
-<a href="#chloride" class="anchor"></a>Chloride</h3>
+<a href="#chloride" class="anchor" aria-hidden="true"></a>Chloride</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, 
            plot_title <span class="op">=</span> <span class="va">plot_title</span>, 
            pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/kendell_test_5_20_years.html">kendell_test_5_20_years</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">qw_data</span>, 
-                                      <span class="va">parm_cd</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>, 
+                                      <span class="va">parm_cd</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span><span class="op">)</span>, 
                         seasonal <span class="op">=</span> <span class="cn">TRUE</span>,
                         enough_5 <span class="op">=</span> <span class="fl">1</span>,
                         enough_20 <span class="op">=</span> <span class="fl">1</span>,
@@ -569,17 +559,17 @@ body {
 <tr class="odd">
 <td align="left">5-year trend</td>
 <td align="right">1.000</td>
-<td align="right">0.014</td>
-<td align="right">9.25</td>
-<td align="right">-19065.5</td>
+<td align="right">0.032</td>
+<td align="right">9.500</td>
+<td align="right">-26118.00</td>
 <td align="left">Up</td>
 </tr>
 <tr class="even">
 <td align="left">20-year trend</td>
-<td align="right">0.602</td>
+<td align="right">0.616</td>
 <td align="right">0.000</td>
-<td align="right">1.50</td>
-<td align="right">-4429.0</td>
+<td align="right">1.667</td>
+<td align="right">-10281.43</td>
 <td align="left">Up</td>
 </tr>
 </tbody>
@@ -600,11 +590,11 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Date of last sample</td>
-<td align="left">2020-04-28</td>
+<td align="left">2021-04-27</td>
 </tr>
 <tr class="even">
 <td align="left">Last sample result (mg/l)</td>
-<td align="left">114</td>
+<td align="left">119</td>
 </tr>
 <tr class="odd">
 <td align="left">Date of first sample within 225 to 999 mg/l</td>
@@ -620,11 +610,11 @@ body {
 </tr>
 <tr class="even">
 <td align="left">Maximum (mg/l)</td>
-<td align="left">114</td>
+<td align="left">119</td>
 </tr>
 <tr class="odd">
 <td align="left">Mean (mg/l)</td>
-<td align="left">60</td>
+<td align="left">60.8</td>
 </tr>
 <tr class="even">
 <td align="left">First quartile (mg/l)</td>
@@ -640,7 +630,7 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Number of samples</td>
-<td align="left">79</td>
+<td align="left">80</td>
 </tr>
 </tbody>
 </table>
@@ -649,7 +639,7 @@ body {
 </div>
 <div id="specific-conductance" class="section level3">
 <h3 class="hasAnchor">
-<a href="#specific-conductance" class="anchor"></a>Specific Conductance</h3>
+<a href="#specific-conductance" class="anchor" aria-hidden="true"></a>Specific Conductance</h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/sc_cl.html">qw_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"Specific Conductance"</span>, 
         pcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>, <span class="st">"90095"</span><span class="op">)</span><span class="op">)</span>
@@ -677,11 +667,11 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Date of last sample</td>
-<td align="left">2020-04-28</td>
+<td align="left">2021-04-27</td>
 </tr>
 <tr class="even">
 <td align="left">Last sample result (uS/cm <span class="citation">@25C</span>)</td>
-<td align="left">765</td>
+<td align="left">761</td>
 </tr>
 <tr class="odd">
 <td align="left">Minimum (uS/cm <span class="citation">@25C</span>)</td>
@@ -693,11 +683,11 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Mean (uS/cm <span class="citation">@25C</span>)</td>
-<td align="left">551</td>
+<td align="left">552</td>
 </tr>
 <tr class="even">
 <td align="left">First quartile (uS/cm <span class="citation">@25C</span>)</td>
-<td align="left">543</td>
+<td align="left">544</td>
 </tr>
 <tr class="odd">
 <td align="left">Median (uS/cm <span class="citation">@25C</span>)</td>
@@ -709,7 +699,7 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Number of samples</td>
-<td align="left">390</td>
+<td align="left">392</td>
 </tr>
 </tbody>
 </table>
@@ -718,7 +708,7 @@ body {
 </div>
 <div id="specific-conductance-vs-chloride" class="section level3">
 <h3 class="hasAnchor">
-<a href="#specific-conductance-vs-chloride" class="anchor"></a>Specific Conductance vs Chloride</h3>
+<a href="#specific-conductance-vs-chloride" class="anchor" aria-hidden="true"></a>Specific Conductance vs Chloride</h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="va">plot_title</span><span class="op">)</span>
 

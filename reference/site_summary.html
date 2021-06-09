@@ -76,9 +76,6 @@
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -164,7 +161,7 @@
     <p>Get station summary information</p>
     </div>
 
-    <pre class="usage"><span class='fu'>site_summary</span><span class='op'>(</span><span class='va'>siteID</span>, markdown <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>site_summary</span><span class='op'>(</span><span class='va'>siteID</span>, markdown <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,17 +178,18 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>siteID</span> <span class='op'>&lt;-</span> <span class='st'>"263819081585801"</span>
-<span class='va'>site_metadata</span> <span class='op'>&lt;-</span> <span class='fu'>site_summary</span><span class='op'>(</span><span class='va'>siteID</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 263819081585801 L  -2701 
-#&gt; Latitude:  26 deg 38 ' 19 " 
-#&gt; Longitude:  81 deg 58 ' 58 " 
-#&gt; Lee County , Florida 
-#&gt; Hydrologic Unit:  03090205 
-#&gt; Well depth:  206  feet 
-#&gt; Land surface altitude:  13  feet above NGVD29 
-#&gt; Well completed in : "Intermediate aquifer system" (S500INTRMD) national aquifer.
-#&gt; Well completed in : "Hawthorn Limestone Aquifer" (122HTRNN) local aquifer.</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>siteID</span> <span class='op'>&lt;-</span> <span class='st'>"263819081585801"</span></span>
+<span class='r-in'><span class='va'>site_metadata</span> <span class='op'>&lt;-</span> <span class='fu'>site_summary</span><span class='op'>(</span><span class='va'>siteID</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 263819081585801 L  -2701 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Latitude:  26 deg 38 ' 19 " </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Longitude:  81 deg 58 ' 58 " </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lee County , Florida </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hydrologic Unit:  03090205 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Well depth:  206  feet </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Land surface altitude:  13  feet above NGVD29 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Well completed in : "Intermediate aquifer system" (S500INTRMD) national aquifer.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Well completed in : "Hawthorn Limestone Aquifer" (122HTRNN) local aquifer.</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

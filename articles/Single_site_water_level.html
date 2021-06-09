@@ -122,7 +122,7 @@ body {
 <p><a href="https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801" class="external-link uri">https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801</a></p>
 <div id="site-information" class="section level2">
 <h2 class="hasAnchor">
-<a href="#site-information" class="anchor"></a>Site Information</h2>
+<a href="#site-information" class="anchor" aria-hidden="true"></a>Site Information</h2>
 <table class="table"><tr>
 <td>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -159,25 +159,25 @@ body {
 <tr class="odd">
 <td align="left">Groundwater level above NGVD 1929, feet</td>
 <td align="left">1978-10-01</td>
-<td align="left">2021-02-28</td>
-<td align="right">14807</td>
+<td align="left">2021-04-26</td>
+<td align="right">14864</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=263819081585801" class="external-link">Field groundwater-level measurements</a></td>
 <td align="left">1982-10-12</td>
-<td align="left">2021-03-01</td>
-<td align="right">454</td>
+<td align="left">2021-04-27</td>
+<td align="right">457</td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
 <td align="left">1978-09-06</td>
-<td align="left">2020-04-28</td>
-<td align="right">470</td>
+<td align="left">2021-04-27</td>
+<td align="right">471</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=263819081585801" class="external-link">Current / Historical Observations</a></td>
 <td align="left">2007-10-01</td>
-<td align="left">2021-03-01</td>
+<td align="left">2021-04-27</td>
 <td align="right"></td>
 </tr>
 </tbody>
@@ -187,7 +187,7 @@ body {
 </div>
 <div id="get-data-using-dataretrieval" class="section level2">
 <h2 class="hasAnchor">
-<a href="#get-data-using-dataretrieval" class="anchor"></a>Get data using dataRetrieval</h2>
+<a href="#get-data-using-dataretrieval" class="anchor" aria-hidden="true"></a>Get data using dataRetrieval</h2>
 <table class="table"><tr>
 <td>
 <p>Using <code>dataRetrieval</code> code to get the data for this site:</p>
@@ -222,10 +222,10 @@ body {
 </div>
 <div id="water-level-data-and-analysis" class="section level2">
 <h2 class="hasAnchor">
-<a href="#water-level-data-and-analysis" class="anchor"></a>Water Level Data and Analysis</h2>
+<a href="#water-level-data-and-analysis" class="anchor" aria-hidden="true"></a>Water Level Data and Analysis</h2>
 <div id="weekly-frequency" class="section level3">
 <h3 class="hasAnchor">
-<a href="#weekly-frequency" class="anchor"></a>Weekly frequency</h3>
+<a href="#weekly-frequency" class="anchor" aria-hidden="true"></a>Weekly frequency</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/weekly_frequency_plot.html">weekly_frequency_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
                       date_col <span class="op">=</span> <span class="st">"Date"</span>,
@@ -235,9 +235,7 @@ body {
                       y_axis_label <span class="op">=</span> <span class="st">"Groundwater level above NGVD 1929, feet"</span><span class="op">)</span>
 
 <span class="va">weekly_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weekly_frequency_table.html">weekly_frequency_table</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
-                                       date_col <span class="op">=</span> <span class="st">"Date"</span>,
-                                       value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,
-                                       approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span><span class="op">)</span>
+                                       parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weekly_table</span>, <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
@@ -262,101 +260,101 @@ body {
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">-40.6</td>
-<td align="right">-33.0</td>
+<td align="right">-32.8</td>
 <td align="right">-28.7</td>
-<td align="right">-21.9</td>
-<td align="right">-17.7</td>
-<td align="right">-14.7</td>
+<td align="right">-21.4</td>
+<td align="right">-17.6</td>
+<td align="right">-15.1</td>
 <td align="right">-5.5</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="right">-41.4</td>
-<td align="right">-32.8</td>
-<td align="right">-29.1</td>
-<td align="right">-21.6</td>
-<td align="right">-17.7</td>
-<td align="right">-14.6</td>
+<td align="right">-32.7</td>
+<td align="right">-29.0</td>
+<td align="right">-21.4</td>
+<td align="right">-17.5</td>
+<td align="right">-14.7</td>
 <td align="right">-5.5</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">-42.1</td>
 <td align="right">-32.5</td>
-<td align="right">-29.3</td>
-<td align="right">-21.5</td>
-<td align="right">-18.0</td>
+<td align="right">-29.2</td>
+<td align="right">-21.2</td>
+<td align="right">-17.8</td>
 <td align="right">-14.0</td>
 <td align="right">-5.7</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">-41.9</td>
-<td align="right">-31.8</td>
-<td align="right">-29.7</td>
-<td align="right">-21.7</td>
-<td align="right">-18.3</td>
+<td align="right">-31.7</td>
+<td align="right">-29.5</td>
+<td align="right">-21.6</td>
+<td align="right">-18.2</td>
 <td align="right">-13.7</td>
 <td align="right">-6.1</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">-41.6</td>
 <td align="right">-32.1</td>
 <td align="right">-29.8</td>
-<td align="right">-21.8</td>
-<td align="right">-18.6</td>
-<td align="right">-13.6</td>
+<td align="right">-21.6</td>
+<td align="right">-18.3</td>
+<td align="right">-13.7</td>
 <td align="right">-6.8</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
 <td align="right">-42.1</td>
 <td align="right">-32.3</td>
-<td align="right">-29.1</td>
-<td align="right">-22.4</td>
-<td align="right">-19.1</td>
-<td align="right">-12.7</td>
+<td align="right">-29.0</td>
+<td align="right">-21.9</td>
+<td align="right">-18.9</td>
+<td align="right">-12.8</td>
 <td align="right">-7.0</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
 <td align="right">-43.5</td>
 <td align="right">-32.5</td>
 <td align="right">-29.1</td>
-<td align="right">-22.3</td>
-<td align="right">-19.1</td>
-<td align="right">-12.9</td>
+<td align="right">-22.1</td>
+<td align="right">-19.0</td>
+<td align="right">-13.0</td>
 <td align="right">-7.4</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
 <td align="right">-44.6</td>
 <td align="right">-33.5</td>
 <td align="right">-29.3</td>
-<td align="right">-22.6</td>
-<td align="right">-18.8</td>
+<td align="right">-22.3</td>
+<td align="right">-18.6</td>
 <td align="right">-11.4</td>
 <td align="right">-6.1</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
 <td align="right">-42.6</td>
-<td align="right">-34.4</td>
-<td align="right">-29.6</td>
-<td align="right">-22.6</td>
-<td align="right">-19.5</td>
+<td align="right">-34.2</td>
+<td align="right">-29.5</td>
+<td align="right">-22.5</td>
+<td align="right">-19.4</td>
 <td align="right">-11.7</td>
 <td align="right">-6.2</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
@@ -376,12 +374,10 @@ body {
 </div>
 <div id="daily-2-year" class="section level3">
 <h3 class="hasAnchor">
-<a href="#daily-2-year" class="anchor"></a>Daily 2-year</h3>
+<a href="#daily-2-year" class="anchor" aria-hidden="true"></a>Daily 2-year</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/daily_gwl_2yr_plot.html">daily_gwl_2yr_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
-                   date_col <span class="op">=</span> <span class="st">"Date"</span>,
-                   value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,
-                   approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span>,
+                   parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
                    plot_title <span class="op">=</span> <span class="va">site_title</span>,
                    historical_stat <span class="op">=</span> <span class="st">"mean"</span>,
                    month_breaks <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -410,72 +406,72 @@ body {
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">-5.29</td>
-<td align="right">-22.66175</td>
+<td align="right">-22.48024</td>
 <td align="right">-41.40</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="right">-5.24</td>
-<td align="right">-22.70275</td>
+<td align="right">-22.52415</td>
 <td align="right">-40.11</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">-5.30</td>
-<td align="right">-22.75350</td>
+<td align="right">-22.57976</td>
 <td align="right">-40.18</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">-5.55</td>
-<td align="right">-22.81100</td>
+<td align="right">-22.63561</td>
 <td align="right">-41.60</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">-5.48</td>
-<td align="right">-22.84975</td>
+<td align="right">-22.66439</td>
 <td align="right">-40.51</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
 <td align="right">-5.71</td>
-<td align="right">-22.89975</td>
+<td align="right">-22.71512</td>
 <td align="right">-40.64</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
 <td align="right">-5.64</td>
-<td align="right">-22.95600</td>
+<td align="right">-22.77317</td>
 <td align="right">-42.25</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
 <td align="right">-5.75</td>
-<td align="right">-22.89300</td>
+<td align="right">-22.71732</td>
 <td align="right">-41.39</td>
-<td align="right">40</td>
+<td align="right">41</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
 <td align="right">-5.52</td>
-<td align="right">-22.70732</td>
+<td align="right">-22.54167</td>
 <td align="right">-40.51</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
 <td align="right">-5.30</td>
-<td align="right">-22.71780</td>
+<td align="right">-22.56143</td>
 <td align="right">-40.57</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 </tbody>
 </table>
@@ -484,23 +480,19 @@ body {
 </div>
 <div id="daily-value-trends" class="section level3">
 <h3 class="hasAnchor">
-<a href="#daily-value-trends" class="anchor"></a>Daily value trends</h3>
+<a href="#daily-value-trends" class="anchor" aria-hidden="true"></a>Daily value trends</h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
 
 <span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
              <span class="va">gwl_data</span>, 
              y_label <span class="op">=</span> <span class="va">y_label</span>,
-             date_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Date"</span>, <span class="st">"lev_dt"</span><span class="op">)</span>,
-             value_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X_62610_00001"</span>,
-                           <span class="st">"sl_lev_va"</span><span class="op">)</span>,
-             approved_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X_62610_00001_cd"</span>,
-                              <span class="st">"lev_age_cd"</span><span class="op">)</span>,
+             parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,
              plot_title <span class="op">=</span> <span class="va">site_title</span>,
              add_trend <span class="op">=</span> <span class="cn">TRUE</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="va">gw_level_dv</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">X_62610_00001</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">gw_level_dv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">X_62610_00001</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">gw_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/monthly_mean.html">monthly_mean</a></span><span class="op">(</span><span class="va">gw_level_dv</span><span class="op">)</span>
@@ -528,8 +520,8 @@ body {
 <td align="right">-51.1</td>
 <td align="right">-28.3</td>
 <td align="right">-21.8</td>
-<td align="right">-22.7</td>
-<td align="right">-16.8</td>
+<td align="right">-22.6</td>
+<td align="right">-16.9</td>
 <td align="right">-2.8</td>
 </tr></tbody>
 </table>
@@ -567,13 +559,11 @@ body {
 </div>
 <div id="field-gwl-values" class="section level3">
 <h3 class="hasAnchor">
-<a href="#field-gwl-values" class="anchor"></a>Field GWL values</h3>
+<a href="#field-gwl-values" class="anchor" aria-hidden="true"></a>Field GWL values</h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="va">gwl_data</span>,
              y_label <span class="op">=</span> <span class="va">y_label</span>,
-             date_col <span class="op">=</span> <span class="st">"lev_dt"</span>,
-             value_col <span class="op">=</span> <span class="st">"sl_lev_va"</span>,
-             approved_col <span class="op">=</span> <span class="st">"lev_age_cd"</span>,
+             parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,
              plot_title <span class="op">=</span> <span class="va">site_title</span>, 
              flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
