@@ -4,15 +4,28 @@
 \alias{daily_gwl_summary}
 \title{Summary table of daily data}
 \usage{
-daily_gwl_summary(gw_level_dv, date_col, value_col, approved_col)
+daily_gwl_summary(
+  gw_level_dv,
+  parameter_cd = NA,
+  date_col = NA,
+  value_col = NA,
+  approved_col = NA
+)
 }
 \arguments{
 \item{gw_level_dv}{daily groundwater level data
 from readNWISdv}
 
-\item{date_col}{the heading of the date column.}
+\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
+can be used to define the value_col.
+ If the data doesn't come directly from NWIS services, this 
+can be set to \code{NA},and this argument will be ignored.}
 
-\item{value_col}{name of value column.}
+\item{date_col}{the heading of the date column. The default is \code{NA},
+which the code will try to get the column name automatically.}
+
+\item{value_col}{name of value column. The default is \code{NA},
+which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 }
@@ -31,8 +44,6 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 daily_gwl_summary(gw_level_dv,
-                  date_col = "Date",
-                  value_col = "X_62610_00001",
-                  approved_col = "X_62610_00001_cd")
+                  parameter_cd = p_code_dv)
 
 }

@@ -181,9 +181,7 @@ daily_gwl_2yr_plot(gw_level_dv,
                    y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 daily_gwl_summary(gw_level_dv, 
-                  date_col = "Date", 
-                  value_col = "X_62610_00001", 
-                  approved_col = "X_62610_00001_cd")
+                  parameter_cd = "62610")
 ```
 
 <table>
@@ -206,9 +204,7 @@ daily_gwl_2yr_plot(gw_level_dv,
 
 ```{r dailySummary, echo=FALSE}
 daily_summary_table <- daily_gwl_summary(gw_level_dv, 
-                                         date_col = "Date",
-                                         value_col = "X_62610_00001",
-                                         approved_col = "X_62610_00001_cd") %>%
+                                         parameter_cd = "62610") %>%
   select("Begin Date" = begin_date,
          "End Date" = end_date,
          "Days" = days,

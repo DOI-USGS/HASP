@@ -759,8 +759,14 @@ daily_frequency_table <- function(gw_level_dv, date_col, value_col, approved_col
 #' 
 #' @param gw_level_dv daily groundwater level data
 #' from readNWISdv
-#' @param date_col the heading of the date column.
-#' @param value_col name of value column.
+#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
+#' can be used to define the value_col.
+#'  If the data doesn't come directly from NWIS services, this 
+#' can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the heading of the date column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
+#' @param value_col name of value column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
 #' @param approved_col name of column to get provisional/approved status.
 #' 
 #' @return a summary table giving the period of record, completeness
@@ -778,19 +784,26 @@ daily_frequency_table <- function(gw_level_dv, date_col, value_col, approved_col
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' daily_gwl_summary(gw_level_dv,
-#'                   date_col = "Date",
-#'                   value_col = "X_62610_00001",
-#'                   approved_col = "X_62610_00001_cd")
+#'                   parameter_cd = p_code_dv)
 #' 
-
-daily_gwl_summary <- function(gw_level_dv, date_col, value_col, approved_col) {
+daily_gwl_summary <- function(gw_level_dv, parameter_cd = NA,
+                              date_col = NA,
+                              value_col = NA,
+                              approved_col = NA) {
   
   gw_level <- gw_level_cd <- ".dplyr"
+
+  date_col <- ifelse(is.na(date_col), "Date", date_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  approved_col <- ifelse(is.na(approved_col),
+                        paste0(value_col, "_cd"),
+                        approved_col)   
+
   
   if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
     stop("Not all columns found in gw_level_dv")
   }
-  
+    
   gw_level_dv <- gw_level_dv %>%
     rename(gw_level = !!sym(value_col),
            gw_level_cd = !!sym(approved_col)) %>%

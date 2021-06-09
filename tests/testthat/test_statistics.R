@@ -66,9 +66,7 @@ test_that("Monthly frequency table", {
 test_that("Daily summary table", {
   
   daily_summary_table <- daily_gwl_summary(L2701_example_data$Daily,
-                                           date_col = "Date",
-                                           value_col = "X_62610_00001",
-                                           approved_col = "X_62610_00001_cd")
+                                           parameter_cd = "62610")
   expect_equal(nrow(daily_summary_table), 1)
   expect_equal(daily_summary_table$percent_complete, 96)
   expect_equal(daily_summary_table$begin_date, as.Date("1978-10-01"))
