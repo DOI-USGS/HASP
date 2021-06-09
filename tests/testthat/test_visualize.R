@@ -82,16 +82,12 @@ test_that("Field gwl plot", {
   
   gwl_data <- L2701_example_data$Discrete
   plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-  plot_out <- gwl_plot_field(gwl_data, plot_title, parameter_cd_gwl = "62610")
+  plot_out <- gwl_plot_field(gwl_data, plot_title, parameter_cd = "62610")
   
   dv <- L2701_example_data$Daily
   plot2 <- gwl_plot_all(dv, gwl_data,
-                        date_col = c("Date", "lev_dt"),
-                        value_col = c("X_62610_00001",
-                                      "sl_lev_va"),
-                        approved_col = c("X_62610_00001_cd",
-                                         "lev_age_cd"),
-                        plot_title = "title", parameter_cd_gwl = "62610")
+                        parameter_cd = "62610",
+                        plot_title = "title",)
   
   expect_true(all(c("lev_dt", "sl_lev_va", "lev_age_cd") %in%
                     names(plot_out[["data"]])))
@@ -102,13 +98,8 @@ test_that("Field gwl plot", {
                     names(plot2)))
   
   plot_with_trend <- gwl_plot_all(dv, gwl_data, 
-                                  date_col = c("Date", "lev_dt"),
-                                  value_col = c("X_62610_00001",
-                                                "sl_lev_va"),
-                                  approved_col = c("X_62610_00001_cd",
-                                                   "lev_age_cd"),
                                   plot_title = "title",
-                                  parameter_cd_gwl = "62610",
+                                  parameter_cd = "62610",
                                   add_trend = TRUE)
   
   plot_data_elements <- unlist(lapply(plot_with_trend$layers, function(x) {names(x$data)}))
@@ -118,11 +109,8 @@ test_that("Field gwl plot", {
                     plot_data_elements))
   
   plot_with_gwl <- gwl_plot_all(NULL, gwl_data, 
-                                date_col = "lev_dt",
-                                value_col = "sl_lev_va",
-                                approved_col = "lev_age_cd",
                                 plot_title = "title",
-                                parameter_cd_gwl = "62610",
+                                parameter_cd = "62610",
                                 add_trend = FALSE)
   plot_elements <- unlist(lapply(plot_with_gwl$layers, function(x) {names(x$data)}))
   expect_true(all(c("lev_dt", "sl_lev_va", "year") %in%

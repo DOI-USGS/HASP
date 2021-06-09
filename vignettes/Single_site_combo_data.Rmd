@@ -117,17 +117,13 @@ qw_data <- L2701_example_data$QW
 ```{r monthlyFrequencyPlot, eval=FALSE}
 
 monthly_frequency_plot(gw_level_dv,
-                       date_col = "Date",
-                       value_col = "X_62610_00001",
-                       approved_col = "X_62610_00001_cd",
+                       parameter_cd = "62610",
                        plot_title = plot_title,
                        plot_range = "Past year",
                        y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 monthly_frequency_table(gw_level_dv, 
-                        date_col = "Date",
-                        value_col = "X_62610_00001",
-                        approved_col = "X_62610_00001_cd")
+                        parameter_cd = "62610")
 ```
 
 
@@ -136,9 +132,7 @@ monthly_frequency_table(gw_level_dv,
 
 ```{r monthlyFreqPlot, echo = FALSE}
 monthly_frequency_plot(gw_level_dv,
-                       date_col = "Date",
-                       value_col = "X_62610_00001",
-                       approved_col = "X_62610_00001_cd",
+                       parameter_cd = "62610",
                        plot_title = plot_title,
                        plot_range = "Past year")
 ```
@@ -147,9 +141,7 @@ monthly_frequency_plot(gw_level_dv,
 
 ```{r monthlyFreqTable, echo = FALSE}
 monthly_freq_table <- monthly_frequency_table(gw_level_dv,
-                                              date_col = "Date",
-                                              value_col = "X_62610_00001",
-                                              approved_col = "X_62610_00001_cd") %>%
+                                              parameter_cd = "62610") %>%
   select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
   mutate(month = month.abb[month]) %>%
   rename("Month" = month,
@@ -181,9 +173,7 @@ daily_gwl_2yr_plot(gw_level_dv,
                    y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 daily_gwl_summary(gw_level_dv, 
-                  date_col = "Date", 
-                  value_col = "X_62610_00001", 
-                  approved_col = "X_62610_00001_cd")
+                  parameter_cd = "62610")
 ```
 
 <table>
@@ -206,9 +196,7 @@ daily_gwl_2yr_plot(gw_level_dv,
 
 ```{r dailySummary, echo=FALSE}
 daily_summary_table <- daily_gwl_summary(gw_level_dv, 
-                                         date_col = "Date",
-                                         value_col = "X_62610_00001",
-                                         approved_col = "X_62610_00001_cd") %>%
+                                         parameter_cd = "62610") %>%
   select("Begin Date" = begin_date,
          "End Date" = end_date,
          "Days" = days,
@@ -239,7 +227,7 @@ site_data_summary(gwl_data, "sl_lev_va", parameter_cd_gwl = "62610")
 
 ```{r fieldPlot, echo=FALSE}
 gwl_plot_field(gwl_data, plot_title, flip_y = FALSE, 
-               parameter_cd_gwl = "62610")
+               parameter_cd = "62610")
 ```
 
 </td><td>
@@ -270,12 +258,8 @@ y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
              y_label = y_label,
-             date_col = c("Date", "lev_dt"),
-             value_col = c("X_62610_00001", "sl_lev_va"),
-             approved_col = c("X_62610_00001_cd",
-                              "lev_age_cd"),
              plot_title = plot_title, 
-             parameter_cd_gwl = "62610",
+             parameter_cd = "62610",
              flip_y = FALSE)
 
 site_data_summary(gw_level_dv, "X_62610_00001")
@@ -290,12 +274,8 @@ y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
              y_label = y_label,
-             date_col = c("Date", "lev_dt"),
-             value_col = c("X_62610_00001", "sl_lev_va"),
-             approved_col = c("X_62610_00001_cd",
-                              "lev_age_cd"),
              plot_title = plot_title,
-             parameter_cd_gwl = "62610",
+             parameter_cd = "62610",
              flip_y = FALSE)
 
 ```
