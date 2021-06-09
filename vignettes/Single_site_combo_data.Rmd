@@ -290,12 +290,8 @@ y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
              y_label = y_label,
-             date_col = c("Date", "lev_dt"),
-             value_col = c("X_62610_00001", "sl_lev_va"),
-             approved_col = c("X_62610_00001_cd",
-                              "lev_age_cd"),
              plot_title = plot_title,
-             parameter_cd_gwl = "62610",
+             parameter_cd = "62610",
              flip_y = FALSE)
 
 ```
