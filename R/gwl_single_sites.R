@@ -2,15 +2,14 @@
 #' 
 #' Function to create the field groundwater level data plot.
 #' @export
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param plot_title character
-#' @param date_col name of date column. Default is "lev_dt".
-#' @param value_col name of value column. Default is "sl_lev_va".
 #' @param parameter_cd_gwl Parameter code to be filtered to in a column specifically
 #' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
 #' can be set to \code{NA},and this argument will be ignored.
-#' @param approved_col name of column to get provisional/approved status.
-#' Default is "lev_age_cd".
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
 #' @import ggplot2
@@ -36,31 +35,48 @@
 #'                flip_y = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
-#'                parameter_cd_gwl = "72019",
-#'                value_col = "lev_va")
+#'                parameter_cd_gwl = "72019")
 gwl_plot_field <- function(gwl_data, plot_title = "",
-                           date_col = "lev_dt",
-                           value_col = "sl_lev_va",
                            parameter_cd_gwl = NA,
-                           approved_col = "lev_age_cd",
-                           flip_y = TRUE){
+                           flip_y = TRUE, y_label = ""){
   
-  if(!all(c(date_col, value_col, approved_col, "sl_datum_cd") %in% names(gwl_data))){
-    stop("data frame gwl_data doesn't include all mandatory columns")
+  if(parameter_cd_gwl == "72019"){
+    value_col <- "lev_va"
+  } else if(is.na(parameter_cd_gwl)){
+    if("parameter_cd" %in% names(gwl_data)){
+      
+    } else {
+      value_col <- "value"
+    }
+  } else {
+    value_col <- "sl_lev_va"
+  }
+  
+  if(!all(c("lev_dt", value_col, "lev_age_cd", "sl_datum_cd") %in% names(gwl_data))){
+    missing_cols <- c("lev_dt", value_col, 
+                      "lev_age_cd", "sl_datum_cd")[!c("lev_dt", value_col,
+                                                      "lev_age_cd", "sl_datum_cd") %in%
+                                                      names(gwl_data)]
+    stop("data frame gwl_data doesn't include mandatory column(s):", 
+         paste(missing_cols, collapse = ", "))
   }
   
   gwl_data <- filter_pcode(gwl_data, parameter_cd_gwl)
 
-  datum <- unique(gwl_data$sl_datum_cd)
-  y_label <- sprintf("Elevation above %s, feet", datum)
+  if(!is.na(parameter_cd_gwl)){
+    y_label <- dataRetrieval::readNWISpCode(parameter_cd_gwl)[["parameter_nm"]]
+  } 
   
-  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
-    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
+  
+  gwl_data$year <- as.numeric(format(gwl_data[["lev_dt"]], "%Y")) + 
+    as.numeric(as.character(gwl_data[["lev_dt"]], "%j"))/365
+  
+
   
   plot_out <- ggplot(data = gwl_data,
          aes_string(x = "year", y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
-    geom_point(aes_string(color = approved_col), size = 1) +
+    geom_point(aes(color = lev_age_cd), size = 1) +
     hasp_framework("Years", y_label, plot_title = plot_title) +
     scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
                        values = c("A" = "blue", "P" = "red"), 
@@ -93,21 +109,11 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #' gwl_data <- L2701_example_data$Discrete
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 #' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
-#' date_col = "Date"
-#' value_col = "X_62610_00001"
-#' approved_col = "X_62610_00001_cd"
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              NULL, 
-#'              date_col = date_col, 
-#'              value_col = value_col,
-#'              approved_col = approved_col,
 #'              plot_title = plot_title,
 #'              flip_y = FALSE) 
-#'
-#' date_col = c("Date", "lev_dt")
-#' value_col = c("X_62610_00001", "sl_lev_va")
-#' approved_col = c("X_62610_00001_cd", "lev_age_cd") 
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              gwl_data, 
@@ -122,15 +128,11 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 #' gwl_plot_all(NULL, 
 #'              gwl_data, 
 #'              parameter_cd_gwl = "62610",
-#'              date_col = "lev_dt", 
-#'              value_col = "sl_lev_va",
-#'              approved_col = "lev_age_cd",
 #'              plot_title = paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
 #' 
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
-                         date_col, value_col, approved_col,
                          parameter_cd_gwl = NA,
                          y_label = "GWL",
                          plot_title = "",
