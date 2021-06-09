@@ -26,6 +26,8 @@ which the code will try to get the column name automatically.}
 
 \item{value_col}{name of value column. The default is \code{NA},
 which the code will try to get the column name automatically.}
+
+\item{approved_col}{name of column to get provisional/approved status.}
 }
 \value{
 a data frame giving the max, mean, min, and number of available
