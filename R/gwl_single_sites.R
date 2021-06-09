@@ -7,11 +7,11 @@
 #' approval code), and a column representing the measured value (either lev_va,
 #' sl_lev_va, or value).
 #' @param value_col name of value column. If NA, the code will attempt to autogenerate
-#' based on parameter_cd_gwl.
+#' based on parameter_cd
 #' @param date_col name of date column. Default is "lev_dt".
-#' @param approval_col name of approval column. Default is "lev_age_cd".
+#' @param approved_col name of approval column. Default is "lev_age_cd".
 #' @param plot_title character
-#' @param parameter_cd_gwl Parameter code to be filtered to in a column specifically
+#' @param parameter_cd Parameter code to be filtered to in a column specifically
 #' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
 #' can be set to \code{NA},and this argument will be ignored.
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
@@ -41,37 +41,37 @@
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
 #'                parameter_cd_gwl = "72019")
 gwl_plot_field <- function(gwl_data, plot_title = "",
-                           parameter_cd_gwl = NA,
+                           parameter_cd = NA,
                            date_col = "lev_dt",
                            value_col = NA,
-                           approve_col = "lev_age_cd",
+                           approved_col = "lev_age_cd",
                            flip_y = TRUE, y_label = ""){
   
   value_col <- get_value_column(parameter_cd_gwl, gwl_data, value_col )
 
-  if(!all(c(date_col, value_col, approve_col) %in% names(gwl_data))){
-    missing_cols <- c(date_col, value_col, approve_col)[!c(date_col,
+  if(!all(c(date_col, value_col, approved_col) %in% names(gwl_data))){
+    missing_cols <- c(date_col, value_col, approved_col)[!c(date_col,
                                                            value_col,
-                                                           approve_col) %in%
+                                                           approved_col) %in%
                                                       names(gwl_data)]
     stop("data frame gwl_data doesn't include mandatory column(s):", 
          paste(missing_cols, collapse = ", "))
   }
   
-  gwl_data <- filter_pcode(gwl_data, parameter_cd_gwl)
+  gwl_data <- filter_pcode(gwl_data, parameter_cd)
 
   if(!is.na(parameter_cd_gwl)){
-    y_label <- dataRetrieval::readNWISpCode(parameter_cd_gwl)[["parameter_nm"]]
+    y_label <- dataRetrieval::readNWISpCode(parameter_cd)[["parameter_nm"]]
   } 
   
   
-  gwl_data$year <- as.numeric(format(gwl_data[["lev_dt"]], "%Y")) + 
-    as.numeric(as.character(gwl_data[["lev_dt"]], "%j"))/365
+  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
+    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
   
   plot_out <- ggplot(data = gwl_data,
          aes_string(x = "year", y = value_col)) +
     geom_line(linetype = "dashed", color = "blue") +
-    geom_point(aes_string(color = approve_col), size = 1) +
+    geom_point(aes_string(color = approved_col), size = 1) +
     hasp_framework("Years", y_label, plot_title = plot_title) +
     scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
                        values = c("A" = "blue", "P" = "red"), 
