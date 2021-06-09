@@ -11,7 +11,7 @@ Hydrologic AnalySis Package
 
 Inspiration: <https://fl.water.usgs.gov/mapper/>
 
-See <https://usgs-r.github.io/HASP/> for more information\!
+See <https://usgs-r.github.io/HASP/> for more information!
 
 ## Sample workflow
 
@@ -39,13 +39,10 @@ qw_data <- dataRetrieval::readNWISqw(site,
 ```
 
 ``` r
-
 y_axis_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
 monthly_frequency_plot(dv,
-                       date_col = "Date",
-                       value_col = "X_62610_00001",
-                       approved_col = "X_62610_00001_cd",
+                       parameter_cd = "62610",
                        plot_title = "L2701_example_data",
                        y_axis_label = y_axis_label)
 ```
@@ -53,14 +50,9 @@ monthly_frequency_plot(dv,
 ![](man/figures/README-graphs-1.png)<!-- -->
 
 ``` r
-
 gwl_plot_all(gw_level_dv = dv, 
              gwl_data = gwl_data, 
-             parameter_cd_gwl = "62610",
-             date_col = c("Date", "lev_dt"),
-             value_col = c("X_62610_00001", "sl_lev_va"),
-             approved_col = c("X_62610_00001_cd",
-                              "lev_age_cd"),
+             parameter_cd = "62610",
              plot_title = "L2701_example_data", 
              add_trend = TRUE, flip_y = FALSE)
 ```
@@ -68,7 +60,6 @@ gwl_plot_all(gw_level_dv = dv,
 ![](man/figures/README-graphs-2.png)<!-- -->
 
 ``` r
-
 Sc_Cl_plot(qw_data, "L2701_example_data")
 ```
 
@@ -83,7 +74,6 @@ trend_plot(qw_data, plot_title = "L2701_example_data")
 ### Composite workflows:
 
 ``` r
-
 #included sample data:
 
 aquifer_data <- aquifer_data
@@ -95,7 +85,6 @@ plot_composite_data(aquifer_data, num_years)
 ![](man/figures/README-example-1.png)<!-- -->
 
 ``` r
-
 plot_normalized_data(aquifer_data, num_years)
 ```
 
@@ -104,9 +93,7 @@ plot_normalized_data(aquifer_data, num_years)
 ## Shiny App
 
 <p align="center">
-
 <img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo">
-
 </p>
 
 ## Installation of R and RStudio
@@ -120,9 +107,9 @@ Instructions](https://owi.usgs.gov/R/training-curriculum/installr/)
 
 Useful links:
 
-  - [Download R Windows](https://cran.r-project.org/bin/windows/base/)
-  - [Download R Mac](https://cran.r-project.org/bin/macosx/)
-  - [Download
+-   [Download R Windows](https://cran.r-project.org/bin/windows/base/)
+-   [Download R Mac](https://cran.r-project.org/bin/macosx/)
+-   [Download
     RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 ## Installation of HASP
