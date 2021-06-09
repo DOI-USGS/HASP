@@ -65,19 +65,13 @@ qw_data <- dataRetrieval::readNWISqw(site,
 y_axis_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
 monthly_frequency_plot(dv,
-                       date_col = "Date",
-                       value_col = "X_62610_00001",
-                       approved_col = "X_62610_00001_cd",
+                       parameter_cd = "62610",
                        plot_title = "L2701_example_data",
                        y_axis_label = y_axis_label)
 
 gwl_plot_all(gw_level_dv = dv, 
              gwl_data = gwl_data, 
-             parameter_cd_gwl = "62610",
-             date_col = c("Date", "lev_dt"),
-             value_col = c("X_62610_00001", "sl_lev_va"),
-             approved_col = c("X_62610_00001_cd",
-                              "lev_age_cd"),
+             parameter_cd = "62610",
              plot_title = "L2701_example_data", 
              add_trend = TRUE, flip_y = FALSE)
 
