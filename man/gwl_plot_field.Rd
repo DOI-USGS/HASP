@@ -9,6 +9,9 @@ gwl_plot_field(
   gwl_data,
   plot_title = "",
   parameter_cd_gwl = NA,
+  date_col = "lev_dt",
+  value_col = NA,
+  approve_col = "lev_age_cd",
   flip_y = TRUE,
   y_label = ""
 )
@@ -16,7 +19,10 @@ gwl_plot_field(
 gwl_plot_all(
   gw_level_dv,
   gwl_data,
-  parameter_cd_gwl = NA,
+  parameter_cd = NA,
+  date_col = NA,
+  value_col = NA,
+  approved_col = NA,
   y_label = "GWL",
   plot_title = "",
   add_trend = FALSE,
@@ -34,6 +40,8 @@ sl_lev_va, or value).}
 \item{parameter_cd_gwl}{Parameter code to be filtered to in a column specifically
 named "parameter_cd". If the data doesn't come directly from NWIS services, this 
 can be set to \code{NA},and this argument will be ignored.}
+
+\item{date_col}{name of date column. Default is "lev_dt".}
 
 \item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
@@ -61,7 +69,7 @@ gwl_plot_field(gwl_data, paste(plot_title,
                parameter_cd_gwl = "62610",
                flip_y = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
+               pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
                parameter_cd_gwl = "62611",
                flip_y = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
@@ -79,22 +87,20 @@ pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 
 gwl_plot_all(gw_level_dv, 
              NULL, 
+             parameter_cd = "62610",
              plot_title = plot_title,
              flip_y = FALSE) 
 
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
-             parameter_cd_gwl = "62610",
-             date_col = date_col, 
-             value_col = value_col,
-             approved_col = approved_col,
+             parameter_cd = "62610",
              plot_title = paste(plot_title,
                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
              add_trend = TRUE)
              
 gwl_plot_all(NULL, 
              gwl_data, 
-             parameter_cd_gwl = "62610",
+             parameter_cd = "62610",
              plot_title = paste(plot_title,
                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
 

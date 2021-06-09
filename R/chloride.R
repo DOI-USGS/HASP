@@ -12,7 +12,6 @@
 #' @export
 #' @import ggplot2
 #' @importFrom ggpmisc stat_poly_eq
-#' @importFrom ggpp geom_table
 #' @importFrom dataRetrieval readNWISpCode
 #' @examples 
 #' 
@@ -116,10 +115,9 @@ trend_plot <- function(qw_data, plot_title,
     trend_results$intercept <- signif(trend_results$intercept, digits = 4)
     
     plot_out <- plot_out +
-      annotate(geom = "table", 
-               x = -Inf, y = Inf,
-               label = list(trend_results), 
-               vjust = 1, hjust = 0)
+      ggpp::geom_table(aes(x = -Inf, y = Inf,
+                           label = list(trend_results)),
+                       vjust = 1, hjust = 0)
   }
     
   return(plot_out)
