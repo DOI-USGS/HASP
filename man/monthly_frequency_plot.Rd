@@ -6,9 +6,10 @@
 \usage{
 monthly_frequency_plot(
   gw_level_dv,
-  date_col,
-  value_col,
-  approved_col,
+  parameter_cd = NA,
+  date_col = NA,
+  value_col = NA,
+  approved_col = NA,
   plot_title = "",
   plot_range = c("Past year"),
   y_axis_label = "",
@@ -18,9 +19,16 @@ monthly_frequency_plot(
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained from \code{readNWISdv}}
 
-\item{date_col}{name of date column.}
+\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
+can be used to define the value_col.
+ If the data doesn't come directly from NWIS services, this 
+can be set to \code{NA},and this argument will be ignored.}
 
-\item{value_col}{name of value column.}
+\item{date_col}{the heading of the date column. The default is \code{NA},
+which the code will try to get the column name automatically.}
+
+\item{value_col}{name of value column. The default is \code{NA},
+which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 
@@ -51,19 +59,15 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 monthly_frequency <- monthly_frequency_plot(gw_level_dv,
-                                             date_col = "Date",
-                                             value_col = "X_62610_00001",
-                                             approved_col = "X_62610_00001_cd",
-                                             plot_title = "L2701 Groundwater Level",
-                                             flip_y = FALSE)
+                                            parameter_cd = "62610",
+                                            plot_title = "L2701 Groundwater Level",
+                                            flip_y = FALSE)
 monthly_frequency
 
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-                                             date_col = "Date",
-                                             value_col = "X_62610_00001",
-                                             approved_col = "X_62610_00001_cd",
+                                             parameter_cd = "62610",
                                              plot_title = "L2701 Groundwater Level", 
-                                             flip_y = FALSE)
+                                             flip_y = TRUE)
 monthly_frequency_flip 
 
 }

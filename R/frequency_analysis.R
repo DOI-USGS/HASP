@@ -1,8 +1,15 @@
 #' Create a table of monthly frequency analysis
 #' 
 #' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
-#' @param date_col name of date column.
-#' @param value_col name of value column.
+#' 
+#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
+#' can be used to define the value_col.
+#'  If the data doesn't come directly from NWIS services, this 
+#' can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the heading of the date column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
+#' @param value_col name of value column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
 #' @param approved_col name of column to get provisional/approved status.
 #' 
 #' @return a data frame of monthly groundwater level statistics including the
@@ -22,13 +29,21 @@
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' monthly_frequency <- monthly_frequency_table(gw_level_dv,
-#'                                              date_col = "Date",
-#'                                              value_col = "X_62610_00001",
-#'                                              approved_col = "X_62610_00001_cd")
+#'                                              parameter_cd = "62610")
 #' head(monthly_frequency)
-monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_col) {
+monthly_frequency_table <- function(gw_level_dv, 
+                                    parameter_cd = NA,
+                                    date_col = NA,
+                                    value_col = NA, approved_col = NA) {
   
   year <- lev_dt <- month <- week <- sl_lev_va <- ".dplyr"
+  
+  
+  date_col <- ifelse(is.na(date_col), "Date", date_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  approved_col <- ifelse(is.na(approved_col),
+                        paste0(value_col, "_cd"),
+                        approved_col) 
   
   if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
     stop("not all required columns found in gw_level_dv")
@@ -66,8 +81,14 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #' Plot monthly frequency analysis
 #' 
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained from \code{readNWISdv}
-#' @param date_col name of date column.
-#' @param value_col name of value column.
+#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
+#' can be used to define the value_col.
+#'  If the data doesn't come directly from NWIS services, this 
+#' can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the heading of the date column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
+#' @param value_col name of value column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
 #' @param approved_col name of column to get provisional/approved status.
 #' @param plot_range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
@@ -94,25 +115,21 @@ monthly_frequency_table <- function(gw_level_dv, date_col, value_col, approved_c
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' monthly_frequency <- monthly_frequency_plot(gw_level_dv,
-#'                                              date_col = "Date",
-#'                                              value_col = "X_62610_00001",
-#'                                              approved_col = "X_62610_00001_cd",
-#'                                              plot_title = "L2701 Groundwater Level",
-#'                                              flip_y = FALSE)
+#'                                             parameter_cd = "62610",
+#'                                             plot_title = "L2701 Groundwater Level",
+#'                                             flip_y = FALSE)
 #' monthly_frequency
 #' 
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-#'                                              date_col = "Date",
-#'                                              value_col = "X_62610_00001",
-#'                                              approved_col = "X_62610_00001_cd",
+#'                                              parameter_cd = "62610",
 #'                                              plot_title = "L2701 Groundwater Level", 
-#'                                              flip_y = FALSE)
+#'                                              flip_y = TRUE)
 #' monthly_frequency_flip 
 #' 
 monthly_frequency_plot <- function(gw_level_dv, 
-                                   date_col, 
-                                   value_col, 
-                                   approved_col,
+                                   parameter_cd = NA,
+                                   date_col = NA,
+                                   value_col = NA, approved_col = NA,
                                    plot_title = "",
                                    plot_range = c("Past year"),
                                    y_axis_label = "",
@@ -121,6 +138,13 @@ monthly_frequency_plot <- function(gw_level_dv,
   lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
     plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
     ymax <- x <- y <- year <- month <- ".dplyr"
+  
+  date_col <- ifelse(is.na(date_col), "Date", date_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  approved_col <- ifelse(is.na(approved_col),
+                        paste0(value_col, "_cd"),
+                        approved_col)   
+  
   
   plot_range <- match.arg(plot_range)
   

@@ -117,17 +117,13 @@ qw_data <- L2701_example_data$QW
 ```{r monthlyFrequencyPlot, eval=FALSE}
 
 monthly_frequency_plot(gw_level_dv,
-                       date_col = "Date",
-                       value_col = "X_62610_00001",
-                       approved_col = "X_62610_00001_cd",
+                       parameter_cd = "62610",
                        plot_title = plot_title,
                        plot_range = "Past year",
                        y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 monthly_frequency_table(gw_level_dv, 
-                        date_col = "Date",
-                        value_col = "X_62610_00001",
-                        approved_col = "X_62610_00001_cd")
+                        parameter_cd = "62610")
 ```
 
 
@@ -136,9 +132,7 @@ monthly_frequency_table(gw_level_dv,
 
 ```{r monthlyFreqPlot, echo = FALSE}
 monthly_frequency_plot(gw_level_dv,
-                       date_col = "Date",
-                       value_col = "X_62610_00001",
-                       approved_col = "X_62610_00001_cd",
+                       parameter_cd = "62610",
                        plot_title = plot_title,
                        plot_range = "Past year")
 ```
@@ -147,9 +141,7 @@ monthly_frequency_plot(gw_level_dv,
 
 ```{r monthlyFreqTable, echo = FALSE}
 monthly_freq_table <- monthly_frequency_table(gw_level_dv,
-                                              date_col = "Date",
-                                              value_col = "X_62610_00001",
-                                              approved_col = "X_62610_00001_cd") %>%
+                                              parameter_cd = "62610") %>%
   select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
   mutate(month = month.abb[month]) %>%
   rename("Month" = month,
