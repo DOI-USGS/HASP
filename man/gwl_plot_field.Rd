@@ -71,15 +71,15 @@ plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 gwl_plot_field(gwl_data, paste(plot_title,
                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
-               parameter_cd_gwl = "62610",
+               parameter_cd = "62610",
                flip_y = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
                pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
-               parameter_cd_gwl = "62611",
+               parameter_cd = "62611",
                flip_y = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
-               parameter_cd_gwl = "72019")
+               parameter_cd = "72019")
 # site <- "263819081585801"
 parameterCd <- "62610"
 # statCd <- "00001"

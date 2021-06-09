@@ -31,15 +31,15 @@
 #' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 #' gwl_plot_field(gwl_data, paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
-#'                parameter_cd_gwl = "62610",
+#'                parameter_cd = "62610",
 #'                flip_y = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
-#'                parameter_cd_gwl = "62611",
+#'                parameter_cd = "62611",
 #'                flip_y = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
-#'                parameter_cd_gwl = "72019")
+#'                parameter_cd = "72019")
 gwl_plot_field <- function(gwl_data, plot_title = "",
                            parameter_cd = NA,
                            date_col = "lev_dt",
@@ -47,7 +47,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
                            approved_col = "lev_age_cd",
                            flip_y = TRUE, y_label = ""){
   
-  value_col <- get_value_column(parameter_cd_gwl, gwl_data, value_col )
+  value_col <- get_value_column(parameter_cd, gwl_data, value_col )
 
   if(!all(c(date_col, value_col, approved_col) %in% names(gwl_data))){
     missing_cols <- c(date_col, value_col, approved_col)[!c(date_col,
@@ -60,7 +60,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
   
   gwl_data <- filter_pcode(gwl_data, parameter_cd)
 
-  if(!is.na(parameter_cd_gwl)){
+  if(!is.na(parameter_cd)){
     y_label <- dataRetrieval::readNWISpCode(parameter_cd)[["parameter_nm"]]
   } 
   
@@ -353,12 +353,12 @@ filter_pcode <- function(df, pcode){
     } else if(all(is.na(pcode)) &
               length(unique(df$parameter_cd)) > 1){
       warning("Multiple parameter codes detected in column 'parameter_cd',
-            and a parameter code is not specified in 'parameter_cd_gwl'")
+            and a parameter code is not specified in 'parameter_cd'")
     }
   } else {
     if(!all(is.na(pcode))){
       message("gwl_data data frame does not contain a 'parameter_cd' column,
-            yet 'parameter_cd_gwl' is defined. Ignoring 'parameter_cd_gwl' argument.")
+            yet 'parameter_cd' is defined. Ignoring 'parameter_cd' argument.")
     }
   }
   return(df)
