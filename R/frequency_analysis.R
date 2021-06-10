@@ -180,6 +180,13 @@ monthly_frequency_plot <- function(gw_level_dv,
                                   month = as.POSIXlt(plot_month)$mon + 1)
   site_statistics <- left_join(site_statistics, plot_month_lookup, by = "month")
   
+  if(flip_y){
+    site_statistics <- site_statistics %>% 
+      rename(p95_new = p5, p90_new = p10, p75_new = p25, 
+             p25_new = p75, p10_new = p90, p5_new = p95)
+    names(site_statistics) <- gsub("_new", "", names(site_statistics))
+  }
+  
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
     select(-month, -nYears, -minMed, -maxMed) %>%
@@ -260,7 +267,12 @@ monthly_frequency_plot <- function(gw_level_dv,
     scale_color_manual(values = point_colors, name = "EXPLANATION") +
     scale_shape_manual(values = point_shapes, name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
-                      name = "Percentile") +
+                      name = "Percentile",
+                      breaks = c("90 - 95",
+                                 "75 - 90",
+                                 "25 - 75",
+                                 "10 - 25",
+                                 "5 - 10")) +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
@@ -347,8 +359,7 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
               p90 = quantile(!!sym(value_col), probs=0.9, na.rm=TRUE),
               p95 = quantile(!!sym(value_col), probs=0.95,na.rm=TRUE),
               nYears = length(unique(year))) %>%
-    left_join(annual_stats, by = "week") %>%
-    filter(week != 53)
+    left_join(annual_stats, by = "week")
   
   return(weekly_stats)
   
@@ -400,6 +411,10 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #'                       
 #' weekly_frequency_plot(gw_level_dv, 
 #'                       parameter_cd = "62610")
+#'                       
+#' weekly_frequency_plot(gw_level_dv, 
+#'                       parameter_cd = "62610", 
+#'                       flip_y = TRUE)
 #' 
 weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                   date_col = NA, value_col = NA,
@@ -429,6 +444,13 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                             date_col = date_col, 
                                             value_col = value_col,
                                             approved_col = approved_col)
+  
+  if(flip_y){
+    site_statistics <- site_statistics %>% 
+      rename(p95_new = p5, p90_new = p10, p75_new = p25, 
+             p25_new = p75, p10_new = p90, p5_new = p95)
+    names(site_statistics) <- gsub("_new", "", names(site_statistics))
+  }
   
   # Find the bounds of the plot
   if(plot_range == "Past year") {
@@ -488,6 +510,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
     rename(x = Date,
            y = !!sym(value_col)) %>%
     select(x, y, group)
+  
   point_data <- bind_rows(site_statistics_med, data_points) %>%
     mutate(group = factor(group,
                           levels = c("Historical weekly median",
@@ -550,6 +573,11 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                        name = "EXPLANATION") +
     scale_shape_manual(values = c(17, NA, NA), name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
+                      breaks = c("90 - 95",
+                                 "75 - 90",
+                                 "25 - 75",
+                                 "10 - 25",
+                                 "5 - 10"),
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
