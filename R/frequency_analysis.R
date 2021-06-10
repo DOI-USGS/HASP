@@ -488,6 +488,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
     rename(x = Date,
            y = !!sym(value_col)) %>%
     select(x, y, group)
+  
   point_data <- bind_rows(site_statistics_med, data_points) %>%
     mutate(group = factor(group,
                           levels = c("Historical weekly median",
@@ -550,6 +551,11 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                        name = "EXPLANATION") +
     scale_shape_manual(values = c(17, NA, NA), name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
+                      breaks = c("90 - 95",
+                                 "75 - 90",
+                                 "25 - 75",
+                                 "10 - 25",
+                                 "5 - 10"),
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
