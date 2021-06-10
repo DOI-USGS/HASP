@@ -260,7 +260,12 @@ monthly_frequency_plot <- function(gw_level_dv,
     scale_color_manual(values = point_colors, name = "EXPLANATION") +
     scale_shape_manual(values = point_shapes, name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
-                      name = "Percentile") +
+                      name = "Percentile",
+                      breaks = c("90 - 95",
+                                 "75 - 90",
+                                 "25 - 75",
+                                 "10 - 25",
+                                 "5 - 10")) +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
