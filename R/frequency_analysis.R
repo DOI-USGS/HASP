@@ -180,6 +180,13 @@ monthly_frequency_plot <- function(gw_level_dv,
                                   month = as.POSIXlt(plot_month)$mon + 1)
   site_statistics <- left_join(site_statistics, plot_month_lookup, by = "month")
   
+  if(flip_y){
+    site_statistics <- site_statistics %>% 
+      rename(p95_new = p5, p90_new = p10, p75_new = p25, 
+             p25_new = p75, p10_new = p90, p5_new = p95)
+    names(site_statistics) <- gsub("_new", "", names(site_statistics))
+  }
+  
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
     select(-month, -nYears, -minMed, -maxMed) %>%
@@ -405,6 +412,10 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #'                       
 #' weekly_frequency_plot(gw_level_dv, 
 #'                       parameter_cd = "62610")
+#'                       
+#' weekly_frequency_plot(gw_level_dv, 
+#'                       parameter_cd = "62610", 
+#'                       flip_y = TRUE)
 #' 
 weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                   date_col = NA, value_col = NA,
@@ -434,6 +445,13 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                             date_col = date_col, 
                                             value_col = value_col,
                                             approved_col = approved_col)
+  
+  if(flip_y){
+    site_statistics <- site_statistics %>% 
+      rename(p95_new = p5, p90_new = p10, p75_new = p25, 
+             p25_new = p75, p10_new = p90, p5_new = p95)
+    names(site_statistics) <- gsub("_new", "", names(site_statistics))
+  }
   
   # Find the bounds of the plot
   if(plot_range == "Past year") {

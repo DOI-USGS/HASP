@@ -65,5 +65,9 @@ weekly_frequency_plot(gw_level_dv,
                       
 weekly_frequency_plot(gw_level_dv, 
                       parameter_cd = "62610")
+                      
+weekly_frequency_plot(gw_level_dv, 
+                      parameter_cd = "62610", 
+                      flip_y = TRUE)
 
 }
