@@ -359,8 +359,7 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
               p90 = quantile(!!sym(value_col), probs=0.9, na.rm=TRUE),
               p95 = quantile(!!sym(value_col), probs=0.95,na.rm=TRUE),
               nYears = length(unique(year))) %>%
-    left_join(annual_stats, by = "week") %>%
-    filter(week != 53)
+    left_join(annual_stats, by = "week")
   
   return(weekly_stats)
   
