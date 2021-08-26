@@ -365,6 +365,7 @@ month_plot <- reactive({
   
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         date_col = "Date",
+                                        parameter_cd = p_code_dv,
                                         value_col = value_col,
                                         approved_col = approv_col,
                                         plot_title = plot_title, 
@@ -386,6 +387,7 @@ month_table_df <- reactive({
   approv_col <- paste0(value_col, "_cd")
   
   month_tab <-  monthly_frequency_table(dvData(), 
+                                        parameter_cd = p_code_dv,
                                         date_col = "Date",
                                         value_col = value_col,
                                         approved_col = approv_col) %>%
@@ -429,6 +431,7 @@ approved_col <- "', approv_col,'"
 month_plot <-  monthly_frequency_plot(gw_level_dv,  
                                       date_col = "Date",
                                       value_col = val_col,
+                                      p_code_dv = ', p_code_dv,'
                                       approved_col = approved_col,
                                       plot_title = plot_title)
 month_plot
@@ -436,6 +439,7 @@ month_plot
 month_frequencies <- monthly_frequency_table(gw_level_dv,  
                                              date_col = "Date",
                                              value_col = val_col,
+                                             p_code_dv = ', p_code_dv,'
                                              approved_col = approved_col)
 # To save:
 # Fiddle with height and width (in inches) for best results:
