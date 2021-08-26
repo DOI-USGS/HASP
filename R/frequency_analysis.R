@@ -138,6 +138,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
     plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
     ymax <- x <- y <- year <- month <- ".dplyr"
+  p5 <- p10 <- p25 <- p75 <- p90 <- p95 <- ".dplyr"
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
@@ -428,6 +429,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   Date <- nYears <- minMed <- maxMed <- name <- value <- group <-
   plot_week_med <- p50 <- gw_code <- gw_level <- x <- y <- 
   plot_week_last <- ymin <- ymax <- week <- ".dplyr"
+  p5 <- p10 <- p25 <- p75 <- p90 <- p95 <- ".dplyr"
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
