@@ -59,6 +59,7 @@ gwl_plot <- reactive({
   
   dv_data <- dvData()
   gwl_data <- gwlData()
+  p_code_dv <- input$pcode
   
   columns <- col_stuff()
 
@@ -69,6 +70,7 @@ gwl_plot <- reactive({
                             gwl_data, 
                             date_col = columns$date_col,
                             value_col = columns$value_col,
+                            parameter_cd = p_code_dv, 
                             approved_col = columns$approved_col,
                             plot_title = plot_title,
                             y_label = columns$y_label,
@@ -89,8 +91,8 @@ gwl_table <- reactive({
   columns <- col_stuff()
 
   val_col <- columns$value_col[1]
-  gwl_tab <-  site_data_summary(dvData(), 
-                                sum_col = val_col) 
+  gwl_tab <-  site_data_summary(dvData() %>%
+                                  rename(value = val_col)) 
   
   gwl_tab <- gwl_tab[,-1]
   names(gwl_tab) <- gsub("_site", "", names(gwl_tab))
@@ -111,7 +113,7 @@ gwl_table <- reactive({
 
 gwl_plot_out <- reactive({
 
-  
+  p_code_dv <- input$pcode
   columns <- col_stuff() 
   
   val_col <- columns$value_col
@@ -128,14 +130,14 @@ gwl_plot <-  gwl_plot_all(gw_level_dv,
                           gwl_data, 
                           date_col = date_col,
                           value_col = val_col,
+                          parameter_cd = ', p_code_dv,'
                           approved_col = approved_col,
                           y_label = y_label,
                           plot_title = plot_title,
                           add_trend = TRUE)
 gwl_plot
 
-gwl_summary_table <- site_data_summary(gw_level_dv,
-                                       sum_col = "', val_col[1],'")
+gwl_summary_table <- site_data_summary(gw_level_dv)
 
 # To save plot:
 # Fiddle with height and width (in inches) for best results:
@@ -169,6 +171,7 @@ week_plot <- reactive({
     week_plot <-  weekly_frequency_plot(dv_data, 
                                       date_col = "Date",
                                       value_col = value_col,
+                                      parameter_cd = p_code_dv,
                                       approved_col = approv_col,
                                       plot_title = plot_title, 
                                       y_axis_label = y_label,
@@ -192,6 +195,7 @@ week_table_df <- reactive({
 
   week_tab <-  weekly_frequency_table(dvData(), 
                                       date_col = "Date",
+                                      parameter_cd = p_code_dv,
                                       value_col = value_col,
                                       approved_col = approv_col) %>% 
     select("Week" = week,
@@ -232,12 +236,14 @@ approved_col <- "', approv_col,'"
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
                                     date_col = "Date",
                                     value_col = val_col,
+                                    parameter_cd = ', p_code_dv,'
                                     approved_col = approved_col,
                                     plot_title = plot_title)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
                                      value_col = val_col,
+                                     parameter_cd = ', p_code_dv,'
                                      approved_col = approved_col,
                                      date_col = "Date")
 
@@ -268,6 +274,7 @@ year2_plot <- reactive({
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
                                      date_col = "Date",
                                      value_col = value_col,
+                                     parameter_cd = p_code_dv,
                                      approved_col = approv_col,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
@@ -290,6 +297,7 @@ year2_table_df <- reactive({
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
   daily_tab <-  daily_frequency_table(dvData(),
+                                      parameter_cd = p_code_dv,
                                       date_col = "Date",
                                       value_col = value_col,
                                       approved_col = approv_col) %>%
@@ -328,6 +336,7 @@ approved_col <- "', approv_col,'"
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
                                   date_col = "Date",
                                   value_col = val_col,
+                                  parameter_cd = ', p_code_dv, '
                                   approved_col = approved_col,
                                   plot_title = plot_title,
                                   historical_stat = "mean",
@@ -365,6 +374,7 @@ month_plot <- reactive({
   
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         date_col = "Date",
+                                        parameter_cd = p_code_dv,
                                         value_col = value_col,
                                         approved_col = approv_col,
                                         plot_title = plot_title, 
@@ -386,6 +396,7 @@ month_table_df <- reactive({
   approv_col <- paste0(value_col, "_cd")
   
   month_tab <-  monthly_frequency_table(dvData(), 
+                                        parameter_cd = p_code_dv,
                                         date_col = "Date",
                                         value_col = value_col,
                                         approved_col = approv_col) %>%
@@ -429,6 +440,7 @@ approved_col <- "', approv_col,'"
 month_plot <-  monthly_frequency_plot(gw_level_dv,  
                                       date_col = "Date",
                                       value_col = val_col,
+                                      p_code_dv = ', p_code_dv,'
                                       approved_col = approved_col,
                                       plot_title = plot_title)
 month_plot
@@ -436,6 +448,7 @@ month_plot
 month_frequencies <- monthly_frequency_table(gw_level_dv,  
                                              date_col = "Date",
                                              value_col = val_col,
+                                             p_code_dv = ', p_code_dv,'
                                              approved_col = approved_col)
 # To save:
 # Fiddle with height and width (in inches) for best results:
