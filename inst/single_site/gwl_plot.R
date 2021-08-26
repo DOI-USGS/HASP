@@ -59,6 +59,7 @@ gwl_plot <- reactive({
   
   dv_data <- dvData()
   gwl_data <- gwlData()
+  p_code_dv <- input$pcode
   
   columns <- col_stuff()
 
@@ -69,6 +70,7 @@ gwl_plot <- reactive({
                             gwl_data, 
                             date_col = columns$date_col,
                             value_col = columns$value_col,
+                            parameter_cd = p_code_dv, 
                             approved_col = columns$approved_col,
                             plot_title = plot_title,
                             y_label = columns$y_label,
@@ -111,7 +113,7 @@ gwl_table <- reactive({
 
 gwl_plot_out <- reactive({
 
-  
+  p_code_dv <- input$pcode
   columns <- col_stuff() 
   
   val_col <- columns$value_col
@@ -128,6 +130,7 @@ gwl_plot <-  gwl_plot_all(gw_level_dv,
                           gwl_data, 
                           date_col = date_col,
                           value_col = val_col,
+                          parameter_cd = ', p_code_dv,'
                           approved_col = approved_col,
                           y_label = y_label,
                           plot_title = plot_title,
@@ -169,6 +172,7 @@ week_plot <- reactive({
     week_plot <-  weekly_frequency_plot(dv_data, 
                                       date_col = "Date",
                                       value_col = value_col,
+                                      parameter_cd = p_code_dv,
                                       approved_col = approv_col,
                                       plot_title = plot_title, 
                                       y_axis_label = y_label,
@@ -192,6 +196,7 @@ week_table_df <- reactive({
 
   week_tab <-  weekly_frequency_table(dvData(), 
                                       date_col = "Date",
+                                      parameter_cd = p_code_dv,
                                       value_col = value_col,
                                       approved_col = approv_col) %>% 
     select("Week" = week,
@@ -232,12 +237,14 @@ approved_col <- "', approv_col,'"
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
                                     date_col = "Date",
                                     value_col = val_col,
+                                    parameter_cd = ', p_code_dv,'
                                     approved_col = approved_col,
                                     plot_title = plot_title)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
                                      value_col = val_col,
+                                     parameter_cd = ', p_code_dv,'
                                      approved_col = approved_col,
                                      date_col = "Date")
 
@@ -268,6 +275,7 @@ year2_plot <- reactive({
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
                                      date_col = "Date",
                                      value_col = value_col,
+                                     parameter_cd = p_code_dv,
                                      approved_col = approv_col,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
@@ -290,6 +298,7 @@ year2_table_df <- reactive({
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
   daily_tab <-  daily_frequency_table(dvData(),
+                                      parameter_cd = p_code_dv,
                                       date_col = "Date",
                                       value_col = value_col,
                                       approved_col = approv_col) %>%
@@ -328,6 +337,7 @@ approved_col <- "', approv_col,'"
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
                                   date_col = "Date",
                                   value_col = val_col,
+                                  parameter_cd = ', p_code_dv, '
                                   approved_col = approved_col,
                                   plot_title = plot_title,
                                   historical_stat = "mean",
