@@ -91,8 +91,8 @@ gwl_table <- reactive({
   columns <- col_stuff()
 
   val_col <- columns$value_col[1]
-  gwl_tab <-  site_data_summary(dvData(), 
-                                sum_col = val_col) 
+  gwl_tab <-  site_data_summary(dvData() %>%
+                                  rename(value = val_col)) 
   
   gwl_tab <- gwl_tab[,-1]
   names(gwl_tab) <- gsub("_site", "", names(gwl_tab))
@@ -137,8 +137,7 @@ gwl_plot <-  gwl_plot_all(gw_level_dv,
                           add_trend = TRUE)
 gwl_plot
 
-gwl_summary_table <- site_data_summary(gw_level_dv,
-                                       sum_col = "', val_col[1],'")
+gwl_summary_table <- site_data_summary(gw_level_dv)
 
 # To save plot:
 # Fiddle with height and width (in inches) for best results:
