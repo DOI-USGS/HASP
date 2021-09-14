@@ -53,8 +53,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -76,15 +74,9 @@
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -135,7 +127,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/HASP">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -161,13 +153,13 @@
     <p>Create a table of monthly frequency analysis</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>monthly_frequency_table</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>monthly_frequency_table</span><span class='op'>(</span>
   <span class='va'>gw_level_dv</span>,
   parameter_cd <span class='op'>=</span> <span class='cn'>NA</span>,
   date_col <span class='op'>=</span> <span class='cn'>NA</span>,
   value_col <span class='op'>=</span> <span class='cn'>NA</span>,
   approved_col <span class='op'>=</span> <span class='cn'>NA</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,25 +199,24 @@ years of data; and the lowest monthly median and the highest monthly
 median.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
-<span class='r-in'><span class='co'># site &lt;- "263819081585801"</span></span>
-<span class='r-in'><span class='va'>p_code_dv</span> <span class='op'>&lt;-</span> <span class='st'>"62610"</span></span>
-<span class='r-in'><span class='va'>statCd</span> <span class='op'>&lt;-</span> <span class='st'>"00001"</span></span>
-<span class='r-in'><span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span></span>
-<span class='r-in'><span class='va'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Daily</span></span>
-<span class='r-in'><span class='va'>monthly_frequency</span> <span class='op'>&lt;-</span> <span class='fu'>monthly_frequency_table</span><span class='op'>(</span><span class='va'>gw_level_dv</span>,</span>
-<span class='r-in'>                                             parameter_cd <span class='op'>=</span> <span class='st'>"62610"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>monthly_frequency</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 6 x 11</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   month    p5   p10   p25   p50   p75   p90    p95 nYears minMed maxMed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     1 -<span style='color: #BB0000;'>38.5</span> -<span style='color: #BB0000;'>32.6</span> -<span style='color: #BB0000;'>29.1</span> -<span style='color: #BB0000;'>21.6</span> -<span style='color: #BB0000;'>18.1</span> -<span style='color: #BB0000;'>13.7</span>  -<span style='color: #BB0000;'>7.91</span>     41  -<span style='color: #BB0000;'>41.8</span>  -<span style='color: #BB0000;'>5.68</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>     2 -<span style='color: #BB0000;'>40.1</span> -<span style='color: #BB0000;'>32.7</span> -<span style='color: #BB0000;'>29.3</span> -<span style='color: #BB0000;'>22.3</span> -<span style='color: #BB0000;'>19.0</span> -<span style='color: #BB0000;'>12.4</span>  -<span style='color: #BB0000;'>7.93</span>     42  -<span style='color: #BB0000;'>42.8</span>  -<span style='color: #BB0000;'>7.25</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span>     3 -<span style='color: #BB0000;'>40.6</span> -<span style='color: #BB0000;'>36.3</span> -<span style='color: #BB0000;'>30.0</span> -<span style='color: #BB0000;'>24.4</span> -<span style='color: #BB0000;'>20.3</span> -<span style='color: #BB0000;'>12.2</span>  -<span style='color: #BB0000;'>7.98</span>     42  -<span style='color: #BB0000;'>45.1</span>  -<span style='color: #BB0000;'>6.87</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span>     4 -<span style='color: #BB0000;'>43.4</span> -<span style='color: #BB0000;'>39.1</span> -<span style='color: #BB0000;'>32.4</span> -<span style='color: #BB0000;'>26.3</span> -<span style='color: #BB0000;'>22.0</span> -<span style='color: #BB0000;'>15.7</span> -<span style='color: #BB0000;'>11.2</span>      42  -<span style='color: #BB0000;'>48.5</span>  -<span style='color: #BB0000;'>9.34</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span>     5 -<span style='color: #BB0000;'>45.9</span> -<span style='color: #BB0000;'>40.2</span> -<span style='color: #BB0000;'>35.0</span> -<span style='color: #BB0000;'>28.2</span> -<span style='color: #BB0000;'>23.5</span> -<span style='color: #BB0000;'>18.3</span> -<span style='color: #BB0000;'>14.2</span>      42  -<span style='color: #BB0000;'>49.4</span> -<span style='color: #BB0000;'>10.0</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span>     6 -<span style='color: #BB0000;'>41.8</span> -<span style='color: #BB0000;'>37.3</span> -<span style='color: #BB0000;'>33</span>   -<span style='color: #BB0000;'>27.1</span> -<span style='color: #BB0000;'>21.0</span> -<span style='color: #BB0000;'>16.6</span> -<span style='color: #BB0000;'>14.2</span>      41  -<span style='color: #BB0000;'>42.8</span> -<span style='color: #BB0000;'>11.0</span> </span>
-</code></pre></div>
+    <pre class="examples"><div class='input'>
+<span class='co'># site &lt;- "263819081585801"</span>
+<span class='va'>p_code_dv</span> <span class='op'>&lt;-</span> <span class='st'>"62610"</span>
+<span class='va'>statCd</span> <span class='op'>&lt;-</span> <span class='st'>"00001"</span>
+<span class='co'># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span>
+<span class='va'>gw_level_dv</span> <span class='op'>&lt;-</span> <span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Daily</span>
+<span class='va'>monthly_frequency</span> <span class='op'>&lt;-</span> <span class='fu'>monthly_frequency_table</span><span class='op'>(</span><span class='va'>gw_level_dv</span>,
+                                             parameter_cd <span class='op'>=</span> <span class='st'>"62610"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>monthly_frequency</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 × 11</span>
+#&gt;   month    p5   p10   p25   p50   p75   p90    p95 nYears minMed maxMed
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>     1 -<span style='color: #BB0000;'>37.9</span> -<span style='color: #BB0000;'>32.4</span> -<span style='color: #BB0000;'>29.0</span> -<span style='color: #BB0000;'>21.4</span> -<span style='color: #BB0000;'>17.7</span> -<span style='color: #BB0000;'>13.8</span>  -<span style='color: #BB0000;'>7.92</span>     42  -<span style='color: #BB0000;'>41.8</span>  -<span style='color: #BB0000;'>5.68</span>
+#&gt; <span style='color: #BCBCBC;'>2</span>     2 -<span style='color: #BB0000;'>39.8</span> -<span style='color: #BB0000;'>32.6</span> -<span style='color: #BB0000;'>29.2</span> -<span style='color: #BB0000;'>22.1</span> -<span style='color: #BB0000;'>18.8</span> -<span style='color: #BB0000;'>12.5</span>  -<span style='color: #BB0000;'>7.94</span>     43  -<span style='color: #BB0000;'>42.8</span>  -<span style='color: #BB0000;'>7.25</span>
+#&gt; <span style='color: #BCBCBC;'>3</span>     3 -<span style='color: #BB0000;'>40.6</span> -<span style='color: #BB0000;'>36.3</span> -<span style='color: #BB0000;'>30.0</span> -<span style='color: #BB0000;'>24.4</span> -<span style='color: #BB0000;'>20.3</span> -<span style='color: #BB0000;'>12.2</span>  -<span style='color: #BB0000;'>7.98</span>     42  -<span style='color: #BB0000;'>45.1</span>  -<span style='color: #BB0000;'>6.87</span>
+#&gt; <span style='color: #BCBCBC;'>4</span>     4 -<span style='color: #BB0000;'>43.4</span> -<span style='color: #BB0000;'>39.1</span> -<span style='color: #BB0000;'>32.4</span> -<span style='color: #BB0000;'>26.3</span> -<span style='color: #BB0000;'>22.0</span> -<span style='color: #BB0000;'>15.7</span> -<span style='color: #BB0000;'>11.2</span>      42  -<span style='color: #BB0000;'>48.5</span>  -<span style='color: #BB0000;'>9.34</span>
+#&gt; <span style='color: #BCBCBC;'>5</span>     5 -<span style='color: #BB0000;'>45.9</span> -<span style='color: #BB0000;'>40.2</span> -<span style='color: #BB0000;'>35.0</span> -<span style='color: #BB0000;'>28.2</span> -<span style='color: #BB0000;'>23.5</span> -<span style='color: #BB0000;'>18.3</span> -<span style='color: #BB0000;'>14.2</span>      42  -<span style='color: #BB0000;'>49.4</span> -<span style='color: #BB0000;'>10.0</span> 
+#&gt; <span style='color: #BCBCBC;'>6</span>     6 -<span style='color: #BB0000;'>41.8</span> -<span style='color: #BB0000;'>37.3</span> -<span style='color: #BB0000;'>33</span>   -<span style='color: #BB0000;'>27.1</span> -<span style='color: #BB0000;'>21.0</span> -<span style='color: #BB0000;'>16.6</span> -<span style='color: #BB0000;'>14.2</span>      41  -<span style='color: #BB0000;'>42.8</span> -<span style='color: #BB0000;'>11.0</span> </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -237,11 +228,11 @@ median.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p></p>
+  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -249,8 +240,6 @@ median.</p>
 
   
 
-
-  
 
   </body>
 </html>

@@ -55,8 +55,6 @@ groundwater level measurements from the site. Updated April 9, 2021." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -78,15 +76,9 @@ groundwater level measurements from the site. Updated April 9, 2021." />
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -137,7 +129,7 @@ groundwater level measurements from the site. Updated April 9, 2021." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/USGS-R/HASP">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -169,94 +161,266 @@ groundwater level measurements from the site. Updated April 9, 2021.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Daily</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   agency_cd         site_no       Date X_62610_00001 X_62610_00001_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      USGS 263819081585801 1978-10-01         -5.58                A</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      USGS 263819081585801 1978-10-02         -5.16                A</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      USGS 263819081585801 1978-10-03         -4.79                A</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      USGS 263819081585801 1978-10-04         -4.54                A</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      USGS 263819081585801 1978-10-05         -4.57                A</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      USGS 263819081585801 1978-10-06         -4.91                A</span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   agency_cd         site_no site_tp_cd     lev_dt lev_tm lev_tz_cd_reported</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      USGS 263819081585801         GW 1982-10-12  13:15                UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      USGS 263819081585801         GW 1982-10-12  13:15                UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      USGS 263819081585801         GW 1982-10-12  13:15                UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      USGS 263819081585801         GW 1983-05-11  15:50                UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      USGS 263819081585801         GW 1983-05-11  15:50                UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      USGS 263819081585801         GW 1983-05-11  15:50                UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   lev_va sl_lev_va sl_datum_cd lev_status_cd lev_agency_cd lev_dt_acy_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     NA    -10.40      NGVD29             1          USGS             m</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     NA    -11.59      NAVD88             1          USGS             m</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   23.4        NA        &lt;NA&gt;             1          USGS             m</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     NA    -18.50      NGVD29             1          USGS             m</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     NA    -19.69      NAVD88             1          USGS             m</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   31.5        NA        &lt;NA&gt;             1          USGS             m</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   lev_acy_cd lev_src_cd lev_meth_cd lev_age_cd parameter_cd        lev_dateTime</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       &lt;NA&gt;          S           S          A        62610 1982-10-12 13:15:00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       &lt;NA&gt;          S           S          A        62611 1982-10-12 13:15:00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       &lt;NA&gt;          S           S          A        72019 1982-10-12 13:15:00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       &lt;NA&gt;          S           S          A        62610 1983-05-11 15:50:00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       &lt;NA&gt;          S           S          A        62611 1983-05-11 15:50:00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6       &lt;NA&gt;          S           S          A        72019 1983-05-11 15:50:00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   lev_tz_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6       UTC</span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>QW</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   agency_cd         site_no  sample_dt sample_tm sample_end_dt sample_end_tm</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      USGS 263819081585801 1978-09-06     16:30            NA          &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      USGS 263819081585801 1979-05-09     15:00            NA          &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      USGS 263819081585801 1979-05-09     15:00            NA          &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      USGS 263819081585801 1981-05-20     14:15            NA          &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      USGS 263819081585801 1981-05-20     14:15            NA          &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      USGS 263819081585801 1981-05-20     14:15            NA          &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   tm_datum_rlbty_cd coll_ent_cd medium_cd project_cd  aqfr_cd tu_id</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6                 T    USGS-WRD        WG       &lt;NA&gt; 122HTRNN  &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   body_part_id hyd_cond_cd samp_type_cd hyd_event_cd sample_lab_cm_tx parm_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00940</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00095</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00940</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00095</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5         &lt;NA&gt;           A            9            9             &lt;NA&gt;   00940</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6         &lt;NA&gt;           A            9            9             &lt;NA&gt;   90095</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   remark_cd result_va val_qual_tx meth_cd dqi_cd rpt_lev_va rpt_lev_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      &lt;NA&gt;        52        &lt;NA&gt;    &lt;NA&gt;      S         NA       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      &lt;NA&gt;       580        &lt;NA&gt;    &lt;NA&gt;      A         NA       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      &lt;NA&gt;        50        &lt;NA&gt;    &lt;NA&gt;      S         NA       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      &lt;NA&gt;       535        &lt;NA&gt;    &lt;NA&gt;      A         NA       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      &lt;NA&gt;        54        &lt;NA&gt;    &lt;NA&gt;      S         NA       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      &lt;NA&gt;       537        &lt;NA&gt;    &lt;NA&gt;      A         NA       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   lab_std_va prep_set_no prep_dt anl_set_no anl_dt result_lab_cm_tx anl_ent_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6         NA          NA      NA         NA     NA             &lt;NA&gt;       &lt;NA&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   sample_start_time_datum_cd_reported sample_end_time_datum_cd_reported</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1                                 EDT                               EDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2                                 EDT                               EDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3                                 EDT                               EDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4                                 EDT                               EDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5                                 EDT                               EDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6                                 EDT                               EDT</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         startDateTime tz_cd</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 1978-09-06 20:30:00   UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 1979-05-09 19:00:00   UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 1979-05-09 19:00:00   UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 1981-05-20 18:15:00   UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 1981-05-20 18:15:00   UTC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 1981-05-20 18:15:00   UTC</span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Daily</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   agency_cd         site_no       Date X_62610_00001 X_62610_00001_cd
+#&gt; 1      USGS 263819081585801 1978-10-01         -5.58                A
+#&gt; 2      USGS 263819081585801 1978-10-02         -5.16                A
+#&gt; 3      USGS 263819081585801 1978-10-03         -4.79                A
+#&gt; 4      USGS 263819081585801 1978-10-04         -4.54                A
+#&gt; 5      USGS 263819081585801 1978-10-05         -4.57                A
+#&gt; 6      USGS 263819081585801 1978-10-06         -4.91                A</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>Discrete</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   agency_cd         site_no site_tp_cd     lev_dt lev_tm lev_tz_cd_reported
+#&gt; 1      USGS 263819081585801         GW 1982-10-12  13:15                UTC
+#&gt; 2      USGS 263819081585801         GW 1982-10-12  13:15                UTC
+#&gt; 3      USGS 263819081585801         GW 1982-10-12  13:15                UTC
+#&gt; 4      USGS 263819081585801         GW 1983-05-11  15:50                UTC
+#&gt; 5      USGS 263819081585801         GW 1983-05-11  15:50                UTC
+#&gt; 6      USGS 263819081585801         GW 1983-05-11  15:50                UTC
+#&gt;   lev_va sl_lev_va sl_datum_cd lev_status_cd lev_agency_cd lev_dt_acy_cd
+#&gt; 1     NA    -10.40      NGVD29             1          USGS             m
+#&gt; 2     NA    -11.59      NAVD88             1          USGS             m
+#&gt; 3   23.4        NA        &lt;NA&gt;             1          USGS             m
+#&gt; 4     NA    -18.50      NGVD29             1          USGS             m
+#&gt; 5     NA    -19.69      NAVD88             1          USGS             m
+#&gt; 6   31.5        NA        &lt;NA&gt;             1          USGS             m
+#&gt;   lev_acy_cd lev_src_cd lev_meth_cd lev_age_cd parameter_cd        lev_dateTime
+#&gt; 1       &lt;NA&gt;          S           S          A        62610 1982-10-12 13:15:00
+#&gt; 2       &lt;NA&gt;          S           S          A        62611 1982-10-12 13:15:00
+#&gt; 3       &lt;NA&gt;          S           S          A        72019 1982-10-12 13:15:00
+#&gt; 4       &lt;NA&gt;          S           S          A        62610 1983-05-11 15:50:00
+#&gt; 5       &lt;NA&gt;          S           S          A        62611 1983-05-11 15:50:00
+#&gt; 6       &lt;NA&gt;          S           S          A        72019 1983-05-11 15:50:00
+#&gt;   lev_tz_cd
+#&gt; 1       UTC
+#&gt; 2       UTC
+#&gt; 3       UTC
+#&gt; 4       UTC
+#&gt; 5       UTC
+#&gt; 6       UTC</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>L2701_example_data</span><span class='op'>$</span><span class='va'>QW</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   OrganizationIdentifier            OrganizationFormalName ActivityIdentifier
+#&gt; 1                USGS-FL USGS Florida Water Science Center nwisfl.01.97806444
+#&gt; 2                USGS-FL USGS Florida Water Science Center nwisfl.01.97904554
+#&gt; 3                USGS-FL USGS Florida Water Science Center nwisfl.01.97904554
+#&gt; 4                USGS-FL USGS Florida Water Science Center nwisfl.01.98103956
+#&gt; 5                USGS-FL USGS Florida Water Science Center nwisfl.01.98103956
+#&gt; 6                USGS-FL USGS Florida Water Science Center nwisfl.01.98103956
+#&gt;   ActivityTypeCode ActivityMediaName ActivityMediaSubdivisionName
+#&gt; 1   Sample-Routine             Water                  Groundwater
+#&gt; 2   Sample-Routine             Water                  Groundwater
+#&gt; 3   Sample-Routine             Water                  Groundwater
+#&gt; 4   Sample-Routine             Water                  Groundwater
+#&gt; 5   Sample-Routine             Water                  Groundwater
+#&gt; 6   Sample-Routine             Water                  Groundwater
+#&gt;   ActivityStartDate ActivityStartTime.Time ActivityStartTime.TimeZoneCode
+#&gt; 1        1978-09-06               16:30:00                            EDT
+#&gt; 2        1979-05-09               15:00:00                            EDT
+#&gt; 3        1979-05-09               15:00:00                            EDT
+#&gt; 4        1981-05-20               14:15:00                            EDT
+#&gt; 5        1981-05-20               14:15:00                            EDT
+#&gt; 6        1981-05-20               14:15:00                            EDT
+#&gt;   ActivityEndDate ActivityEndTime.Time ActivityEndTime.TimeZoneCode
+#&gt; 1            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+#&gt; 2            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+#&gt; 3            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+#&gt; 4            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+#&gt; 5            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+#&gt; 6            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+#&gt;   ActivityDepthHeightMeasure.MeasureValue
+#&gt; 1                                      NA
+#&gt; 2                                      NA
+#&gt; 3                                      NA
+#&gt; 4                                      NA
+#&gt; 5                                      NA
+#&gt; 6                                      NA
+#&gt;   ActivityDepthHeightMeasure.MeasureUnitCode
+#&gt; 1                                       &lt;NA&gt;
+#&gt; 2                                       &lt;NA&gt;
+#&gt; 3                                       &lt;NA&gt;
+#&gt; 4                                       &lt;NA&gt;
+#&gt; 5                                       &lt;NA&gt;
+#&gt; 6                                       &lt;NA&gt;
+#&gt;   ActivityDepthAltitudeReferencePointText
+#&gt; 1                                    &lt;NA&gt;
+#&gt; 2                                    &lt;NA&gt;
+#&gt; 3                                    &lt;NA&gt;
+#&gt; 4                                    &lt;NA&gt;
+#&gt; 5                                    &lt;NA&gt;
+#&gt; 6                                    &lt;NA&gt;
+#&gt;   ActivityTopDepthHeightMeasure.MeasureValue
+#&gt; 1                                         NA
+#&gt; 2                                         NA
+#&gt; 3                                         NA
+#&gt; 4                                         NA
+#&gt; 5                                         NA
+#&gt; 6                                         NA
+#&gt;   ActivityTopDepthHeightMeasure.MeasureUnitCode
+#&gt; 1                                            NA
+#&gt; 2                                            NA
+#&gt; 3                                            NA
+#&gt; 4                                            NA
+#&gt; 5                                            NA
+#&gt; 6                                            NA
+#&gt;   ActivityBottomDepthHeightMeasure.MeasureValue
+#&gt; 1                                            NA
+#&gt; 2                                            NA
+#&gt; 3                                            NA
+#&gt; 4                                            NA
+#&gt; 5                                            NA
+#&gt; 6                                            NA
+#&gt;   ActivityBottomDepthHeightMeasure.MeasureUnitCode ProjectIdentifier
+#&gt; 1                                               NA                NA
+#&gt; 2                                               NA                NA
+#&gt; 3                                               NA                NA
+#&gt; 4                                               NA                NA
+#&gt; 5                                               NA                NA
+#&gt; 6                                               NA                NA
+#&gt;                  ActivityConductingOrganizationText
+#&gt; 1 U.S. Geological Survey-Water Resources Discipline
+#&gt; 2 U.S. Geological Survey-Water Resources Discipline
+#&gt; 3 U.S. Geological Survey-Water Resources Discipline
+#&gt; 4 U.S. Geological Survey-Water Resources Discipline
+#&gt; 5 U.S. Geological Survey-Water Resources Discipline
+#&gt; 6 U.S. Geological Survey-Water Resources Discipline
+#&gt;   MonitoringLocationIdentifier ActivityCommentText              SampleAquifer
+#&gt; 1         USGS-263819081585801                &lt;NA&gt; Hawthorn Limestone Aquifer
+#&gt; 2         USGS-263819081585801                &lt;NA&gt; Hawthorn Limestone Aquifer
+#&gt; 3         USGS-263819081585801                &lt;NA&gt; Hawthorn Limestone Aquifer
+#&gt; 4         USGS-263819081585801                &lt;NA&gt; Hawthorn Limestone Aquifer
+#&gt; 5         USGS-263819081585801                &lt;NA&gt; Hawthorn Limestone Aquifer
+#&gt; 6         USGS-263819081585801                &lt;NA&gt; Hawthorn Limestone Aquifer
+#&gt;   HydrologicCondition HydrologicEvent SampleCollectionMethod.MethodIdentifier
+#&gt; 1      Not determined  Routine sample                                    USGS
+#&gt; 2      Not determined  Routine sample                                    USGS
+#&gt; 3      Not determined  Routine sample                                    USGS
+#&gt; 4      Not determined  Routine sample                                    USGS
+#&gt; 5      Not determined  Routine sample                                    USGS
+#&gt; 6      Not determined  Routine sample                                    USGS
+#&gt;   SampleCollectionMethod.MethodIdentifierContext
+#&gt; 1                                           USGS
+#&gt; 2                                           USGS
+#&gt; 3                                           USGS
+#&gt; 4                                           USGS
+#&gt; 5                                           USGS
+#&gt; 6                                           USGS
+#&gt;   SampleCollectionMethod.MethodName SampleCollectionEquipmentName
+#&gt; 1                              USGS                       Unknown
+#&gt; 2                              USGS                       Unknown
+#&gt; 3                              USGS                       Unknown
+#&gt; 4                              USGS                       Unknown
+#&gt; 5                              USGS                       Unknown
+#&gt; 6                              USGS                       Unknown
+#&gt;   ResultDetectionConditionText   CharacteristicName ResultSampleFractionText
+#&gt; 1                         &lt;NA&gt;             Chloride                Dissolved
+#&gt; 2                         &lt;NA&gt; Specific conductance                    Total
+#&gt; 3                         &lt;NA&gt;             Chloride                Dissolved
+#&gt; 4                         &lt;NA&gt; Specific conductance                    Total
+#&gt; 5                         &lt;NA&gt;             Chloride                Dissolved
+#&gt; 6                         &lt;NA&gt; Specific conductance                    Total
+#&gt;   ResultMeasureValue ResultMeasure.MeasureUnitCode MeasureQualifierCode
+#&gt; 1                 52                          mg/l                   NA
+#&gt; 2                580                    uS/cm @25C                   NA
+#&gt; 3                 50                          mg/l                   NA
+#&gt; 4                535                    uS/cm @25C                   NA
+#&gt; 5                 54                          mg/l                   NA
+#&gt; 6                537                    uS/cm @25C                   NA
+#&gt;   ResultStatusIdentifier StatisticalBaseCode ResultValueTypeName
+#&gt; 1            Preliminary                  NA              Actual
+#&gt; 2             Historical                  NA              Actual
+#&gt; 3            Preliminary                  NA              Actual
+#&gt; 4             Historical                  NA              Actual
+#&gt; 5            Preliminary                  NA              Actual
+#&gt; 6             Historical                  NA              Actual
+#&gt;   ResultWeightBasisText ResultTimeBasisText ResultTemperatureBasisText
+#&gt; 1                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+#&gt; 2                  &lt;NA&gt;                &lt;NA&gt;                   25 deg C
+#&gt; 3                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+#&gt; 4                  &lt;NA&gt;                &lt;NA&gt;                   25 deg C
+#&gt; 5                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+#&gt; 6                  &lt;NA&gt;                &lt;NA&gt;                   25 deg C
+#&gt;   ResultParticleSizeBasisText PrecisionValue ResultCommentText USGSPCode
+#&gt; 1                        &lt;NA&gt;             NA              &lt;NA&gt;     00940
+#&gt; 2                        &lt;NA&gt;             NA              &lt;NA&gt;     00095
+#&gt; 3                        &lt;NA&gt;             NA              &lt;NA&gt;     00940
+#&gt; 4                        &lt;NA&gt;             NA              &lt;NA&gt;     00095
+#&gt; 5                        &lt;NA&gt;             NA              &lt;NA&gt;     00940
+#&gt; 6                        &lt;NA&gt;             NA              &lt;NA&gt;     90095
+#&gt;   ResultDepthHeightMeasure.MeasureValue
+#&gt; 1                                    NA
+#&gt; 2                                    NA
+#&gt; 3                                    NA
+#&gt; 4                                    NA
+#&gt; 5                                    NA
+#&gt; 6                                    NA
+#&gt;   ResultDepthHeightMeasure.MeasureUnitCode
+#&gt; 1                                     &lt;NA&gt;
+#&gt; 2                                     &lt;NA&gt;
+#&gt; 3                                     &lt;NA&gt;
+#&gt; 4                                     &lt;NA&gt;
+#&gt; 5                                     &lt;NA&gt;
+#&gt; 6                                     &lt;NA&gt;
+#&gt;   ResultDepthAltitudeReferencePointText SubjectTaxonomicName
+#&gt; 1                                  &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 2                                  &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 3                                  &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 4                                  &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 5                                  &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 6                                  &lt;NA&gt;                 &lt;NA&gt;
+#&gt;   SampleTissueAnatomyName ResultAnalyticalMethod.MethodIdentifier
+#&gt; 1                    &lt;NA&gt;                                    &lt;NA&gt;
+#&gt; 2                    &lt;NA&gt;                                    &lt;NA&gt;
+#&gt; 3                    &lt;NA&gt;                                    &lt;NA&gt;
+#&gt; 4                    &lt;NA&gt;                                    &lt;NA&gt;
+#&gt; 5                    &lt;NA&gt;                                    &lt;NA&gt;
+#&gt; 6                    &lt;NA&gt;                                    &lt;NA&gt;
+#&gt;   ResultAnalyticalMethod.MethodIdentifierContext
+#&gt; 1                                           &lt;NA&gt;
+#&gt; 2                                           &lt;NA&gt;
+#&gt; 3                                           &lt;NA&gt;
+#&gt; 4                                           &lt;NA&gt;
+#&gt; 5                                           &lt;NA&gt;
+#&gt; 6                                           &lt;NA&gt;
+#&gt;   ResultAnalyticalMethod.MethodName MethodDescriptionText LaboratoryName
+#&gt; 1                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+#&gt; 2                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+#&gt; 3                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+#&gt; 4                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+#&gt; 5                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+#&gt; 6                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+#&gt;   AnalysisStartDate ResultLaboratoryCommentText
+#&gt; 1              &lt;NA&gt;                        &lt;NA&gt;
+#&gt; 2              &lt;NA&gt;                        &lt;NA&gt;
+#&gt; 3              &lt;NA&gt;                        &lt;NA&gt;
+#&gt; 4              &lt;NA&gt;                        &lt;NA&gt;
+#&gt; 5              &lt;NA&gt;                        &lt;NA&gt;
+#&gt; 6              &lt;NA&gt;                        &lt;NA&gt;
+#&gt;   DetectionQuantitationLimitTypeName
+#&gt; 1                               &lt;NA&gt;
+#&gt; 2                               &lt;NA&gt;
+#&gt; 3                               &lt;NA&gt;
+#&gt; 4                               &lt;NA&gt;
+#&gt; 5                               &lt;NA&gt;
+#&gt; 6                               &lt;NA&gt;
+#&gt;   DetectionQuantitationLimitMeasure.MeasureValue
+#&gt; 1                                             NA
+#&gt; 2                                             NA
+#&gt; 3                                             NA
+#&gt; 4                                             NA
+#&gt; 5                                             NA
+#&gt; 6                                             NA
+#&gt;   DetectionQuantitationLimitMeasure.MeasureUnitCode PreparationStartDate
+#&gt; 1                                              &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 2                                              &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 3                                              &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 4                                              &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 5                                              &lt;NA&gt;                 &lt;NA&gt;
+#&gt; 6                                              &lt;NA&gt;                 &lt;NA&gt;
+#&gt;   ProviderName ActivityStartDateTime ActivityEndDateTime
+#&gt; 1         NWIS   1978-09-06 20:30:00                &lt;NA&gt;
+#&gt; 2         NWIS   1979-05-09 19:00:00                &lt;NA&gt;
+#&gt; 3         NWIS   1979-05-09 19:00:00                &lt;NA&gt;
+#&gt; 4         NWIS   1981-05-20 18:15:00                &lt;NA&gt;
+#&gt; 5         NWIS   1981-05-20 18:15:00                &lt;NA&gt;
+#&gt; 6         NWIS   1981-05-20 18:15:00                &lt;NA&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -268,11 +432,11 @@ groundwater level measurements from the site. Updated April 9, 2021.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p></p>
+  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -280,8 +444,6 @@ groundwater level measurements from the site. Updated April 9, 2021.</p>
 
   
 
-
-  
 
   </body>
 </html>
