@@ -42,7 +42,7 @@ test_that("Weekly frequency table", {
                                 value_col = "X_62610_00001",
                                 approved_col = "X_62610_00001_cd")
   expect_equal(as.numeric(head(wft$p25, 6)), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
-  expect_equal(as.numeric(head(wft$nYears, 6)), c(40, 41, 41, 41, 42, 42))
+  expect_equal(as.numeric(head(wft$nYears, 6)), c(41, 42, 42, 42, 43, 43))
   expect_equal(tail(wft$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
   
 })
