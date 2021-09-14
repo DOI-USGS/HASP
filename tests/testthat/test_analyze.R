@@ -31,7 +31,8 @@ test_that("QW summaries", {
   
   qw_data <- L2701_example_data$QW
   
-  x <- qw_summary(qw_data, pcode = c("00940","99220"), 
+  x <- qw_summary(qw_data, 
+                  CharacteristicName = "Chloride", 
                   norm_range = c(225,999))
   
   expect_true(all(x$Analysis == c("Date of first sample",                           
@@ -48,11 +49,13 @@ test_that("QW summaries", {
                                      "Third quartile (mg/l)",                          
                                      "Number of samples")))
   
-  expect_true(all(x$Result == c("1978-09-06", "52", "2020-04-28", "114", "",          
-                                  "", "14", "114", "60", "54",        
-                                  "58", "68", "79")))
+  expect_true(all(x$Result == c("1978-09-06", "52", "2021-04-27", "119", "",          
+                                  "", "14", "119", "60.8", "54",        
+                                  "58", "68", "80")))
   
-  y <- qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)
+  y <- qw_summary(qw_data, 
+                  CharacteristicName = "Specific conductance",
+                  norm_range = NA)
   
   expect_true(all(y$Analysis == c("Date of first sample", "First sample result (uS/cm @25C)",
                                    "Date of last sample", "Last sample result (uS/cm @25C)", 
@@ -61,9 +64,9 @@ test_that("QW summaries", {
                                    "Median (uS/cm @25C)", "Third quartile (uS/cm @25C)",     
                                    "Number of samples")))
   
-  expect_true(all(y$Result == c("1979-05-09", "580", "2020-04-28", "765", "176",       
-                                "785", "551", "543", "560", "569",       
-                                "390")))
+  expect_true(all(y$Result == c("1979-05-09", "580", "2021-04-27", "761", "176",       
+                                "785", "552", "544", "560", "569",       
+                                "392")))
   
   
 })
