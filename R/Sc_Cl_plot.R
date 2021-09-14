@@ -3,7 +3,7 @@
 #' Functions to create the individual chloride, specific conductance, 
 #' and combination plots and tables for a single site.
 #'
-#' @param qw_data data frame returned from dataRetrieval::readNWISqw,
+#' @param qw_data data frame returned from dataRetrieval::readWQPqw,
 #' must include columns sample_dt, parm_cd, result_va
 #' @param plot_title character title for plot
 #' @rdname sc_cl
@@ -14,7 +14,7 @@
 #' 
 #' # site <- "263819081585801"
 #' # parameterCd <- c("00095","90095","00940","99220")
-#' # site_data <- dataRetrieval::readNWISqw(site, 
+#' # site_data <- dataRetrieval::readWQPqw(site, 
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW

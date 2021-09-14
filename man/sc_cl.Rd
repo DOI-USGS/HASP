@@ -16,7 +16,7 @@ qw_plot(qw_data, plot_title, y_label = NA, CharacteristicName = "Chloride")
 qw_summary(qw_data, CharacteristicName, norm_range = NA)
 }
 \arguments{
-\item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
+\item{qw_data}{data frame returned from dataRetrieval::readWQPqw,
 must include columns sample_dt, parm_cd, result_va}
 
 \item{plot_title}{character title for plot}
@@ -33,7 +33,7 @@ and combination plots and tables for a single site.
 
 # site <- "263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
-# site_data <- dataRetrieval::readNWISqw(site, 
+# site_data <- dataRetrieval::readWQPqw(site, 
 #                                        parameterCd)
 # Using package example data:
 qw_data <- L2701_example_data$QW

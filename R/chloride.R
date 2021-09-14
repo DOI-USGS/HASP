@@ -2,7 +2,7 @@
 #'
 #' Function creates the cloride over time plot with trends.
 #'
-#' @param qw_data data frame returned from dataRetrieval::readNWISqw,
+#' @param qw_data data frame returned from dataRetrieval::readWQPqw,
 #' must include columns ActivityStartDateTime, CharacteristicName, result_va
 #' @param CharacteristicName character CharacteristicName to plot
 #' @param norm_range a numerical range to potentially group the data. If NA, no grouping is shown.
