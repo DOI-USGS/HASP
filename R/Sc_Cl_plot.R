@@ -22,7 +22,7 @@
 #' Sc_Cl_plot(qw_data, plot_title)
 Sc_Cl_plot <- function(qw_data, plot_title){
   
-  chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
+  Chloride <- `Specific conductance` <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
   
   # Specify the plot titles using the function getParmCodeDef
   
@@ -88,7 +88,10 @@ Sc_Cl_table <- function(qw_data){
 }
 
 #' @rdname sc_cl
-#' @param pcode character pcode to plot
+#' @param CharacteristicName character CharacteristicName to filter to.
+#' @param y_label character label for y axis. If left as NA, the function
+#' will attempt to use the "variableInfo" attribute of qw_data. This is
+#' attached to dataRetrieval output.
 #' @export
 #' @examples
 #' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
@@ -144,6 +147,8 @@ qw_plot <- function(qw_data, plot_title,
 #'  norm_range = NA)
 qw_summary <- function(qw_data, CharacteristicName, 
                        norm_range = NA){
+  
+  MonitoringLocationIdentifier <- ".dplyr"
   
   if(!all(c("ActivityStartDateTime", "ResultMeasureValue", "CharacteristicName") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")

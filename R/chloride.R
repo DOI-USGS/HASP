@@ -6,7 +6,10 @@
 #' must include columns ActivityStartDateTime, CharacteristicName, result_va
 #' @param CharacteristicName character CharacteristicName to plot
 #' @param norm_range a numerical range to potentially group the data. If NA, no grouping is shown.
-#' @param plot_title character
+#' @param plot_title character title for plot
+#' @param y_label character label for y axis. If left as NA, the function
+#' will attempt to use the "variableInfo" attribute of qw_data. This is
+#' attached to dataRetrieval output.
 #' @param include_table logical whether or not to include the trend table in the upper left corner.
 #' @rdname chloridetrend
 #' @export

@@ -17,7 +17,11 @@ trend_plot(
 \item{qw_data}{data frame returned from dataRetrieval::readWQPqw,
 must include columns ActivityStartDateTime, CharacteristicName, result_va}
 
-\item{plot_title}{character}
+\item{plot_title}{character title for plot}
+
+\item{y_label}{character label for y axis. If left as NA, the function
+will attempt to use the "variableInfo" attribute of qw_data. This is
+attached to dataRetrieval output.}
 
 \item{CharacteristicName}{character CharacteristicName to plot}
 

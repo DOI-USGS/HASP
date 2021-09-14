@@ -21,9 +21,13 @@ must include columns sample_dt, parm_cd, result_va}
 
 \item{plot_title}{character title for plot}
 
-\item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
+\item{y_label}{character label for y axis. If left as NA, the function
+will attempt to use the "variableInfo" attribute of qw_data. This is
+attached to dataRetrieval output.}
 
-\item{pcode}{character pcode to plot}
+\item{CharacteristicName}{character CharacteristicName to filter to.}
+
+\item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
 }
 \description{
 Functions to create the individual chloride, specific conductance, 

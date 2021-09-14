@@ -68,7 +68,7 @@ monthly_frequency
 
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
                                              parameter_cd = "62610",
-                                             y_axis_label = dataRetrieval::readNWISpCode("62610")[["parameter_nm"]],
+                                             y_axis_label = label,
                                              plot_title = "L2701 Groundwater Level", 
                                              flip_y = TRUE)
 monthly_frequency_flip 
