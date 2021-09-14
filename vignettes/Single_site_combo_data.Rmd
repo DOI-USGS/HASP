@@ -81,7 +81,8 @@ gwl_data <- readNWISgwl(siteID)
 
 # Water quality data:
 pcodes_cl_sc <- c("00095","90095","00940","99220")
-qw_data <- readNWISqw(siteID,  pcodes_cl_sc)
+qw_data <- readWQPqw(paste0("USGS-", siteID),
+                     pcodes_cl_sc)
 
 plot_title <- "L -2701\n263819081585801 "
 
@@ -304,21 +305,21 @@ kable(siteDaily, digits = 1)
 
 ### Chloride
 
-```{r chloride_plot, eval=FALSE}
+```{r chloride_plot, eval=FALSE, warning=FALSE}
 trend_plot(qw_data, 
            plot_title = plot_title, 
-           pcode = c("00940","99220"))
+           CharacteristicName = "Chloride")
 
 kendell_test_5_20_years(dplyr::filter(qw_data, 
-                                      parm_cd %in% c("00940","99220")), 
+                                      CharacteristicName == "Chloride"), 
                         seasonal = TRUE,
                         enough_5 = 1,
                         enough_20 = 1,
-                        date_col = "sample_dt",
-                        value_col = "result_va")
+                        date_col = "ActivityStartDateTime",
+                        value_col = "ResultMeasureValue")
 
 qw_summary(qw_data, 
-           pcode = c("00940","99220"),
+           CharacteristicName = "Chloride",
            norm_range = c(225,999))
 ```
 
@@ -333,19 +334,19 @@ trend_plot(qw_data, plot_title = plot_title)
 
 ```{r chloride_trend, echo=FALSE}
 cl_trend <- kendell_test_5_20_years(dplyr::filter(qw_data, 
-                                      parm_cd %in% c("00940","99220")), 
+                                      CharacteristicName == "Chloride"), 
                      seasonal = TRUE,
                      enough_5 = 1,
                      enough_20 = 1,
-                     date_col = "sample_dt",
-                     value_col = "result_va")
+                     date_col = "ActivityStartDateTime",
+                     value_col = "ResultMeasureValue")
 kable(cl_trend, digits = 3)
 ```
 
 ```{r chloride_table, echo=FALSE}
 chl_table <- qw_summary(qw_data, 
-                       pcode = c("00940","99220"),
-                       norm_range = c(225,999))
+                        CharacteristicName = "Chloride",
+                        norm_range = c(225,999))
 kable(chl_table)
 
 ```
@@ -358,9 +359,9 @@ kable(chl_table)
 
 ```{r qwplot1, eval=FALSE}
 qw_plot(qw_data, "Specific Conductance", 
-        pcode = c("00095", "90095"))
+        CharacteristicName = "Specific conductance")
 qw_summary(qw_data, 
-           pcode = c("00095","90095"),
+           CharacteristicName = "Specific conductance",
            norm_range = NA)
 ```
 
@@ -370,14 +371,14 @@ qw_summary(qw_data,
 
 ```{r qwplotReal, echo=FALSE}
 qw_plot(qw_data, "Specific Conductance", 
-        pcode = c("00095", "90095"))
+        CharacteristicName = "Specific conductance")
 ```
 
 </td><td>
 
 ```{r sc_table, echo=FALSE}
 sc_table <- qw_summary(qw_data, 
-                       pcode = c("00095","90095"),
+                       CharacteristicName = "Specific conductance",
                        norm_range = NA)
 kable(sc_table)
 

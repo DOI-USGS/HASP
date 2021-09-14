@@ -114,14 +114,17 @@ monthly_frequency_table <- function(gw_level_dv,
 #' statCd <- "00001"
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
+#' label <- dataRetrieval::readNWISpCode(p_code_dv)[["parameter_nm"]]
 #' monthly_frequency <- monthly_frequency_plot(gw_level_dv,
 #'                                             parameter_cd = "62610",
 #'                                             plot_title = "L2701 Groundwater Level",
+#'                                             y_axis_label = label,
 #'                                             flip_y = FALSE)
 #' monthly_frequency
 #' 
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
 #'                                              parameter_cd = "62610",
+#'                                              y_axis_label = dataRetrieval::readNWISpCode("62610")[["parameter_nm"]],
 #'                                              plot_title = "L2701 Groundwater Level", 
 #'                                              flip_y = TRUE)
 #' monthly_frequency_flip 
@@ -642,7 +645,6 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
 #' @import dplyr
 #' @import ggplot2
 #' @importFrom tidyr pivot_longer
-#' @importFrom dataRetrieval readNWISpCode
 #' @importFrom stats setNames
 #'
 #' @examples

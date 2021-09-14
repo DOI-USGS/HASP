@@ -80,10 +80,12 @@ The water-quality plots are less flexible, they require the data frame to have c
 ```{r}
 library(dplyr)
 qw_data <- qw_data %>% 
-  rename(sample_dt = Date, 
-         parm_cd = parameter,
-         result_va = Value,
-         remark_cd = Remark)
+  rename(ActivityStartDateTime = Date, 
+         ResultMeasureValue = Value) %>%  
+  mutate(CharacteristicName = case_when(parameter %in% 
+                                          c("99220", "00940") ~ "Chloride",
+                                        parameter %in% 
+                                          c("90095", "00095") ~ "Specific conductance"))
 
 Sc_Cl_plot(qw_data = qw_data, 
            "External Data")

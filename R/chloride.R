@@ -3,8 +3,8 @@
 #' Function creates the cloride over time plot with trends.
 #'
 #' @param qw_data data frame returned from dataRetrieval::readNWISqw,
-#' must include columns sample_dt, parm_cd, result_va
-#' @param pcode character pcode to plot
+#' must include columns ActivityStartDateTime, CharacteristicName, result_va
+#' @param CharacteristicName character CharacteristicName to plot
 #' @param norm_range a numerical range to potentially group the data. If NA, no grouping is shown.
 #' @param plot_title character
 #' @param include_table logical whether or not to include the trend table in the upper left corner.
@@ -12,23 +12,23 @@
 #' @export
 #' @import ggplot2
 #' @importFrom ggpmisc stat_poly_eq
-#' @importFrom dataRetrieval readNWISpCode
 #' @examples 
 #' 
 #' # site <- "263819081585801"
 #' # parameterCd <- c("00095","90095","00940","99220")
-#' # site_data <- dataRetrieval::readNWISqw(site, 
+#' # site_data <- dataRetrieval::readWQPqw(site, 
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
 #' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Chloride")
 #' trend_plot(qw_data, plot_title)
-trend_plot <- function(qw_data, plot_title, 
-                       pcode = c("00940","99220"),
+trend_plot <- function(qw_data, plot_title,
+                       y_label = NA, 
+                       CharacteristicName = c("Chloride"),
                        norm_range = c(225,999),
                        include_table = TRUE){
   
-  if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
+  if(!all(c("ActivityStartDateTime", "ResultMeasureValue", "CharacteristicName") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
   
@@ -36,13 +36,13 @@ trend_plot <- function(qw_data, plot_title,
     stop("norm_range vector needs to be of length 2")
   }
   
-  sample_dt <- condition <- result_va <- remark_cd <- parm_cd <- ".dplyr"
+  ActivityStartDateTime <- condition <- ResultMeasureValue <- ".dplyr"
   x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
   
   qw_sub <- qw_data %>% 
-    filter(parm_cd %in% pcode) %>% 
-    arrange(sample_dt) %>% 
-    mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
+    filter(CharacteristicName %in% !!CharacteristicName) %>% 
+    arrange(ActivityStartDateTime) %>% 
+    mutate(year = as.numeric(format(ActivityStartDateTime, "%Y")) + as.numeric(as.character(ActivityStartDateTime, "%j"))/365)
 
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"
@@ -54,11 +54,11 @@ trend_plot <- function(qw_data, plot_title,
     # coded a different color and there's no upper bound?
     qw_sub <- qw_sub %>% 
       mutate(condition = case_when(
-        result_va < norm_range[1] ~ "low",
-        result_va >= norm_range[1] & 
-          result_va <= norm_range[2] ~ "medium",
-        result_va > norm_range[2] ~ "high")) %>% 
-      select(sample_dt, year, result_va, condition)
+        ResultMeasureValue < norm_range[1] ~ "low",
+        ResultMeasureValue >= norm_range[1] & 
+          ResultMeasureValue <= norm_range[2] ~ "medium",
+        ResultMeasureValue > ResultMeasureValue[2] ~ "high")) %>% 
+      select(ActivityStartDateTime, year, ResultMeasureValue, condition)
     
     col_values <- c("low", "medium", "high")
     col_labels <- c(paste0("<", norm_range[1]), 
@@ -67,15 +67,27 @@ trend_plot <- function(qw_data, plot_title,
     
   }
   
-  y_label <- trimmed_name(pcode[1])
-  on_top <- zero_on_top(qw_sub$result_va)
+  if(is.na(y_label)){
+    y_label <- attr(qw_data, "variableInfo")
+    if(is.null(y_label)){
+      y_label <- ""
+    } else {
+      y_label <- y_label[y_label$characteristicName %in% CharacteristicName,]
+      y_label <- trimmed_name(y_label$parameter_nm)      
+    }
+  }
   
-  seg_df <- create_segs(qw_sub)
+  on_top <- zero_on_top(qw_sub$ResultMeasureValue)
+  
+  seg_df <- create_segs(qw_sub,
+                        value_col = "ResultMeasureValue",
+                        date_col = "ActivityStartDateTime")
+  
   linetype = c('solid', 'dashed')
   
   plot_out <- ggplot() +
     geom_point(data = qw_sub,
-               aes(x = year, y = result_va,
+               aes(x = year, y = ResultMeasureValue,
                    shape = condition, 
                    color = condition)) +
     geom_segment(data = seg_df, color = "blue", 
@@ -105,8 +117,8 @@ trend_plot <- function(qw_data, plot_title,
   if(include_table){
     
     trend_results <- kendell_test_5_20_years(qw_sub, seasonal = FALSE,
-                                             date_col = "sample_dt", 
-                                             value_col = "result_va",
+                                             date_col = "ActivityStartDateTime", 
+                                             value_col = "ResultMeasureValue",
                                              enough_5 = 1, enough_20 = 1)
     
     trend_results$tau <- signif(trend_results$tau, digits = 4)
@@ -135,7 +147,7 @@ create_segs <- function(x,
                                            value_col = value_col)
 
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
-                       x2 = rep(max(x[[date_col]], na.rm = FALSE), 2),
+                       x2 = rep(max(as.Date(x[[date_col]]), na.rm = FALSE), 2),
                        y1 = c(NA, NA),
                        y2 = c(NA, NA),
                        trend = trend_results$test, 

@@ -96,8 +96,8 @@ NULL
 # library(dataRetrieval)
 # site <- "263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
-# site_data <- dataRetrieval::readNWISqw(site,
-#                                        parameterCd)
+# qw_data <- dataRetrieval::readWQPqw(paste0("USGS-", site),
+#                                     parameterCd)
 # gwl_data <- dataRetrieval::readNWISgwl(site)
 # parameterCd <- "62610"
 # statCd <- "00001"
@@ -107,7 +107,7 @@ NULL
 # 
 # L2701_example_data <- list("Daily" = dv,
 #                            "Discrete" = gwl_data,
-#                            "QW" = site_data)
+#                            "QW" = qw_data)
 # save(L2701_example_data, file = "data/L2701_example_data.RData")
 
 .onAttach <- function(libname, pkgname) {
