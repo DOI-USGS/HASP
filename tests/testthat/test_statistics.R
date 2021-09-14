@@ -27,10 +27,11 @@ test_that("Kendall Seasonal Trend", {
   
   qw_data <- L2701_example_data$QW
   test4 <- kendell_test_5_20_years(qw_data, seasonal = FALSE, 
-                                       enough_5 = 1, enough_20 = 1,
-                                       date_col = "sample_dt", value_col = "result_va")
-  expect_true(0.0658 == signif(test4$slope[1], digits = 3))
-  expect_true(0.014 == signif(test4$slope[2], digits = 3))
+                                   enough_5 = 1, enough_20 = 1,
+                                   date_col = "ActivityStartDateTime",
+                                   value_col = "ResultMeasureValue")
+  expect_true(0.0471 == signif(test4$slope[1], digits = 3))
+  expect_true(0.00771 == signif(test4$slope[2], digits = 3))
   
 })
 
@@ -56,7 +57,7 @@ test_that("Monthly frequency table", {
                c(-18.0575, -19.0500, -20.2625, -22.0500, -23.5100, -21.0200),
                tolerance = 0.05)
   expect_equal(as.numeric(head(mft$nYears, 6)),
-               c(41, 42, 42, 42, 42, 41))
+               c(42, 43, 42, 42, 42, 41))
   expect_equal(tail(mft$maxMed, 6),
                c(-6.790, -4.820, -3.240, -4.800, -4.535, -4.860),
                tolerance = 0.05)
