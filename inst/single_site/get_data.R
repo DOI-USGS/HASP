@@ -39,12 +39,6 @@ observeEvent(input$get_data_avail,{
   rawData_data$available_data <- data_available(site_id)
   rawData_data$site_meta <-  site_info
   
-  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
-    filter(!is.na(parm_cd)) %>% 
-    pull(parm_cd)
-  
-  rawData_data$p_code_qw <- pcodes_qw
-
   pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
     filter(!is.na(parm_cd))
 
@@ -65,7 +59,7 @@ observeEvent(input$example_data,{
   rawData_data$p_code_dv <-  dataRetrieval::readNWISpCode("62610")
   
   rawData_data$stat_cd <- "00001"
-  rawData_data$p_code_qw <- c("00095","90095","00940","99220")
+  rawData_data$p_code_qw <- unique(qw_data$CharacteristicName)
 
   rawData_data$available_data <- data_available("263819081585801")
   rawData_data$site_meta <- site_summary("263819081585801")
@@ -86,16 +80,14 @@ observeEvent(input$get_data_qw, {
   
   rawData_data$available_data <- data_available(site_id)
   
-  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
-    filter(!is.na(parm_cd)) %>% 
-    pull(parm_cd)
-  
-  rawData_data$p_code_qw <- pcodes_qw
-  
   showNotification("Loading QW", 
                    duration = NULL, id = "load3")
   
-  rawData_data$qw_data <- dataRetrieval::readNWISqw(site_id, parameterCd = "All")
+  qw_data <- dataRetrieval::readWQPqw(paste0("USGS-", site_id), 
+                                                   parameterCd = "")
+  
+  rawData_data$qw_data <- qw_data
+  rawData_data$p_code_qw <- unique(qw_data$CharacteristicName)
   
   removeNotification(id = "load3")
 
@@ -116,12 +108,6 @@ observeEvent(input$get_data_dv, {
   rawData_data$p_code_dv <- dataRetrieval::readNWISpCode(pcodes_dv$parm_cd)
   rawData_data$stat_cd <- unique(pcodes_dv$stat_cd)
   rawData_data$site_meta <-  site_info
-  
-  pcodes_qw <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "qw") %>% 
-    filter(!is.na(parm_cd)) %>% 
-    pull(parm_cd)
-  
-  rawData_data$p_code_qw <- pcodes_qw
 
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 

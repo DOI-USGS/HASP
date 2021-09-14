@@ -27,10 +27,11 @@ test_that("Kendall Seasonal Trend", {
   
   qw_data <- L2701_example_data$QW
   test4 <- kendell_test_5_20_years(qw_data, seasonal = FALSE, 
-                                       enough_5 = 1, enough_20 = 1,
-                                       date_col = "sample_dt", value_col = "result_va")
-  expect_true(0.0658 == signif(test4$slope[1], digits = 3))
-  expect_true(0.014 == signif(test4$slope[2], digits = 3))
+                                   enough_5 = 1, enough_20 = 1,
+                                   date_col = "ActivityStartDateTime",
+                                   value_col = "ResultMeasureValue")
+  expect_true(0.0471 == signif(test4$slope[1], digits = 3))
+  expect_true(0.00771 == signif(test4$slope[2], digits = 3))
   
 })
 
@@ -41,7 +42,7 @@ test_that("Weekly frequency table", {
                                 value_col = "X_62610_00001",
                                 approved_col = "X_62610_00001_cd")
   expect_equal(as.numeric(head(wft$p25, 6)), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
-  expect_equal(as.numeric(head(wft$nYears, 6)), c(40, 41, 41, 41, 42, 42))
+  expect_equal(as.numeric(head(wft$nYears, 6)), c(41, 42, 42, 42, 43, 43))
   expect_equal(tail(wft$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
   
 })
@@ -56,7 +57,7 @@ test_that("Monthly frequency table", {
                c(-18.0575, -19.0500, -20.2625, -22.0500, -23.5100, -21.0200),
                tolerance = 0.05)
   expect_equal(as.numeric(head(mft$nYears, 6)),
-               c(41, 42, 42, 42, 42, 41))
+               c(42, 43, 42, 42, 42, 41))
   expect_equal(tail(mft$maxMed, 6),
                c(-6.790, -4.820, -3.240, -4.800, -4.535, -4.860),
                tolerance = 0.05)
@@ -92,9 +93,11 @@ test_that("trend segments",{
   gw_level_dv <- L2701_example_data$Daily
   qw_data <- L2701_example_data$QW
   
-  seg_df <- HASP:::create_segs(qw_data)
-  expect_true(all(seg_df$x1 == c(2015,2000)))
-  expect_true(all(seg_df$x2 == c(2020,2020)))
+  seg_df <- HASP:::create_segs(qw_data, 
+                               value_col = "ResultMeasureValue",
+                               date_col = "ActivityStartDateTime")
+  expect_true(all(seg_df$x1 == c(2016,2001)))
+  expect_true(all(seg_df$x2 == c(2021,2021)))
   expect_true(all(seg_df$years == c(5,20)))
   expect_true(all(seg_df$trend == c("5-year trend",
                                  "20-year trend")))
@@ -107,8 +110,8 @@ test_that("trend segments",{
   expect_true(all(seg_df_dv$years == c(5,20)))
   expect_true(all(seg_df_dv$trend == c("5-year trend",
                                     "20-year trend")))
-  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-22.7, -31.1)))
-  expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-18.3, -21.8)))
+  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-22.2, -30.8)))
+  expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-17.9, -21.5)))
   
   gw_monthly <- monthly_mean(gw_level_dv, 
                              date_col = "Date", 
@@ -131,8 +134,8 @@ test_that("trend segments",{
   expect_true(all(seg_df_month$years == c(5,20)))
   expect_true(all(seg_df_month$trend == c("5-year trend",
                                        "20-year trend")))
-  expect_true(all(signif(seg_df_month$y1, digits = 3) == c(-22.8, -31.1)))
-  expect_true(all(signif(seg_df_month$y2, digits = 3) == c(-18.4, -21.8)))
+  expect_true(all(signif(seg_df_month$y1, digits = 3) == c(-22.4, -30.8)))
+  expect_true(all(signif(seg_df_month$y2, digits = 3) == c(-18.0, -21.6)))
   
   
 })

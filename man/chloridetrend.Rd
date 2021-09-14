@@ -7,18 +7,23 @@
 trend_plot(
   qw_data,
   plot_title,
-  pcode = c("00940", "99220"),
+  y_label = NA,
+  CharacteristicName = c("Chloride"),
   norm_range = c(225, 999),
   include_table = TRUE
 )
 }
 \arguments{
-\item{qw_data}{data frame returned from dataRetrieval::readNWISqw,
-must include columns sample_dt, parm_cd, result_va}
+\item{qw_data}{data frame returned from dataRetrieval::readWQPqw,
+must include columns ActivityStartDateTime, CharacteristicName, result_va}
 
-\item{plot_title}{character}
+\item{plot_title}{character title for plot}
 
-\item{pcode}{character pcode to plot}
+\item{y_label}{character label for y axis. If left as NA, the function
+will attempt to use the "variableInfo" attribute of qw_data. This is
+attached to dataRetrieval output.}
+
+\item{CharacteristicName}{character CharacteristicName to plot}
 
 \item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
 
@@ -31,7 +36,7 @@ Function creates the cloride over time plot with trends.
 
 # site <- "263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
-# site_data <- dataRetrieval::readNWISqw(site, 
+# site_data <- dataRetrieval::readWQPqw(site, 
 #                                        parameterCd)
 # Using package example data:
 qw_data <- L2701_example_data$QW

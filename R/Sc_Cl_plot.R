@@ -3,19 +3,18 @@
 #' Functions to create the individual chloride, specific conductance, 
 #' and combination plots and tables for a single site.
 #'
-#' @param qw_data data frame returned from dataRetrieval::readNWISqw,
+#' @param qw_data data frame returned from dataRetrieval::readWQPqw,
 #' must include columns sample_dt, parm_cd, result_va
 #' @param plot_title character title for plot
 #' @rdname sc_cl
 #' @export
 #' @import ggplot2
 #' @importFrom ggpmisc stat_poly_eq
-#' @importFrom dataRetrieval readNWISpCode
 #' @examples 
 #' 
 #' # site <- "263819081585801"
 #' # parameterCd <- c("00095","90095","00940","99220")
-#' # site_data <- dataRetrieval::readNWISqw(site, 
+#' # site_data <- dataRetrieval::readWQPqw(site, 
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
@@ -23,12 +22,12 @@
 #' Sc_Cl_plot(qw_data, plot_title)
 Sc_Cl_plot <- function(qw_data, plot_title){
   
-  chloride <- sp <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
+  Chloride <- `Specific conductance` <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
   
   # Specify the plot titles using the function getParmCodeDef
   
-  Cltitle <- trimmed_name("99220")
-  Sctitle <- trimmed_name("90095")
+  Cltitle <- trimmed_name(dataRetrieval::readNWISpCode("99220")[["parameter_nm"]])
+  Sctitle <- trimmed_name(dataRetrieval::readNWISpCode("90095")[["parameter_nm"]])
   
   Plotdata <- Sc_Cl_table(qw_data)
   
@@ -37,7 +36,7 @@ Sc_Cl_plot <- function(qw_data, plot_title){
   }
 
   plot_out <- ggplot(data = Plotdata,
-                     aes(x = sp, y = chloride)) +
+                     aes(x = `Specific conductance`, y = Chloride)) +
     geom_point(color = "blue") +
     stat_smooth(method = "lm", color = "black", 
                 formula = y ~ x , se = FALSE) +
@@ -69,57 +68,64 @@ Sc_Cl_table <- function(qw_data){
     mean(x, na.rm = TRUE)
   }
   
-  if(!all(c("sample_dt", "parm_cd", "result_va") %in% names(qw_data))){
+  if(!all(c("ActivityStartDateTime", "CharacteristicName", "ResultMeasureValue") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
   
-  sample_dt <- startDateTime <- site_no <- parm_cd <- remark_cd <- result_va <- `90095` <- `99220` <- ".dplyr"
-  chloride <- sp <- ".dplyr"
-  
+  ActivityStartDateTime <- startDateTime <- site_no <- CharacteristicName <- ResultMeasureValue <- ".dplyr"
+
   Plotdata <- qw_data %>% 
-    select(Date = sample_dt, 
-           parm_cd, 
-           result_va) %>% 
-    mutate(parm_cd = ifelse(parm_cd == "00940", "99220", parm_cd),
-           parm_cd = ifelse(parm_cd == "00095", "90095", parm_cd)) %>% 
-    pivot_wider(names_from = parm_cd, 
-                values_from = result_va,
-                values_fn = list(result_va = mean_no_na)) %>%  
-    rename(chloride = `99220`,
-           sp = `90095`) %>% 
-    filter(!is.na(sp),
-           !is.na(chloride))
+    select(Date = ActivityStartDateTime, 
+           CharacteristicName, 
+           ResultMeasureValue) %>% 
+    filter(!is.na(ResultMeasureValue)) %>%
+    pivot_wider(names_from = CharacteristicName, 
+                values_from = ResultMeasureValue,
+                values_fn = list(ResultMeasureValue = mean_no_na)) 
   
   return(Plotdata)
   
 }
 
 #' @rdname sc_cl
-#' @param pcode character pcode to plot
+#' @param CharacteristicName character CharacteristicName to filter to.
+#' @param y_label character label for y axis. If left as NA, the function
+#' will attempt to use the "variableInfo" attribute of qw_data. This is
+#' attached to dataRetrieval output.
 #' @export
 #' @examples
 #' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
-#' qw_plot(qw_data, plot_title, pcode = c("00095", "90095"))
-#' qw_plot(qw_data, plot_title, pcode = c("00940","99220"))
+#' qw_plot(qw_data, plot_title, CharacteristicName = "Chloride")
+#' qw_plot(qw_data, plot_title, CharacteristicName = "Specific conductance")
 qw_plot <- function(qw_data, plot_title,
-                    pcode = c("00095", "90095")){
+                    y_label = NA,
+                    CharacteristicName = "Chloride"){
   
-  if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
+  if(!all(c("ActivityStartDateTime", "CharacteristicName", "ResultMeasureValue") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
   
-  sample_dt <- result_va <- remark_cd <- parm_cd <- year <- ".dplyr"
+  ActivityStartDateTime <- ResultMeasureValue <- year <- ".dplyr"
   
   qw_data <- qw_data %>% 
-    filter(parm_cd %in% pcode) %>% 
-    mutate(year = as.numeric(format(sample_dt, "%Y")) + as.numeric(as.character(sample_dt, "%j"))/365)
+    filter(CharacteristicName %in% !!CharacteristicName)  %>% 
+    mutate(year = as.numeric(format(ActivityStartDateTime, "%Y")) + as.numeric(as.character(ActivityStartDateTime, "%j"))/365)
   
-  y_label <- trimmed_name(pcode[1])
-  on_top <- zero_on_top(qw_data$result_va)
+  if(is.na(y_label)){
+    y_label <- attr(qw_data, "variableInfo")
+    if(is.null(y_label)){
+      y_label <- ""
+    } else {
+      y_label <- y_label[y_label$characteristicName %in% CharacteristicName,]
+      y_label <- trimmed_name(y_label$parameter_nm)      
+    }
+  }
+  
+  on_top <- zero_on_top(qw_data$ResultMeasureValue)
   
   plot_out <- ggplot() +
     geom_point(data = qw_data ,
-               aes(x = year, y = result_va),
+               aes(x = year, y = ResultMeasureValue),
                size = 1.5, color = "blue") +
     hasp_framework(x_label = "Date", y_label = y_label, include_y_scale = TRUE,
                    plot_title = plot_title, zero_on_top = on_top) +
@@ -135,31 +141,44 @@ qw_plot <- function(qw_data, plot_title,
 #' @export
 #' @examples
 #' 
-#' qw_summary(qw_data, pcode = c("00940","99220"), norm_range = c(225,999))
-#' qw_summary(qw_data, pcode = c("00095","90095"), norm_range = NA)
-qw_summary <- function(qw_data, pcode, 
+#' qw_summary(qw_data, CharacteristicName = "Chloride",
+#'  norm_range = c(225,999))
+#' qw_summary(qw_data, CharacteristicName = "Specific conductance",
+#'  norm_range = NA)
+qw_summary <- function(qw_data, CharacteristicName, 
                        norm_range = NA){
   
-  if(!all(c("sample_dt", "result_va", "remark_cd", "parm_cd") %in% names(qw_data))){
+  MonitoringLocationIdentifier <- ".dplyr"
+  
+  if(!all(c("ActivityStartDateTime", "ResultMeasureValue", "CharacteristicName") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
 
-  p_code_info <- dataRetrieval::readNWISpCode(pcode)
+  p_code_info <- attr(qw_data, "variableInfo")
+  
+  if(is.null(p_code_info)){
+    p_code_info <- ""
+  } else {
+    p_code_info <- p_code_info[p_code_info$characteristicName %in% CharacteristicName,]
+  }
+
   unit_meas <- p_code_info$parameter_units[1]
   
-  sample_dt <- result_va <- remark_cd <- parm_cd <- ".dplyr"
+  ActivityStartDateTime <- ResultMeasureValue <- ".dplyr"
   
   qw_sub <- qw_data %>% 
-    filter(parm_cd %in% pcode) %>% 
-    arrange(sample_dt)
+    filter(CharacteristicName %in% !!CharacteristicName) %>% 
+    arrange(ActivityStartDateTime)
   
   qw_info <- data.frame(
-        first_sample = min(qw_sub$sample_dt, na.rm = TRUE),
-        first_sample_result = qw_sub$result_va[1],
-        last_sample = max(qw_sub$sample_dt, na.rm = TRUE),
-        last_sample_result = qw_sub$result_va[nrow(qw_sub)]
+        first_sample = min(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),
+        first_sample_result = qw_sub$ResultMeasureValue[1],
+        last_sample = max(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),
+        last_sample_result = qw_sub$ResultMeasureValue[nrow(qw_sub)]
       ) %>%  
-    bind_cols(site_data_summary(rename(qw_sub, value = result_va)))
+    bind_cols(site_data_summary(rename(qw_sub,
+                                       site_no = MonitoringLocationIdentifier,
+                                       value = ResultMeasureValue)))
   
   Analysis = c("Date of first sample",
                paste0("First sample result (",unit_meas,")"),
@@ -193,14 +212,14 @@ qw_summary <- function(qw_data, pcode,
              )
   
   if(!all(is.na(norm_range))){
-     first_day_mid <- qw_sub$sample_dt[qw_sub$result_va >= norm_range[1] & 
-                                   qw_sub$result_va <= norm_range[2]]
+     first_day_mid <- qw_sub$sample_dt[qw_sub$ResultMeasureValue >= norm_range[1] & 
+                                   qw_sub$ResultMeasureValue <= norm_range[2]]
     
      if(length(first_day_mid) != 0){
        Result[5] <- first_day_mid
      }
      
-     first_day_max <- qw_sub$sample_dt[qw_sub$result_va >= norm_range[2]]
+     first_day_max <- qw_sub$ResultMeasureValue[qw_sub$ResultMeasureValue >= norm_range[2]]
      
      if(length(first_day_max) != 0){
        Result[6] <- first_day_max
@@ -220,12 +239,13 @@ qw_summary <- function(qw_data, pcode,
 }
 
 
-trimmed_name <- function(pcode){
+trimmed_name <- function(parameter_nm){
   
-  lab_trimmed <- gsub(", unfiltered", "",readNWISpCode(pcode[1])[["parameter_nm"]])
+  lab_trimmed <- gsub(", unfiltered", "",parameter_nm)
   lab_trimmed <- gsub(", filtered", "", lab_trimmed)
   lab_trimmed <- gsub(", water", "", lab_trimmed)
   lab_trimmed <- gsub(", laboratory", "", lab_trimmed)
+  lab_trimmed <- unique(lab_trimmed)
   
   return(lab_trimmed)
 }

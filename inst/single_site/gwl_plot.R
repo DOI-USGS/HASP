@@ -236,14 +236,14 @@ approved_col <- "', approv_col,'"
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
                                     date_col = "Date",
                                     value_col = val_col,
-                                    parameter_cd = ', p_code_dv,'
+                                    parameter_cd = "', p_code_dv,'"
                                     approved_col = approved_col,
                                     plot_title = plot_title)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
                                      value_col = val_col,
-                                     parameter_cd = ', p_code_dv,'
+                                     parameter_cd = "', p_code_dv,'"
                                      approved_col = approved_col,
                                      date_col = "Date")
 
@@ -336,7 +336,7 @@ approved_col <- "', approv_col,'"
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
                                   date_col = "Date",
                                   value_col = val_col,
-                                  parameter_cd = ', p_code_dv, '
+                                  parameter_cd = "', p_code_dv, '"
                                   approved_col = approved_col,
                                   plot_title = plot_title,
                                   historical_stat = "mean",

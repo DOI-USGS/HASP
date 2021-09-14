@@ -115,9 +115,8 @@ plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
                     site_id, sep = "\\\\n")
 
 pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
-qw_data <- readNWISqw(siteNumbers = site_id,
-                      parameterCd = pcodes_qw)
-')
+qw_data <- readWQPqw(siteNumbers = paste0("USGS-", site_id),
+                     parameterCd = "")')
         
     }
     

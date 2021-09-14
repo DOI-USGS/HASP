@@ -71,7 +71,7 @@ kendell_test_5_20_years <- function(gwl,
     gwl$month <- as.numeric(format(gwl[[date_col]], "%m"))
     form <- as.formula(paste(value_col, " ~ month + year"))
   } else {
-    gwl[date_col] <- as.numeric(gwl[[date_col]])
+    gwl[date_col] <- as.numeric(as.Date(gwl[[date_col]]))
     form <- as.formula(paste(value_col, " ~ ", date_col ))
   }
   

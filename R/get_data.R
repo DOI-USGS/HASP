@@ -94,7 +94,7 @@ get_state_data <- function(state, aquiferCd,
     
     state_data <- levels %>% 
       filter(lev_age_cd == "A") %>% 
-      select(lev_dt, site_no, {{val_col}}) %>% 
+      select(lev_dt, site_no, all_of(val_col)) %>% 
       mutate(state_call = state,
              value = as.numeric(!!sym(val_col)),
              lev_dt = as.character(lev_dt),
@@ -103,7 +103,7 @@ get_state_data <- function(state, aquiferCd,
                                       function(x) x[1])),
              water_year = water_year(lev_dt),
              lev_dt = as.Date(lev_dt)) %>% 
-      select(-{{val_col}})
+      select(-all_of(val_col))
   } else {
     state_data <- data.frame()
   }
@@ -270,7 +270,7 @@ data_available <- function(siteID){
                 end = max(end_date, na.rm = TRUE),
                 count = max(count_nu, na.rm = TRUE)) %>% 
       ungroup() %>% 
-      mutate(`Data Type` = readNWISpCode(parm_cd)[["parameter_nm"]]) %>% 
+      mutate(`Data Type` = dataRetrieval::readNWISpCode(parm_cd)[["parameter_nm"]]) %>% 
       select(-parm_cd)
     
     data_info_clean$`Data Type`[data_info_clean$data_type_cd == "dv"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=', siteID, '">Daily Data</a>')

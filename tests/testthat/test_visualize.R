@@ -34,13 +34,13 @@ test_that("SC Chloride graphs and table", {
   site_data <- L2701_example_data$QW
   
   sc_plot <- Sc_Cl_plot(site_data, plot_title = "Hi")
-  expect_true(all(c("Date", "chloride", "sp") %in%
+  expect_true(all(c("Date", "Chloride", "Specific conductance") %in%
                     names(sc_plot$data)))
   
   sccl_table <- Sc_Cl_table(site_data)
   expect_true(all(c("Date",   
-                    "chloride",
-                    "sp" ) %in% names(sccl_table)))
+                    "Chloride",
+                    "Specific conductance" ) %in% names(sccl_table)))
   
   qw_plot_out <- qw_plot(site_data, "hi!")
   expect_true(all(c(c("data", "layers", "scales",     
@@ -157,7 +157,7 @@ test_that("Chloride trend graph", {
   plot_out <- trend_plot(qw_data, plot_title = title)
   plot_data_elements <- unlist(lapply(plot_out$layers, function(x) {names(x$data)}))
   
-  expect_true(all(c("sample_dt", "result_va", "condition", "x1", "x2", "y1",       
+  expect_true(all(c("ActivityStartDateTime", "ResultMeasureValue", "condition", "x1", "x2", "y1",       
                     "y2", "trend", "y") %in% plot_data_elements))
 })
   
