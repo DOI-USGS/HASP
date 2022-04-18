@@ -22,7 +22,7 @@ variables:
 before_script:
   - mkdir -p $R_LIBS_USER
   - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
-  - Rscript -e 'install.packages(c("covr", "shinycssloaders", "shinydashboard","shinyAce","leaflet", "dataRetrieval", "kableExtra", "EnvStats", "ggpmisc", "openxlsx", "shinyWidgets", "DT"), repos = Sys.getenv("CRAN_MIRROR"), lib = Sys.getenv("R_LIBS_USER"))'
+  - Rscript -e 'install.packages(c("covr", "shinycssloaders", "shinydashboard","shinyAce","leaflet", "dataRetrieval", "kableExtra", "EnvStats", "ggpmisc", "openxlsx", "shinyWidgets", "DT"))'
 
 
 buildcheck:
