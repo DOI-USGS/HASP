@@ -1,4 +1,5 @@
-image: rocker/tidyverse
+image: artifactory.wma.chs.usgs.gov/docker-official-mirror/rocker/shiny-verse:latest
+
 
 stages:
   - check
@@ -9,24 +10,20 @@ variables:
   _R_CHECK_SUGGESTS_ONLY: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
   APT_CACHE: "$CI_PROJECT_DIR/ci/lib/apt-cache"
-  CRAN_MIRROR: "https://cloud.r-project.org"
+  CRAN: "https://rpkg.chs.usgs.gov/prod-cran/latest"
+  R_PROFILE: "$R_HOME/etc/Rprofile.site"
   R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   R_LIBS: "$CI_PROJECT_DIR/ci/lib"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs"
   NOT_CRAN: "true"
+  RSCONNECT_URL: "$RSCONNECT_URL""
+  RSCONNECT_APIKEY: "$RSCONNECT_APIKEY"
 
-getready:
-  stage: .pre
-  script:
-    - mkdir -p $R_LIBS_USER
-    - mkdir -p $APT_CACHE
-    - R -e 'install.packages(c("covr", "shinycssloaders", "shinydashboard","shinyAce","leaflet", "dataRetrieval", "kableExtra","shiny", "EnvStats", "ggpmisc", "openxlsx", "shinyWidgets", "DT"), repos = Sys.getenv("CRAN_MIRROR"), lib = Sys.getenv("R_LIBS_USER"))'
-  cache:
-    paths:
-     - $R_LIBS_USER
-  artifacts:
-    paths:
-     - $R_LIBS_USER
+before_script:
+  - mkdir -p $R_LIBS_USER
+  - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
+  - Rscript -e 'install.packages(c("covr", "shinycssloaders", "shinydashboard","shinyAce","leaflet", "dataRetrieval", "kableExtra", "EnvStats", "ggpmisc", "openxlsx", "shinyWidgets", "DT"), repos = Sys.getenv("CRAN_MIRROR"), lib = Sys.getenv("R_LIBS_USER"))'
+
 
 buildcheck:
   stage: check
@@ -43,7 +40,6 @@ buildcheck:
 unittests:
   stage: test
   dependencies:
-    - getready
     - buildcheck
   script:
     - R -e 'if (any(as.data.frame(devtools::test())[["failed"]] > 0)) stop("Some tests failed.")'
@@ -51,7 +47,6 @@ unittests:
 covertests:
   stage: test
   dependencies:
-    - getready
     - buildcheck
   script:
     - R -e 'covr::package_coverage()'
