@@ -29,7 +29,7 @@ getready:
     - mkdir -p $R_LIBS_USER
     - mkdir -p $APT_CACHE
     - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
-    - Rscript -e 'install.packages(c("covr", "kableExtra", "readxl", "rmarkdown", "knitr"))'
+    - Rscript -e 'install.packages(c("fastmap", "covr", "kableExtra", "readxl", "rmarkdown", "knitr"))'
     - Rscript -e 'remotes::install_deps(dependencies=TRUE)'
   cache:
     paths:
