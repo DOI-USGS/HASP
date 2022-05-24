@@ -59,7 +59,7 @@ test_that("Monthly frequency plot", {
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
-  expect_true(all(c("plot_month", "x", "y", "ymin", "group") %in%
+  expect_true(all(c("plot_month", "ymin", "ymax", "month", "value", "group") %in%
                 plot_data_elements))
   
 })

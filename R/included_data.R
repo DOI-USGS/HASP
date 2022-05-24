@@ -143,3 +143,9 @@ NO FUTURE BEHAVIOR PROMISED', width = 40),
 #' @docType package
 #' @keywords Groundwater levels
 NULL
+
+utils::globalVariables(c("lev_dt", "nYears","minMed", "maxMed", "name", "value",
+                         "group", "plot_month_med", "p50", "sl_lev_va", "plot_month_last", "ymin",
+                         "ymax", "x",  "y", "year", "month",
+                         "p5", "p10", "p25", "p75", "p90", "p95" ))
+

@@ -138,10 +138,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    y_axis_label = "",
                                    flip_y = FALSE) {
   
-  lev_dt <- nYears <- minMed <- maxMed <- name <- value <- group <- 
-    plot_month_med <- p50 <- sl_lev_va <- plot_month_last <- ymin <-
-    ymax <- x <- y <- year <- month <- ".dplyr"
-  p5 <- p10 <- p25 <- p75 <- p90 <- p95 <- ".dplyr"
+
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
@@ -174,62 +171,75 @@ monthly_frequency_plot <- function(gw_level_dv,
   }
   
   # The last year of groundwater level measurements will plot
-  gw_level_dv <- filter(gw_level_dv,
-                     !!sym(date_col) >= plot_start,
-                     !!sym(date_col) <= plot_end)
-  
+  gw_level_dv <- gw_level_dv[gw_level_dv[[date_col]] >= plot_start &
+                               gw_level_dv[[date_col]] <= plot_end, ]
+
   # Add the first day of the month to the site_statistics table for plotting
   plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
   plot_month_lookup <- data.frame(plot_month = plot_month, 
                                   month = as.POSIXlt(plot_month)$mon + 1)
-  site_statistics <- left_join(site_statistics, plot_month_lookup, by = "month")
+  site_statistics <- dplyr::left_join(site_statistics,
+                                      plot_month_lookup, by = "month")
   
   if(flip_y){
     site_statistics <- site_statistics %>% 
-      rename(p95_new = p5, p90_new = p10, p75_new = p25, 
-             p25_new = p75, p10_new = p90, p5_new = p95)
+      dplyr::rename(p95_new = p5, p90_new = p10, p75_new = p25, 
+                    p25_new = p75, p10_new = p90, p5_new = p95)
     names(site_statistics) <- gsub("_new", "", names(site_statistics))
   }
   
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
-    select(-month, -nYears, -minMed, -maxMed) %>%
-    pivot_longer(cols = -plot_month, names_to = "name", values_to = "value")
+    dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
+    tidyr::pivot_longer(cols = -plot_month, 
+                        names_to = "name", 
+                        values_to = "value")
   
   cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
+  
   plot_list <- data.frame()
+  
   for(i in seq_along(cols)) {
     plot_data <- site_statistics_pivot %>%
-      filter(name %in% cols[[i]]) %>%
-      pivot_wider(id_cols = plot_month, names_from = name, values_from = value) %>%
-      rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
-      mutate(group = groups[i])
+      dplyr::filter(name %in% cols[[i]]) %>%
+      tidyr::pivot_wider(id_cols = plot_month, 
+                         names_from = name, 
+                         values_from = value) %>%
+      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
+      dplyr::mutate(group = groups[i])
     
-    plot_list <- bind_rows(plot_list, plot_data)
+    plot_list <- dplyr::bind_rows(plot_list, plot_data)
   }
   
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- plot_list %>%
-    mutate(group = factor(group,
-                          levels = groups,
-                          ordered = TRUE),
-           plot_month_last = last_day(plot_month) + 1)
+  site_statistics_plot <- plot_list 
+  site_statistics_plot$group <- factor(site_statistics_plot$group,
+                                       levels = groups,
+                                       ordered = TRUE)
+  
+  site_statistics_plot$plot_month_last <- last_day(site_statistics_plot$plot_month) + 1
+
   
   # The median value will plot in the middle of the month
-  site_statistics_med <- site_statistics %>%
-    mutate(plot_month_med = mid_month(plot_month),
-           group = "Monthly median") %>%
-    select(plot_month_med, p50, group) %>%
-    rename(x = plot_month_med, y = p50)
+  site_statistics_med <- site_statistics 
+  site_statistics_med$group <- "Monthly median"
+  site_statistics_med$plot_month_med <- mid_month(site_statistics_med$plot_month)
   
-  points_plot <- gw_level_dv %>%
-    mutate(group = "Data point") %>%
-    select(!!date_col, !!value_col, group) %>%
-    rename(x = !!date_col, y = !!value_col) %>%
-    bind_rows(site_statistics_med)
+  site_statistics_med <- site_statistics_med[, c("plot_month_med", "p50", "group")]
+  names(site_statistics_med) <- c("month", "value", "group")
+  
+  points_plot <- gw_level_dv 
+  points_plot$group <- "Data point"
+
+  points_plot <- points_plot[, c(date_col, value_col, "group")]
+  names(points_plot) <- c("month", "value", "group")
+  
+  points_plot <- dplyr::bind_rows(site_statistics_med,
+                                  points_plot)
+    
   
   # Assign colors and shapes
   rectangle_colors <- c("5 - 10" = "firebrick4",
@@ -263,13 +273,11 @@ monthly_frequency_plot <- function(gw_level_dv,
               color = "black") +
     geom_vline(xintercept = plot_month) +
     geom_point(data = points_plot,
-               aes(x = x,
-                   y = y,
+               aes(x = month,
+                   y = value,
                    shape = group,
                    color = group),
                size = 2.5) +
-    scale_color_manual(values = point_colors, name = "EXPLANATION") +
-    scale_shape_manual(values = point_shapes, name = "EXPLANATION") +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile",
                       breaks = c("90 - 95",
@@ -280,16 +288,23 @@ monthly_frequency_plot <- function(gw_level_dv,
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
-    hasp_framework(x_label, y_label, plot_title = plot_title) +
+    hasp_framework(x_label = x_label,
+                   y_label = y_label,
+                   plot_title = plot_title) +
     theme(axis.ticks.x = element_blank()) +
     guides(color = guide_legend(order = 1, 
-                                override.aes = list(shape = rev(point_shapes))),
+                                override.aes = list(shape = point_shapes)),
            shape = "none",
            fill = guide_legend(order = 2))  
   if(flip_y){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }
+  
+  plot_out <- plot_out +
+    scale_color_manual(values = point_colors, name = "EXPLANATION") +
+    scale_shape_manual(values = point_shapes, name = "EXPLANATION") 
+  
   return(plot_out)
 }
 
@@ -342,20 +357,20 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
   }
   
   gw_level_dv <- gw_level_dv %>%
-    filter(grepl("A", !!sym(approved_col))) %>%
-    mutate(year = as.POSIXlt(!!sym(date_col))$year + 1900,
+    dplyr::filter(grepl("A", !!sym(approved_col))) %>%
+    dplyr::mutate(year = as.POSIXlt(!!sym(date_col))$year + 1900,
            week = as.POSIXlt(!!sym(date_col))$yday%/%7 + 1 )
   
   annual_stats <- gw_level_dv %>%
-    group_by(year, week) %>%
-    summarize(median = median(!!sym(value_col))) %>%
-    group_by(week) %>%
-    summarize(minMed = min(median, na.rm = TRUE),
-              maxMed = max(median, na.rm = TRUE))
+    dplyr::group_by(year, week) %>%
+    dplyr::summarize(median = median(!!sym(value_col))) %>%
+    dplyr::group_by(week) %>%
+    dplyr::summarize(minMed = min(median, na.rm = TRUE),
+                     maxMed = max(median, na.rm = TRUE))
   
   weekly_stats <- gw_level_dv %>%
-    group_by(week) %>%
-    summarize(p5 = quantile(!!sym(value_col), probs=0.05, na.rm=TRUE),
+    dplyr::group_by(week) %>%
+    dplyr::summarize(p5 = quantile(!!sym(value_col), probs=0.05, na.rm=TRUE),
               p10 = quantile(!!sym(value_col), probs=0.1, na.rm=TRUE),
               p25 = quantile(!!sym(value_col), probs=0.25, na.rm=TRUE),
               p50 = quantile(!!sym(value_col), probs=0.5, na.rm=TRUE),
@@ -452,7 +467,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   
   if(flip_y){
     site_statistics <- site_statistics %>% 
-      rename(p95_new = p5, p90_new = p10, p75_new = p25, 
+      dplyr::rename(p95_new = p5, p90_new = p10, p75_new = p25, 
              p25_new = p75, p10_new = p90, p5_new = p95)
     names(site_statistics) <- gsub("_new", "", names(site_statistics))
   }
@@ -469,7 +484,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   
   # The last year of groundwater level measurements will plot
   gw_level_plot <- gw_level_dv %>%
-    filter(!!sym(date_col) >= plot_start)
+    dplyr::filter(!!sym(date_col) >= plot_start)
   
   # Add the first day of the week to the site_statistics table for plotting
   plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
@@ -509,6 +524,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
            group = "Historical weekly median") %>%
     select(plot_week_med, p50, group) %>%
     rename(x = plot_week_med, y = p50)
+  
   data_points <- gw_level_plot %>%
     mutate(gw_code = ifelse(grepl("A", !!sym(approved_col)), "Approved", "Provisional"),
            group = sprintf("%s daily value", gw_code)) %>%
