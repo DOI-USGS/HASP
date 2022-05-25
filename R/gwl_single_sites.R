@@ -17,7 +17,6 @@
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
 #' @import ggplot2
-#' @import dplyr
 #' @rdname gwl_plot_field
 #' 
 #' @examples
@@ -170,10 +169,7 @@ gwl_plot_all <- function(gw_level_dv,
                          plot_title = "",
                          add_trend = FALSE,
                          flip_y = FALSE){
-  
-  x1 <- x2 <- y1 <- y2 <- trend <- year <- Value <- Approve <- ".dplyr"
-  Date <- is_na_after <- is_na_before <- is_point <- ".dplyr"
-  
+
   includes_gwl <- !is.null(gwl_data) || !all(is.na(gwl_data))
   includes_dv <- !is.null(gw_level_dv) || !all(is.na(gw_level_dv))
   includes_both <- includes_gwl & includes_dv
@@ -242,18 +238,18 @@ gwl_plot_all <- function(gw_level_dv,
                                        to = max(gw_level_dv[[date_col_dv]], na.rm = TRUE), 
                                        by = "day"))
 
+    gw_lev <- gw_level_dv[ , c(date_col_dv, value_col_dv, approved_dv)]
+    names(gw_lev) <- c("Date", "Value", "Approve")
     gw_complete <- complete_df %>% 
-      left_join(select(gw_level_dv, Date = !!date_col_dv, 
-                       Value = !!value_col_dv, 
-                       Approve = !!approved_dv), 
+      dplyr::left_join(gw_lev, 
                 by = "Date") %>% 
-      mutate(year = as.numeric(format(Date, "%Y")) + 
-               as.numeric(as.character(Date, "%j"))/365,
-             is_na_before = is.na(lag(Value)),
-             is_na_after = is.na(lead(Value)),
-             is_point = is_na_after & is_na_before & !is.na(Value),
-             is_complete = !is.na(Value) & !is_na_after & !is_na_before,
-             Approve = ifelse(grepl(pattern = "A",  
+      dplyr::mutate(year = as.numeric(format(Date, "%Y")) + 
+                              as.numeric(as.character(Date, "%j"))/365,
+                     is_na_before = is.na(dplyr::lag(Value)),
+                     is_na_after = is.na(dplyr::lead(Value)),
+                     is_point = is_na_after & is_na_before & !is.na(Value),
+                     is_complete = !is.na(Value) & !is_na_after & !is_na_before,
+                     Approve = ifelse(grepl(pattern = "A",  
                                           x =  Approve), "A", "P"))
 
     gw_complete[is.na(gw_complete$Value), "Approve"] <- "A"
@@ -264,7 +260,7 @@ gwl_plot_all <- function(gw_level_dv,
     
     if(sum(gw_complete$is_point) > 0){
       plot_out <- plot_out +
-        geom_point(data = filter(gw_complete, is_point),
+        geom_point(data = dplyr::filter(gw_complete, is_point),
                  aes(x = year, color = Approve, y = Value), size = 0.2) 
     }
     

@@ -25,9 +25,7 @@
 #'                     plot_title = "Water Year")
 plot_composite_data <- function(x, 
                                 num_years = NA, plot_title = ""){
-  
-  year <- value <- name <- ".dplyr"
-  
+
   if(!all(c("site_no", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
   }
@@ -85,8 +83,6 @@ plot_composite_data <- function(x,
 plot_normalized_data <- function(x, num_years = NA,
                                  plot_title = ""){
   
-  year <- value <- name <- ".dplyr"
-
   if(!all(c("site_no", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
   }
@@ -125,7 +121,6 @@ plot_normalized_data <- function(x, num_years = NA,
 #' @param num_years integer number of years required
 #' @return leaflet object
 #' 
-#' @import leaflet
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
@@ -139,15 +134,15 @@ map_hydro_data <- function(x, num_years){
   
   map_data <- prep_map_data(x)
 
-  map <- leaflet(data = map_data) %>%
-    addProviderTiles("CartoDB.Positron") %>%
-    addCircleMarkers(lat = ~dec_lat_va, lng = ~dec_long_va,
-                     radius = 3,
-                     fillOpacity = 1,
-                     popup= ~popup,
-                     stroke=FALSE) %>% 
-    fitBounds(~min(dec_long_va), ~min(dec_lat_va),
-              ~max(dec_long_va), ~max(dec_lat_va)) 
+  map <- leaflet::leaflet(data = map_data) %>%
+    leaflet::addProviderTiles("CartoDB.Positron") %>%
+    leaflet::addCircleMarkers(lat = ~dec_lat_va, lng = ~dec_long_va,
+                               radius = 3,
+                               fillOpacity = 1,
+                               popup = ~popup,
+                               stroke = FALSE) %>% 
+    leaflet::fitBounds(~min(dec_long_va), ~min(dec_lat_va),
+                       ~max(dec_long_va), ~max(dec_lat_va)) 
   
   return(map)
   

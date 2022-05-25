@@ -9,7 +9,6 @@
 #' @rdname sc_cl
 #' @export
 #' @import ggplot2
-#' @importFrom ggpmisc stat_poly_eq
 #' @examples 
 #' 
 #' # site <- "263819081585801"
@@ -22,8 +21,7 @@
 #' Sc_Cl_plot(qw_data, plot_title)
 Sc_Cl_plot <- function(qw_data, plot_title){
   
-  Chloride <- `Specific conductance` <- ..eq.label.. <- ..rr.label.. <- ".dplyr"
-  
+
   # Specify the plot titles using the function getParmCodeDef
   
   Cltitle <- trimmed_name(dataRetrieval::readNWISpCode("99220")[["parameter_nm"]])
@@ -46,7 +44,7 @@ Sc_Cl_plot <- function(qw_data, plot_title){
                    zero_on_top = NA) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
-    stat_poly_eq(formula = y ~ x,
+    ggpmisc::stat_poly_eq(formula = y ~ x,
                  aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
                  parse = TRUE) 
   
@@ -57,8 +55,6 @@ Sc_Cl_plot <- function(qw_data, plot_title){
 
 #' @rdname sc_cl
 #' @export
-#' @import dplyr
-#' @importFrom tidyr pivot_wider
 #' @examples 
 #'
 #' sc_cl <- Sc_Cl_table(qw_data)
@@ -72,14 +68,13 @@ Sc_Cl_table <- function(qw_data){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
   
-  ActivityStartDateTime <- startDateTime <- site_no <- CharacteristicName <- ResultMeasureValue <- ".dplyr"
-
+  
   Plotdata <- qw_data %>% 
-    select(Date = ActivityStartDateTime, 
+    dplyr::select(Date = ActivityStartDateTime, 
            CharacteristicName, 
            ResultMeasureValue) %>% 
-    filter(!is.na(ResultMeasureValue)) %>%
-    pivot_wider(names_from = CharacteristicName, 
+    dplyr::filter(!is.na(ResultMeasureValue)) %>%
+    tidyr::pivot_wider(names_from = CharacteristicName, 
                 values_from = ResultMeasureValue,
                 values_fn = list(ResultMeasureValue = mean_no_na)) 
   
@@ -104,12 +99,10 @@ qw_plot <- function(qw_data, plot_title,
   if(!all(c("ActivityStartDateTime", "CharacteristicName", "ResultMeasureValue") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
-  
-  ActivityStartDateTime <- ResultMeasureValue <- year <- ".dplyr"
-  
+
   qw_data <- qw_data %>% 
-    filter(CharacteristicName %in% !!CharacteristicName)  %>% 
-    mutate(year = as.numeric(format(ActivityStartDateTime, "%Y")) + as.numeric(as.character(ActivityStartDateTime, "%j"))/365)
+    dplyr::filter(CharacteristicName %in% !!CharacteristicName)  %>% 
+    dplyr::mutate(year = as.numeric(format(ActivityStartDateTime, "%Y")) + as.numeric(as.character(ActivityStartDateTime, "%j"))/365)
   
   if(is.na(y_label)){
     y_label <- attr(qw_data, "variableInfo")
@@ -147,9 +140,7 @@ qw_plot <- function(qw_data, plot_title,
 #'  norm_range = NA)
 qw_summary <- function(qw_data, CharacteristicName, 
                        norm_range = NA){
-  
-  MonitoringLocationIdentifier <- ".dplyr"
-  
+
   if(!all(c("ActivityStartDateTime", "ResultMeasureValue", "CharacteristicName") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
@@ -163,23 +154,20 @@ qw_summary <- function(qw_data, CharacteristicName,
   }
 
   unit_meas <- p_code_info$parameter_units[1]
-  
-  ActivityStartDateTime <- ResultMeasureValue <- ".dplyr"
-  
-  qw_sub <- qw_data %>% 
-    filter(CharacteristicName %in% !!CharacteristicName) %>% 
-    arrange(ActivityStartDateTime)
-  
+
+  qw_sub <- qw_data[qw_data$CharacteristicName %in% CharacteristicName, ]
+  qw_sub <- qw_sub[order(qw_sub$ActivityStartDateTime) , ]
+
   qw_info <- data.frame(
         first_sample = min(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),
         first_sample_result = qw_sub$ResultMeasureValue[1],
         last_sample = max(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),
         last_sample_result = qw_sub$ResultMeasureValue[nrow(qw_sub)]
       ) %>%  
-    bind_cols(site_data_summary(rename(qw_sub,
-                                       site_no = MonitoringLocationIdentifier,
-                                       value = ResultMeasureValue)))
-  
+    dplyr::bind_cols(site_data_summary(dplyr::rename(qw_sub,
+                                                     site_no = MonitoringLocationIdentifier,
+                                                     value = ResultMeasureValue)))
+                
   Analysis = c("Date of first sample",
                paste0("First sample result (",unit_meas,")"),
                "Date of last sample",

@@ -17,8 +17,6 @@
 #' years of data; and the lowest monthly median and the highest monthly
 #' median.
 #' 
-#' @import dplyr
-#' 
 #' @export
 #' 
 #' @examples 
@@ -34,45 +32,50 @@
 monthly_frequency_table <- function(gw_level_dv, 
                                     parameter_cd = NA,
                                     date_col = NA,
-                                    value_col = NA, approved_col = NA) {
-  
-  year <- lev_dt <- month <- week <- sl_lev_va <- ".dplyr"
-  
-  
+                                    value_col = NA,
+                                    approved_col = NA) {
+
+  checkmate::assert_data_frame(gw_level_dv)
+
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
   approved_col <- ifelse(is.na(approved_col),
                         paste0(value_col, "_cd"),
                         approved_col) 
   
-  if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
-    stop("not all required columns found in gw_level_dv")
-  }
+  checkmate::assert_string(date_col)
+  checkmate::assert_string(value_col)
+  checkmate::assert_string(approved_col)
   
-  gw_level_dv <- gw_level_dv %>%
-    filter(grepl("A", !!sym(approved_col))) %>%
-    mutate(year = as.POSIXlt(!!sym(date_col))$year + 1900,
-           month = as.POSIXlt(!!sym(date_col))$mon + 1,
-           week = as.POSIXlt(!!sym(date_col))$yday%/%7 + 1)
+  needed_cols <- c(date_col, value_col, approved_col)
+  
+  checkmate::assertNames(names(gw_level_dv), must.include = needed_cols)
+  
+  gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv[[approved_col]]), ]
+  gw_level_dv$year = as.POSIXlt(gw_level_dv[[date_col]])$year + 1900
+  gw_level_dv$month = as.POSIXlt(gw_level_dv[[date_col]])$mon + 1
+  gw_level_dv$week = as.POSIXlt(gw_level_dv[[date_col]])$yday%/%7 + 1
+  
+  gw_level_dv$result <- gw_level_dv[[value_col]]
   
   annual_stats <- gw_level_dv %>%
-    group_by(year, month) %>%
-    summarize(median = median(!!sym(value_col))) %>%
-    group_by(month) %>%
-    summarize(minMed = min(median, na.rm = TRUE),
+    dplyr::group_by(year, month) %>%
+    dplyr::summarize(median = stats::median(result, na.rm = TRUE)) %>%
+    dplyr::group_by(month) %>%
+    dplyr::summarize(minMed = min(median, na.rm = TRUE),
               maxMed = max(median, na.rm = TRUE))
   
   monthly_stats <- gw_level_dv %>%
-    group_by(month) %>%
-    summarize(p5 = quantile(!!sym(value_col), probs=0.05, na.rm=TRUE),
-              p10 = quantile(!!sym(value_col), probs=0.1, na.rm=TRUE),
-              p25 = quantile(!!sym(value_col), probs=0.25, na.rm=TRUE),
-              p50 = quantile(!!sym(value_col), probs=0.5, na.rm=TRUE),
-              p75 = quantile(!!sym(value_col), probs=0.75, na.rm=TRUE),
-              p90 = quantile(!!sym(value_col), probs=0.9, na.rm=TRUE),
-              p95 = quantile(!!sym(value_col), probs=0.95,na.rm=TRUE),
+    dplyr::group_by(month) %>%
+    dplyr::summarize(p5 = quantile(result, probs=0.05, na.rm=TRUE),
+              p10 = quantile(result, probs=0.1, na.rm=TRUE),
+              p25 = quantile(result, probs=0.25, na.rm=TRUE),
+              p50 = quantile(result, probs=0.5, na.rm=TRUE),
+              p75 = quantile(result, probs=0.75, na.rm=TRUE),
+              p90 = quantile(result, probs=0.9, na.rm=TRUE),
+              p95 = quantile(result, probs=0.95,na.rm=TRUE),
               nYears = length(unique(year))) %>%
-    left_join(annual_stats, by = "month")
+    dplyr::left_join(annual_stats, by = "month")
   
   return(monthly_stats)
   
@@ -102,8 +105,6 @@ monthly_frequency_table <- function(gw_level_dv,
 #' showing the last year of groundwater level measurements.
 #' 
 #' @import ggplot2
-#' @importFrom tidyr pivot_longer
-#' @import dplyr
 #' 
 #' @export
 #'
@@ -138,13 +139,21 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    y_axis_label = "",
                                    flip_y = FALSE) {
   
-
+  checkmate::assert_data_frame(gw_level_dv)
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
   approved_col <- ifelse(is.na(approved_col),
-                        paste0(value_col, "_cd"),
-                        approved_col)   
+                         paste0(value_col, "_cd"),
+                         approved_col) 
+  
+  checkmate::assert_string(date_col)
+  checkmate::assert_string(value_col)
+  checkmate::assert_string(approved_col)
+  
+  needed_cols <- c(date_col, value_col, approved_col)
+  
+  checkmate::assertNames(names(gw_level_dv), must.include = needed_cols)
   
   
   plot_range <- match.arg(plot_range)
@@ -326,8 +335,6 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' 
 #' @return a data frame of weekly frequency analysis
 #' 
-#' @import dplyr
-#' 
 #' @export
 #' 
 #' @examples 
@@ -342,9 +349,7 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' head(weekly_frequency)
 weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
                                    date_col = NA, value_col = NA, approved_col = NA) {
-  
-  Date <- gw_level <- year <- week <- ".dplyr"
-  
+
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
   approved_col <- ifelse(is.na(approved_col),
@@ -356,29 +361,29 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
     stop("not all columns found in gw_level_dv")
   }
   
-  gw_level_dv <- gw_level_dv %>%
-    dplyr::filter(grepl("A", !!sym(approved_col))) %>%
-    dplyr::mutate(year = as.POSIXlt(!!sym(date_col))$year + 1900,
-           week = as.POSIXlt(!!sym(date_col))$yday%/%7 + 1 )
-  
+  gw_level_dv <- gw_level_dv[ grepl("A", gw_level_dv[[approved_col]]), ]
+  gw_level_dv$year <- as.POSIXlt(gw_level_dv[[date_col]])$year + 1900
+  gw_level_dv$week <- as.POSIXlt(gw_level_dv[[date_col]])$yday%/%7 + 1
+  gw_level_dv$result <- gw_level_dv[[value_col]]
+
   annual_stats <- gw_level_dv %>%
     dplyr::group_by(year, week) %>%
-    dplyr::summarize(median = median(!!sym(value_col))) %>%
+    dplyr::summarize(median = median(result, na.rm = TRUE)) %>%
     dplyr::group_by(week) %>%
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
                      maxMed = max(median, na.rm = TRUE))
   
   weekly_stats <- gw_level_dv %>%
     dplyr::group_by(week) %>%
-    dplyr::summarize(p5 = quantile(!!sym(value_col), probs=0.05, na.rm=TRUE),
-              p10 = quantile(!!sym(value_col), probs=0.1, na.rm=TRUE),
-              p25 = quantile(!!sym(value_col), probs=0.25, na.rm=TRUE),
-              p50 = quantile(!!sym(value_col), probs=0.5, na.rm=TRUE),
-              p75 = quantile(!!sym(value_col), probs=0.75, na.rm=TRUE),
-              p90 = quantile(!!sym(value_col), probs=0.9, na.rm=TRUE),
-              p95 = quantile(!!sym(value_col), probs=0.95,na.rm=TRUE),
+    dplyr::summarize(p5 = quantile(result, probs=0.05, na.rm=TRUE),
+              p10 = quantile(result, probs=0.1, na.rm=TRUE),
+              p25 = quantile(result, probs=0.25, na.rm=TRUE),
+              p50 = quantile(result, probs=0.5, na.rm=TRUE),
+              p75 = quantile(result, probs=0.75, na.rm=TRUE),
+              p90 = quantile(result, probs=0.9, na.rm=TRUE),
+              p95 = quantile(result, probs=0.95,na.rm=TRUE),
               nYears = length(unique(year))) %>%
-    left_join(annual_stats, by = "week")
+    dplyr::left_join(annual_stats, by = "week")
   
   return(weekly_stats)
   
@@ -410,9 +415,6 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' and points representing the historical median and daily values
 #' 
 #' @import ggplot2
-#' @import dplyr
-#' @importFrom tidyr pivot_longer
-#' @importFrom tidyr pivot_wider
 #' 
 #' @export
 #'
@@ -443,11 +445,6 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                   plot_title = "", 
                                   y_axis_label = "",
                                   flip_y = FALSE) {
-  
-  Date <- nYears <- minMed <- maxMed <- name <- value <- group <-
-  plot_week_med <- p50 <- gw_code <- gw_level <- x <- y <- 
-  plot_week_last <- ymin <- ymax <- week <- ".dplyr"
-  p5 <- p10 <- p25 <- p75 <- p90 <- p95 <- ".dplyr"
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
@@ -490,12 +487,12 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
   plot_week_lookup <- data.frame(plot_week = plot_week, 
                                  week = as.POSIXlt(plot_week)$yday%/%7 + 1)
-  site_statistics <- left_join(site_statistics, plot_week_lookup, by = "week")
+  site_statistics <- dplyr::left_join(site_statistics, plot_week_lookup, by = "week")
   
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
-    select(-week, -nYears, -minMed, -maxMed) %>%
-    pivot_longer(cols = -plot_week, names_to = "name", values_to = "value")
+    dplyr::select(-week, -nYears, -minMed, -maxMed) %>%
+    tidyr::pivot_longer(cols = -plot_week, names_to = "name", values_to = "value")
   
   cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
@@ -503,37 +500,37 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   plot_list <- data.frame()
   for(i in seq_along(cols)) {
     plot_data <- site_statistics_pivot %>%
-      filter(name %in% cols[[i]]) %>%
-      pivot_wider(id_cols = plot_week, names_from = name, values_from = value) %>%
-      rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
-      mutate(group = groups[i])
-    plot_list <- bind_rows(plot_list, plot_data)
+      dplyr::filter(name %in% cols[[i]]) %>%
+      tidyr::pivot_wider(id_cols = plot_week, names_from = name, values_from = value) %>%
+      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
+      dplyr::mutate(group = groups[i])
+    plot_list <- dplyr::bind_rows(plot_list, plot_data)
   }
   
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
   site_statistics_plot <- plot_list %>%
-    mutate(group = factor(group,
+    dplyr::mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
            plot_week_last = plot_week + 7)
   
   # The median value will plot in the middle of the month
   site_statistics_med <- site_statistics %>%
-    mutate(plot_week_med = plot_week + 3,
+    dplyr::mutate(plot_week_med = plot_week + 3,
            group = "Historical weekly median") %>%
-    select(plot_week_med, p50, group) %>%
-    rename(x = plot_week_med, y = p50)
+    dplyr::select(plot_week_med, p50, group) %>%
+    dplyr::rename(x = plot_week_med, y = p50)
   
   data_points <- gw_level_plot %>%
-    mutate(gw_code = ifelse(grepl("A", !!sym(approved_col)), "Approved", "Provisional"),
+    dplyr::mutate(gw_code = ifelse(grepl("A", !!sym(approved_col)), "Approved", "Provisional"),
            group = sprintf("%s daily value", gw_code)) %>%
-    rename(x = Date,
+    dplyr::rename(x = Date,
            y = !!sym(value_col)) %>%
-    select(x, y, group)
+    dplyr::select(x, y, group)
   
-  point_data <- bind_rows(site_statistics_med, data_points) %>%
-    mutate(group = factor(group,
+  point_data <- dplyr::bind_rows(site_statistics_med, data_points) %>%
+    dplyr::mutate(group = factor(group,
                           levels = c("Historical weekly median",
                                      "Approved daily value",
                                      "Provisional daily value"),
@@ -658,10 +655,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
 #' 
 #' @export
 #' 
-#' @import dplyr
 #' @import ggplot2
-#' @importFrom tidyr pivot_longer
-#' @importFrom stats setNames
 #'
 #' @examples
 #' 
@@ -693,10 +687,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
                                plot_title = "",
                                y_axis_label = "",
                                flip_y = FALSE) {
-  
-  Date <- gw_level_cd <- J <- gw_level <- name <- group <- value <- gw_level_cd <- middle <-
-    ".dplyr"
-  
+
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
   approved_col <- ifelse(is.na(approved_col),
@@ -712,16 +703,15 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
   historical_name <- paste("Historical", historical_stat)
   
   # Calculate the historical max/min/median for each day
+
+  gw_level_dv$J = as.numeric(as.character(gw_level_dv[[date_col]], format = "%j"))
+  gw_level_dv$result <- gw_level_dv[[value_col]]
   
-  gw_level_dv <- gw_level_dv %>%
-    mutate(J = as.numeric(as.character(!!sym(date_col), format = "%j")))
-  
-  historical_stats <- gw_level_dv %>%
-    filter(grepl("A", !!sym(approved_col))) %>%
-    group_by(J) %>%
-    summarize(max = max(!!sym(value_col), na.rm = TRUE),
-              middle = historical_function(!!sym(value_col), na.rm = TRUE),
-              min = min(!!sym(value_col), na.rm = TRUE))
+  historical_stats <- gw_level_dv[grepl("A", gw_level_dv[[approved_col]]), ] %>%
+    dplyr::group_by(J) %>%
+    dplyr::summarize(max = max(result, na.rm = TRUE),
+              middle = historical_function(result, na.rm = TRUE),
+              min = min(result, na.rm = TRUE))
   
   # Pull the last two years of data & join with the historical data
   
@@ -734,24 +724,27 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
   plot_end <- most_recent + as.difftime(90, units = "days")
   buffer_dates <- seq.Date(most_recent, plot_end, by = "day")[-1]
   buffer_j <- as.numeric(as.character(buffer_dates, "%j"))
-  buffer <- setNames(data.frame(buffer_dates, buffer_j), c(date_col, "J"))
+  buffer <- stats::setNames(data.frame(buffer_dates, buffer_j), c(date_col, "J"))
+  
+  names(gw_level_dv)[names(gw_level_dv) == date_col] <- "Date"
+  names(gw_level_dv)[names(gw_level_dv) == value_col] <- "gw_level"
+  names(gw_level_dv)[names(gw_level_dv) == approved_col] <- "gw_level_cd"
   
   plot_data <- gw_level_dv %>%
-    filter(!!sym(date_col) >= plot_start,
-           !!sym(date_col) <= most_recent) %>%
-    bind_rows(buffer) %>%
-    left_join(historical_stats, by = "J") %>%
-    mutate(group = "Approved Daily\nMin & Max")
+    dplyr::filter(Date >= plot_start,
+                  Date <= most_recent) %>%
+    dplyr::bind_rows(buffer) %>%
+    dplyr::left_join(historical_stats, by = "J") %>%
+    dplyr::mutate(group = "Approved Daily\nMin & Max")
   
   line_data <- plot_data %>%
-    rename(Date = !!date_col, gw_level = !!value_col, gw_level_cd = !!approved_col) %>%
-    select(Date, gw_level_cd, gw_level, middle) %>%
-    pivot_longer(-Date:-gw_level_cd) %>%
-    mutate(group = ifelse(name == "gw_level",
+    dplyr::select(Date, gw_level_cd, gw_level, middle) %>%
+    tidyr::pivot_longer(-Date:-gw_level_cd) %>%
+    dplyr::mutate(group = ifelse(name == "gw_level",
                           ifelse(gw_level_cd == "A", "Approved daily value", "Provisional daily value"),
                           historical_name)) %>%
-    select(-gw_level_cd, -name) %>%
-    filter(!is.na(value))
+    dplyr::select(-gw_level_cd, -name) %>%
+    dplyr::filter(!is.na(value))
   
   line_data$group <- ordered(line_data$group, 
                              levels = c("Approved daily value", 
@@ -832,8 +825,6 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
 #' @return a data frame giving the max, mean, min, and number of available
 #' days of data for each day of the year.
 #' 
-#' @import dplyr
-#' 
 #' @export
 #' 
 #' @examples 
@@ -851,8 +842,7 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
                                   date_col = NA, value_col = NA, 
                                   approved_col = NA) {
   
-  DOY <- ".dplyr"
-  
+
   date_col <- ifelse(is.na(date_col), "Date", date_col)
   value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
   approved_col <- ifelse(is.na(approved_col),
@@ -863,14 +853,16 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
     stop("Not all columns found in gw_level_dv")
   }
   
-  historical_stats <- gw_level_dv %>%
-    filter(grepl("A", !!sym(approved_col))) %>%
-    mutate(DOY = as.numeric(as.character(!!sym(date_col), "%j"))) %>%
-    group_by(DOY) %>%
-    summarize(max = max(!!sym(value_col), na.rm = TRUE),
-              mean = mean(!!sym(value_col), na.rm = TRUE),
-              min = min(!!sym(value_col), na.rm = TRUE),
-              points = n())
+  historical_stats <- gw_level_dv[grepl("A", gw_level_dv[[approved_col]]), ] 
+  historical_stats$DOY <- as.numeric(as.character(historical_stats[[date_col]], "%j")) 
+  historical_stats$results <- historical_stats[[value_col]]
+  
+  historical_stats <- historical_stats %>%
+    dplyr::group_by(DOY) %>%
+    dplyr::summarize(max = max(results, na.rm = TRUE),
+              mean = mean(results, na.rm = TRUE),
+              min = min(results, na.rm = TRUE),
+              points = dplyr::n())
   return(historical_stats)
   
 }
@@ -894,8 +886,6 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' 
 #' @export
 #' 
-#' @import dplyr
-#'
 #' @examples
 #' 
 #' # site <- "263819081585801"
@@ -924,10 +914,10 @@ daily_gwl_summary <- function(gw_level_dv, parameter_cd = NA,
     stop("Not all columns found in gw_level_dv")
   }
     
-  gw_level_dv <- gw_level_dv %>%
-    rename(gw_level = !!sym(value_col),
-           gw_level_cd = !!sym(approved_col)) %>%
-    filter(grepl("A", gw_level_cd))
+  gw_level_dv$gw_level <- gw_level_dv[[value_col]]
+  gw_level_dv$gw_level_cd <- gw_level_dv[[approved_col]]
+  
+  gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv$gw_level_cd), ]
   
   begin_date <- min(gw_level_dv[,date_col], na.rm = TRUE)
   end_date <- max(gw_level_dv[,date_col], na.rm = TRUE)

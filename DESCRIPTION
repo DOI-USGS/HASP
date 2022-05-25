@@ -40,7 +40,9 @@ Imports:
     shinydashboard,
     EnvStats,
     openxlsx,
-    shinyWidgets
+    shinyWidgets,
+    checkmate,
+    magrittr
 Suggests:
     rmarkdown,
     testthat,
