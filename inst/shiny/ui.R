@@ -9,16 +9,7 @@ init_text <- "######################################
 # Setup:
 library(HASP)"
 
-header <- dashboardHeader(title = "HASP",
-                          tags$li(class = "dropdown", tags$button(
-                            id = 'close',
-                            type = "button",
-                            class = "btn action-button",
-                            style='color: #000000; 
-                            margin-right:13px;margin-top:7px;margin-bottom:7px',
-                            onclick = "setTimeout(function(){window.close();},500);",  # close browser
-                            "Stop Shiny App"
-                          )))
+header <- dashboardHeader(title = "HASP")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
@@ -42,6 +33,7 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  includeCSS("www/custom.css"),
   tabBox(width = 12, id = "mainOut",
          tabPanel(title = tagList("Composite Hydrograph", shiny::icon("bar-chart")),
                   value = "comp_plot",
@@ -78,3 +70,25 @@ body <- dashboardBody(
 
 dashboardPage(header, sidebar, body)
 
+ui <- tagList(
+  tags$header(class = "navbar",
+              tags$a(href = 'https://www.usgs.gov/', type = "button",
+                     img(src = 'logo.png', target="_blank",
+                         title = "USGS", height = "60px"),
+                     style = "float: left; 
+                              padding: 10px 50px 10px 50px;"),
+              tags$li(class = "dropdown", tags$button(
+                id = 'close',
+                type = "button",
+                class = "btn action-button",
+                style='color: #000000; 
+                       float: right;
+                       margin-right:13px;margin-top:7px;margin-bottom:7px',
+                onclick = "setTimeout(function(){window.close();},500);",  # close browser
+                "Stop Shiny App"
+              ))),
+  dashboardPage(header = dashboardHeader(disable = TRUE),
+                sidebar = sidebar,
+                body = body),
+  tags$footer(htmltools::includeHTML("www/footer.html") )
+)
