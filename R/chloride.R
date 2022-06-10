@@ -41,8 +41,8 @@ trend_plot <- function(qw_data, plot_title,
   qw_sub <- qw_data[qw_data$CharacteristicName %in% CharacteristicName, ]
   qw_sub <- qw_sub[order(qw_sub$ActivityStartDateTime), ]
   
-  qw_sub$year <- as.numeric(format(qw_sub$ActivityStartDateTime, "%Y")) +
-    as.numeric(as.character(qw_sub$ActivityStartDateTime, "%j"))/365
+  qw_sub$year <- as.numeric(format(as.Date(qw_sub$ActivityStartDate), "%Y")) +
+    as.numeric(as.character(as.Date(qw_sub$ActivityStartDate), "%j"))/365
 
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"

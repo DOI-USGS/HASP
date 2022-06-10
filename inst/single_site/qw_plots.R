@@ -3,6 +3,7 @@ cl_trend_plot <- reactive({
   validate(
     need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
+
   plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],
                       attr(qwData(), "siteInfo")[["site_no"]], sep = "\n")
   chl_plot <-  trend_plot(qwData(), plot_title = plot_title) 
@@ -126,7 +127,7 @@ qw1_plot <- reactive({
   validate(
     need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
-  
+
   pcode <-  input$pcode_plot
   
   plot_title <- paste(attr(qwData(), "siteInfo")[["station_nm"]],

@@ -102,7 +102,7 @@ qw_plot <- function(qw_data, plot_title,
 
   qw_data <- qw_data %>% 
     dplyr::filter(CharacteristicName %in% !!CharacteristicName)  %>% 
-    dplyr::mutate(year = as.numeric(format(ActivityStartDateTime, "%Y")) + as.numeric(as.character(ActivityStartDateTime, "%j"))/365)
+    dplyr::mutate(year = as.numeric(format(as.Date(ActivityStartDate), "%Y")) + as.numeric(as.character(as.Date(ActivityStartDate), "%j"))/365)
   
   if(is.na(y_label)){
     y_label <- attr(qw_data, "variableInfo")
