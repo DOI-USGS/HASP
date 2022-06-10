@@ -41,6 +41,10 @@ trend_plot <- function(qw_data, plot_title,
   qw_sub <- qw_data[qw_data$CharacteristicName %in% CharacteristicName, ]
   qw_sub <- qw_sub[order(qw_sub$ActivityStartDateTime), ]
   
+  if(!"ActivityStartDate" %in% names(qw_sub)){
+    qw_sub$ActivityStartDate <- as.Date(qw_sub$ActivityStartDateTime)
+  }
+  
   qw_sub$year <- as.numeric(format(as.Date(qw_sub$ActivityStartDate), "%Y")) +
     as.numeric(as.character(as.Date(qw_sub$ActivityStartDate), "%j"))/365
 
