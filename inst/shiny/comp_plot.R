@@ -14,7 +14,6 @@ comp_plot <- reactive({
   }
 
   comp_plot <-  plot_composite_data(y, 
-                                    sum_col = input$gwl_vals, 
                                     plot_title = rawData_data$aquifer_cd) 
   
   return(comp_plot)
@@ -25,7 +24,6 @@ comp_plot_out <- reactive({
   code_out <- paste0(setup(),'
 library(ggplot2)
 comp_plot <-  plot_composite_data(aquifer_data, 
-                                  sum_col = "',input$gwl_vals,'",
                                   plot_title = "',rawData_data$aquifer_cd,'")
 comp_plot
 # To save:

@@ -66,27 +66,30 @@ get_state_data <- function(state, aquiferCd,
                            startDate, endDate, parameter_cd){
 
   levels <- dataRetrieval::readNWISdata(stateCd = state, 
-                         parameterCd = parameter_cd,
                          service = "gwlevels",
                          startDate= startDate,
                          endDate = endDate,
-                         aquiferCd = aquiferCd)
+                         aquiferCd = aquiferCd,
+                         format = "rdb,3.0")
   
   levels_dv <- dataRetrieval::readNWISdata(stateCd = state, 
                          service = "dv",
-                         parameterCd = parameter_cd,
+                         parameterCd = unique(levels$parameter_cd),
                          statCd = "00003",
                          startDate= startDate,
                          endDate = endDate,
                          aquiferCd = aquiferCd)
+  parameter_cd <- names(levels_dv)[grep("X_", names(levels_dv))][1]
+  parameter_cd <- gsub("X_", "", parameter_cd)
+  parameter_cd <- substr(parameter_cd,start = 1, 5)
+  
   val_col <- ifelse(parameter_cd == "72019", "lev_va", "sl_lev_va")
   
   if(nrow(levels) > 0){
-    state_data <- levels[ , c(val_col, "lev_dt", "site_no", "lev_age_cd")]
-    
+
     state_data <- levels %>% 
       dplyr::filter(lev_age_cd == "A") %>% 
-      dplyr::select(lev_dt, site_no, dplyr::all_of(val_col)) 
+      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) 
     
     state_data$state_call <- state
     state_data$value <- state_data[[val_col]]
@@ -97,8 +100,7 @@ get_state_data <- function(state, aquiferCd,
                                                split = "-"), 
                                       function(x) x[1])),
              water_year = water_year(lev_dt),
-             lev_dt = as.Date(lev_dt)) %>% 
-      dplyr::select(-dplyr::all_of(val_col))
+             lev_dt = as.Date(lev_dt))
   } else {
     state_data <- data.frame()
   }

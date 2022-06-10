@@ -44,7 +44,7 @@ observeEvent(input$get_data,{
     
     id_message <- showNotification(paste("Getting data from: ", state), 
                      type = "message", duration = NULL)
-    
+
     state_data <- tryCatch(
       expr = {
         HASP:::get_state_data(state = state, 
