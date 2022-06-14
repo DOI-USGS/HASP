@@ -58,27 +58,27 @@ body <- dashboardBody(
 
                   
          ),
-         tabPanel(title = tagList("Groundwater", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Groundwater", shiny::icon("chart-bar")),
                   value = "gwl_plot",
                   ggraph_table_downloaders_1line("gwl_graph", init_text = init_text)
 
          ),
-         tabPanel(title = tagList("Weekly Frequency", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Weekly Frequency", shiny::icon("chart-bar")),
                   value = "week_plot",
                   ggraph_table_downloaders("week_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("Daily Plot", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Daily Plot", shiny::icon("chart-bar")),
                   value = "year2_plot",
                   ggraph_table_downloaders("year2_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("Monthly Plot", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Monthly Plot", shiny::icon("chart-bar")),
                   value = "month_plot",
                   ggraph_table_downloaders_1line("month_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("Chloride", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Chloride", shiny::icon("chart-bar")),
                   value = "chloride_plot",
                   ggraph_table_downloaders_1line("chloride_graph", init_text = init_text)
                   

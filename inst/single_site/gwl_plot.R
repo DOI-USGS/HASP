@@ -130,7 +130,7 @@ gwl_plot <-  gwl_plot_all(gw_level_dv,
                           gwl_data, 
                           date_col = date_col,
                           value_col = val_col,
-                          parameter_cd = ', p_code_dv,'
+                          parameter_cd = "', p_code_dv,'",
                           approved_col = approved_col,
                           y_label = y_label,
                           plot_title = plot_title,
@@ -236,14 +236,14 @@ approved_col <- "', approv_col,'"
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
                                     date_col = "Date",
                                     value_col = val_col,
-                                    parameter_cd = "', p_code_dv,'"
+                                    parameter_cd = "', p_code_dv,'",
                                     approved_col = approved_col,
                                     plot_title = plot_title)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
                                      value_col = val_col,
-                                     parameter_cd = "', p_code_dv,'"
+                                     parameter_cd = "', p_code_dv,'",
                                      approved_col = approved_col,
                                      date_col = "Date")
 
@@ -336,7 +336,7 @@ approved_col <- "', approv_col,'"
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
                                   date_col = "Date",
                                   value_col = val_col,
-                                  parameter_cd = "', p_code_dv, '"
+                                  parameter_cd = "', p_code_dv, '",
                                   approved_col = approved_col,
                                   plot_title = plot_title,
                                   historical_stat = "mean",
@@ -440,7 +440,6 @@ approved_col <- "', approv_col,'"
 month_plot <-  monthly_frequency_plot(gw_level_dv,  
                                       date_col = "Date",
                                       value_col = val_col,
-                                      p_code_dv = ', p_code_dv,'
                                       approved_col = approved_col,
                                       plot_title = plot_title)
 month_plot
@@ -448,7 +447,6 @@ month_plot
 month_frequencies <- monthly_frequency_table(gw_level_dv,  
                                              date_col = "Date",
                                              value_col = val_col,
-                                             p_code_dv = ', p_code_dv,'
                                              approved_col = approved_col)
 # To save:
 # Fiddle with height and width (in inches) for best results:
