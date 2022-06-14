@@ -137,7 +137,7 @@ filter_sites <- function(x,
     num_years <- end_year - start_year
   }
   
-  if(num_years > end_year - start_year){
+  if(num_years > end_year +1 - start_year){
     num_years <- end_year - start_year
     warning("Supplied num_years was more than the data range.\nSwitching to num_year = ", num_years)
   }
