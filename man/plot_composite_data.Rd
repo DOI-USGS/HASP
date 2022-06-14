@@ -34,7 +34,8 @@ comp_data
 # Do it on a water year:
 aquifer_data$cal_year <- aquifer_data$year
 aquifer_data$year <- aquifer_data$water_year
-plot_composite_data(aquifer_data, num_years, 
+plot_composite_data(aquifer_data, 
                     parameter_cd = "72019",
+                    num_years = 30,
                     plot_title = "Water Year")
 }

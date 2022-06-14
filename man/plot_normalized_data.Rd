@@ -40,5 +40,5 @@ aquifer_data$cal_year <- aquifer_data$year
 aquifer_data$year <- aquifer_data$water_year
 plot_normalized_data(aquifer_data, 
                      parameter_cd = "72019",
-                     num_years = num_years)
+                     num_years = 30)
 }
