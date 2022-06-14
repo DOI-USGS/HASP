@@ -48,9 +48,10 @@ observeEvent(input$get_data,{
     state_data <- tryCatch(
       expr = {
         HASP:::get_state_data(state = state, 
-                                    aquiferCd = short_code, 
-                                    startDate = start_date,
-                                    endDate = end_date)
+                              aquiferCd = short_code, 
+                              startDate = start_date,
+                              endDate = end_date,
+                              parameter_cd = input$pcode)
       }, 
       error = function(e){ 
         cat(state, "errored \n")

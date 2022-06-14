@@ -110,7 +110,7 @@ filter_sites <- function(x, num_years = NA,
   
   #if the user doesn't define start/end, use the whole thing
   if(is.na(start_year)){
-    start_year <- min(pick_sites$year)
+    start_year <- min(pick_sites$year, na.rm = TRUE)
   }
   
   if(is.na(end_year)){
@@ -143,6 +143,12 @@ filter_sites <- function(x, num_years = NA,
   sites_incomplete <- unique(pick_sites_comp$site_no[is.na(pick_sites_comp$n_meas)])
   sites_complete <- unique(pick_sites_comp$site_no)
   sites_complete <- sites_complete[!sites_complete %in% sites_incomplete]
+  
+  # If no sites are complete...we could walk back until there are some 
+  # complete sets?
+  if(length(sites_complete) == 0){
+    warning("No sites had a complete data set")
+  }
   
   pick_sites_comp_sum <- pick_sites_comp %>% 
     dplyr::filter(site_no %in% sites_complete) %>% 

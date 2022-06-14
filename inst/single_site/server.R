@@ -19,7 +19,8 @@ shinyServer(function(input, output, session) {
   output$dataAvailable <- DT::renderDataTable({
       availData()
     }, 
-    escape=FALSE, rownames = FALSE, options = list(dom = "t")
+    escape=FALSE, rownames = FALSE, 
+    options = list(dom = "t"), server = FALSE
   )
   
   any_data <- reactive({

@@ -40,7 +40,7 @@ shinyServer(function(input, output, session) {
     
     shinyAce::updateAceEditor(session, editorId = "map_code", value = map_code() )
     
-    x <- filter_sites(aquifer_data, input$gwl_vals, 30)
+    x <- filter_sites(aquifer_data, num_years = 30)
     
     if(nrow(x) == 0){
       x <- aquifer_data
@@ -64,18 +64,18 @@ shinyServer(function(input, output, session) {
     
   })
 
-  observe({
-    gwl_data <- rawData_data$data
-
-    if(all(is.na(gwl_data$sl_lev_va))){
-      updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
-    }
-    
-    if(all(is.na(gwl_data$lev_va))){
-      updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
-    }
-
-  })
+  # observe({
+  #   gwl_data <- rawData_data$data
+  # 
+  #   if(all(is.na(gwl_data$sl_lev_va))){
+  #     updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
+  #   }
+  #   
+  #   if(all(is.na(gwl_data$lev_va))){
+  #     updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
+  #   }
+  # 
+  # })
   
   callModule(graph_download_code, 'composite_graph', 
              plot_gg = comp_plot, 

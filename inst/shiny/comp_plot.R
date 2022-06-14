@@ -3,8 +3,12 @@ comp_plot <- reactive({
   validate(
     need(!is.null(rawData_data$data), "Please select a data set")
   )
-  x <- rawData()
-  y <- filter_sites(x, input$gwl_vals, 
+  df <- rawData()
+  pcode <- input$pcode
+  df <- df %>%
+    dplyr::filter(parameter_cd %in% pcode)
+  
+  y <- filter_sites(df, 
                     start_year = input$start_year, 
                     end_year = input$end_year)
   

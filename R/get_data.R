@@ -71,59 +71,67 @@ get_state_data <- function(state, aquiferCd,
                          endDate = endDate,
                          aquiferCd = aquiferCd,
                          format = "rdb,3.0")
-  
+
   levels_dv <- dataRetrieval::readNWISdata(stateCd = state, 
                          service = "dv",
-                         parameterCd = unique(levels$parameter_cd),
                          statCd = "00003",
                          startDate= startDate,
                          endDate = endDate,
                          aquiferCd = aquiferCd)
-  parameter_cd <- names(levels_dv)[grep("X_", names(levels_dv))][1]
-  parameter_cd <- gsub("X_", "", parameter_cd)
-  parameter_cd <- substr(parameter_cd,start = 1, 5)
   
-  val_col <- ifelse(parameter_cd == "72019", "lev_va", "sl_lev_va")
-  
+  if(nrow(levels) + nrow(levels_dv) == 0){
+    return(data.frame())
+  }
+
   if(nrow(levels) > 0){
 
     state_data <- levels %>% 
       dplyr::filter(lev_age_cd == "A") %>% 
-      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) 
+      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) %>%
+      dplyr::mutate(value = dplyr::case_when(is.na(lev_va) ~ sl_lev_va,
+                                             TRUE ~ lev_va),
+                    state_call = state,
+                    year = as.integer(format(as.Date(lev_dt), "%Y")),
+                    water_year = water_year(lev_dt),
+                    lev_dt = as.Date(lev_dt)) %>%
+      dplyr::select(-lev_va, -sl_lev_va)
     
-    state_data$state_call <- state
-    state_data$value <- state_data[[val_col]]
-    state_data$lev_dt <- as.character(state_data$lev_dt)
-    
-    state_data <- state_data %>%
-      dplyr::mutate(year = as.numeric(sapply(strsplit(lev_dt, 
-                                               split = "-"), 
-                                      function(x) x[1])),
-             water_year = water_year(lev_dt),
-             lev_dt = as.Date(lev_dt))
   } else {
     state_data <- data.frame()
   }
   
   if(nrow(levels_dv) > 0){
-    val_col_dv <- paste0("X_", parameter_cd, "_00003")
-    
-    levels_dv$result <- levels_dv[[val_col_dv]]
+
     state_dv <- levels_dv %>% 
       dplyr::mutate(year = as.numeric(format(dateTime, "%Y")),
                     water_year = water_year(dateTime),
                     dateTime = as.character(as.Date(dateTime)),
                     state_call = state,
-                    value = as.numeric(result),
-                    lev_dt = as.Date(dateTime)) %>% 
-      dplyr::select(dplyr::all_of(c("lev_dt", "site_no", "state_call", "value",
-                                    "year", "water_year")))
+                    lev_dt = as.Date(dateTime)) 
     
+    cds <- which(!grepl("_cd", names(state_dv)) &
+      !names(state_dv) %in% c("agency_cd", "site_no", "water_year",
+                              "dateTime", "tz_cd", "year",
+                              "state_call", "lev_dt"))
+    names(state_dv)[cds] <- sprintf("%s_value", names(state_dv)[cds])
+    
+    state_dv <- state_dv %>%
+      tidyr::pivot_longer(cols = c(-agency_cd, -site_no, -water_year,
+                                   -dateTime, -tz_cd, -year,
+                                   -state_call, -lev_dt), 
+                   names_to = c("pcode", ".value"),
+                   names_pattern = "(.+)_(.+)") %>%
+      dplyr::mutate(pcode = gsub("X_", "", pcode),
+                    pcode = substr(pcode, 1, 5)) %>%
+      dplyr::rename(lev_status_cd = cd,
+                    parameter_cd = pcode) %>%
+      dplyr::filter(lev_status_cd == "A") %>%
+      dplyr::select(-dateTime, -tz_cd, -agency_cd, -lev_status_cd)
+      
   } else {
     state_dv = data.frame()
   }
   
-
   state_data_tots <- dplyr::bind_rows(state_data, 
                                state_dv)
   
