@@ -28,6 +28,7 @@ norm_plot <- reactive({
 norm_plot_out <- reactive({
   code_out <- paste0(setup(),'
 library(ggplot2)
+aquifer_data <- dplyr::filter(parameter_cd == "', input$pcode,'")
 norm_plot <-  plot_normalized_data(aquifer_data, 
                                    sum_col = "',input$gwl_vals,'",
                                    plot_title ="',rawData_data$aquifer_cd,'")

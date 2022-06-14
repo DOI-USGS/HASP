@@ -64,19 +64,6 @@ shinyServer(function(input, output, session) {
     
   })
 
-  # observe({
-  #   gwl_data <- rawData_data$data
-  # 
-  #   if(all(is.na(gwl_data$sl_lev_va))){
-  #     updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
-  #   }
-  #   
-  #   if(all(is.na(gwl_data$lev_va))){
-  #     updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
-  #   }
-  # 
-  # })
-  
   callModule(graph_download_code, 'composite_graph', 
              plot_gg = comp_plot, 
              code_out = comp_plot_out, 

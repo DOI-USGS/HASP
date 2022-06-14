@@ -47,7 +47,6 @@ body <- dashboardBody(
          ),
          tabPanel(title = tagList("Map", shiny::icon("map-marker")),
                   value = "map",
-                  h3("Site used in composite hydrograph"),
                   leaflet::leafletOutput("mymap",height = "500px"),
                   h4("R Code:"),
                   shinyAce::aceEditor(outputId = "map_code", value = init_text, 

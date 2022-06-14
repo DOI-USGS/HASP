@@ -9,7 +9,7 @@ ci/*
 HASP_*.tar.gz
 orig_scripts/
 DISCLAIMER.md
-^doc$
+^docs$
 ^Meta$
 code.json
 travis.yml
@@ -44,4 +44,4 @@ vignettes/git_login.png
 vignettes/login.png
 vignettes/git_repository.png
 vignettes/https_clone.png
-
+deploy_simple.R

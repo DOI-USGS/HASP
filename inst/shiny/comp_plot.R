@@ -27,6 +27,7 @@ comp_plot <- reactive({
 comp_plot_out <- reactive({
   code_out <- paste0(setup(),'
 library(ggplot2)
+aquifer_data <- dplyr::filter(parameter_cd == "', input$pcode,'")
 comp_plot <-  plot_composite_data(aquifer_data, 
                                   plot_title = "',rawData_data$aquifer_cd,'")
 comp_plot
