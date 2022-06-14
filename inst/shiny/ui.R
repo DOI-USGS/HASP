@@ -35,12 +35,12 @@ sidebar <- dashboardSidebar(
 body <- dashboardBody(
   includeCSS("www/custom.css"),
   tabBox(width = 12, id = "mainOut",
-         tabPanel(title = tagList("Composite Hydrograph", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Composite Hydrograph", shiny::icon("chart-bar")),
                   value = "comp_plot",
                   ggraph_w_downloaders("composite_graph", init_text = init_text)
 
          ),
-         tabPanel(title = tagList("Normalized Composite Hydrograph", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Normalized Composite Hydrograph", shiny::icon("chart-bar")),
                   value = "norm_plot",
                   ggraph_w_downloaders("normalized_graph", init_text = init_text)
                   

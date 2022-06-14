@@ -11,6 +11,7 @@
 #'
 #' @examples 
 #' aquifer_data <- aquifer_data
+#' aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
 #' summary_info <- site_data_summary(aquifer_data)
 site_data_summary <- function(x){
 
@@ -86,15 +87,21 @@ prep_map_data <- function(x ){
 #' the filter will use the minimum from the data.
 #' @param end_year integer the last year to filter from. If \code{NA},
 #' the filter will use the last year.
+#' @param parameter_cd character, 5-digit parameter code, default is "72019".
 #' @return data frame filter of x
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' num_years <- 30
 #' 
-#' aq_data <- filter_sites(aquifer_data, num_years)
-filter_sites <- function(x, num_years = NA, 
-                         start_year = NA, end_year = NA){
+#' aq_data <- filter_sites(aquifer_data,
+#'                         parameter_cd = "72019",
+#'                         num_years = num_years)
+filter_sites <- function(x,
+                         parameter_cd = "72019",
+                         num_years = NA, 
+                         start_year = NA, 
+                         end_year = NA){
   
   if(nrow(x) == 0) stop("No data")
   
@@ -102,11 +109,19 @@ filter_sites <- function(x, num_years = NA,
 
   lev_va <- site_no <- year <- value <- n_years <- ".dplyr"
 
-  pick_sites <- x %>% 
+  pick_sites <- x[x$parameter_cd == parameter_cd, ]
+  
+  if(nrow(pick_sites) == 0){
+    warning("No data with requested parameter code.")
+    return(data.frame())
+  }
+  
+  pick_sites <- pick_sites %>%
     dplyr::filter(!is.na(value)) %>% 
     dplyr::group_by(site_no, year) %>% 
     dplyr::summarize(n_meas = dplyr::n()) %>% 
     dplyr::ungroup() 
+
   
   #if the user doesn't define start/end, use the whole thing
   if(is.na(start_year)){
@@ -180,6 +195,7 @@ filter_sites <- function(x, num_years = NA,
 #' 
 #' @param x aquifer data
 #' @param num_years integer number of years required
+#' @param parameter_cd character, 5-digit parameter code, default is "72019".
 #' @return data frame with year, name, and value
 #' 
 #' @export
@@ -187,9 +203,9 @@ filter_sites <- function(x, num_years = NA,
 #' aquifer_data <- aquifer_data
 #' num_years <- 30
 #' 
-#' comp_data <- composite_data(aquifer_data, num_years)
+#' comp_data <- composite_data(aquifer_data, num_years, "72019")
 #' 
-composite_data <- function(x, num_years){
+composite_data <- function(x, num_years, parameter_cd){
   
   year <- site_no <- n_sites_year <- med_site <- value <- name <- ".dplyr"
   
@@ -197,7 +213,7 @@ composite_data <- function(x, num_years){
   
   if(!all(c("site_no", "year", "value") %in% names(x))) stop("Missing columns")
 
-  x <- filter_sites(x, num_years)
+  x <- filter_sites(x, num_years, parameter_cd = parameter_cd)
   
   if(nrow(x) == 0){
     stop("No data ")
@@ -235,14 +251,15 @@ composite_data <- function(x, num_years){
 #' 
 #' @param x aquifer data
 #' @param num_years integer number of years required
+#' @param parameter_cd character, 5-digit parameter code, default is "72019".
 #' @return data frame with year, name, and value
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' num_years <- 30
 #' 
-#' norm_data <- normalized_data(aquifer_data, num_years)
-normalized_data <- function(x, num_years){
+#' norm_data <- normalized_data(aquifer_data, num_years, "72019")
+normalized_data <- function(x, num_years, parameter_cd = "72019"){
 
   if(nrow(x) == 0) stop("No data")
   
@@ -252,7 +269,9 @@ normalized_data <- function(x, num_years){
     stop("No data")
   }
   
-  x <- filter_sites(x, num_years)
+  x <- filter_sites(x,
+                    num_years = num_years, 
+                    parameter_cd = parameter_cd)
   n_sites <- length(unique(x$site_no))
   year_summaries <- site_data_summary(x)
   

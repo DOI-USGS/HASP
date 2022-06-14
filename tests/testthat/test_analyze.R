@@ -6,7 +6,7 @@ format_2 <- function(x){
 
 test_that("Site summaries", {
   aquifer_data <- aquifer_data
-
+  aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
   summary_info2 <- site_data_summary(aquifer_data)
 
   expect_type(summary_info2, "list")
@@ -91,7 +91,7 @@ test_that("Filter sites", {
   aquifer_data <- aquifer_data
   num_years <- 30
   
-  aq_data <- filter_sites(aquifer_data, num_years)
+  aq_data <- filter_sites(aquifer_data, num_years, parameter_cd = "72019")
   
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
@@ -109,7 +109,7 @@ test_that("Composite hydrodata", {
   aquifer_data <- aquifer_data
   num_years <- 30
   
-  comp_data <- composite_data(aquifer_data, num_years)
+  comp_data <- composite_data(aquifer_data, num_years, parameter_cd = "72019")
   
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
@@ -122,7 +122,7 @@ test_that("Normalized composite hydrodata", {
   aquifer_data <- aquifer_data
   num_years <- 30
   
-  norm_data <- normalized_data(aquifer_data, num_years)
+  norm_data <- normalized_data(aquifer_data, num_years, parameter_cd = "72019")
   
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",

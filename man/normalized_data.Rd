@@ -4,12 +4,14 @@
 \alias{normalized_data}
 \title{Composite normalized hydrograph data}
 \usage{
-normalized_data(x, num_years)
+normalized_data(x, num_years, parameter_cd = "72019")
 }
 \arguments{
 \item{x}{aquifer data}
 
 \item{num_years}{integer number of years required}
+
+\item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 }
 \value{
 data frame with year, name, and value
@@ -24,5 +26,5 @@ Information can be found here: \url{https://groundwaterwatch.usgs.gov/composite/
 aquifer_data <- aquifer_data
 num_years <- 30
 
-norm_data <- normalized_data(aquifer_data, num_years)
+norm_data <- normalized_data(aquifer_data, num_years, "72019")
 }

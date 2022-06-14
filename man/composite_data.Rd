@@ -4,12 +4,14 @@
 \alias{composite_data}
 \title{Composite hydrograph data}
 \usage{
-composite_data(x, num_years)
+composite_data(x, num_years, parameter_cd)
 }
 \arguments{
 \item{x}{aquifer data}
 
 \item{num_years}{integer number of years required}
+
+\item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 }
 \value{
 data frame with year, name, and value
@@ -21,6 +23,6 @@ Create composite data
 aquifer_data <- aquifer_data
 num_years <- 30
 
-comp_data <- composite_data(aquifer_data, num_years)
+comp_data <- composite_data(aquifer_data, num_years, "72019")
 
 }

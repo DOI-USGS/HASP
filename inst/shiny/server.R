@@ -94,10 +94,7 @@ long_name <- "', input$aquiferCd ,'"
 aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == long_name]
 aquifer_data <- get_aquifer_data(aquiferCd = "',aquiferCd,'",
                            startDate = "', start_date,'",
-                           endDate = "', end_date, '")
-aquifer_data <- filter_sites(aquifer_data, 
-                             start_year = ',year_start,',
-                             end_year = ', year_end,')')      
+                           endDate = "', end_date, '")')      
     }
     
     setup_code
@@ -105,8 +102,9 @@ aquifer_data <- filter_sites(aquifer_data,
   
   map_code <- reactive({
     paste0(setup(),'
-map_data <- map_hydro_data(aquifer_data, 
-                           sum_col = "lev_va", num_years = 30)
+map_data <- map_hydro_data(aquifer_data,  
+                           parameter_cd = "', input$pcode,'",
+                           num_years = 30)
 map_data')
            
   })
