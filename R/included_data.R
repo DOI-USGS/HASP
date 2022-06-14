@@ -40,6 +40,8 @@ NULL
 # end_date <- "2021-01-01"
 # aquiferCd <- "N100BSNRGB"
 # aquifer_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+# aquifer_data <- dplyr::filter(aquifer_data, parameter_cd %in%
+#                                 c( "72019"))
 # save(aquifer_data, file = "data/aquifer_data.RData", compress = "xz")
 
 

@@ -8,6 +8,7 @@ test_that("Site summaries", {
   aquifer_data <- aquifer_data
 
   summary_info2 <- site_data_summary(aquifer_data)
+
   expect_type(summary_info2, "list")
   
   expect_true(all(names(summary_info2) %in% 
@@ -113,7 +114,7 @@ test_that("Composite hydrodata", {
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(comp_data$value[1]), 149.63)
+  expect_equal(format_2(comp_data$value[1]), 150.89)
 })
 
 test_that("Normalized composite hydrodata", {
@@ -126,7 +127,7 @@ test_that("Normalized composite hydrodata", {
   expect_true(all(names(norm_data) %in% c("year", "name", "value")))
   expect_true(all(levels(norm_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(norm_data$value[1]), 0.08)
+  expect_equal(format_2(norm_data$value[1]), 0.1)
 })
 
 
