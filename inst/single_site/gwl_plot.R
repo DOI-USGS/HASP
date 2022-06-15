@@ -137,7 +137,9 @@ gwl_plot <-  gwl_plot_all(gw_level_dv,
                           add_trend = TRUE)
 gwl_plot
 
-gwl_summary_table <- site_data_summary(gw_level_dv)
+df <- gw_level_dv
+names(df)[names(df) == val_col] <- "value"
+gwl_summary_table <- site_data_summary(df)
 
 # To save plot:
 # Fiddle with height and width (in inches) for best results:
