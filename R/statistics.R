@@ -13,7 +13,7 @@
 #' @param value_col name of value column.
 #' @param seasonal logical. Use a seasonal kendall test or not seasonal. Default is \code{TRUE}.
 #' @param enough_5 number per year. Default is 10.
-#' @param enough_20 numbr per year. Default is 6.
+#' @param enough_20 number per year. Default is 6.
 #' @param alpha the confidence level to use for statistical significance
 #' @param include_current_year a logical indicating whether to include data from
 #' the current calendar year in the test.
@@ -42,9 +42,7 @@ kendell_test_5_20_years <- function(gwl,
                                     seasonal = TRUE, 
                                     enough_5 = 10, enough_20 = 6,
                                     include_current_year = FALSE) {
-  
-  year <- month <- ".dplyr"
-  
+
   if(!all(c(date_col, value_col) %in% names(gwl))) {
     stop("gwl should include ", date_col, " and ", value_col, " columns")
   }
@@ -171,19 +169,20 @@ monthly_mean <- function(x,
                          date_col = "Date",
                          value_col = "X_62610_00001"){
   
-  year <- month <- n_days <- mean_va <- ".dplyr"
-  
   days_in_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
   
+  x$result <- x[[value_col]]
+  x$date <- x[[date_col]]
+  
   monthly_mean <- x %>% 
-    mutate(month = as.numeric(format(!!sym(date_col), "%m")),
-           year = as.numeric(format(!!sym(date_col), "%Y"))) %>% 
-    group_by(year, month) %>% 
-    summarize(mean_va = mean(!!sym(value_col), na.rm = TRUE),
-              n_days = n()) %>% 
-    filter(n_days > 14) %>% 
-    ungroup() %>% 
-    mutate(mid_date = as.Date(paste(year, month, 15, sep = "-")))
+    dplyr::mutate(month = as.numeric(format(date, "%m")),
+           year = as.numeric(format(date, "%Y"))) %>% 
+    dplyr::group_by(year, month) %>% 
+    dplyr::summarize(mean_va = mean(result, na.rm = TRUE),
+              n_days = dplyr::n()) %>% 
+    dplyr::filter(n_days > 14) %>% 
+    dplyr::ungroup() %>% 
+    dplyr::mutate(mid_date = as.Date(paste(year, month, 15, sep = "-")))
     
   return(monthly_mean)
   
@@ -193,16 +192,14 @@ enough_data <- function(x,
                         date_col = "lev_dt",
                         n_years = 5, 
                         required_per_year = 10){
-  
-  year <- ".dplyr"
-  
+
   x$year <- as.numeric(format(x[[date_col]], "%Y")) 
 
   latest_measured_year <- max(x$year, na.rm = TRUE)
   
   x <- dplyr::filter(x, year >= latest_measured_year - n_years)
   
-  yearly_count <- count(x, year)
+  yearly_count <- dplyr::count(x, year)
  
   if(nrow(yearly_count) < n_years) {
     message("Total data time span is less than ", n_years," years")

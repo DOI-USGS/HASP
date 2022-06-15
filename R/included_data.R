@@ -40,6 +40,8 @@ NULL
 # end_date <- "2021-01-01"
 # aquiferCd <- "N100BSNRGB"
 # aquifer_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+# aquifer_data <- dplyr::filter(aquifer_data, parameter_cd %in%
+#                                 c( "72019"))
 # save(aquifer_data, file = "data/aquifer_data.RData", compress = "xz")
 
 
@@ -145,7 +147,18 @@ NO FUTURE BEHAVIOR PROMISED', width = 40),
 NULL
 
 utils::globalVariables(c("lev_dt", "nYears","minMed", "maxMed", "name", "value",
-                         "group", "plot_month_med", "p50", "sl_lev_va", "plot_month_last", "ymin",
-                         "ymax", "x",  "y", "year", "month",
-                         "p5", "p10", "p25", "p75", "p90", "p95" ))
+                         "group", "plot_month_med", "p50", "sl_lev_va", "plot_month_last",
+                         "ymax", "ymin", "year", "month", "result", "n_days", "site_no",
+                         "p5", "p10", "p25", "p75", "p90", "p95", "trend", "med_site",
+                         "mean_med", "max_med", "min_med", "x_norm", "station_nm",
+                         "prep_map_data", "MonitoringLocationIdentifier", 
+                         "ResultMeasureValue", "lev_va", "agency_cd", "tz_cd", "state_call", 
+                         "pcode", "lev_status_cd", "ActivityStartDate", "cd",
+                         "..eq.label..", "..rr.label..", "ActivityStartDateTime",
+                         "Approve", "Aqfr_Name_prpr", "CharacteristicName", "Chloride", "DOY", "Data Type", "Date", "J",
+                         "Specific conductance", "Value", "begin", "begin_date", "condition", "count", "count_nu",
+                         "county_cd", "data_type_cd", "dateTime", "dec_lat_va", "dec_long_va", "end", "end_date",
+                         "gw_code", "gw_level", "gw_level_cd", "is_na_after", "is_na_before", "is_point", "lat_va",
+                         "lev_age_cd", "long_va", "median", "middle", "n_sites_year", "parm_cd", "plot_week_last",
+                         "plot_week_med", "results", "state_cd", "week", "x", "x1", "x2", "y", "y1", "y2"))
 

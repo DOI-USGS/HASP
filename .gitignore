@@ -6,8 +6,5 @@
 vignettes/*.R
 vignettes/*.html
 tests/testthat/Rplots.pdf
-doc
 Meta
-docs
-pkgdown/
-docs/
+docs/*

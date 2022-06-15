@@ -40,7 +40,7 @@ shinyServer(function(input, output, session) {
     
     shinyAce::updateAceEditor(session, editorId = "map_code", value = map_code() )
     
-    x <- filter_sites(aquifer_data, input$gwl_vals, 30)
+    x <- filter_sites(aquifer_data, num_years = 30)
     
     if(nrow(x) == 0){
       x <- aquifer_data
@@ -64,19 +64,6 @@ shinyServer(function(input, output, session) {
     
   })
 
-  observe({
-    gwl_data <- rawData_data$data
-
-    if(all(is.na(gwl_data$sl_lev_va))){
-      updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
-    }
-    
-    if(all(is.na(gwl_data$lev_va))){
-      updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
-    }
-
-  })
-  
   callModule(graph_download_code, 'composite_graph', 
              plot_gg = comp_plot, 
              code_out = comp_plot_out, 
@@ -107,10 +94,7 @@ long_name <- "', input$aquiferCd ,'"
 aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == long_name]
 aquifer_data <- get_aquifer_data(aquiferCd = "',aquiferCd,'",
                            startDate = "', start_date,'",
-                           endDate = "', end_date, '")
-aquifer_data <- filter_sites(aquifer_data, 
-                             start_year = ',year_start,',
-                             end_year = ', year_end,')')      
+                           endDate = "', end_date, '")')      
     }
     
     setup_code
@@ -118,8 +102,9 @@ aquifer_data <- filter_sites(aquifer_data,
   
   map_code <- reactive({
     paste0(setup(),'
-map_data <- map_hydro_data(aquifer_data, 
-                           sum_col = "lev_va", num_years = 30)
+map_data <- map_hydro_data(aquifer_data,  
+                           parameter_cd = "', input$pcode,'",
+                           num_years = 30)
 map_data')
            
   })

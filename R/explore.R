@@ -10,15 +10,6 @@
 #' @param browse Logical. Use browser for running Shiny app.
 #' @export
 #' @rdname shinystuff
-#' @importFrom tools file_ext
-#' @importFrom shinyAce updateAceEditor
-#' @importFrom shinyAce aceEditor
-#' @importFrom shinycssloaders withSpinner
-#' @importFrom shinydashboard dashboardSidebar
-#' @importFrom shinydashboard sidebarMenu
-#' @importFrom shinydashboard dashboardBody
-#' @importFrom shinydashboard dashboardPage
-#' @import ggplot2
 #' @examples 
 #' \dontrun{
 #' explore_aquifers()
@@ -29,14 +20,6 @@ explore_aquifers <- function(browse=TRUE){
 
 #' @rdname shinystuff
 #' @export
-#' @importFrom DT renderDataTable
-#' @importFrom DT dataTableOutput
-#' @importFrom DT datatable
-#' @importFrom DT formatSignif
-#' @importFrom openxlsx writeData
-#' @importFrom openxlsx createWorkbook
-#' @importFrom openxlsx addWorksheet
-#' @importFrom openxlsx saveWorkbook
 #' @examples 
 #' \dontrun{
 #' explore_site()

@@ -4,17 +4,19 @@ norm_plot <- reactive({
     need(!is.null(rawData_data$data), "Please select a data set")
   )
   
-  x <- filter_sites(rawData(), input$gwl_vals, 
+  df <- rawData()
+  pcode <- input$pcode
+  y <- filter_sites(df,
+                    parameter_cd = input$pcode, 
                     start_year = input$start_year, 
                     end_year = input$end_year)
   
-  if(nrow(x) == 0){
+  if(nrow(y) == 0){
     showNotification("No sites have complete records within the start/end years",
                      duration = 5)
   }
-  
-  norm_plot <-  plot_normalized_data(x, 
-                                     input$gwl_vals, 
+  norm_plot <-  plot_normalized_data(y,  
+                                     parameter_cd = pcode, 
                                      plot_title = rawData_data$aquifer_cd)
   
   return(norm_plot)
@@ -23,9 +25,13 @@ norm_plot <- reactive({
 
 norm_plot_out <- reactive({
   code_out <- paste0(setup(),'
-library(ggplot2)
-norm_plot <-  plot_normalized_data(aquifer_data, 
-                                   sum_col = "',input$gwl_vals,'",
+aquifer_data_filtered <- filter_sites(aquifer_data,
+                                      parameter_cd = "', input$pcode, '", 
+                                      start_year = ', input$start_year, ', 
+                                      end_year = ', input$end_year, ')
+                                      
+norm_plot <-  plot_normalized_data(aquifer_data_filtered, 
+                                   parameter_cd = "',input$pcode,'",
                                    plot_title ="',rawData_data$aquifer_cd,'")
 norm_plot
 # To save:

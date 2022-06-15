@@ -1,8 +1,23 @@
 template:
   params:
     ganalytics: UA-53797708-7
+  includes:
+    before_title: '<a href="https://www.usgs.gov/"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>'
+  bootstrap: 5
+  theme: atom-one-light
+  bslib:
+    bg: "white"
+    fg: "#283140"
+    navbar-brand-color: "white"
+    navbar-light-color: "white"
+    nav-link-color: "white"
+    nav-link-hover-color: "#a9a9a9"
+    navbar-light-brand-hover-color: "white"
+    navbar-light-hover-color: "white"
+    text-muted: "white"
+    pkgdown-nav-height: 125px
+
 navbar:
-  type: default
   left:
   - text: Function Help
     href: reference/index.html
@@ -18,6 +33,8 @@ navbar:
       href: articles/Single_site_water_level.html
     - text: Principle Aquifers
       href: articles/Single_basin.html
+    - text: How to Contribute
+      href: articles/Contributing.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/USGS-R/HASP
@@ -72,3 +89,4 @@ reference:
       - water_year
       - filter_sites
       - monthly_mean 
+      - HASP-package 

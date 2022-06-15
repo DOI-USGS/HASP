@@ -56,7 +56,7 @@ graph_table_download_code <- function(input, output, session,
   
   output$table <- DT::renderDataTable({
     table_DT()
-  })
+  }, server = FALSE)
   
   output$download_plot <- downloadHandler(
     

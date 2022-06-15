@@ -4,7 +4,7 @@
 \alias{plot_composite_data}
 \title{Plot composite hydrograph data}
 \usage{
-plot_composite_data(x, num_years = NA, plot_title = "")
+plot_composite_data(x, num_years = NA, parameter_cd = "72019", plot_title = "")
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
@@ -12,6 +12,8 @@ and "value".}
 
 \item{num_years}{integer number of years required. If \code{NA}, the 
 analysis will default to the range of the data in x.}
+
+\item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 
 \item{plot_title}{character title included on plot.}
 }
@@ -23,14 +25,17 @@ Create composite hydrograph plot
 }
 \examples{
 aquifer_data <- aquifer_data
-num_years <- 30
 
-comp_data <- plot_composite_data(aquifer_data, num_years, 
-                    plot_title = "Calendar Year")
+comp_data <- plot_composite_data(aquifer_data, 
+                                 num_years = 30, 
+                                 parameter_cd = "72019",
+                                 plot_title = "Calendar Year")
 comp_data
 # Do it on a water year:
 aquifer_data$cal_year <- aquifer_data$year
 aquifer_data$year <- aquifer_data$water_year
-plot_composite_data(aquifer_data, num_years, 
+plot_composite_data(aquifer_data, 
+                    parameter_cd = "72019",
+                    num_years = 30,
                     plot_title = "Water Year")
 }

@@ -4,10 +4,18 @@
 \alias{filter_sites}
 \title{filter_sites}
 \usage{
-filter_sites(x, num_years = NA, start_year = NA, end_year = NA)
+filter_sites(
+  x,
+  parameter_cd = "72019",
+  num_years = NA,
+  start_year = NA,
+  end_year = NA
+)
 }
 \arguments{
 \item{x}{aquifer data}
+
+\item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 
 \item{num_years}{integer number of years required. This can be
 \code{NA}, in which case the filter will use the full range of the data.}
@@ -28,5 +36,7 @@ Filter down to sites with num_years of data
 aquifer_data <- aquifer_data
 num_years <- 30
 
-aq_data <- filter_sites(aquifer_data, num_years)
+aq_data <- filter_sites(aquifer_data,
+                        parameter_cd = "72019",
+                        num_years = num_years)
 }

@@ -3,8 +3,12 @@ comp_plot <- reactive({
   validate(
     need(!is.null(rawData_data$data), "Please select a data set")
   )
-  x <- rawData()
-  y <- filter_sites(x, input$gwl_vals, 
+  
+  df <- rawData()
+  pcode <- input$pcode
+
+  y <- filter_sites(df,
+                    parameter_cd = input$pcode, 
                     start_year = input$start_year, 
                     end_year = input$end_year)
   
@@ -12,9 +16,9 @@ comp_plot <- reactive({
     showNotification("No sites have complete records within the start/end years",
                      duration = 5)
   }
-
-  comp_plot <-  plot_composite_data(y, 
-                                    sum_col = input$gwl_vals, 
+  
+  comp_plot <-  plot_composite_data(y,
+                                    parameter_cd = pcode,
                                     plot_title = rawData_data$aquifer_cd) 
   
   return(comp_plot)
@@ -23,9 +27,14 @@ comp_plot <- reactive({
 
 comp_plot_out <- reactive({
   code_out <- paste0(setup(),'
-library(ggplot2)
-comp_plot <-  plot_composite_data(aquifer_data, 
-                                  sum_col = "',input$gwl_vals,'",
+  
+aquifer_data_filtered <- filter_sites(aquifer_data,
+                                      parameter_cd = "', input$pcode, '", 
+                                      start_year = ', input$start_year, ', 
+                                      end_year = ', input$end_year, ')
+                                     
+comp_plot <-  plot_composite_data(aquifer_data_filtered, 
+                                  parameter_cd = "', input$pcode,'",
                                   plot_title = "',rawData_data$aquifer_cd,'")
 comp_plot
 # To save:

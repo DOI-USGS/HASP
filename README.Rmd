@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE,
 )
 ```
 
-# HASP  <img src="man/figures/R_logo.png" alt="HASP" height="150px" align="right" />
+# HASP <img src="man/figures/R_logo.png" alt="HASP" class="logo" style="width:90px;height:auto;" align="right" />
 
 [![R build status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/HASP/actions)
 [![Coverage Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
@@ -53,8 +53,8 @@ dv <- dataRetrieval::readNWISdv(site,
 
 # Water Quality data:
 parameterCd <- c("00095","90095","00940","99220")
-qw_data <- dataRetrieval::readNWISqw(site,
-                                     parameterCd)
+qw_data <- dataRetrieval::readWQPqw(paste0("USGS-", site),
+                                    parameterCd)
 
 
 ```

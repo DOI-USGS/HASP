@@ -14,7 +14,6 @@
 #' @rdname chloridetrend
 #' @export
 #' @import ggplot2
-#' @importFrom ggpmisc stat_poly_eq
 #' @examples 
 #' 
 #' # site <- "263819081585801"
@@ -38,14 +37,16 @@ trend_plot <- function(qw_data, plot_title,
   if(all(!is.na(norm_range)) && length(norm_range) != 2){
     stop("norm_range vector needs to be of length 2")
   }
+
+  qw_sub <- qw_data[qw_data$CharacteristicName %in% CharacteristicName, ]
+  qw_sub <- qw_sub[order(qw_sub$ActivityStartDateTime), ]
   
-  ActivityStartDateTime <- condition <- ResultMeasureValue <- ".dplyr"
-  x1 <- x2 <- y1 <- y2 <- trend <- year <- ".dplyr"
+  if(!"ActivityStartDate" %in% names(qw_sub)){
+    qw_sub$ActivityStartDate <- as.Date(qw_sub$ActivityStartDateTime)
+  }
   
-  qw_sub <- qw_data %>% 
-    filter(CharacteristicName %in% !!CharacteristicName) %>% 
-    arrange(ActivityStartDateTime) %>% 
-    mutate(year = as.numeric(format(ActivityStartDateTime, "%Y")) + as.numeric(as.character(ActivityStartDateTime, "%j"))/365)
+  qw_sub$year <- as.numeric(format(as.Date(qw_sub$ActivityStartDate), "%Y")) +
+    as.numeric(as.character(as.Date(qw_sub$ActivityStartDate), "%j"))/365
 
   if(all(is.na(norm_range))){
     qw_sub$condition <- "medium"
@@ -55,14 +56,13 @@ trend_plot <- function(qw_data, plot_title,
     # TODO: think about ways to incorporate NA in the norm_range?
     # for example, c(225, NA) could be only things lower than 225 are
     # coded a different color and there's no upper bound?
-    qw_sub <- qw_sub %>% 
-      mutate(condition = case_when(
-        ResultMeasureValue < norm_range[1] ~ "low",
-        ResultMeasureValue >= norm_range[1] & 
-          ResultMeasureValue <= norm_range[2] ~ "medium",
-        ResultMeasureValue > ResultMeasureValue[2] ~ "high")) %>% 
-      select(ActivityStartDateTime, year, ResultMeasureValue, condition)
+    qw_sub$condition <- ifelse(qw_sub$ResultMeasureValue < norm_range[1], "low",
+                               ifelse(qw_sub$ResultMeasureValue >= norm_range[1] & 
+                                 qw_sub$ResultMeasureValue < norm_range[2], "medium",
+                               ifelse(qw_sub$ResultMeasureValue >= norm_range[2] , "high", NA_character_)))
     
+    qw_sub <- qw_sub[, c("ActivityStartDateTime", "year", "ResultMeasureValue", "condition")]
+
     col_values <- c("low", "medium", "high")
     col_labels <- c(paste0("<", norm_range[1]), 
                     paste0(">=", norm_range[1], " and <", norm_range[2]), 

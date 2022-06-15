@@ -4,7 +4,12 @@
 \alias{plot_normalized_data}
 \title{Plot normalized composite hydrograph data}
 \usage{
-plot_normalized_data(x, num_years = NA, plot_title = "")
+plot_normalized_data(
+  x,
+  num_years = NA,
+  parameter_cd = "72019",
+  plot_title = ""
+)
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
@@ -12,6 +17,8 @@ and "value".}
 
 \item{num_years}{integer number of years required to the analysis. If \code{NA}, the 
 analysis will default to the range of the data in x.}
+
+\item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 
 \item{plot_title}{character title of plot.}
 }
@@ -23,12 +30,15 @@ Create composite hydrograph plot
 }
 \examples{
 aquifer_data <- aquifer_data
-num_years <- 30
 
-norm_data <- plot_normalized_data(aquifer_data, num_years)
+norm_data <- plot_normalized_data(aquifer_data, 
+                                  parameter_cd = "72019",
+                                  num_years = 30)
 norm_data
 
 aquifer_data$cal_year <- aquifer_data$year
 aquifer_data$year <- aquifer_data$water_year
-plot_normalized_data(aquifer_data, num_years = num_years)
+plot_normalized_data(aquifer_data, 
+                     parameter_cd = "72019",
+                     num_years = 30)
 }

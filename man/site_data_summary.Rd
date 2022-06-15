@@ -18,5 +18,6 @@ take the summaries
 }
 \examples{
 aquifer_data <- aquifer_data
+aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
 summary_info <- site_data_summary(aquifer_data)
 }

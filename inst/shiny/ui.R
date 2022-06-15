@@ -9,16 +9,7 @@ init_text <- "######################################
 # Setup:
 library(HASP)"
 
-header <- dashboardHeader(title = "HASP",
-                          tags$li(class = "dropdown", tags$button(
-                            id = 'close',
-                            type = "button",
-                            class = "btn action-button",
-                            style='color: #000000; 
-                            margin-right:13px;margin-top:7px;margin-bottom:7px',
-                            onclick = "setTimeout(function(){window.close();},500);",  # close browser
-                            "Stop Shiny App"
-                          )))
+header <- dashboardHeader(title = "HASP")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
@@ -27,10 +18,10 @@ sidebar <- dashboardSidebar(
                 selected = summary_aquifers$long_name[1], 
                 multiple = FALSE),
     actionButton("get_data", label = "Get Latest Data"),
-    radioButtons("gwl_vals",
-                  choices = c("sl_lev_va", "lev_va"), 
-                  selected = "lev_va", 
-                  label = "Data Column"),
+    radioButtons("pcode",
+                  choices = c("62610", "62611", "72019"),
+                  selected = "72019",
+                  label = "Parameter Code"),
     numericInput("start_year",value = as.POSIXlt(Sys.Date())$year + 1870,
                  label = "Starting Year"),
     numericInput("end_year",value = as.POSIXlt(Sys.Date())$year + 1900,
@@ -42,20 +33,20 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  includeCSS("www/custom.css"),
   tabBox(width = 12, id = "mainOut",
-         tabPanel(title = tagList("Composite Hydrograph", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Composite Hydrograph", shiny::icon("chart-bar")),
                   value = "comp_plot",
                   ggraph_w_downloaders("composite_graph", init_text = init_text)
 
          ),
-         tabPanel(title = tagList("Normalized Composite Hydrograph", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Normalized Composite Hydrograph", shiny::icon("chart-bar")),
                   value = "norm_plot",
                   ggraph_w_downloaders("normalized_graph", init_text = init_text)
                   
          ),
          tabPanel(title = tagList("Map", shiny::icon("map-marker")),
                   value = "map",
-                  h3("Site used in composite hydrograph"),
                   leaflet::leafletOutput("mymap",height = "500px"),
                   h4("R Code:"),
                   shinyAce::aceEditor(outputId = "map_code", value = init_text, 
@@ -78,3 +69,25 @@ body <- dashboardBody(
 
 dashboardPage(header, sidebar, body)
 
+ui <- tagList(
+  tags$header(class = "navbar",
+              tags$a(href = 'https://www.usgs.gov/', type = "button",
+                     img(src = 'logo.png', target="_blank",
+                         title = "USGS", height = "60px"),
+                     style = "float: left; 
+                              padding: 10px 50px 10px 50px;"),
+              tags$li(class = "dropdown", tags$button(
+                id = 'close',
+                type = "button",
+                class = "btn action-button",
+                style='color: #000000; 
+                       float: right;
+                       margin-right:13px;margin-top:7px;margin-bottom:7px',
+                onclick = "setTimeout(function(){window.close();},500);",  # close browser
+                "Stop Shiny App"
+              ))),
+  dashboardPage(header = dashboardHeader(disable = TRUE),
+                sidebar = sidebar,
+                body = body),
+  tags$footer(htmltools::includeHTML("www/footer.html") )
+)

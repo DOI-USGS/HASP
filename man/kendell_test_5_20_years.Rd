@@ -34,7 +34,7 @@ can be set to \code{NA},and this argument will be ignored.}
 
 \item{enough_5}{number per year. Default is 10.}
 
-\item{enough_20}{numbr per year. Default is 6.}
+\item{enough_20}{number per year. Default is 6.}
 
 \item{include_current_year}{a logical indicating whether to include data from
 the current calendar year in the test.}

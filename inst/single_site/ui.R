@@ -8,16 +8,7 @@ init_text <- "######################################
 # Setup:
 library(HASP)"
 
-header <- dashboardHeader(title = "HASP",
-                          tags$li(class = "dropdown", tags$button(
-                            id = 'close',
-                            type = "button",
-                            class = "btn action-button",
-                            style='color: #000000; 
-                            margin-right:13px;margin-top:7px;margin-bottom:7px',
-                            onclick = "setTimeout(function(){window.close();},500);",  # close browser
-                            "Stop App"
-                          )))
+header <- dashboardHeader(title = "HASP")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
@@ -55,6 +46,7 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  includeCSS("www/custom.css"),
   tabBox(width = 12, id = "mainOut",
          tabPanel(title = tagList("Get Data", shiny::icon("laptop-code")),
                   value = "get_data",
@@ -66,27 +58,27 @@ body <- dashboardBody(
 
                   
          ),
-         tabPanel(title = tagList("Groundwater", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Groundwater", shiny::icon("chart-bar")),
                   value = "gwl_plot",
                   ggraph_table_downloaders_1line("gwl_graph", init_text = init_text)
 
          ),
-         tabPanel(title = tagList("Weekly Frequency", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Weekly Frequency", shiny::icon("chart-bar")),
                   value = "week_plot",
                   ggraph_table_downloaders("week_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("Daily Plot", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Daily Plot", shiny::icon("chart-bar")),
                   value = "year2_plot",
                   ggraph_table_downloaders("year2_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("Monthly Plot", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Monthly Plot", shiny::icon("chart-bar")),
                   value = "month_plot",
                   ggraph_table_downloaders_1line("month_graph", init_text = init_text)
                   
          ),
-         tabPanel(title = tagList("Chloride", shiny::icon("bar-chart")),
+         tabPanel(title = tagList("Chloride", shiny::icon("chart-bar")),
                   value = "chloride_plot",
                   ggraph_table_downloaders_1line("chloride_graph", init_text = init_text)
                   
@@ -118,3 +110,25 @@ body <- dashboardBody(
 
 dashboardPage(header, sidebar, body)
 
+ui <- tagList(
+  tags$header(class = "navbar",
+              tags$a(href = 'https://www.usgs.gov/', type = "button",
+                     img(src = 'logo.png', target="_blank",
+                         title = "USGS", height = "60px"),
+                     style = "float: left; 
+                              padding: 10px 50px 10px 50px;"),
+              tags$li(class = "dropdown", tags$button(
+                id = 'close',
+                type = "button",
+                class = "btn action-button",
+                style='color: #000000; 
+                       float: right;
+                       margin-right:13px;margin-top:7px;margin-bottom:7px',
+                onclick = "setTimeout(function(){window.close();},500);",  # close browser
+                "Stop Shiny App"
+              ))),
+  dashboardPage(header = dashboardHeader(disable = TRUE),
+                sidebar = sidebar,
+                body = body),
+  tags$footer(htmltools::includeHTML("www/footer.html") )
+)

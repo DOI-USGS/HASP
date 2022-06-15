@@ -4,8 +4,10 @@ test_that("Composite Graphs", {
   aquifer_data <- aquifer_data
   num_years <- 30
  
-  comp_data <- plot_composite_data(aquifer_data,  num_years)
-  norm_data <- plot_normalized_data(aquifer_data, num_years)
+  comp_data <- plot_composite_data(aquifer_data,  num_years, 
+                                   parameter_cd = "72019")
+  norm_data <- plot_normalized_data(aquifer_data, num_years, 
+                                    parameter_cd = "72019")
   
   expect_true(all(names(comp_data$data) %in% c("year","name","value")))
   expect_true(all(names(norm_data$data) %in% c("year","name","value")))
@@ -21,7 +23,7 @@ test_that("Map", {
   aquifer_data <- aquifer_data
   num_years <- 30
   
-  map <- map_hydro_data(aquifer_data, num_years)
+  map <- map_hydro_data(aquifer_data, num_years, parameter_cd = "72019")
   
   expect_true(all(class(map) %in% c("leaflet","htmlwidget")))
 
