@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="HASP">
 <title>Single Site Water Level • HASP</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,12 +13,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Single Site Water Level">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Single Site Water Level">
 <meta property="og:description" content="HASP">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -31,79 +32,65 @@
   gtag('config', 'UA-53797708-7');
 </script>
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">HASP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.0001</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Function Help</a>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
+    <a class="navbar-brand me-2" href="../index.html">HASP</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.0001</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Function Help</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/PrepareData.html">Prepare External Data</a>
-    </li>
-    <li>
-      <a href="../articles/shinyApp.html">Introduction to Shiny App</a>
-    </li>
-    <li>
-      <a href="../articles/Single_site_combo_data.html">Single Site</a>
-    </li>
-    <li>
-      <a href="../articles/Single_site_water_level.html">Water Level</a>
-    </li>
-    <li>
-      <a href="../articles/Single_basin.html">Principle Aquifers</a>
-    </li>
-  </ul>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/PrepareData.html">Prepare External Data</a>
+    <a class="dropdown-item" href="../articles/shinyApp.html">Introduction to Shiny App</a>
+    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Single Site</a>
+    <a class="dropdown-item" href="../articles/Single_site_water_level.html">Water Level</a>
+    <a class="dropdown-item" href="../articles/Single_basin.html">Principle Aquifers</a>
+    <a class="dropdown-item" href="../articles/Contributing.html">How to Contribute</a>
+  </div>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/USGS-R/HASP">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/USGS-R/HASP">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><script src="Single_site_water_level_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Single Site Water Level</h1>
+
+<script src="Single_site_water_level_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Single Site Water Level</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/master/vignettes/Single_site_water_level.Rmd"><code>vignettes/Single_site_water_level.Rmd</code></a></small>
-      <div class="hidden name"><code>Single_site_water_level.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/HEAD/vignettes/Single_site_water_level.Rmd" class="external-link"><code>vignettes/Single_site_water_level.Rmd</code></a></small>
+      <div class="d-none name"><code>Single_site_water_level.Rmd</code></div>
     </div>
 
     
@@ -117,14 +104,14 @@ body {
 }
 </style>
 <p>This vignette shows how to use <code>HASP</code> and other R tools to reproduce:</p>
-<p><a href="https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801" class="uri">https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801</a></p>
-<div id="site-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#site-information" class="anchor"></a>Site Information</h2>
+<p><a href="https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801" class="external-link uri">https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801</a></p>
+<div class="section level2">
+<h2 id="site-information">Site Information<a class="anchor" aria-label="anchor" href="#site-information"></a>
+</h2>
 <table class="table"><tr>
 <td>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
 
 <span class="va">siteID</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
 <span class="va">site_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site_summary.html">site_summary</a></span><span class="op">(</span><span class="va">siteID</span>, markdown <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -143,39 +130,45 @@ body {
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/wys_rpt?site_no=263819081585801">Water-Year Summary</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/wys_rpt?site_no=263819081585801" class="external-link">Water-Year Summary</a></td>
 <td align="left">2006-01-01</td>
-<td align="left">2020-01-01</td>
-<td align="right">15</td>
+<td align="left">2021-01-01</td>
+<td align="right">16</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=263819081585801">Daily Data</a></td>
+<td align="left"></td>
+<td align="left">1978-01-01</td>
+<td align="left">2021-01-01</td>
+<td align="right">15205</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=263819081585801" class="external-link">Daily Data</a></td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Groundwater level above NGVD 1929, feet</td>
 <td align="left">1978-10-01</td>
-<td align="left">2021-09-09</td>
-<td align="right">15000</td>
-</tr>
-<tr class="even">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=263819081585801">Field groundwater-level measurements</a></td>
-<td align="left">1982-10-12</td>
-<td align="left">2021-07-01</td>
-<td align="right">458</td>
+<td align="left">2022-05-17</td>
+<td align="right">15250</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801">Field/Lab water-quality samples</a></td>
-<td align="left">1978-09-06</td>
-<td align="left">2021-04-27</td>
-<td align="right">471</td>
+<td align="left">Groundwater level above NAVD 1988, feet</td>
+<td align="left">2019-06-16</td>
+<td align="left">2022-05-17</td>
+<td align="right">1067</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=263819081585801">Current / Historical Observations</a></td>
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
+<td align="left">1978-09-06</td>
+<td align="left">2022-05-18</td>
+<td align="right">472</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=263819081585801" class="external-link">Current / Historical Observations</a></td>
 <td align="left">2007-10-01</td>
-<td align="left">2021-09-10</td>
+<td align="left">2022-05-18</td>
 <td align="right"></td>
 </tr>
 </tbody>
@@ -183,24 +176,24 @@ body {
 </td>
 </tr></table>
 </div>
-<div id="get-data-using-dataretrieval" class="section level2">
-<h2 class="hasAnchor">
-<a href="#get-data-using-dataretrieval" class="anchor"></a>Get data using dataRetrieval</h2>
+<div class="section level2">
+<h2 id="get-data-using-dataretrieval">Get data using dataRetrieval<a class="anchor" aria-label="anchor" href="#get-data-using-dataretrieval"></a>
+</h2>
 <table class="table"><tr>
 <td>
 <p>Using <code>dataRetrieval</code> code to get the data for this site:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span>
 <span class="va">siteID</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
 <span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span>
 <span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span>
 <span class="co"># Daily data:</span>
-<span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">siteID</span>,
+<span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></span><span class="op">(</span><span class="va">siteID</span>,
                           <span class="va">parameterCd</span>,
                           statCd <span class="op">=</span> <span class="va">statCd</span><span class="op">)</span>
 
 <span class="co"># Field GWL measured:</span>
-<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span><span class="op">(</span><span class="va">siteID</span><span class="op">)</span>
+<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></span><span class="op">(</span><span class="va">siteID</span><span class="op">)</span>
 
 <span class="va">site_title</span> <span class="op">&lt;-</span> <span class="st">"L -2701\n263819081585801"</span></code></pre></div>
 </td>
@@ -218,12 +211,12 @@ body {
 </td>
 </tr></table>
 </div>
-<div id="water-level-data-and-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#water-level-data-and-analysis" class="anchor"></a>Water Level Data and Analysis</h2>
-<div id="weekly-frequency" class="section level3">
-<h3 class="hasAnchor">
-<a href="#weekly-frequency" class="anchor"></a>Weekly frequency</h3>
+<div class="section level2">
+<h2 id="water-level-data-and-analysis">Water Level Data and Analysis<a class="anchor" aria-label="anchor" href="#water-level-data-and-analysis"></a>
+</h2>
+<div class="section level3">
+<h3 id="weekly-frequency">Weekly frequency<a class="anchor" aria-label="anchor" href="#weekly-frequency"></a>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/weekly_frequency_plot.html">weekly_frequency_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
                       date_col <span class="op">=</span> <span class="st">"Date"</span>,
@@ -235,7 +228,7 @@ body {
 <span class="va">weekly_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weekly_frequency_table.html">weekly_frequency_table</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
                                        parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">weekly_table</span>, <span class="fl">10</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weekly_table</span>, <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_water_level_files/figure-html/weeklyFrequencyPlot-1.png" width="864"></p>
@@ -260,11 +253,11 @@ body {
 <td align="right">-40.6</td>
 <td align="right">-32.8</td>
 <td align="right">-28.7</td>
-<td align="right">-21.4</td>
-<td align="right">-17.6</td>
-<td align="right">-15.1</td>
+<td align="right">-21.3</td>
+<td align="right">-17.5</td>
+<td align="right">-14.6</td>
 <td align="right">-5.5</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
@@ -346,10 +339,10 @@ body {
 <tr class="odd">
 <td align="right">9</td>
 <td align="right">-42.6</td>
-<td align="right">-34.2</td>
+<td align="right">-34.0</td>
 <td align="right">-29.5</td>
-<td align="right">-22.5</td>
-<td align="right">-19.4</td>
+<td align="right">-22.4</td>
+<td align="right">-19.3</td>
 <td align="right">-11.7</td>
 <td align="right">-6.2</td>
 <td align="right">43</td>
@@ -357,22 +350,22 @@ body {
 <tr class="even">
 <td align="right">10</td>
 <td align="right">-43.3</td>
-<td align="right">-34.0</td>
-<td align="right">-29.8</td>
-<td align="right">-23.1</td>
-<td align="right">-20.0</td>
+<td align="right">-33.9</td>
+<td align="right">-29.7</td>
+<td align="right">-22.7</td>
+<td align="right">-19.5</td>
 <td align="right">-11.6</td>
 <td align="right">-6.3</td>
-<td align="right">42</td>
+<td align="right">43</td>
 </tr>
 </tbody>
 </table>
 </td>
 </tr></table>
 </div>
-<div id="daily-2-year" class="section level3">
-<h3 class="hasAnchor">
-<a href="#daily-2-year" class="anchor"></a>Daily 2-year</h3>
+<div class="section level3">
+<h3 id="daily-2-year">Daily 2-year<a class="anchor" aria-label="anchor" href="#daily-2-year"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/daily_gwl_2yr_plot.html">daily_gwl_2yr_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
                    parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
@@ -385,7 +378,7 @@ body {
                       date_col <span class="op">=</span> <span class="st">"Date"</span>,
                       value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,
                       approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">daily_table</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">daily_table</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <table class="table"><tr>
 <td>
 <p><img src="Single_site_water_level_files/figure-html/dailyDo-1.png" width="864"></p>
@@ -404,37 +397,37 @@ body {
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">-5.29</td>
-<td align="right">-22.48024</td>
+<td align="right">-22.29738</td>
 <td align="right">-41.40</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="right">-5.24</td>
-<td align="right">-22.52415</td>
+<td align="right">-22.34071</td>
 <td align="right">-40.11</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">-5.30</td>
-<td align="right">-22.57976</td>
+<td align="right">-22.40381</td>
 <td align="right">-40.18</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">-5.55</td>
-<td align="right">-22.63561</td>
+<td align="right">-22.43976</td>
 <td align="right">-41.60</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">-5.48</td>
-<td align="right">-22.66439</td>
+<td align="right">-22.47310</td>
 <td align="right">-40.51</td>
-<td align="right">41</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
@@ -476,11 +469,11 @@ body {
 </td>
 </tr></table>
 </div>
-<div id="daily-value-trends" class="section level3">
-<h3 class="hasAnchor">
-<a href="#daily-value-trends" class="anchor"></a>Daily value trends</h3>
+<div class="section level3">
+<h3 id="daily-value-trends">Daily value trends<a class="anchor" aria-label="anchor" href="#daily-value-trends"></a>
+</h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
+<code class="sourceCode R"><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
 
 <span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, 
              <span class="va">gwl_data</span>, 
@@ -489,8 +482,8 @@ body {
              plot_title <span class="op">=</span> <span class="va">site_title</span>,
              add_trend <span class="op">=</span> <span class="cn">TRUE</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="va">gw_level_dv</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">X_62610_00001</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">gw_level_dv</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">X_62610_00001</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">gw_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/monthly_mean.html">monthly_mean</a></span><span class="op">(</span><span class="va">gw_level_dv</span><span class="op">)</span>
@@ -516,10 +509,10 @@ body {
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">-51.1</td>
-<td align="right">-28.2</td>
-<td align="right">-21.8</td>
-<td align="right">-22.6</td>
-<td align="right">-16.8</td>
+<td align="right">-28.1</td>
+<td align="right">-21.6</td>
+<td align="right">-22.5</td>
+<td align="right">-16.7</td>
 <td align="right">-2.8</td>
 </tr></tbody>
 </table>
@@ -537,17 +530,17 @@ body {
 <tr class="odd">
 <td align="left">5-year trend</td>
 <td align="right">0.1</td>
+<td align="right">0.5</td>
 <td align="right">0.2</td>
-<td align="right">0.6</td>
-<td align="right">-1945.5</td>
+<td align="right">-270.0</td>
 <td align="left">Not significant</td>
 </tr>
 <tr class="even">
 <td align="left">20-year trend</td>
-<td align="right">0.2</td>
-<td align="right">0.0</td>
 <td align="right">0.4</td>
-<td align="right">-941.0</td>
+<td align="right">0.0</td>
+<td align="right">0.7</td>
+<td align="right">-1439.5</td>
 <td align="left">Up</td>
 </tr>
 </tbody>
@@ -555,9 +548,9 @@ body {
 </td>
 </tr></table>
 </div>
-<div id="field-gwl-values" class="section level3">
-<h3 class="hasAnchor">
-<a href="#field-gwl-values" class="anchor"></a>Field GWL values</h3>
+<div class="section level3">
+<h3 id="field-gwl-values">Field GWL values<a class="anchor" aria-label="anchor" href="#field-gwl-values"></a>
+</h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="va">gwl_data</span>,
              y_label <span class="op">=</span> <span class="va">y_label</span>,
@@ -582,11 +575,11 @@ body {
 <th align="right">Maximum</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-52.5</td>
+<td align="right">-52.4</td>
 <td align="right">-32.5</td>
-<td align="right">-26.4</td>
-<td align="right">-27.1</td>
-<td align="right">-21.1</td>
+<td align="right">-26.3</td>
+<td align="right">-26.9</td>
+<td align="right">-20.8</td>
 <td align="right">-4.8</td>
 </tr></tbody>
 </table>
@@ -594,31 +587,87 @@ body {
 </tr></table>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
-</div>
+    <footer></footer>
+</div> <!-- / div for your main content-->
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
-</div>
+<!-- BEGIN USGS Footer Template -->
 
-      </footer>
+<footer class="footer"><div class="tmp-container">
+		<!-- .footer-wrap -->
+			<!-- .footer-doi -->
+			<div class="footer-doi">
+				<!-- footer nav links -->
+				<ul class="menu nav">
+<li class="first leaf menu-links menu-level-1"><a href="https://www.doi.gov/privacy" class="external-link">DOI Privacy Policy</a></li>
+					<li class="leaf menu-links menu-level-1"><a href="https://www.usgs.gov/policies-and-notices" class="external-link">Legal</a></li>
+					<li class="leaf menu-links menu-level-1"><a href="https://www.usgs.gov/accessibility-and-us-geological-survey" class="external-link">Accessibility</a></li>
+					<li class="leaf menu-links menu-level-1"><a href="https://www.usgs.gov/sitemap" class="external-link">Site Map</a></li>
+					<li class="last leaf menu-links menu-level-1"><a href="https://answers.usgs.gov/" class="external-link">Contact USGS</a></li>
+				</ul>
+<!--/ footer nav links -->
 </div>
+			<!-- /.footer-doi -->
 
+			<hr>
+<!-- .footer-utl-links --><div class="footer-doi">
+			<ul class="menu nav">
+<li class="first leaf menu-links menu-level-1"><a href="https://www.doi.gov/" class="external-link">U.S. Department of the Interior</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.doioig.gov/" class="external-link">DOI Inspector General</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.whitehouse.gov/" class="external-link">White House</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.whitehouse.gov/omb/management/egov/" class="external-link">E-gov</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.doi.gov/pmb/eeo/no-fear-act" class="external-link">No Fear Act</a></li>
+				<li class="last leaf menu-links menu-level-1"><a href="https://www.usgs.gov/about/organization/science-support/foia" class="external-link">FOIA</a></li>
+			</ul>
+</div>			
+		<!-- /.footer-utl-links -->
+		<!-- .footer-social-links -->
+		<div class="footer-social-links">
+			<ul class="social">
+<li class="follow">Follow</li>
+				<li class="twitter">
+					<a href="https://twitter.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-twitter-square"><span class="only">Twitter</span></i>
+					</a>
+				</li>
+				<li class="facebook">
+					<a href="https://facebook.com/usgeologicalsurvey" target="_blank" class="external-link">
+						<i class="fa fa-facebook-square"><span class="only">Facebook</span></i>
+					</a>
+				</li>
+				<li class="github">
+					<a href="https://github.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-github"><span class="only">GitHub</span></i>
+					</a>
+				</li>
+				<li class="flickr">
+					<a href="https://flickr.com/usgeologicalsurvey" target="_blank" class="external-link">
+						<i class="fa fa-flickr"><span class="only">Flickr</span></i>
+					</a>
+				</li>
+				<li class="youtube">
+					<a href="http://youtube.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-youtube-play"><span class="only">YouTube</span></i>
+					</a>
+				</li>
+				<li class="instagram">
+					<a href="https://instagram.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-instagram"><span class="only">Instagram</span></i>
+					</a>
+				</li>
+			</ul>
+</div>
+		<!-- /.footer-social-links -->
+	</div>
+		<!-- /.footer-wrap -->	
+</footer><!-- END USGS Footer Template- --><!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKQR8KP" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
   
-
-
   </body>
+<!-- closing div for body -->
 </html>

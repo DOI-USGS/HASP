@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Data aggregation and plotting of USGS groundwater level data.">
 <title>Hydrologic AnalySis Package • HASP</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -12,12 +13,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Hydrologic AnalySis Package">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="Hydrologic AnalySis Package">
 <meta property="og:description" content="Data aggregation and plotting of USGS groundwater level data.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -31,108 +32,92 @@
   gtag('config', 'UA-53797708-7');
 </script>
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">HASP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.0001</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="reference/index.html">Function Help</a>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
+    <a class="navbar-brand me-2" href="index.html">HASP</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.0001</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Function Help</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/PrepareData.html">Prepare External Data</a>
-    </li>
-    <li>
-      <a href="articles/shinyApp.html">Introduction to Shiny App</a>
-    </li>
-    <li>
-      <a href="articles/Single_site_combo_data.html">Single Site</a>
-    </li>
-    <li>
-      <a href="articles/Single_site_water_level.html">Water Level</a>
-    </li>
-    <li>
-      <a href="articles/Single_basin.html">Principle Aquifers</a>
-    </li>
-  </ul>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/PrepareData.html">Prepare External Data</a>
+    <a class="dropdown-item" href="articles/shinyApp.html">Introduction to Shiny App</a>
+    <a class="dropdown-item" href="articles/Single_site_combo_data.html">Single Site</a>
+    <a class="dropdown-item" href="articles/Single_site_water_level.html">Water Level</a>
+    <a class="dropdown-item" href="articles/Single_basin.html">Principle Aquifers</a>
+    <a class="dropdown-item" href="articles/Contributing.html">How to Contribute</a>
+  </div>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/USGS-R/HASP">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/USGS-R/HASP">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="hasp-">HASP <a class="anchor" aria-label="anchor" href="#hasp-"></a>
+</h1>
 </div>
-<!--/.navbar -->
-
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-<div id="hasp-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#hasp-" class="anchor"></a>HASP <img src="reference/figures/R_logo.png" alt="HASP" height="150px" align="right">
-</h1></div>
 
 <p>Hydrologic AnalySis Package</p>
-<p>Inspiration: <a href="https://fl.water.usgs.gov/mapper/" class="uri">https://fl.water.usgs.gov/mapper/</a></p>
-<p>See <a href="https://usgs-r.github.io/HASP/" class="uri">https://usgs-r.github.io/HASP/</a> for more information!</p>
-<div id="sample-workflow" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sample-workflow" class="anchor"></a>Sample workflow</h2>
-<div id="single-site-workflows" class="section level3">
-<h3 class="hasAnchor">
-<a href="#single-site-workflows" class="anchor"></a>Single site workflows:</h3>
+<p>Inspiration: <a href="https://fl.water.usgs.gov/mapper/" class="external-link uri">https://fl.water.usgs.gov/mapper/</a></p>
+<p>See <a href="https://usgs-r.github.io/HASP/" class="external-link uri">https://usgs-r.github.io/HASP/</a> for more information!</p>
+<div class="section level2">
+<h2 id="sample-workflow">Sample workflow<a class="anchor" aria-label="anchor" href="#sample-workflow"></a>
+</h2>
+<div class="section level3">
+<h3 id="single-site-workflows">Single site workflows:<a class="anchor" aria-label="anchor" href="#single-site-workflows"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/">dataRetrieval</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span>
 <span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
 
 <span class="co">#Field GWL data:</span>
-<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html">readNWISgwl</a></span><span class="op">(</span><span class="va">site</span><span class="op">)</span>
+<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></span><span class="op">(</span><span class="va">site</span><span class="op">)</span>
 
 <span class="co"># Daily data:</span>
 <span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span>
 <span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span>
-<span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html">readNWISdv</a></span><span class="op">(</span><span class="va">site</span>,
+<span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></span><span class="op">(</span><span class="va">site</span>,
                                 <span class="va">parameterCd</span>,
                                 statCd <span class="op">=</span> <span class="va">statCd</span><span class="op">)</span>
 
 <span class="co"># Water Quality data:</span>
-<span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>
-<span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISqw.html">readNWISqw</a></span><span class="op">(</span><span class="va">site</span>,
-                                     <span class="va">parameterCd</span><span class="op">)</span></code></pre></div>
+<span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>
+<span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readWQPqw.html" class="external-link">readWQPqw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site</span><span class="op">)</span>,
+                                    <span class="va">parameterCd</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">y_axis_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
+<code class="sourceCode R"><span class="va">y_axis_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
 
 <span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span><span class="op">(</span><span class="va">dv</span>,
                        parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
@@ -140,27 +125,24 @@
                        y_axis_label <span class="op">=</span> <span class="va">y_axis_label</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-graphs-1.png"><!-- --></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">dv</span>, 
+<code class="sourceCode R"><span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">dv</span>, 
              gwl_data <span class="op">=</span> <span class="va">gwl_data</span>, 
              parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
              plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span>, 
              add_trend <span class="op">=</span> <span class="cn">TRUE</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-graphs-2.png"><!-- --></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="reference/Sc_Cl_plot.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"L2701_example_data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"L2701_example_data"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-graphs-3.png"><!-- --></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/trend_plot.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-graphs-4.png"><!-- --></p>
 </div>
-<div id="composite-workflows" class="section level3">
-<h3 class="hasAnchor">
-<a href="#composite-workflows" class="anchor"></a>Composite workflows:</h3>
+<div class="section level3">
+<h3 id="composite-workflows">Composite workflows:<a class="anchor" aria-label="anchor" href="#composite-workflows"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">#included sample data:</span>
+<code class="sourceCode R"><span class="co">#included sample data:</span>
 
 <span class="va">aquifer_data</span> <span class="op">&lt;-</span> <span class="va">aquifer_data</span>
 <span class="va">num_years</span> <span class="op">&lt;-</span> <span class="fl">30</span>
@@ -168,115 +150,179 @@
 <span class="fu"><a href="reference/plot_composite_data.html">plot_composite_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png"><!-- --></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png"><!-- --></p>
 </div>
 </div>
-<div id="shiny-app" class="section level2">
-<h2 class="hasAnchor">
-<a href="#shiny-app" class="anchor"></a>Shiny App</h2>
-<p align="center">
-</p>
-<p><img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo"></p>
-
+<div class="section level2">
+<h2 id="shiny-app">Shiny App<a class="anchor" aria-label="anchor" href="#shiny-app"></a>
+</h2>
+<p align="center"><img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo"></p>
 </div>
-<div id="installation-of-r-and-rstudio" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation-of-r-and-rstudio" class="anchor"></a>Installation of R and RStudio</h2>
+<div class="section level2">
+<h2 id="installation-of-r-and-rstudio">Installation of R and RStudio<a class="anchor" aria-label="anchor" href="#installation-of-r-and-rstudio"></a>
+</h2>
 <p>To use the HASP package, you will need to have R and RStudio installed on your computer. This installation will only need to be done once for each computer. This link has instructions for installing R and RStudio:</p>
-<p><a href="https://owi.usgs.gov/R/training-curriculum/installr/">R and RStudio Installation Instructions</a></p>
+<p><a href="https://owi.usgs.gov/R/training-curriculum/installr/" class="external-link">R and RStudio Installation Instructions</a></p>
 <p>Useful links:</p>
 <ul>
-<li><a href="https://cran.r-project.org/bin/windows/base/">Download R Windows</a></li>
-<li><a href="https://cran.r-project.org/bin/macosx/">Download R Mac</a></li>
-<li><a href="https://www.rstudio.com/products/rstudio/download/">Download RStudio</a></li>
+<li><a href="https://cran.r-project.org/bin/windows/base/" class="external-link">Download R Windows</a></li>
+<li><a href="https://cran.r-project.org/bin/macosx/" class="external-link">Download R Mac</a></li>
+<li><a href="https://www.rstudio.com/products/rstudio/download/" class="external-link">Download RStudio</a></li>
 </ul>
 </div>
-<div id="installation-of-hasp" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation-of-hasp" class="anchor"></a>Installation of HASP</h2>
+<div class="section level2">
+<h2 id="installation-of-hasp">Installation of HASP<a class="anchor" aria-label="anchor" href="#installation-of-hasp"></a>
+</h2>
 <p>You can install the <code>HASP</code> package using the <code>remotes</code> package.</p>
 <p>To install the remotes package, copy the following line into R or the “Console” window in RStudio:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></code></pre></div>
 <p>To install the <code>HASP</code> package:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/HASP"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/HASP"</span><span class="op">)</span></code></pre></div>
 <p>During this installation, you may be prompted to update or install some packages. You can press 1 to update all packages.</p>
 </div>
-<div id="running-the-apps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#running-the-apps" class="anchor"></a>Running the apps</h2>
+<div class="section level2">
+<h2 id="running-the-apps">Running the apps<a class="anchor" aria-label="anchor" href="#running-the-apps"></a>
+</h2>
 <p><code>HASP</code> includes two interactive applications as a way to explore the functionality of this package. One has functions for exploring data from a single site, and the other has functions for exploring data from an aquifer.</p>
 <p>To run the single site application, use the following code:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/explore_aquifers.html">explore_site</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/shinystuff.html">explore_site</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>To run the aquifer application use the following code:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/explore_aquifers.html">explore_aquifers</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/shinystuff.html">explore_aquifers</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="disclaimer" class="section level2">
-<h2 class="hasAnchor">
-<a href="#disclaimer" class="anchor"></a>Disclaimer</h2>
+<div class="section level2">
+<h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
+</h2>
 <p>This software is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The software has not received final approval by the U.S. Geological Survey (USGS). No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. The software is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the software.</p>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
-<h2>Links</h2>
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/USGS-R/HASP/">https://​github.com/​USGS-R/​HASP/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/USGS-R/HASP/issues">https://​github.com/​USGS-R/​HASP/​issues</a>
-</li>
+<li><a href="https://github.com/USGS-R/HASP/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/USGS-R/HASP/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>CC0</small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing HASP</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Scott Prinos <br><small class="roles"> Author </small>  </li>
-<li>Laura DeCicco <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3915-9487" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Laura DeCicco <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3915-9487" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Patrick Eslick <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/USGS-R/HASP/actions"><img src="https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://coveralls.io/github/USGS-R/HASP?branch=master"><img src="https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master" alt="Coverage Status"></a></li>
-<li><a href="https://codecov.io/gh/USGS-R/HASP"><img src="https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://owi.usgs.gov/R/packages.html#research"><img src="https://img.shields.io/badge/USGS-Research-blue.svg" alt="status"></a></li>
+<li><a href="https://github.com/USGS-R/HASP/actions" class="external-link"><img src="https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://coveralls.io/github/USGS-R/HASP?branch=master" class="external-link"><img src="https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master" alt="Coverage Status"></a></li>
+<li><a href="https://codecov.io/gh/USGS-R/HASP" class="external-link"><img src="https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://owi.usgs.gov/R/packages.html#research" class="external-link"><img src="https://img.shields.io/badge/USGS-Research-blue.svg" alt="status"></a></li>
 </ul>
 </div>
-</div>
-</div>
 
-
-      <footer><div class="copyright">
-  <p>Developed by Scott Prinos, Laura DeCicco, Patrick Eslick.</p>
+  </aside>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
-</div>
 
-      </footer>
-</div>
+    <footer></footer>
+</div> <!-- / div for your main content-->
 
+<!-- BEGIN USGS Footer Template -->
+
+<footer class="footer"><div class="tmp-container">
+		<!-- .footer-wrap -->
+			<!-- .footer-doi -->
+			<div class="footer-doi">
+				<!-- footer nav links -->
+				<ul class="menu nav">
+<li class="first leaf menu-links menu-level-1"><a href="https://www.doi.gov/privacy" class="external-link">DOI Privacy Policy</a></li>
+					<li class="leaf menu-links menu-level-1"><a href="https://www.usgs.gov/policies-and-notices" class="external-link">Legal</a></li>
+					<li class="leaf menu-links menu-level-1"><a href="https://www.usgs.gov/accessibility-and-us-geological-survey" class="external-link">Accessibility</a></li>
+					<li class="leaf menu-links menu-level-1"><a href="https://www.usgs.gov/sitemap" class="external-link">Site Map</a></li>
+					<li class="last leaf menu-links menu-level-1"><a href="https://answers.usgs.gov/" class="external-link">Contact USGS</a></li>
+				</ul>
+<!--/ footer nav links -->
+</div>
+			<!-- /.footer-doi -->
+
+			<hr>
+<!-- .footer-utl-links --><div class="footer-doi">
+			<ul class="menu nav">
+<li class="first leaf menu-links menu-level-1"><a href="https://www.doi.gov/" class="external-link">U.S. Department of the Interior</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.doioig.gov/" class="external-link">DOI Inspector General</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.whitehouse.gov/" class="external-link">White House</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.whitehouse.gov/omb/management/egov/" class="external-link">E-gov</a></li>
+				<li class="leaf menu-links menu-level-1"><a href="https://www.doi.gov/pmb/eeo/no-fear-act" class="external-link">No Fear Act</a></li>
+				<li class="last leaf menu-links menu-level-1"><a href="https://www.usgs.gov/about/organization/science-support/foia" class="external-link">FOIA</a></li>
+			</ul>
+</div>			
+		<!-- /.footer-utl-links -->
+		<!-- .footer-social-links -->
+		<div class="footer-social-links">
+			<ul class="social">
+<li class="follow">Follow</li>
+				<li class="twitter">
+					<a href="https://twitter.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-twitter-square"><span class="only">Twitter</span></i>
+					</a>
+				</li>
+				<li class="facebook">
+					<a href="https://facebook.com/usgeologicalsurvey" target="_blank" class="external-link">
+						<i class="fa fa-facebook-square"><span class="only">Facebook</span></i>
+					</a>
+				</li>
+				<li class="github">
+					<a href="https://github.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-github"><span class="only">GitHub</span></i>
+					</a>
+				</li>
+				<li class="flickr">
+					<a href="https://flickr.com/usgeologicalsurvey" target="_blank" class="external-link">
+						<i class="fa fa-flickr"><span class="only">Flickr</span></i>
+					</a>
+				</li>
+				<li class="youtube">
+					<a href="http://youtube.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-youtube-play"><span class="only">YouTube</span></i>
+					</a>
+				</li>
+				<li class="instagram">
+					<a href="https://instagram.com/usgs" target="_blank" class="external-link">
+						<i class="fa fa-instagram"><span class="only">Instagram</span></i>
+					</a>
+				</li>
+			</ul>
+</div>
+		<!-- /.footer-social-links -->
+	</div>
+		<!-- /.footer-wrap -->	
+</footer><!-- END USGS Footer Template- --><!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKQR8KP" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
   
-
-
   </body>
+<!-- closing div for body -->
 </html>
