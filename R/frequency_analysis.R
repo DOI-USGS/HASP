@@ -549,6 +549,9 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                     "Provisional daily value" = "red",
                     "Historical weekly median" = "springgreen4")
   
+  point_shapes <- point_shapes[as.character(unique(point_data$group))]
+  point_colors <- point_colors[as.character(unique(point_data$group))]
+  
   # Create the plot labels
   year_start <- as.POSIXlt(plot_start)$year + 1900
   year_end <- as.POSIXlt(plot_end)$year + 1900
@@ -571,6 +574,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   
   point_data$group <- factor(point_data$group, 
                              levels = order_groups)
+  point_data$group <- droplevels(point_data$group)
   # Plot
   plot_out <- ggplot() +
     geom_rect(data = site_statistics_plot,
@@ -580,7 +584,8 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                   ymax = ymax, 
                   fill = group)) +
     geom_vline(xintercept = plot_week, color = "gray90") +
-    geom_point(data = dplyr::filter(point_data, group == "Historical weekly median"),
+    geom_point(data = dplyr::filter(point_data, 
+                                    group == "Historical weekly median"),
                aes(x = x, y = y, color = group),
                size = 1, shape = 17) +
     geom_line(data = dplyr::filter(point_data, 
@@ -603,7 +608,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
     theme(axis.ticks.x = element_blank(),
           aspect.ratio = NULL)
   
-  if(all(levels(point_data$group) %in% unique(point_data$group))){
+  if(length(unique(point_data$group)) == 3){
     plot_out <- plot_out +
       guides(color = guide_legend(order = 1,
                                 override.aes = list(shape = c(NA, NA, 17),
