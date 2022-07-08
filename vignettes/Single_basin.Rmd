@@ -52,7 +52,7 @@ cat("In states: ", paste(states, collapse = ", ") )
 
 ```
 
-```{r dataRetrival, eval=FALSE}
+```{r dataRetrival, eval=FALSE, echo=TRUE}
 library(HASP)
 end_date <- "2019-12-31"
 state_date <- "1989-12-31"
@@ -69,7 +69,7 @@ aquifer_data <- aquifer_data
 
 ## Map It
 
-```{r mapIt}
+```{r mapIt, echo=TRUE}
 
 map <- map_hydro_data(aquifer_data, 30)
 map
@@ -78,7 +78,7 @@ map
 
 ## Composite
 
-```{r graphIt}
+```{r graphIt, echo=TRUE}
 
 plot_composite_data(aquifer_data, 30) +
     ggtitle(label = aquifer_long_name)
@@ -88,7 +88,7 @@ plot_composite_data(aquifer_data, 30) +
 
 ## Normalized Composite
 
-```{r norm}
+```{r norm, echo=TRUE}
 
 plot_normalized_data(aquifer_data, 30) +
   ggtitle(label = aquifer_long_name)
