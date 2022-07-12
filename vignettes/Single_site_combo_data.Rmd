@@ -39,8 +39,6 @@ This page merges information from USGS Groundwater Watch website and USGS Water 
 
 ## Site Information
 
-<table>
-<tr><td>
 
 ```{r siteInfo, results='asis'}
 library(HASP)
@@ -49,14 +47,12 @@ siteID <- "263819081585801"
 site_metadata <- site_summary(siteID, markdown = TRUE)
 ```
 
-</td><td>
 
 ```{r whatData}
 data_info <- data_available(siteID)
 kable(data_info)
 ```
 
-</td></tr> </table>
 
 ## Get data using dataRetrieval
 
@@ -115,32 +111,16 @@ qw_data <- L2701_example_data$QW
 
 ### Monthly Frequency
 
-```{r monthlyFrequencyPlot, eval=FALSE}
 
-monthly_frequency_plot(gw_level_dv,
-                       parameter_cd = "62610",
-                       plot_title = plot_title,
-                       plot_range = "Past year",
-                       y_axis_label = "Groundwater level above NGVD 1929, feet")
-
-monthly_frequency_table(gw_level_dv, 
-                        parameter_cd = "62610")
-```
-
-
-<table>
-<tr><td>
-
-```{r monthlyFreqPlot, echo = FALSE}
+```{r monthlyFreqPlot}
 monthly_frequency_plot(gw_level_dv,
                        parameter_cd = "62610",
                        plot_title = plot_title,
                        plot_range = "Past year")
 ```
 
-</td><td>
 
-```{r monthlyFreqTable, echo = FALSE}
+```{r monthlyFreqTable}
 monthly_freq_table <- monthly_frequency_table(gw_level_dv,
                                               parameter_cd = "62610") %>%
   select(month, minMed, p10, p25, p50, p75, p90, maxMed, nYears) %>%
@@ -157,30 +137,11 @@ kable(monthly_freq_table, digits = 1)
 ```
 
 
-</td></tr> </table>
-
 
 ## Daily 2 year plot
 
-```{r dailyPlot, eval = FALSE}
 
-daily_gwl_2yr_plot(gw_level_dv, 
-                   date_col = "Date",
-                   value_col = "X_62610_00001",
-                   approved_col = "X_62610_00001_cd",
-                   plot_title = plot_title, 
-                   month_breaks = TRUE, 
-                   historical_stat = "median",
-                   y_axis_label = "Groundwater level above NGVD 1929, feet")
-
-daily_gwl_summary(gw_level_dv, 
-                  parameter_cd = "62610")
-```
-
-<table>
-<tr><td>
-
-```{r dailyPlotShow, echo = FALSE, fig.width=9}
+```{r dailyPlotShow, fig.width=9}
 
 daily_gwl_2yr_plot(gw_level_dv, 
                    date_col = "Date",
@@ -193,9 +154,7 @@ daily_gwl_2yr_plot(gw_level_dv,
 ```
 
 
-</td><td>
-
-```{r dailySummary, echo=FALSE}
+```{r dailySummary}
 daily_summary_table <- daily_gwl_summary(gw_level_dv, 
                                          parameter_cd = "62610") %>%
   select("Begin Date" = begin_date,
@@ -207,33 +166,21 @@ daily_summary_table <- daily_gwl_summary(gw_level_dv,
          "50th" = p50,
          "75th" = p75,
          "Highest Level" = highest_level)
-kable(daily_summary_table)
+kable(t(daily_summary_table))
 ```
-
-</td></tr> </table>
-
 
 
 ## Field Groundwater Level Data
 
-```{r fieldPlotDisplay, eval=FALSE}
-gwl_plot_field(gwl_data, plot_title, flip_y = FALSE, 
-               parameter_cd_gwl = "62610")
 
-site_data_summary(gwl_data, "sl_lev_va", parameter_cd_gwl = "62610")
-```
 
-<table>
-<tr><td>
-
-```{r fieldPlot, echo=FALSE}
+```{r fieldPlot}
 gwl_plot_field(gwl_data, plot_title, flip_y = FALSE, 
                parameter_cd = "62610")
 ```
 
-</td><td>
 
-```{r fieldTable, echo=FALSE}
+```{r fieldTable}
 siteField <- gwl_data %>% 
   rename(value = sl_lev_va) %>% 
   site_data_summary() %>% 
@@ -248,28 +195,13 @@ kable(siteField, digits = 1)
 
 ```
 
-</td></tr> </table>
 
 
 ### Period of Record - All Data Types
 
-```{r dvPlotDisplay, eval=FALSE}
-y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
-gwl_plot_all(gw_level_dv, 
-             gwl_data, 
-             y_label = y_label,
-             plot_title = plot_title, 
-             parameter_cd = "62610",
-             flip_y = FALSE)
 
-site_data_summary(gw_level_dv, "X_62610_00001")
-```
-
-<table>
-<tr><td>
-
-```{r dvPlot, echo=FALSE}
+```{r dvPlot}
 y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
 gwl_plot_all(gw_level_dv, 
@@ -281,9 +213,8 @@ gwl_plot_all(gw_level_dv,
 
 ```
 
-</td><td>
 
-```{r dailyTable, echo=FALSE}
+```{r dailyTable}
 siteDaily <- gw_level_dv %>% 
   rename(value = X_62610_00001) %>% 
   site_data_summary() %>% 
@@ -298,41 +229,18 @@ kable(siteDaily, digits = 1)
 
 ```
 
-</td></tr> </table>
-
 ## Salinity Data and Analysis
 
 
 ### Chloride
 
-```{r chloride_plot, eval=FALSE, warning=FALSE}
-trend_plot(qw_data, 
-           plot_title = plot_title, 
-           CharacteristicName = "Chloride")
 
-kendell_test_5_20_years(dplyr::filter(qw_data, 
-                                      CharacteristicName == "Chloride"), 
-                        seasonal = TRUE,
-                        enough_5 = 1,
-                        enough_20 = 1,
-                        date_col = "ActivityStartDateTime",
-                        value_col = "ResultMeasureValue")
-
-qw_summary(qw_data, 
-           CharacteristicName = "Chloride",
-           norm_range = c(225,999))
-```
-
-<table>
-<tr><td>
-
-```{r chloride_plotSHOW, echo=FALSE}
+```{r chloride_plotSHOW}
 trend_plot(qw_data, plot_title = plot_title)
 ```
 
-</td><td>
 
-```{r chloride_trend, echo=FALSE}
+```{r chloride_trend}
 cl_trend <- kendell_test_5_20_years(dplyr::filter(qw_data, 
                                       CharacteristicName == "Chloride"), 
                      seasonal = TRUE,
@@ -343,7 +251,7 @@ cl_trend <- kendell_test_5_20_years(dplyr::filter(qw_data,
 kable(cl_trend, digits = 3)
 ```
 
-```{r chloride_table, echo=FALSE}
+```{r chloride_table}
 chl_table <- qw_summary(qw_data, 
                         CharacteristicName = "Chloride",
                         norm_range = c(225,999))
@@ -352,31 +260,16 @@ kable(chl_table)
 ```
 
 
-
-</td></tr> </table>
-
 ### Specific Conductance
 
-```{r qwplot1, eval=FALSE}
-qw_plot(qw_data, "Specific Conductance", 
-        CharacteristicName = "Specific conductance")
-qw_summary(qw_data, 
-           CharacteristicName = "Specific conductance",
-           norm_range = NA)
-```
 
 
-<table>
-<tr><td>
-
-```{r qwplotReal, echo=FALSE}
+```{r qwplotReal}
 qw_plot(qw_data, "Specific Conductance", 
         CharacteristicName = "Specific conductance")
 ```
 
-</td><td>
-
-```{r sc_table, echo=FALSE}
+```{r sc_table}
 sc_table <- qw_summary(qw_data, 
                        CharacteristicName = "Specific conductance",
                        norm_range = NA)
@@ -385,29 +278,17 @@ kable(sc_table)
 ```
 
 
-</td></tr> </table>
-
 
 ### Specific Conductance vs Chloride
 
-```{r salityPlot, eval=FALSE}
-Sc_Cl_plot(qw_data, plot_title = plot_title)
 
-Sc_Cl_table(qw_data)
-```
-
-<table>
-<tr><td>
-
-```{r salityPlotDisplay, echo=FALSE}
+```{r salityPlotDisplay}
 Sc_Cl_plot(qw_data, plot_title = plot_title)
 
 ```
 
 
-</td><td>
-
-```{r salityTable, echo=FALSE}
+```{r salityTable}
 sc_cl <- Sc_Cl_table(qw_data)
 
 # only show 10 row:
@@ -416,8 +297,4 @@ kable(head(sc_cl, 10),
                     "Chloride [mg/L]",
                     "Specific conductance [µS/L]"))
 ```
-
-
-</td></tr> </table>
-
 

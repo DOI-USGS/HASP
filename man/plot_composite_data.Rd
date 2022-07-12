@@ -4,7 +4,13 @@
 \alias{plot_composite_data}
 \title{Plot composite hydrograph data}
 \usage{
-plot_composite_data(x, num_years = NA, parameter_cd = "72019", plot_title = "")
+plot_composite_data(
+  x,
+  num_years = NA,
+  parameter_cd = "72019",
+  plot_title = "",
+  subtitle = "U.S. Geological Survey"
+)
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
@@ -16,6 +22,8 @@ analysis will default to the range of the data in x.}
 \item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 
 \item{plot_title}{character title included on plot.}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 }
 \value{
 ggplot2 object

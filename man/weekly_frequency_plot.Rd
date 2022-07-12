@@ -12,6 +12,7 @@ weekly_frequency_plot(
   approved_col = NA,
   plot_range = c("Past year", "Calendar year"),
   plot_title = "",
+  subtitle = "U.S. Geological Survey",
   y_axis_label = "",
   flip_y = FALSE
 )
@@ -38,6 +39,8 @@ last year of data, or "Calendar year" to use the current calendar year, beginnin
 in January.}
 
 \item{plot_title}{the title to use on the plot}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 

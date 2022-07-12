@@ -42,6 +42,7 @@ theme_gwl <- function(base_family = "", ...){
 #' @param y_label character. Label for y-axis.
 #' @param include_y_scale logical. If \code{TRUE}, include groundwater type style for y-axis. Default is \code{FALSE}.
 #' @param plot_title character. Title for plot.
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param zero_on_top logical. If zero_on_top is \code{TRUE}, there is no padding
 #' at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.
 #' @examples 
@@ -57,7 +58,8 @@ theme_gwl <- function(base_family = "", ...){
 hasp_framework <- function(x_label, y_label,
                            plot_title, 
                            include_y_scale = FALSE, 
-                           zero_on_top = TRUE){
+                           zero_on_top = TRUE,
+                           subtitle = "U.S. Geological Survey"){
   
   if(is.na(zero_on_top)) {
     expand_lims <- c(0.05, 0.05)
@@ -80,13 +82,13 @@ hasp_framework <- function(x_label, y_label,
                                               sec.axis = dup_axis(labels =  NULL,
                                                                   name = NULL)),
                            ggtitle(plot_title, 
-                                   subtitle = "U.S. Geological Survey"))
+                                   subtitle = subtitle))
   } else {
     basic_elements <- list(theme_gwl(),
                            labs(caption = paste("Plot created:", Sys.Date()), 
                                 y = y_label, x = x_label),
                            ggtitle(plot_title, 
-                                   subtitle = "U.S. Geological Survey"))
+                                   subtitle = subtitle))
   }
   
   return(basic_elements)

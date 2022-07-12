@@ -8,7 +8,8 @@ plot_normalized_data(
   x,
   num_years = NA,
   parameter_cd = "72019",
-  plot_title = ""
+  plot_title = "",
+  subtitle = "U.S. Geological Survey"
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ analysis will default to the range of the data in x.}
 \item{parameter_cd}{character, 5-digit parameter code, default is "72019".}
 
 \item{plot_title}{character title of plot.}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 }
 \value{
 ggplot2 object

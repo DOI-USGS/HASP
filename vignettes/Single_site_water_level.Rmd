@@ -15,7 +15,7 @@ library(knitr)
 opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
-               fig.width = 6,
+               fig.width = 7,
                fig.height = 6)
 library(dplyr)
 library(tidyr)
@@ -107,7 +107,7 @@ gwl_data <- L2701_example_data$Discrete
 
 ### Weekly frequency
 
-```{r weeklyFrequencyShow, eval=FALSE}
+```{r weeklyFrequencyShow}
 
 weekly_frequency_plot(gw_level_dv, 
                       date_col = "Date",
@@ -116,32 +116,18 @@ weekly_frequency_plot(gw_level_dv,
                       plot_title = site_title,
                       y_axis_label = "Groundwater level above NGVD 1929, feet")
 
-weekly_table <- weekly_frequency_table(gw_level_dv, 
-                                       parameter_cd = "62610")
-
-head(weekly_table, 10)
-```
-
-
-<table>
-<tr><td>
-```{r weeklyFrequencyPlot, echo=FALSE, fig.width=9}
-weekly_frequency_plot(gw_level_dv, 
-                      parameter_cd = "62610",
-                      plot_title = site_title,
-                      y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 ```
 
-</td><td>
+
 
 Weekly frequency analysis of daily maximum water level record. Only showing the first 10 rows for this example:
 
-```{r weekly_table, echo=FALSE}
-library(dplyr)
+```{r weekly_table}
 
-weekly_freq_table <- weekly_frequency_table(gw_level_dv,
-                                            parameter_cd = "62610") %>%
+
+weekly_table <- weekly_frequency_table(gw_level_dv, 
+                                       parameter_cd = "62610") %>%
   select("Week" = week,
          "Lowest median" = minMed,
          "10th" = p10,
@@ -151,35 +137,14 @@ weekly_freq_table <- weekly_frequency_table(gw_level_dv,
          "90th" = p90,
          "Highest median" = maxMed,
          "# Years" = nYears)
-kable(head(weekly_freq_table, 10), digits = 1)
+kable(head(weekly_table, 10), digits = 1)
 
 ```
-
-
-</td></tr> </table>
 
 
 ### Daily 2-year
 
-```{r dailyPlotShow, eval=FALSE}
-daily_gwl_2yr_plot(gw_level_dv, 
-                   parameter_cd = "62610",
-                   plot_title = site_title,
-                   historical_stat = "mean",
-                   month_breaks = TRUE,
-                   y_axis_label = "Groundwater level above NGVD 1929, feet")
-
-daily_table <- daily_frequency_table(gw_level_dv, 
-                      date_col = "Date",
-                      value_col = "X_62610_00001",
-                      approved_col = "X_62610_00001_cd")
-head(daily_table, n = 10)
-```
-
-<table>
-<tr><td>
-
-```{r dailyDo, echo=FALSE, fig.width=9}
+```{r dailyPlotShow, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
                    parameter_cd = "62610",
                    plot_title = site_title,
@@ -189,11 +154,10 @@ daily_gwl_2yr_plot(gw_level_dv,
 
 ```
 
-</td><td>
 
 Statistics of maximum daily water level record (DOY = day of year). Only showing the first 10 rows for this example:
 
-```{r dailyShow2, echo=FALSE}
+```{r dailyShow2}
 daily_table <- daily_frequency_table(gw_level_dv, 
                                      date_col = "Date",
                                      value_col = "X_62610_00001",
@@ -206,37 +170,11 @@ daily_table <- daily_frequency_table(gw_level_dv,
 kable(head(daily_table, 10))
 ```
 
-</td></tr> </table>
 
 ### Daily value trends
 
-```{r trend_dv, eval=FALSE}
-y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
-gwl_plot_all(gw_level_dv, 
-             gwl_data, 
-             y_label = y_label,
-             parameter_cd = parameterCd,
-             plot_title = site_title,
-             add_trend = TRUE, flip_y = FALSE)
-
-gw_level_dv %>% 
-  rename(value = X_62610_00001) %>% 
-  site_data_summary()
-
-gw_monthly <- monthly_mean(gw_level_dv)
-
-kendell_test_5_20_years(gw_monthly, 
-                        seasonal = TRUE, 
-                        date_col = "mid_date", 
-                        value_col = "mean_va")
-```
-
-
-<table>
-<tr><td>
-
-```{r gwlTrendplot, echo=FALSE}
+```{r gwlTrendplot}
 y_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
 
@@ -249,11 +187,9 @@ gwl_plot_all(gw_level_dv, gwl_data,
 
 ```
 
-</td><td>
-
 Summary statistics for maximum daily water level measurements:
 
-```{r siteStatsDaily, echo=FALSE}
+```{r siteStatsDaily}
 siteDV <- gw_level_dv %>%
   rename(value = X_62610_00001) %>% 
   site_data_summary() %>% 
@@ -270,7 +206,7 @@ kable(siteDV, digits = 1)
 
 Results of trend analysis on maximum daily water levels:
 
-```{r trendTableDaily, echo=FALSE}
+```{r trendTableDaily}
 gw_monthly <- monthly_mean(gw_level_dv)
 
 trend_result <- kendell_test_5_20_years(gw_monthly, 
@@ -282,24 +218,13 @@ kable(trend_result, digits = 1)
 
 ```
 
-</td></tr> </table>
+
 
 ### Field GWL values
 
-```{r manual, eval=FALSE}
-gwl_plot_all(NULL, gwl_data,
-             y_label = y_label,
-             parameter_cd = parameterCd,
-             plot_title = site_title, 
-             flip_y = FALSE)
 
-site_data_summary(gwl_data, "sl_lev_va")
-```
 
-<table>
-<tr><td>
-
-```{r manualPlot, echo=FALSE}
+```{r manualPlot}
 gwl_plot_all(NULL, gwl_data,
              y_label = y_label,
              parameter_cd = parameterCd,
@@ -309,11 +234,11 @@ gwl_plot_all(NULL, gwl_data,
 
 ```
 
-</td><td>
+
 
 Summary statistics for manual water level measurements
 
-```{r manualTable, echo=FALSE}
+```{r manualTable}
 quantiles <- gwl_data %>% 
   rename(value = sl_lev_va) %>% 
   site_data_summary() %>% 
@@ -327,5 +252,4 @@ kable(quantiles, digits = 1)
 
 ```
 
-</td></tr> </table>
 

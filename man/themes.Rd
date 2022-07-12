@@ -12,7 +12,8 @@ hasp_framework(
   y_label,
   plot_title,
   include_y_scale = FALSE,
-  zero_on_top = TRUE
+  zero_on_top = TRUE,
+  subtitle = "U.S. Geological Survey"
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ hasp_framework(
 
 \item{zero_on_top}{logical. If zero_on_top is \code{TRUE}, there is no padding
 at the top of y axis. If \code{FALSE}, no padding at the bottom. If \code{NA}, padding on both top and bottom.}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 }
 \description{
 Themes and other useful graphing utilities for the HASP package
