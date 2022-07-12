@@ -101,68 +101,68 @@
 <p>Most examples within <code>HASP</code> are given with data obtained via <code>dataRetrieval</code> functions. This article describes how to use external (non-<code>dataRetrieval</code>) data with <code>HASP</code> functions. Users can import their data into R in any of their favorite ways, and use the data frames in any of the scripted work flows. There are 3 main data types used in the <code>HASP</code> package: daily data (argument = <code>gw_level_dv</code>), field groundwater levels (argument = <code>gwl</code>), and water quality data (argument = <code>qw_data</code>).</p>
 <p>The <code>HASP</code> package provides sample data named <code>L2701_example_data</code>. This data is also provided here, in a simplified Microsoft™ Excel file:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sample.xlsx"</span>, package <span class="op">=</span> <span class="st">"HASP"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sample.xlsx"</span>, package <span class="op">=</span> <span class="st">"HASP"</span><span class="op">)</span></span></code></pre></div>
 <p>We will use the <code>readxl</code> package to import this data for these examples. The main idea is import the data, figure out what columns you need, and call the functions appropriately.</p>
 <div class="section level3">
 <h3 id="import-the-data">Import the data<a class="anchor" aria-label="anchor" href="#import-the-data"></a>
 </h3>
 <p>This is how to import the sample file. This can be done in any number of ways. The point is to get 3 data frames in your R environment.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample_data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sample.xlsx"</span>,
-                                package <span class="op">=</span> <span class="st">"HASP"</span><span class="op">)</span>
-<span class="va">daily_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">sample_data_path</span>, 
-                                sheet <span class="op">=</span> <span class="st">"Daily"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">daily_data</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "Date"   "Value"  "Remark"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">sample_data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sample.xlsx"</span>,</span>
+<span>                                package <span class="op">=</span> <span class="st">"HASP"</span><span class="op">)</span></span>
+<span><span class="va">daily_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">sample_data_path</span>, </span>
+<span>                                sheet <span class="op">=</span> <span class="st">"Daily"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">daily_data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "Date"   "Value"  "Remark"</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">sample_data_path</span>, 
-                                sheet <span class="op">=</span> <span class="st">"Field"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">gwl_data</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "Date"   "Value"  "Remark"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">sample_data_path</span>, </span>
+<span>                                sheet <span class="op">=</span> <span class="st">"Field"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">gwl_data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "Date"   "Value"  "Remark"</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">sample_data_path</span>, 
-                                sheet <span class="op">=</span> <span class="st">"QW"</span><span class="op">)</span> 
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">qw_data</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "Date"      "Value"     "Remark"    "parameter"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">sample_data_path</span>, </span>
+<span>                                sheet <span class="op">=</span> <span class="st">"QW"</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">qw_data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "Date"      "Value"     "Remark"    "parameter"</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="call-hasp-functions">Call <code>HASP</code> functions<a class="anchor" aria-label="anchor" href="#call-hasp-functions"></a>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">daily_data</span>,
-                       date_col <span class="op">=</span> <span class="st">"Date"</span>,
-                       value_col <span class="op">=</span> <span class="st">"Value"</span>,
-                       approved_col <span class="op">=</span> <span class="st">"Remark"</span>,
-                       plot_title <span class="op">=</span> <span class="st">"External Data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">daily_data</span>,</span>
+<span>                       date_col <span class="op">=</span> <span class="st">"Date"</span>,</span>
+<span>                       value_col <span class="op">=</span> <span class="st">"Value"</span>,</span>
+<span>                       approved_col <span class="op">=</span> <span class="st">"Remark"</span>,</span>
+<span>                       plot_title <span class="op">=</span> <span class="st">"External Data"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PrepareData_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">daily_data</span>,
-             gwl_data <span class="op">=</span>  <span class="va">gwl_data</span>, 
-             date_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Date"</span>, <span class="st">"Date"</span><span class="op">)</span>,
-             value_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Value"</span>, <span class="st">"Value"</span><span class="op">)</span>,
-             approved_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Remark"</span>, <span class="st">"Remark"</span><span class="op">)</span>,
-             plot_title <span class="op">=</span> <span class="st">"External Data"</span>, 
-             add_trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">daily_data</span>,</span>
+<span>             gwl_data <span class="op">=</span>  <span class="va">gwl_data</span>, </span>
+<span>             date_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Date"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
+<span>             value_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Value"</span>, <span class="st">"Value"</span><span class="op">)</span>,</span>
+<span>             approved_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Remark"</span>, <span class="st">"Remark"</span><span class="op">)</span>,</span>
+<span>             plot_title <span class="op">=</span> <span class="st">"External Data"</span>, </span>
+<span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PrepareData_files/figure-html/unnamed-chunk-2-2.png" width="576"></p>
 <p>The water-quality plots are less flexible, they require the data frame to have column names “sample_dt”, “parm_cd”, “result_va”, “remark_cd”. Renaming columns in R can be done in several ways, here is one using <code>dplyr</code>’s <code>rename</code> function:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-
-<span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="va">qw_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>ActivityStartDateTime <span class="op">=</span> <span class="va">Date</span>, 
-         ResultMeasureValue <span class="op">=</span> <span class="va">Value</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>CharacteristicName <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">parameter</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> 
-                                          <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"99220"</span>, <span class="st">"00940"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Chloride"</span>,
-                                        <span class="va">parameter</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> 
-                                          <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"90095"</span>, <span class="st">"00095"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Specific conductance"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span>qw_data <span class="op">=</span> <span class="va">qw_data</span>, 
-           <span class="st">"External Data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="va">qw_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>ActivityStartDateTime <span class="op">=</span> <span class="va">Date</span>, </span>
+<span>         ResultMeasureValue <span class="op">=</span> <span class="va">Value</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>CharacteristicName <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">parameter</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> </span>
+<span>                                          <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"99220"</span>, <span class="st">"00940"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Chloride"</span>,</span>
+<span>                                        <span class="va">parameter</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> </span>
+<span>                                          <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"90095"</span>, <span class="st">"00095"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Specific conductance"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span>qw_data <span class="op">=</span> <span class="va">qw_data</span>, </span>
+<span>           <span class="st">"External Data"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PrepareData_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, 
-           plot_title <span class="op">=</span> <span class="st">"External Data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, </span>
+<span>           plot_title <span class="op">=</span> <span class="st">"External Data"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PrepareData_files/figure-html/unnamed-chunk-3-2.png" width="576"></p>
 </div>
 </div>

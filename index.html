@@ -98,59 +98,59 @@
 <h3 id="single-site-workflows">Single site workflows:<a class="anchor" aria-label="anchor" href="#single-site-workflows"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span>
-<span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span>
-
-<span class="co">#Field GWL data:</span>
-<span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></span><span class="op">(</span><span class="va">site</span><span class="op">)</span>
-
-<span class="co"># Daily data:</span>
-<span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span>
-<span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span>
-<span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></span><span class="op">(</span><span class="va">site</span>,
-                                <span class="va">parameterCd</span>,
-                                statCd <span class="op">=</span> <span class="va">statCd</span><span class="op">)</span>
-
-<span class="co"># Water Quality data:</span>
-<span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span>
-<span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readWQPqw.html" class="external-link">readWQPqw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site</span><span class="op">)</span>,
-                                    <span class="va">parameterCd</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HASP</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pubs.usgs.gov/tm/04/a10/" class="external-link">dataRetrieval</a></span><span class="op">)</span></span>
+<span><span class="va">site</span> <span class="op">&lt;-</span> <span class="st">"263819081585801"</span></span>
+<span></span>
+<span><span class="co">#Field GWL data:</span></span>
+<span><span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></span><span class="op">(</span><span class="va">site</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Daily data:</span></span>
+<span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span></span>
+<span><span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span></span>
+<span><span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></span><span class="op">(</span><span class="va">site</span>,</span>
+<span>                                <span class="va">parameterCd</span>,</span>
+<span>                                statCd <span class="op">=</span> <span class="va">statCd</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Water Quality data:</span></span>
+<span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"00095"</span>,<span class="st">"90095"</span>,<span class="st">"00940"</span>,<span class="st">"99220"</span><span class="op">)</span></span>
+<span><span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readWQPqw.html" class="external-link">readWQPqw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"USGS-"</span>, <span class="va">site</span><span class="op">)</span>,</span>
+<span>                                    <span class="va">parameterCd</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y_axis_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span>
-
-<span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span><span class="op">(</span><span class="va">dv</span>,
-                       parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
-                       plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span>,
-                       y_axis_label <span class="op">=</span> <span class="va">y_axis_label</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y_axis_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/monthly_frequency_plot.html">monthly_frequency_plot</a></span><span class="op">(</span><span class="va">dv</span>,</span>
+<span>                       parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span>
+<span>                       plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span>,</span>
+<span>                       y_axis_label <span class="op">=</span> <span class="va">y_axis_label</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-graphs-1.png"><!-- --></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">dv</span>, 
-             gwl_data <span class="op">=</span> <span class="va">gwl_data</span>, 
-             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,
-             plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span>, 
-             add_trend <span class="op">=</span> <span class="cn">TRUE</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span>gw_level_dv <span class="op">=</span> <span class="va">dv</span>, </span>
+<span>             gwl_data <span class="op">=</span> <span class="va">gwl_data</span>, </span>
+<span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span>
+<span>             plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span>, </span>
+<span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-graphs-2.png"><!-- --></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"L2701_example_data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/sc_cl.html">Sc_Cl_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"L2701_example_data"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-graphs-3.png"><!-- --></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/chloridetrend.html">trend_plot</a></span><span class="op">(</span><span class="va">qw_data</span>, plot_title <span class="op">=</span> <span class="st">"L2701_example_data"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-graphs-4.png"><!-- --></p>
 </div>
 <div class="section level3">
 <h3 id="composite-workflows">Composite workflows:<a class="anchor" aria-label="anchor" href="#composite-workflows"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#included sample data:</span>
-
-<span class="va">aquifer_data</span> <span class="op">&lt;-</span> <span class="va">aquifer_data</span>
-<span class="va">num_years</span> <span class="op">&lt;-</span> <span class="fl">30</span>
-
-<span class="fu"><a href="reference/plot_composite_data.html">plot_composite_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#included sample data:</span></span>
+<span></span>
+<span><span class="va">aquifer_data</span> <span class="op">&lt;-</span> <span class="va">aquifer_data</span></span>
+<span><span class="va">num_years</span> <span class="op">&lt;-</span> <span class="fl">30</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/plot_composite_data.html">plot_composite_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png"><!-- --></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_normalized_data.html">plot_normalized_data</a></span><span class="op">(</span><span class="va">aquifer_data</span>, <span class="va">num_years</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png"><!-- --></p>
 </div>
 </div>
@@ -177,10 +177,10 @@
 <p>You can install the <code>HASP</code> package using the <code>remotes</code> package.</p>
 <p>To install the remotes package, copy the following line into R or the “Console” window in RStudio:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span></code></pre></div>
 <p>To install the <code>HASP</code> package:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/HASP"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/HASP"</span><span class="op">)</span></span></code></pre></div>
 <p>During this installation, you may be prompted to update or install some packages. You can press 1 to update all packages.</p>
 </div>
 <div class="section level2">
@@ -189,10 +189,10 @@
 <p><code>HASP</code> includes two interactive applications as a way to explore the functionality of this package. One has functions for exploring data from a single site, and the other has functions for exploring data from an aquifer.</p>
 <p>To run the single site application, use the following code:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/shinystuff.html">explore_site</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/shinystuff.html">explore_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>To run the aquifer application use the following code:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/shinystuff.html">explore_aquifers</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">HASP</span><span class="fu">::</span><span class="fu"><a href="reference/shinystuff.html">explore_aquifers</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>

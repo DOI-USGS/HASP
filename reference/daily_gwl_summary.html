@@ -65,13 +65,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">daily_gwl_summary</span><span class="op">(</span>
-  <span class="va">gw_level_dv</span>,
-  parameter_cd <span class="op">=</span> <span class="cn">NA</span>,
-  date_col <span class="op">=</span> <span class="cn">NA</span>,
-  value_col <span class="op">=</span> <span class="cn">NA</span>,
-  approved_col <span class="op">=</span> <span class="cn">NA</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">daily_gwl_summary</span><span class="op">(</span></span>
+<span>  <span class="va">gw_level_dv</span>,</span>
+<span>  parameter_cd <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  value_col <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  approved_col <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -112,19 +112,19 @@ and percentile values</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># site &lt;- "263819081585801"</span></span>
-<span class="r-in"><span class="va">p_code_dv</span> <span class="op">&lt;-</span> <span class="st">"62610"</span></span>
-<span class="r-in"><span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span></span>
-<span class="r-in"><span class="co"># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span></span>
-<span class="r-in"><span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">Daily</span></span>
-<span class="r-in"><span class="fu">daily_gwl_summary</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span>
-<span class="r-in">                  parameter_cd <span class="op">=</span> <span class="va">p_code_dv</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># site &lt;- "263819081585801"</span></span></span>
+<span class="r-in"><span><span class="va">p_code_dv</span> <span class="op">&lt;-</span> <span class="st">"62610"</span></span></span>
+<span class="r-in"><span><span class="va">statCd</span> <span class="op">&lt;-</span> <span class="st">"00001"</span></span></span>
+<span class="r-in"><span><span class="co"># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span></span></span>
+<span class="r-in"><span><span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">Daily</span></span></span>
+<span class="r-in"><span><span class="fu">daily_gwl_summary</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>                  parameter_cd <span class="op">=</span> <span class="va">p_code_dv</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   begin_date   end_date  days percent_complete lowest_level      p5     p10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1978-10-01 2021-02-28 14807               96       -51.08 -38.397 -33.874</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      p25    p50    p75    p90    p95 highest_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 -28.34 -21.84 -16.84 -12.12 -9.153         -2.81</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

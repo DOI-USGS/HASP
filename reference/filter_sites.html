@@ -65,13 +65,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">filter_sites</span><span class="op">(</span>
-  <span class="va">x</span>,
-  parameter_cd <span class="op">=</span> <span class="st">"72019"</span>,
-  num_years <span class="op">=</span> <span class="cn">NA</span>,
-  start_year <span class="op">=</span> <span class="cn">NA</span>,
-  end_year <span class="op">=</span> <span class="cn">NA</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_sites</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  parameter_cd <span class="op">=</span> <span class="st">"72019"</span>,</span>
+<span>  num_years <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  start_year <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  end_year <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -108,12 +108,12 @@ the filter will use the last year.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">aquifer_data</span> <span class="op">&lt;-</span> <span class="va">aquifer_data</span></span>
-<span class="r-in"><span class="va">num_years</span> <span class="op">&lt;-</span> <span class="fl">30</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">aq_data</span> <span class="op">&lt;-</span> <span class="fu">filter_sites</span><span class="op">(</span><span class="va">aquifer_data</span>,</span>
-<span class="r-in">                        parameter_cd <span class="op">=</span> <span class="st">"72019"</span>,</span>
-<span class="r-in">                        num_years <span class="op">=</span> <span class="va">num_years</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">aquifer_data</span> <span class="op">&lt;-</span> <span class="va">aquifer_data</span></span></span>
+<span class="r-in"><span><span class="va">num_years</span> <span class="op">&lt;-</span> <span class="fl">30</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">aq_data</span> <span class="op">&lt;-</span> <span class="fu">filter_sites</span><span class="op">(</span><span class="va">aquifer_data</span>,</span></span>
+<span class="r-in"><span>                        parameter_cd <span class="op">=</span> <span class="st">"72019"</span>,</span></span>
+<span class="r-in"><span>                        num_years <span class="op">=</span> <span class="va">num_years</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

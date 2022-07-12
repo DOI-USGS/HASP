@@ -117,7 +117,7 @@
 </ul>
 <p>Once those have been installed, the following R packages will be needed for R-package development work:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"devtools"</span>, <span class="st">"rmarkdown"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"devtools"</span>, <span class="st">"rmarkdown"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="code-usgs-gov-gitlab-setup">code.usgs.gov (GitLab) setup<a class="anchor" aria-label="anchor" href="#code-usgs-gov-gitlab-setup"></a>
@@ -164,7 +164,7 @@
 <p><img src="install_error.png" width="50%"></p>
 <p>Read which package is missing from your computer and install, or you can use the <code>remotes</code> package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html" class="external-link">install_deps</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html" class="external-link">install_deps</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="set-up-roxygen-options">Set up roxygen options<a class="anchor" aria-label="anchor" href="#set-up-roxygen-options"></a>
@@ -202,27 +202,27 @@
 <p>You have all the details for a new function, great! Here are some steps to get it fully incorporated into the package so others can use it. See <a href="https://r-pkgs.org/" class="external-link">R Packages</a> for complete details.</p>
 <p>Follow the style and guidelines agreed upon by the package development team. For example, I typically create Roxygen above the function definition, explicitly call dependent functions with the notation <code>package::function_I_need</code>, and prefer more whitespace and linebreaks than other developers. I would either discuss these style preferences with my collaborators or create a project-specific style guideline.</p>
 <p>Here is an example of some of a new function which follows our package guidelines. Save this as an R file in the “R” folder of the package.</p>
-<pre><code><span class="co">#' My fancy new function</span>
-<span class="co">#' </span>
-<span class="co">#' This is my fancy new function. It's really great.</span>
-<span class="co">#' </span>
-<span class="co">#' @param excited_flag logical. This sets our output</span>
-<span class="co">#' to excited or not</span>
-<span class="co">#' @export</span>
-<span class="co">#' @examples </span>
-<span class="co">#' my_fancy_function(excited_flag = TRUE)</span>
-<span class="co">#' my_fancy_function(excited_flag = FALSE)</span>
-<span class="va">my_fancy_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">excited_flag</span><span class="op">)</span><span class="op">{</span>
-  
-  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkLogical.html" class="external-link">assert_logical</a></span><span class="op">(</span><span class="va">excited_flag</span><span class="op">)</span>
-  
-  <span class="kw">if</span><span class="op">(</span><span class="va">excited_flag</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">say</span> <span class="op">&lt;-</span> <span class="st">"HI!"</span>
-  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="va">say</span> <span class="op">&lt;-</span> <span class="st">"hi"</span>
-  <span class="op">}</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">say</span><span class="op">)</span>
-<span class="op">}</span></code></pre>
+<pre><code><span><span class="co">#' My fancy new function</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' This is my fancy new function. It's really great.</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param excited_flag logical. This sets our output</span></span>
+<span><span class="co">#' to excited or not</span></span>
+<span><span class="co">#' @export</span></span>
+<span><span class="co">#' @examples </span></span>
+<span><span class="co">#' my_fancy_function(excited_flag = TRUE)</span></span>
+<span><span class="co">#' my_fancy_function(excited_flag = FALSE)</span></span>
+<span><span class="va">my_fancy_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">excited_flag</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkLogical.html" class="external-link">assert_logical</a></span><span class="op">(</span><span class="va">excited_flag</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">excited_flag</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">say</span> <span class="op">&lt;-</span> <span class="st">"HI!"</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">say</span> <span class="op">&lt;-</span> <span class="st">"hi"</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">say</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="local-package-check">Local Package Check<a class="anchor" aria-label="anchor" href="#local-package-check"></a>
@@ -235,17 +235,17 @@
 <h3 id="creating-tests">Creating tests<a class="anchor" aria-label="anchor" href="#creating-tests"></a>
 </h3>
 <p>It’s also important to create tests to check that your functions do exactly what you expect them to do. Use the <a href="https://testthat.r-lib.org/" class="external-link">testthat</a> package to create these tests. Navigate to the tests/testthat folder and create some new tests for your new function. As much as possible, the tests should check every part of your function.</p>
-<pre><code><span class="fu">context</span><span class="op">(</span><span class="st">"Test my fancy function"</span><span class="op">)</span>
-<span class="fu">test_that</span><span class="op">(</span><span class="st">"My fancy function"</span>, <span class="op">{</span>
-
-  <span class="va">excited</span> <span class="op">&lt;-</span> <span class="fu">my_fancy_function</span><span class="op">(</span>excited_flag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-  <span class="va">not_excited</span> <span class="op">&lt;-</span> <span class="fu">my_fancy_function</span><span class="op">(</span>excited_flag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-  
-  <span class="fu">expect_type</span><span class="op">(</span><span class="va">excited</span>, type <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>
-  <span class="fu">expect_equal</span><span class="op">(</span><span class="va">excited</span>, <span class="st">"HI!"</span><span class="op">)</span>
-  <span class="fu">expect_equal</span><span class="op">(</span><span class="va">not_excited</span>, <span class="st">"hi"</span><span class="op">)</span>
-  <span class="fu">expect_error</span><span class="op">(</span><span class="fu">my_fancy_function</span><span class="op">(</span>excited_flag <span class="op">=</span> <span class="st">"what?"</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu">context</span><span class="op">(</span><span class="st">"Test my fancy function"</span><span class="op">)</span></span>
+<span><span class="fu">test_that</span><span class="op">(</span><span class="st">"My fancy function"</span>, <span class="op">{</span></span>
+<span></span>
+<span>  <span class="va">excited</span> <span class="op">&lt;-</span> <span class="fu">my_fancy_function</span><span class="op">(</span>excited_flag <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">not_excited</span> <span class="op">&lt;-</span> <span class="fu">my_fancy_function</span><span class="op">(</span>excited_flag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu">expect_type</span><span class="op">(</span><span class="va">excited</span>, type <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_equal</span><span class="op">(</span><span class="va">excited</span>, <span class="st">"HI!"</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_equal</span><span class="op">(</span><span class="va">not_excited</span>, <span class="st">"hi"</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_error</span><span class="op">(</span><span class="fu">my_fancy_function</span><span class="op">(</span>excited_flag <span class="op">=</span> <span class="st">"what?"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre>
 <p>In the “Build” tab, under “More”, test the full package</p>
 <p><img src="test.png" width="50%"></p>
 </div>
