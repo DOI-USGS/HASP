@@ -11,6 +11,7 @@ monthly_frequency_plot(
   value_col = NA,
   approved_col = NA,
   plot_title = "",
+  subtitle = "U.S. Geological Survey",
   plot_range = c("Past year"),
   y_axis_label = "",
   flip_y = FALSE
@@ -32,7 +33,9 @@ which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 
-\item{plot_title}{the title to use on the plot}
+\item{plot_title}{the title to use on the plot.}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning

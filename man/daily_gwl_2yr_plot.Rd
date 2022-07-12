@@ -13,6 +13,7 @@ daily_gwl_2yr_plot(
   historical_stat = c("mean", "median"),
   month_breaks = FALSE,
   plot_title = "",
+  subtitle = "U.S. Geological Survey",
   y_axis_label = "",
   flip_y = FALSE
 )
@@ -40,6 +41,8 @@ which the code will try to get the column name automatically.}
 \item{month_breaks}{a logical indicating whether to use monthly breaks for the plot}
 
 \item{plot_title}{the title to use on the plot}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{y_axis_label}{the label to use for the y axis}
 

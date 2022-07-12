@@ -96,7 +96,8 @@ monthly_frequency_table <- function(gw_level_dv,
 #' @param plot_range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
-#' @param plot_title the title to use on the plot
+#' @param plot_title the title to use on the plot.
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}. 
@@ -135,6 +136,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    date_col = NA,
                                    value_col = NA, approved_col = NA,
                                    plot_title = "",
+                                   subtitle = "U.S. Geological Survey",
                                    plot_range = c("Past year"),
                                    y_axis_label = "",
                                    flip_y = FALSE) {
@@ -299,7 +301,8 @@ monthly_frequency_plot <- function(gw_level_dv,
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
     hasp_framework(x_label = x_label,
                    y_label = y_label,
-                   plot_title = plot_title) +
+                   plot_title = plot_title,
+                   subtitle = subtitle) +
     theme(axis.ticks.x = element_blank()) +
     guides(color = guide_legend(order = 1, 
                                 override.aes = list(shape = point_shapes)),
@@ -408,6 +411,7 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
 #' @param plot_title the title to use on the plot
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{FALSE}. 
@@ -443,6 +447,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                   plot_range = c("Past year",
                                                  "Calendar year"),
                                   plot_title = "", 
+                                  subtitle = "U.S. Geological Survey",
                                   y_axis_label = "",
                                   flip_y = FALSE) {
   
@@ -604,7 +609,9 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0,0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_label, plot_title = plot_title) +
+    hasp_framework(x_label, y_label, 
+                   plot_title = plot_title,
+                   subtitle = subtitle) +
     theme(axis.ticks.x = element_blank(),
           aspect.ratio = NULL)
   
@@ -651,6 +658,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
 #' "mean" or "median." 
 #' @param month_breaks a logical indicating whether to use monthly breaks for the plot
 #' @param plot_title the title to use on the plot
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label to use for the y axis
 #' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{FALSE}. 
@@ -690,6 +698,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
                                historical_stat = c("mean", "median"), 
                                month_breaks = FALSE,
                                plot_title = "",
+                               subtitle = "U.S. Geological Survey",
                                y_axis_label = "",
                                flip_y = FALSE) {
 
@@ -785,7 +794,9 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
               aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "EXPLANATION") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    hasp_framework(x_label, y_label, plot_title = plot_title) +
+    hasp_framework(x_label, y_label,
+                   plot_title = plot_title,
+                   subtitle = subtitle) +
     theme(aspect.ratio = NULL) +
     scale_x_date(limits = c(plot_start, plot_end), 
                  expand = c(0,0),
@@ -990,6 +1001,7 @@ first_day <- function(date) {
 #' last_day(date)
 #' last_day("2020-02-15")
 #' last_day("2019-02-15")
+#' last_day(c("2020-12-28", "2020-02-15", "2019-02-15"))
 last_day <- function(date) {
   
   date <- as.POSIXlt(date)
@@ -1000,7 +1012,7 @@ last_day <- function(date) {
   is_leap <- as.numeric((year %% 4 == 0 & year %% 100 != 0) | 
                           year %% 400 == 0)
   
-  total_day <- c(31, 28 + is_leap,
+  total_day <- c(31, 28,
                  31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
   
   last_day_month <- as.Date(paste(
@@ -1009,6 +1021,13 @@ last_day <- function(date) {
     total_day[month],
     sep = "-"
   ))
+  
+  if(any(is_leap & month == 2)){
+    last_day_month[is_leap & month == 2] <- as.Date(paste(year[is_leap & month == 2],
+                                                          "02-29",
+                                                          sep = "-"))
+  }
+  
   
   return(last_day_month)
   

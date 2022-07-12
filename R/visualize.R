@@ -7,6 +7,7 @@
 #' @param num_years integer number of years required. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title included on plot.
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param parameter_cd character, 5-digit parameter code, default is "72019".
 #' @return ggplot2 object
 #' 
@@ -30,7 +31,8 @@
 plot_composite_data <- function(x, 
                                 num_years = NA, 
                                 parameter_cd = "72019",
-                                plot_title = ""){
+                                plot_title = "",
+                                subtitle = "U.S. Geological Survey"){
 
   if(!all(c("site_no", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
@@ -52,7 +54,9 @@ plot_composite_data <- function(x,
     geom_line(aes(x = year, y = value, color = name)) +
     hasp_framework(x_label = "Years", include_y_scale = FALSE,
                    y_label = "Principal Aquifer Water-Level Index",
-                   plot_title = plot_title, zero_on_top = NA) +
+                   plot_title = plot_title,
+                   subtitle = subtitle,
+                   zero_on_top = NA) +
     scale_y_reverse(sec.axis = dup_axis(labels =  NULL,
                                         name = NULL)) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
@@ -74,6 +78,7 @@ plot_composite_data <- function(x,
 #' @param num_years integer number of years required to the analysis. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
 #' @param plot_title character title of plot.
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param parameter_cd character, 5-digit parameter code, default is "72019".
 #' @return ggplot2 object
 #' 
@@ -95,7 +100,8 @@ plot_composite_data <- function(x,
 plot_normalized_data <- function(x, 
                                  num_years = NA,
                                  parameter_cd = "72019",
-                                 plot_title = ""){
+                                 plot_title = "",
+                                 subtitle = "U.S. Geological Survey"){
   
   if(!all(c("site_no", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
@@ -113,7 +119,9 @@ plot_normalized_data <- function(x,
     geom_line(aes(x = year, y = value, color = name)) +
     hasp_framework(x_label = "Years", include_y_scale = FALSE,
                    y_label = "Water-Level Index, feet below land surface",
-                   plot_title = plot_title, zero_on_top = NA) +
+                   plot_title = plot_title, 
+                   subtitle = subtitle,
+                   zero_on_top = NA) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1),
                     sec.axis = dup_axis(labels =  NULL,
                                         name = NULL)) +

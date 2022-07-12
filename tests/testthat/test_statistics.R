@@ -150,4 +150,15 @@ test_that("utils", {
   expect_true(yes_zero)
   expect_true(is.na(crosses_zero))
   
+  ld <- last_day(c("2020-12-28", "2020-02-15", "2019-02-15"))
+  expect_equal(as.Date(c("2020-12-31", "2020-02-29", "2019-02-28")),
+               ld)
+  
+  md <- mid_month(c("2019-02-15", "2020-03-08", "2010-06-01"))
+  expect_equal(as.Date(c("2019-02-15", "2020-03-16", "2010-06-15")),
+               md)
+  
+  fd <- first_day(c("2020-12-28", "2020-02-15", "2019-02-15"))
+  expect_equal(as.Date(c("2020-12-01", "2020-02-01", "2019-02-01")),
+               fd)
 })
