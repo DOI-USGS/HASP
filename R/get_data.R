@@ -78,9 +78,11 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 #' @examples 
 #' end_date <- "2021-01-01"
 #' start_date <- "1989-12-31"
+#' aquiferCd <- "S100CSLLWD"
 #'
 #' \donttest{
-#' st_data <- get_state_data("WI", start_date, end_date)
+#' st_data <- get_state_data("WI", aquiferCd,
+#'                           start_date, end_date)
 #' }
 get_state_data <- function(state, aquiferCd, 
                            startDate, endDate, 

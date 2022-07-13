@@ -32,14 +32,7 @@ Imports:
     ggpmisc,
     ggpp,
     scales,
-    leaflet,
-    shiny,
-    DT,
-    shinyAce,
-    shinycssloaders,
-    shinydashboard,
     EnvStats,
-    openxlsx,
     checkmate,
     magrittr
 Suggests:
@@ -48,7 +41,14 @@ Suggests:
     knitr,
     kableExtra,
     covr,
-    readxl
+    readxl,
+    leaflet,
+    shiny,
+    DT,
+    shinyAce,
+    shinycssloaders,
+    shinydashboard,
+    openxlsx
 BugReports: https://github.com/USGS-R/HASP/issues
 VignetteBuilder: knitr
 BuildVignettes: true
