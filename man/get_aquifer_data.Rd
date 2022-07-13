@@ -7,7 +7,8 @@
 get_aquifer_data(aquiferCd, startDate, endDate, parameter_cd = "72019")
 }
 \arguments{
-\item{aquiferCd}{character.}
+\item{aquiferCd}{character. To see valid aquifer codes, see the included data
+frame \code{local_aqfr}.}
 
 \item{startDate}{date or string. Beginning date of when to pull data.}
 

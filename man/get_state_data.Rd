@@ -9,6 +9,9 @@ get_state_data(state, aquiferCd, startDate, endDate, parameter_cd = "72019")
 \arguments{
 \item{state}{character. Can be state abbreviation, long name, or numeric code.}
 
+\item{aquiferCd}{character. To see valid aquifer codes, see the included data
+frame \code{local_aqfr}.}
+
 \item{startDate}{date or string. Beginning date of when to pull data.}
 
 \item{endDate}{date of string  Ending date to pull data.}
@@ -16,7 +19,7 @@ get_state_data(state, aquiferCd, startDate, endDate, parameter_cd = "72019")
 \item{parameter_cd}{5-digit character USGS parameter code. Default is "72019".}
 }
 \description{
-Get USGS data based for a single state.
+Get USGS data based for a single state with specific aquifer codes.
 }
 \examples{
 end_date <- "2021-01-01"

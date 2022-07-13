@@ -3,7 +3,8 @@
 #'
 #' Get USGS data based on aquiferCd
 #' 
-#' @param aquiferCd character. 
+#' @param aquiferCd character. To see valid aquifer codes, see the included data
+#'  frame \code{local_aqfr}. 
 #' @param startDate date or string. Beginning date of when to pull data.
 #' @param endDate date of string  Ending date to pull data.
 #' @param parameter_cd 5-digit character USGS parameter code.
@@ -64,9 +65,11 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 
 #' get_state_data
 #'
-#' Get USGS data based for a single state.
+#' Get USGS data based for a single state with specific aquifer codes.
 #' 
 #' @param state character. Can be state abbreviation, long name, or numeric code.
+#' @param aquiferCd character. To see valid aquifer codes, see the included data
+#'  frame \code{local_aqfr}.
 #' @param startDate date or string. Beginning date of when to pull data.
 #' @param endDate date of string  Ending date to pull data.
 #' @param parameter_cd 5-digit character USGS parameter code. Default is "72019".
