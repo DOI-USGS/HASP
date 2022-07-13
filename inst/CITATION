@@ -21,6 +21,6 @@ bibentry(bibtype = "Manual",
   year = 2022,
   doi = "",
   url = "https://code.usgs.gov/water/stats/hasp",
-  textVersion = "DeCicco, L.A., Prinos, S.T., Eslick-Huff, P., 2022, HASP: Hydrologic AnalySis Package, v1.0.0., https://code.usgs.gov/water/stats/hasp, doi:"
+  textVersion = "DeCicco, L.A., Prinos, S.T., Eslick-Huff, P.J., 2022, HASP: Hydrologic AnalySis Package, v1.0.0., https://code.usgs.gov/water/stats/hasp, doi:"
 )
 
