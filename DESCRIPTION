@@ -1,7 +1,7 @@
 Package: HASP
 Type: Package
 Title: Hydrologic AnalySis Package
-Version: 0.0.0.0001
+Version: 0.0.1
 Authors@R: c(person("Scott", "Prinos", 
                      role = c("aut"),
                      email = "stprinos@usgs.gov"),
@@ -32,15 +32,7 @@ Imports:
     ggpmisc,
     ggpp,
     scales,
-    leaflet,
-    shiny,
-    DT,
-    shinyAce,
-    shinycssloaders,
-    shinydashboard,
     EnvStats,
-    openxlsx,
-    shinyWidgets,
     checkmate,
     magrittr
 Suggests:
@@ -49,7 +41,14 @@ Suggests:
     knitr,
     kableExtra,
     covr,
-    readxl
+    readxl,
+    leaflet,
+    shiny,
+    DT,
+    shinyAce,
+    shinycssloaders,
+    shinydashboard,
+    openxlsx
 BugReports: https://github.com/USGS-R/HASP/issues
 VignetteBuilder: knitr
 BuildVignettes: true

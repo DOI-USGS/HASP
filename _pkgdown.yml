@@ -36,8 +36,8 @@ navbar:
     - text: How to Contribute
       href: articles/Contributing.html
   right:
-  - icon: fa-github fa-lg
-    href: https://github.com/USGS-R/HASP
+  - icon: fa-gitlab fa-lg
+    href: https://code.usgs.gov/water/stats/hasp
 reference:
   - title: Visualize
     desc:  Plot functions
@@ -76,6 +76,7 @@ reference:
       - nat_aqfr_state
       - aquifer_data
       - get_aquifer_data
+      - get_state_data
   - title: Utilities
     contents:
       - theme_gwl

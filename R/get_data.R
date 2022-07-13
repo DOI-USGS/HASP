@@ -3,9 +3,10 @@
 #'
 #' Get USGS data based on aquiferCd
 #' 
-#' @param aquiferCd character
-#' @param startDate date or string
-#' @param endDate date of string 
+#' @param aquiferCd character. To see valid aquifer codes, see the included data
+#'  frame \code{local_aqfr}. 
+#' @param startDate date or string. Beginning date of when to pull data.
+#' @param endDate date of string  Ending date to pull data.
 #' @param parameter_cd 5-digit character USGS parameter code.
 #' @export
 #'
@@ -62,8 +63,30 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 }
 
 
+#' get_state_data
+#'
+#' Get USGS data based for a single state with specific aquifer codes.
+#' 
+#' @param state character. Can be state abbreviation, long name, or numeric code.
+#' @param aquiferCd character. To see valid aquifer codes, see the included data
+#'  frame \code{local_aqfr}.
+#' @param startDate date or string. Beginning date of when to pull data.
+#' @param endDate date of string  Ending date to pull data.
+#' @param parameter_cd 5-digit character USGS parameter code. Default is "72019".
+#' @export
+#'
+#' @examples 
+#' end_date <- "2021-01-01"
+#' start_date <- "1989-12-31"
+#' aquiferCd <- "S100CSLLWD"
+#'
+#' \donttest{
+#' st_data <- get_state_data("WI", aquiferCd,
+#'                           start_date, end_date)
+#' }
 get_state_data <- function(state, aquiferCd, 
-                           startDate, endDate, parameter_cd){
+                           startDate, endDate, 
+                           parameter_cd = "72019"){
 
   levels <- dataRetrieval::readNWISdata(stateCd = state, 
                          service = "gwlevels",
