@@ -40,7 +40,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.0001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,8 +70,8 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/USGS-R/HASP">
-    <span class="fa fa-github fa-lg"></span>
+  <a class="external-link nav-link" href="https://code.usgs.gov/water/stats/hasp">
+    <span class="fa fa-gitlab fa-lg"></span>
      
   </a>
 </li>
@@ -84,11 +84,12 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="hasp-">HASP <a class="anchor" aria-label="anchor" href="#hasp-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="hasp-hydrologic-analysis-package-">HASP: Hydrologic AnalySis Package <a class="anchor" aria-label="anchor" href="#hasp-hydrologic-analysis-package-"></a>
 </h1>
 </div>
 
-<p>Hydrologic AnalySis Package</p>
+<p><em>H</em>ydrologic <em>A</em>naly<em>S</em>is <em>P</em>ackage</p>
+<p>The <a href="https://code.usgs.gov/water/stats/hasp" class="external-link">Hydrologic Analysis Package (HASP)</a> can retrieve groundwater level and groundwater quality data, aggregate these data, plot them, and generate basic statistics. One of the benefits of HASP is its ability to aggregate two time-series of data into one record and generate statistics and graphics on that record. By merging two data sets together, users can view and manipulate a much longer record of data. Users can download the aggregated record and see basic statistics that have been calculated with these data. HASP also allows users to plot groundwater level trends in major aquifers as well. The explore_aquifers function allows users to pull data from wells classified in Principal Aquifers and synthesize water-level data to better understand trends.</p>
 <p>Inspiration: <a href="https://fl.water.usgs.gov/mapper/" class="external-link uri">https://fl.water.usgs.gov/mapper/</a></p>
 <p>See <a href="https://usgs-r.github.io/HASP/" class="external-link uri">https://usgs-r.github.io/HASP/</a> for more information!</p>
 <div class="section level2">
@@ -180,8 +181,13 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span></code></pre></div>
 <p>To install the <code>HASP</code> package:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"USGS-R/HASP"</span><span class="op">)</span></span></code></pre></div>
-<p>During this installation, you may be prompted to update or install some packages. You can press 1 to update all packages.</p>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"water/stats/hasp"</span>,</span>
+<span>                        host <span class="op">=</span> <span class="st">"code.usgs.gov"</span>,</span>
+<span>                        build_opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--no-resave-data"</span>,</span>
+<span>                                       <span class="st">"--no-manual"</span><span class="op">)</span>,</span>
+<span>                        build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                        dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>During this installation, you may be prompted to update or install some packages. Press 3 to skip the updates, but don’t forget to update all of your packages later.</p>
 </div>
 <div class="section level2">
 <h2 id="running-the-apps">Running the apps<a class="anchor" aria-label="anchor" href="#running-the-apps"></a>
@@ -237,10 +243,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/USGS-R/HASP/actions" class="external-link"><img src="https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://coveralls.io/github/USGS-R/HASP?branch=master" class="external-link"><img src="https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master" alt="Coverage Status"></a></li>
-<li><a href="https://codecov.io/gh/USGS-R/HASP" class="external-link"><img src="https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://code.usgs.gov/water/stats/hasp/pipelines" class="external-link"><img src="https://code.usgs.gov/water/stats/hasp/badges/master/pipeline.svg" alt="R build status"></a></li>
 <li><a href="https://owi.usgs.gov/R/packages.html#research" class="external-link"><img src="https://img.shields.io/badge/USGS-Research-blue.svg" alt="status"></a></li>
+<li><a href="https://rconnect.usgs.gov/HASP_docs/" class="external-link"><img src="https://img.shields.io/badge/USGS-Documentation-blue.svg" alt="status"></a></li>
+<li><a href="https://code.usgs.gov/water/stats/hasp" class="external-link"><img src="https://img.shields.io/badge/USGS-Source-orange.svg" alt="status"></a></li>
 </ul>
 </div>
 
