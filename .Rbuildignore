@@ -7,7 +7,8 @@ LICENSE.md
 README.Rmd
 all_aqs.Rmd
 all_aqs.pdf
-ci/*
+^ci/*
+^review/*
 HASP_*.tar.gz
 orig_scripts/
 DISCLAIMER.md
