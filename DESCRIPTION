@@ -4,14 +4,16 @@ Title: Hydrologic AnalySis Package
 Version: 0.0.1
 Authors@R: c(person("Scott", "Prinos", 
                      role = c("aut"),
-                     email = "stprinos@usgs.gov"),
+                     email = "stprinos@usgs.gov",
+                     comment=c(ORCID="0000-0002-5776-8956")),
              person("Laura", "DeCicco", 
                      role = c("aut", "cre"),
                      email = "ldecicco@usgs.gov",
                      comment=c(ORCID="0000-0002-3915-9487")),
              person("Patrick", "Eslick", 
                      role = c("aut"),
-                     email = "peslick@usgs.gov"),
+                     email = "peslick@usgs.gov",
+                     comment=c(ORCID="0000-0003-2611-6012")),
              person("Lindsay", "Platt", 
                      role = c("ctr"),
                      email = "lplatt@usgs.gov"))
