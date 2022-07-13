@@ -732,11 +732,14 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
   most_recent <- max(gw_level_dv[, date_col], na.rm = TRUE)
   #TODO: check here!
   plot_start_year <- as.numeric(as.character(most_recent, format = "%Y")) - 2
-  plot_start <- as.Date(paste0(plot_start_year, "-01-01"))
+  plot_start <- as.Date(paste(plot_start_year,
+                              as.character(most_recent, format = "%m-%d"),
+                              sep = "-"))
   
-  # The plot has a ~3 month buffer following the most recent value
-  plot_end <- most_recent + as.difftime(90, units = "days")
-  buffer_dates <- seq.Date(most_recent, plot_end, by = "day")[-1]
+  # add a 10 day buffer following the most recent value
+  plot_end <- most_recent + as.difftime(10, units = "days")
+  buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
+  buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
   buffer_j <- as.numeric(as.character(buffer_dates, "%j"))
   buffer <- stats::setNames(data.frame(buffer_dates, buffer_j), c(date_col, "J"))
   
@@ -745,9 +748,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
   names(gw_level_dv)[names(gw_level_dv) == approved_col] <- "gw_level_cd"
   
   plot_data <- gw_level_dv %>%
-    dplyr::filter(Date >= plot_start,
-                  Date <= most_recent) %>%
-    dplyr::bind_rows(buffer) %>%
+    dplyr::right_join(buffer, by = c("Date", "J")) %>%
     dplyr::left_join(historical_stats, by = "J") %>%
     dplyr::mutate(group = "Approved Daily\nMin & Max")
   
