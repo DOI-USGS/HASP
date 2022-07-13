@@ -1,4 +1,4 @@
-# HASP <img src="man/figures/R_logo.png" alt="HASP" class="logo" style="width:90px;height:auto;" align="right" />
+# HASP: Hydrologic AnalySis Package <img src="man/figures/R_logo.png" alt="HASP" class="logo" style="width:90px;height:auto;" align="right" />
 
 [![R build
 status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/HASP/actions)
@@ -6,8 +6,10 @@ status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https:/
 Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
 [![codecov](https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg)](https://codecov.io/gh/USGS-R/HASP)
 [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
+[![status](https://img.shields.io/badge/USGS-Documentation-blue.svg)](https://rconnect.usgs.gov/HASP/)
+[![status](https://img.shields.io/badge/USGS-Source-orange.svg)](https://code.usgs.gov/water/stats/hasp)
 
-Hydrologic AnalySis Package
+*H*ydrologic *A*naly*S*is *P*ackage
 
 Inspiration: <https://fl.water.usgs.gov/mapper/>
 
@@ -126,11 +128,17 @@ install.packages("remotes")
 To install the `HASP` package:
 
 ``` r
-remotes::install_github("USGS-R/HASP")
+remotes::install_gitlab("water/stats/hasp",
+                        host = "code.usgs.gov",
+                        build_opts = c("--no-resave-data",
+                                       "--no-manual"),
+                        build_vignettes = TRUE, 
+                        dependencies = TRUE)
 ```
 
 During this installation, you may be prompted to update or install some
-packages. You can press 1 to update all packages.
+packages. Press 3 to skip the updates, but don’t forget to update all of
+your packages later.
 
 ## Running the apps
 
