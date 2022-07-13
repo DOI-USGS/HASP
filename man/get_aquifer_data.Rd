@@ -7,11 +7,11 @@
 get_aquifer_data(aquiferCd, startDate, endDate, parameter_cd = "72019")
 }
 \arguments{
-\item{aquiferCd}{character}
+\item{aquiferCd}{character.}
 
-\item{startDate}{date or string}
+\item{startDate}{date or string. Beginning date of when to pull data.}
 
-\item{endDate}{date of string}
+\item{endDate}{date of string  Ending date to pull data.}
 
 \item{parameter_cd}{5-digit character USGS parameter code.}
 }
