@@ -3,7 +3,7 @@
 [![R build
 status](https://code.usgs.gov/water/stats/hasp/badges/master/pipeline.svg)](https://code.usgs.gov/water/stats/hasp/pipelines)
 [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
-[![status](https://img.shields.io/badge/USGS-Documentation-blue.svg)](https://rconnect.usgs.gov/HASP/)
+[![status](https://img.shields.io/badge/USGS-Documentation-blue.svg)](https://rconnect.usgs.gov/HASP_docs/)
 [![status](https://img.shields.io/badge/USGS-Source-orange.svg)](https://code.usgs.gov/water/stats/hasp)
 
 *H*ydrologic *A*naly*S*is *P*ackage
