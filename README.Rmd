@@ -28,6 +28,8 @@ knitr::opts_chunk$set(echo = TRUE,
 
 *H*ydrologic *A*naly*S*is *P*ackage
 
+The [Hydrologic Analysis Package (HASP)](https://code.usgs.gov/water/stats/hasp) can retrieve groundwater level and groundwater quality data, aggregate these data, plot them, and generate basic statistics. One of the benefits of HASP is its ability to aggregate two time-series of data into one record and generate statistics and graphics on that record. By merging two data sets together, users can view and manipulate a much longer record of data. Users can download the aggregated record and see basic statistics that have been calculated with these data. HASP also allows users to plot groundwater level trends in major aquifers as well. The explore_aquifers function allows users to pull data from wells classified in Principal Aquifers and synthesize water-level data to better understand trends.
+
 Inspiration:
 https://fl.water.usgs.gov/mapper/
 

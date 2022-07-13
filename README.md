@@ -1,15 +1,25 @@
 # HASP: Hydrologic AnalySis Package <img src="man/figures/R_logo.png" alt="HASP" class="logo" style="width:90px;height:auto;" align="right" />
 
 [![R build
-status](https://github.com/USGS-R/HASP/workflows/R-CMD-check/badge.svg)](https://github.com/USGS-R/HASP/actions)
-[![Coverage
-Status](https://coveralls.io/repos/github/USGS-R/HASP/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/HASP?branch=master)
-[![codecov](https://codecov.io/gh/USGS-R/HASP/branch/master/graph/badge.svg)](https://codecov.io/gh/USGS-R/HASP)
+status](https://code.usgs.gov/water/stats/hasp/badges/master/pipeline.svg)](https://code.usgs.gov/water/stats/hasp/pipelines)
 [![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
 [![status](https://img.shields.io/badge/USGS-Documentation-blue.svg)](https://rconnect.usgs.gov/HASP/)
 [![status](https://img.shields.io/badge/USGS-Source-orange.svg)](https://code.usgs.gov/water/stats/hasp)
 
 *H*ydrologic *A*naly*S*is *P*ackage
+
+The [Hydrologic Analysis Package
+(HASP)](https://code.usgs.gov/water/stats/hasp) can retrieve groundwater
+level and groundwater quality data, aggregate these data, plot them, and
+generate basic statistics. One of the benefits of HASP is its ability to
+aggregate two time-series of data into one record and generate
+statistics and graphics on that record. By merging two data sets
+together, users can view and manipulate a much longer record of data.
+Users can download the aggregated record and see basic statistics that
+have been calculated with these data. HASP also allows users to plot
+groundwater level trends in major aquifers as well. The explore_aquifers
+function allows users to pull data from wells classified in Principal
+Aquifers and synthesize water-level data to better understand trends.
 
 Inspiration: <https://fl.water.usgs.gov/mapper/>
 
