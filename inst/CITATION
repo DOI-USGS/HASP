@@ -12,7 +12,11 @@ bibentry(bibtype = "Manual",
              person("Patrick", "Eslick-Huff", 
                      role = c("aut"),
                      email = "peslick@usgs.gov",
-                     comment=c(ORCID="0000-0003-2611-6012"))),
+                     comment=c(ORCID="0000-0003-2611-6012")),
+             person("Candice", "Hopkins",
+                     role = c("aut"),
+                     email = "chopkins@usgs.gov",
+                     comment=c(ORCID="0000-0003-3207-7267"))),
   title = "HASP: Hydrologic AnalySis Package,
   publisher = "U.S. Geological Survey",
   address = "Reston, VA",
@@ -21,6 +25,6 @@ bibentry(bibtype = "Manual",
   year = 2022,
   doi = "",
   url = "https://code.usgs.gov/water/stats/hasp",
-  textVersion = "DeCicco, L.A., Prinos, S.T., Eslick-Huff, P.J., 2022, HASP: Hydrologic AnalySis Package, v1.0.0., https://code.usgs.gov/water/stats/hasp, doi:"
+  textVersion = "DeCicco, L.A., Prinos, S.T., Eslick-Huff, P.J., Hopkins, C.B., 2022, HASP: Hydrologic AnalySis Package, v1.0.0., https://code.usgs.gov/water/stats/hasp, doi:"
 )
 
