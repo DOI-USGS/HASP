@@ -23,7 +23,7 @@ Aquifers and synthesize water-level data to better understand trends.
 
 Inspiration: <https://fl.water.usgs.gov/mapper/>
 
-See <https://usgs-r.github.io/HASP/> for more information!
+See <https://rconnect.usgs.gov/HASP_docs/> for more information!
 
 ## Sample workflow
 
