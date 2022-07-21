@@ -7,7 +7,7 @@
 data_available(siteID)
 }
 \arguments{
-\item{siteID}{character}
+\item{siteID}{character. USGS site ID for a groundwater site.}
 }
 \description{
 Get station summary information

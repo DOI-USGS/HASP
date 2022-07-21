@@ -181,7 +181,7 @@ site_summary <- function(siteID, markdown = FALSE){
     return(site_info)
   }
   
-  end_of_line <- ifelse(markdown, "<br/>", "\n")
+  end_of_line <- ifelse(markdown, "<br/>", "\n\n")
   
   nat_aqfrs <- nat_aqfr_state %>% 
     dplyr::select(dplyr::all_of(c("nat_aqfr_cd", "long_name"))) %>% 
@@ -233,7 +233,7 @@ site_summary <- function(siteID, markdown = FALSE){
 #'
 #' Get station summary information
 #' 
-#' @param siteID character
+#' @param siteID character. USGS site ID for a groundwater site.
 #' @export
 #'
 #' @examples 
