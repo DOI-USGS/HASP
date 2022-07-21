@@ -1,18 +1,14 @@
 ---
-title: "Single Site Water Level"
+title: "Groundwater information for {{{ site }}}"
+date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette
-editor_options: 
-  chunk_output_type: console
-vignette: >
-  %\VignetteIndexEntry{Single Site Water Level}
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
+  {{{ output_type }}}_document
 ---
+
 
 ```{r setup, include=FALSE}
 library(knitr)
-opts_chunk$set(echo = TRUE,
+opts_chunk$set(echo = FALSE,
                warning = FALSE,
                message = FALSE,
                fig.width = 7,
@@ -25,83 +21,55 @@ library(HASP)
 options(knitr.kable.NA = '')
 ```
 
-<style>
-
-body {
-    max-width: 1600px;
-    margin-left:10px;
-    padding-left:10px;
-}
-</style>
-
-This vignette shows how to use `HASP` and other R tools to reproduce:
-
-https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801
-
 
 ## Site Information
-
-<table>
-<tr><td>
 
 ```{r siteInfo, results='asis'}
 library(HASP)
 
-siteID <- "263819081585801"
-site_metadata <- site_summary(siteID, markdown = TRUE)
+siteID <- "{{{ site }}}"
+site_metadata <- site_summary(siteID, markdown = FALSE)
+
+pcodes <- dataRetrieval::whatNWISdata(siteNumber = siteID,
+                                      service = c("gw", "dv")) 
+  
 ```
 
-</td><td>
+
 
 ```{r whatData}
 data_info <- data_available(siteID)
 kable(data_info)
 ```
 
-</td></tr> </table>
 
-## Get data using dataRetrieval
-
-
-<table>
-<tr><td>
-
-Using `dataRetrieval` code to get the data for this site:
-
-```{r getData, eval=TRUE}
+```{r getData}
 library(dataRetrieval)
-siteID <- "263819081585801"
-parameterCd <- "62610"
-statCd <- "00001"
+
+# Figure out what data to retrieve
+available_pcodes <- unique(pcodes$parm_cd[pcodes$data_type_cd == "dv"])
+available_statCds <- unique(pcodes$stat_cd[pcodes$data_type_cd == "dv"])
+
+# Use the parameter with the highest count
+# This can be changed and then r
+parameterCd <- pcodes$parm_cd[which(pcodes$count_nu ==
+                                      max(pcodes$count_nu,na.rm = TRUE) & 
+                                      pcodes$data_type_cd == "dv")]
+statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
+                                      max(pcodes$count_nu,na.rm = TRUE) & 
+                                      pcodes$data_type_cd == "dv")]
+
 # Daily data:
-gw_level_dv <- readNWISdv(siteID,
-                          parameterCd,
-                          statCd = statCd)
-
+if(any(pcodes$data_type_cd == "dv")){
+  gw_level_dv <- dataRetrieval::readNWISdv(siteID,
+                            available_pcodes,
+                            statCd = available_statCds)
+}
 # Field GWL measured:
-gwl_data <- readNWISgwl(siteID)
-
-site_title <- "L -2701\n263819081585801"
-
+if(any(pcodes$data_type_cd == "gw")){
+  gwl_data <- dataRetrieval::readNWISgwl(siteID)
+}
 ```
-
-</td><td>
-
-Using the example data provided in the package:
-
-```{r getDataReal, eval=FALSE}
-siteID <- "263819081585801"
-parameterCd <- "62610"
-statCd <- "00001"
-
-# Daily
-gw_level_dv <-  L2701_example_data$Daily
-# Field
-gwl_data <- L2701_example_data$Discrete
-
-```
-
-</td></tr> </table>
 
 ## Water Level Data and Analysis
 
@@ -110,8 +78,8 @@ gwl_data <- L2701_example_data$Discrete
 ```{r weeklyFrequencyShow}
 
 weekly_frequency_plot(gw_level_dv, 
-                      parameter_cd = parameterCd,
-                      plot_title = site_title,
+                      parameter_cd = parameterCd, 
+                      plot_title = siteID,
                       y_axis_label = "Groundwater level above NGVD 1929, feet")
 
 
@@ -123,8 +91,8 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 
 ```{r weekly_table}
 weekly_table <- weekly_frequency_table(gw_level_dv, 
-                                       parameter_cd = parameterCd)
-kable(head(weekly_table, 10), digits = 1)
+                                       parameter_cd = parameterCd) 
+knitr::kable(head(weekly_table, 10), digits = 1)
 
 ```
 
@@ -134,7 +102,7 @@ kable(head(weekly_table, 10), digits = 1)
 ```{r dailyPlotShow, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
                    parameter_cd = parameterCd,
-                   plot_title = site_title,
+                   plot_title = siteID,
                    historical_stat = "mean",
                    month_breaks = TRUE,
                    y_axis_label = "Groundwater level above NGVD 1929, feet")
@@ -147,8 +115,7 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 ```{r dailyShow2}
 daily_table <- daily_frequency_table(gw_level_dv, 
                                      parameter_cd = parameterCd) 
-
-kable(head(daily_table, 10))
+knitr::kable(head(daily_table, 10))
 ```
 
 
@@ -162,7 +129,7 @@ y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm
 gwl_plot_all(gw_level_dv, gwl_data, 
              y_label = y_label,
              parameter_cd = parameterCd,
-             plot_title = site_title,
+             plot_title = siteID,
              add_trend = TRUE, flip_y = FALSE)
 
 
@@ -171,18 +138,22 @@ gwl_plot_all(gw_level_dv, gwl_data,
 Summary statistics for maximum daily water level measurements:
 
 ```{r siteStatsDaily}
-siteDV <- gw_level_dv %>%
-  rename(value = X_62610_00001) %>% 
-  site_data_summary() 
+gw <- gw_level_dv
+names(gw)[names(gw) == paste("X",
+                             parameterCd,
+                             statCd, sep = "_")] <- "value"
+siteDV <- site_data_summary(gw) 
 
-kable(siteDV, digits = 1)
+knitr::kable(t(siteDV), digits = 1) %>%
+  kableExtra::kable_styling(full_width = FALSE)
 
 ```
 
 Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
-gw_monthly <- monthly_mean(gw_level_dv)
+gw_monthly <- monthly_mean(gw_level_dv, 
+                           value_col = paste("X", parameterCd, statCd, sep = "_"))
 
 trend_result <- kendell_test_5_20_years(gw_monthly, 
                         seasonal = TRUE, 
@@ -203,7 +174,7 @@ kable(trend_result, digits = 1)
 gwl_plot_all(NULL, gwl_data,
              y_label = y_label,
              parameter_cd = parameterCd,
-             plot_title = site_title, 
+             plot_title = siteID, 
              flip_y = FALSE)
 
 
@@ -214,11 +185,12 @@ gwl_plot_all(NULL, gwl_data,
 Summary statistics for manual water level measurements
 
 ```{r manualTable}
+
 quantiles <- gwl_data %>% 
   rename(value = sl_lev_va) %>% 
   site_data_summary() 
-
-kable(quantiles, digits = 1)
+knitr::kable(t(quantiles), digits = 1) %>%
+  kableExtra::kable_styling(full_width = FALSE)
 
 ```
 
