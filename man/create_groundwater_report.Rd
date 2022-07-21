@@ -12,11 +12,13 @@ create_groundwater_report(
 )
 }
 \arguments{
+\item{siteID}{character. USGS site ID, should be a groundwater site.}
+
+\item{report_name}{character. Base name of report.}
+
+\item{report_folder}{character. Report folder, can be full path or partial.}
+
 \item{output_type}{should be either "word", "html", or "pdf".}
-
-\item{siteNumber}{character. USGS site ID, should be a groundwater site.}
-
-\item{render}{Should the report be rendered automatically? Defaults to `FALSE`}
 }
 \description{
 Opens a template of the blanks sample report, optionally rendering it.

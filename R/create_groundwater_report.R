@@ -2,9 +2,10 @@
 #'
 #' @description Opens a template of the blanks sample report, optionally rendering it.
 #'
-#' @param siteNumber character. USGS site ID, should be a groundwater site.
+#' @param siteID character. USGS site ID, should be a groundwater site.
+#' @param report_folder character. Report folder, can be full path or partial.
+#' @param report_name character. Base name of report.
 #' @param output_type should be either "word", "html", or "pdf".
-#' @param render Should the report be rendered automatically? Defaults to `FALSE`
 #'
 #' @export
 #' @examples 

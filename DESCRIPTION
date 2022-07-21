@@ -38,10 +38,8 @@ Imports:
     ggpmisc,
     ggpp,
     scales,
-    kableExtra,
     EnvStats,
     checkmate,
-    rmarkdown,
     whisker,
     xfun,
     usethis,
@@ -49,6 +47,7 @@ Imports:
 Suggests:
     testthat,
     knitr,
+    kableExtra,
     covr,
     readxl,
     leaflet,
@@ -57,7 +56,8 @@ Suggests:
     shinyAce,
     shinycssloaders,
     shinydashboard,
-    openxlsx
+    openxlsx,
+    rmarkdown
 BugReports: https://github.com/USGS-R/HASP/issues
 VignetteBuilder: knitr
 BuildVignettes: true
