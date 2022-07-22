@@ -88,7 +88,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 }
 
 
-get_value_column <- function(parameter_cd, df, value_col){
+get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
   
   if(is.na(parameter_cd)){
     if("parameter_cd" %in% names(df)){
@@ -109,7 +109,17 @@ get_value_column <- function(parameter_cd, df, value_col){
         }
       }
     } else {
-      value_col <- value_col_df
+      
+      if(length(value_col_df) == 1){
+        value_col <- value_col_df
+      } else {
+        if(is.na(stat_cd)){
+          message("statistic code not given")
+          value_col <- value_col_df[1]
+        } else {
+          value_col <- value_col_df[grepl(stat_cd, value_col_df)]
+        }
+      }
     }
     return(value_col)
   }
@@ -130,6 +140,8 @@ get_value_column <- function(parameter_cd, df, value_col){
 #' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
 #' @param add_trend logical. Uses \code{kendell_test_5_20_years}.
 #' @param gw_level_dv daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @examples 
 #' # site <- "263819081585801"
 #' parameterCd <- "62610"
@@ -164,7 +176,9 @@ gwl_plot_all <- function(gw_level_dv,
                          gwl_data, 
                          parameter_cd = NA,
                          date_col = NA,
-                         value_col = NA, approved_col = NA,
+                         value_col = NA, 
+                         approved_col = NA,
+                         stat_cd = NA,
                          y_label = "GWL",
                          plot_title = "",
                          add_trend = FALSE,
@@ -189,7 +203,7 @@ gwl_plot_all <- function(gw_level_dv,
     }
     date_col_per <- ifelse(is.na(date_col_per), "lev_dt", date_col_per)
     approved_col_per <- ifelse(is.na(approved_col_per), "lev_age_cd", approved_col_per)
-    value_col_per <- get_value_column(parameter_cd, gwl_data, value_col_per)
+    value_col_per <- get_value_column(parameter_cd, gwl_data, value_col_per, stat_cd)
       
     gwl_data <- filter_pcode(gwl_data, parameter_cd)
     

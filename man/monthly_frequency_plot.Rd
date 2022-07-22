@@ -10,6 +10,7 @@ monthly_frequency_plot(
   date_col = NA,
   value_col = NA,
   approved_col = NA,
+  stat_cd = NA,
   plot_title = "",
   subtitle = "U.S. Geological Survey",
   plot_range = c("Past year"),
@@ -32,6 +33,9 @@ which the code will try to get the column name automatically.}
 which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
+
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 
 \item{plot_title}{the title to use on the plot.}
 

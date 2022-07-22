@@ -23,6 +23,7 @@ gwl_plot_all(
   date_col = NA,
   value_col = NA,
   approved_col = NA,
+  stat_cd = NA,
   y_label = "GWL",
   plot_title = "",
   add_trend = FALSE,
@@ -54,6 +55,9 @@ Default is \code{TRUE}.}
 \item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
 
 \item{gw_level_dv}{daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.}
+
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 
 \item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
 }

@@ -11,6 +11,8 @@
 #' @param value_col name of value column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
 #' @param approved_col name of column to get provisional/approved status.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' 
 #' @return a data frame of monthly groundwater level statistics including the
 #' 5th, 10th, 25th, 75th, 90th, and 95th percentiles; the number of
@@ -33,12 +35,14 @@ monthly_frequency_table <- function(gw_level_dv,
                                     parameter_cd = NA,
                                     date_col = NA,
                                     value_col = NA,
+                                    stat_cd = NA,
                                     approved_col = NA) {
 
   checkmate::assert_data_frame(gw_level_dv)
 
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv,
+                                value_col, stat_cd)
   approved_col <- ifelse(is.na(approved_col),
                         paste0(value_col, "_cd"),
                         approved_col) 
@@ -96,6 +100,8 @@ monthly_frequency_table <- function(gw_level_dv,
 #' @param plot_range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param plot_title the title to use on the plot.
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
@@ -134,7 +140,9 @@ monthly_frequency_table <- function(gw_level_dv,
 monthly_frequency_plot <- function(gw_level_dv, 
                                    parameter_cd = NA,
                                    date_col = NA,
-                                   value_col = NA, approved_col = NA,
+                                   value_col = NA, 
+                                   approved_col = NA,
+                                   stat_cd = NA,
                                    plot_title = "",
                                    subtitle = "U.S. Geological Survey",
                                    plot_range = c("Past year"),
@@ -144,7 +152,8 @@ monthly_frequency_plot <- function(gw_level_dv,
   checkmate::assert_data_frame(gw_level_dv)
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv, 
+                                value_col, stat_cd)
   approved_col <- ifelse(is.na(approved_col),
                          paste0(value_col, "_cd"),
                          approved_col) 
@@ -334,6 +343,8 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' which the code will try to get the column name automatically.
 #' @param value_col name of value column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param approved_col name of column to get provisional/approved status.
 #' 
 #' @return a data frame of weekly frequency analysis
@@ -351,10 +362,11 @@ monthly_frequency_plot <- function(gw_level_dv,
 #'                                            parameter_cd = "62610")
 #' head(weekly_frequency)
 weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
-                                   date_col = NA, value_col = NA, approved_col = NA) {
+                                   date_col = NA, value_col = NA, 
+                                   approved_col = NA, stat_cd = NA) {
 
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col, stat_cd)
   approved_col <- ifelse(is.na(approved_col),
                         paste0(value_col, "_cd"),
                         approved_col)   
@@ -410,6 +422,8 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' @param plot_range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param plot_title the title to use on the plot
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
@@ -444,20 +458,24 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                   date_col = NA, value_col = NA,
                                   approved_col = NA,
-                                  plot_range = c("Past year",
-                                                 "Calendar year"),
+                                  stat_cd = NA,
+                                  plot_range = "Past year",
                                   plot_title = "", 
                                   subtitle = "U.S. Geological Survey",
                                   y_axis_label = "",
                                   flip_y = FALSE) {
   
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv, 
+                                value_col, stat_cd = stat_cd)
+  
   approved_col <- ifelse(is.na(approved_col),
                          paste0(value_col, "_cd"),
                          approved_col)   
   
-  plot_range <- match.arg(plot_range)
+  plot_range <- match.arg(plot_range, choices = c("Past year",
+                                                  "Calendar year"),
+                          several.ok = FALSE)
   
   date <- max(gw_level_dv[[date_col]], na.rm = TRUE)
   
@@ -654,7 +672,9 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
 #' @param value_col name of value column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
 #' @param approved_col name of column to get provisional/approved status.
-#' @param historical_stat the summary statstic to use for middle line of the plot. Either
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
+#' @param historical_stat the summary statistic to use for middle line of the plot. Either
 #' "mean" or "median." 
 #' @param month_breaks a logical indicating whether to use monthly breaks for the plot
 #' @param plot_title the title to use on the plot
@@ -695,7 +715,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
                                date_col = NA,
                                value_col = NA,
                                approved_col = NA,
-                               historical_stat = c("mean", "median"), 
+                               stat_cd = NA,
+                               historical_stat = "mean", 
                                month_breaks = FALSE,
                                plot_title = "",
                                subtitle = "U.S. Geological Survey",
@@ -703,7 +724,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
                                flip_y = FALSE) {
 
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv,
+                                value_col, stat_cd = stat_cd)
   approved_col <- ifelse(is.na(approved_col),
                          paste0(value_col, "_cd"),
                          approved_col)   
@@ -712,7 +734,9 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
     stop("Not all required columns found in gw_level_dv")
   }
   
-  historical_stat <- match.arg(historical_stat)
+  historical_stat <- match.arg(historical_stat, 
+                               choices = c("mean", "median"), 
+                               several.ok = FALSE)
   historical_function <- switch(historical_stat, "median" = median, "mean" = mean)
   historical_name <- paste("Historical", historical_stat)
   
@@ -837,6 +861,8 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
 #' which the code will try to get the column name automatically.
 #' @param value_col name of value column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param approved_col name of column to get provisional/approved status.
 #' 
 #' @return a data frame giving the max, mean, min, and number of available
@@ -857,11 +883,12 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
 
 daily_frequency_table <- function(gw_level_dv, parameter_cd = NA, 
                                   date_col = NA, value_col = NA, 
-                                  approved_col = NA) {
+                                  approved_col = NA, stat_cd = NA) {
   
 
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv,
+                                value_col, stat_cd = stat_cd)
   approved_col <- ifelse(is.na(approved_col),
                          paste0(value_col, "_cd"),
                          approved_col)  
@@ -896,6 +923,8 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' which the code will try to get the column name automatically.
 #' @param value_col name of value column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param approved_col name of column to get provisional/approved status.
 #' 
 #' @return a summary table giving the period of record, completeness
@@ -916,12 +945,14 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 daily_gwl_summary <- function(gw_level_dv, parameter_cd = NA,
                               date_col = NA,
                               value_col = NA,
-                              approved_col = NA) {
+                              approved_col = NA,
+                              stat_cd = NA) {
   
   gw_level <- gw_level_cd <- ".dplyr"
 
   date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col)
+  value_col <- get_value_column(parameter_cd, gw_level_dv,
+                                value_col, stat_cd = stat_cd)
   approved_col <- ifelse(is.na(approved_col),
                         paste0(value_col, "_cd"),
                         approved_col)   

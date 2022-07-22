@@ -52,12 +52,15 @@ available_statCds <- unique(pcodes$stat_cd[pcodes$data_type_cd == "dv"])
 
 # Use the parameter with the highest count
 # This can be changed and then r
-parameterCd <- pcodes$parm_cd[which(pcodes$count_nu ==
+parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
                                       max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "dv")]
+                                      pcodes$data_type_cd == "dv")])
 statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
                                       max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "dv")]
+                                      pcodes$data_type_cd == "dv")][1]
+
+pCode_info <- dataRetrieval::readNWISpCode(parameterCd)
+yaxis <- pCode_info$parameter_nm
 
 # Daily data:
 if(any(pcodes$data_type_cd == "dv")){
@@ -73,14 +76,26 @@ if(any(pcodes$data_type_cd == "gw")){
 
 ## Water Level Data and Analysis
 
+### Monthly frequency
+
+```{r monthlyFreq}
+monthly_frequency_plot(gw_level_dv,
+                       parameter_cd = parameterCd,
+                       stat_cd = statCd, 
+                       plot_title = siteID, 
+                       y_axis_label = yaxis)
+
+```
+
 ### Weekly frequency
 
-```{r weeklyFrequencyShow}
+```{r weeklyFrequency}
 
 weekly_frequency_plot(gw_level_dv, 
                       parameter_cd = parameterCd, 
+                      stat_cd = statCd,
                       plot_title = siteID,
-                      y_axis_label = "Groundwater level above NGVD 1929, feet")
+                      y_axis_label = yaxis)
 
 
 ```
@@ -91,7 +106,8 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 
 ```{r weekly_table}
 weekly_table <- weekly_frequency_table(gw_level_dv, 
-                                       parameter_cd = parameterCd) 
+                                       parameter_cd = parameterCd, 
+                                       stat_cd = statCd) 
 knitr::kable(head(weekly_table, 10), digits = 1)
 
 ```
@@ -103,9 +119,10 @@ knitr::kable(head(weekly_table, 10), digits = 1)
 daily_gwl_2yr_plot(gw_level_dv, 
                    parameter_cd = parameterCd,
                    plot_title = siteID,
+                   stat_cd = statCd,
                    historical_stat = "mean",
                    month_breaks = TRUE,
-                   y_axis_label = "Groundwater level above NGVD 1929, feet")
+                   y_axis_label = yaxis)
 
 ```
 
@@ -114,7 +131,8 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 
 ```{r dailyShow2}
 daily_table <- daily_frequency_table(gw_level_dv, 
-                                     parameter_cd = parameterCd) 
+                                     parameter_cd = parameterCd,
+                                     stat_cd = statCd) 
 knitr::kable(head(daily_table, 10))
 ```
 
@@ -123,14 +141,14 @@ knitr::kable(head(daily_table, 10))
 
 
 ```{r gwlTrendplot}
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm
-
 
 gwl_plot_all(gw_level_dv, gwl_data, 
-             y_label = y_label,
-             parameter_cd = parameterCd,
+             y_label = yaxis,
+             parameter_cd = parameterCd, 
+             stat_cd = statCd,
              plot_title = siteID,
-             add_trend = TRUE, flip_y = FALSE)
+             add_trend = TRUE, 
+             flip_y = FALSE)
 
 
 ```
@@ -172,7 +190,7 @@ kable(trend_result, digits = 1)
 
 ```{r manualPlot}
 gwl_plot_all(NULL, gwl_data,
-             y_label = y_label,
+             y_label = yaxis,
              parameter_cd = parameterCd,
              plot_title = siteID, 
              flip_y = FALSE)
