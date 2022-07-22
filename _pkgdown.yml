@@ -79,6 +79,7 @@ reference:
       - get_state_data
   - title: Utilities
     contents:
+      - create_groundwater_report
       - theme_gwl
       - hasp_framework
       - explore_aquifers
