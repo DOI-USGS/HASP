@@ -100,6 +100,7 @@ weekly_frequency_plot(gw_level_dv,
                       parameter_cd = parameterCd, 
                       stat_cd = statCd,
                       plot_title = siteID,
+                      flip_y = flip,
                       y_axis_label = yaxis)
 
 
