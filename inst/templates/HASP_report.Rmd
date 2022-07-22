@@ -28,7 +28,9 @@ options(knitr.kable.NA = '')
 library(HASP)
 
 siteID <- "{{{ site }}}"
-site_metadata <- site_summary(siteID, markdown = FALSE)
+type <- "{{{ output_type }}}"
+
+site_metadata <- site_summary(siteID, markdown = type == "html")
 
 pcodes <- dataRetrieval::whatNWISdata(siteNumber = siteID,
                                       service = c("gw", "dv")) 
@@ -166,9 +168,14 @@ names(gw)[names(gw) == paste("X",
                              statCd, sep = "_")] <- "value"
 siteDV <- site_data_summary(gw) 
 
-knitr::kable(t(siteDV), digits = 1) %>%
-  kableExtra::kable_styling(full_width = FALSE)
+site_out <- knitr::kable(t(siteDV), digits = 1)
 
+if(type == "html"){
+  site_out <- site_out %>%
+  kableExtra::kable_styling(full_width = FALSE)
+}
+
+site_out
 ```
 
 Results of trend analysis on maximum daily water levels:
@@ -210,8 +217,15 @@ Summary statistics for manual water level measurements
 quantiles <- gwl_data %>% 
   rename(value = sl_lev_va) %>% 
   site_data_summary() 
-knitr::kable(t(quantiles), digits = 1) %>%
+
+q_out <- knitr::kable(t(quantiles), digits = 1)
+
+if(type == "html"){
+  q_out <- q_out %>%
   kableExtra::kable_styling(full_width = FALSE)
+}
+
+q_out
 
 ```
 
