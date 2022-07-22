@@ -10,7 +10,8 @@ daily_gwl_2yr_plot(
   date_col = NA,
   value_col = NA,
   approved_col = NA,
-  historical_stat = c("mean", "median"),
+  stat_cd = NA,
+  historical_stat = "mean",
   month_breaks = FALSE,
   plot_title = "",
   subtitle = "U.S. Geological Survey",
@@ -35,7 +36,10 @@ which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 
-\item{historical_stat}{the summary statstic to use for middle line of the plot. Either
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
+
+\item{historical_stat}{the summary statistic to use for middle line of the plot. Either
 "mean" or "median."}
 
 \item{month_breaks}{a logical indicating whether to use monthly breaks for the plot}

@@ -9,6 +9,7 @@ monthly_frequency_table(
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
+  stat_cd = NA,
   approved_col = NA
 )
 }
@@ -25,6 +26,9 @@ which the code will try to get the column name automatically.}
 
 \item{value_col}{name of value column. The default is \code{NA},
 which the code will try to get the column name automatically.}
+
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 }

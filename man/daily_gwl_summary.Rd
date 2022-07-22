@@ -9,7 +9,8 @@ daily_gwl_summary(
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
-  approved_col = NA
+  approved_col = NA,
+  stat_cd = NA
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ which the code will try to get the column name automatically.}
 which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
+
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 }
 \value{
 a summary table giving the period of record, completeness

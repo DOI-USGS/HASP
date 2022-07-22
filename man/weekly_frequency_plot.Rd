@@ -10,7 +10,8 @@ weekly_frequency_plot(
   date_col = NA,
   value_col = NA,
   approved_col = NA,
-  plot_range = c("Past year", "Calendar year"),
+  stat_cd = NA,
+  plot_range = "Past year",
   plot_title = "",
   subtitle = "U.S. Geological Survey",
   y_axis_label = "",
@@ -33,6 +34,9 @@ which the code will try to get the column name automatically.}
 which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
+
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 
 \item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
