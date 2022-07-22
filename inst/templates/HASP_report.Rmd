@@ -62,6 +62,8 @@ statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
 pCode_info <- dataRetrieval::readNWISpCode(parameterCd)
 yaxis <- pCode_info$parameter_nm
 
+flip <- parameterCd == "72019"
+
 # Daily data:
 if(any(pcodes$data_type_cd == "dv")){
   gw_level_dv <- dataRetrieval::readNWISdv(siteID,
@@ -83,6 +85,7 @@ monthly_frequency_plot(gw_level_dv,
                        parameter_cd = parameterCd,
                        stat_cd = statCd, 
                        plot_title = siteID, 
+                       flip_y = flip,
                        y_axis_label = yaxis)
 
 ```
@@ -120,6 +123,7 @@ daily_gwl_2yr_plot(gw_level_dv,
                    parameter_cd = parameterCd,
                    plot_title = siteID,
                    stat_cd = statCd,
+                   flip_y = flip,
                    historical_stat = "mean",
                    month_breaks = TRUE,
                    y_axis_label = yaxis)
@@ -146,9 +150,9 @@ gwl_plot_all(gw_level_dv, gwl_data,
              y_label = yaxis,
              parameter_cd = parameterCd, 
              stat_cd = statCd,
+             flip_y = flip,
              plot_title = siteID,
-             add_trend = TRUE, 
-             flip_y = FALSE)
+             add_trend = TRUE)
 
 
 ```
@@ -191,10 +195,9 @@ kable(trend_result, digits = 1)
 ```{r manualPlot}
 gwl_plot_all(NULL, gwl_data,
              y_label = yaxis,
+             flip_y = flip,
              parameter_cd = parameterCd,
-             plot_title = siteID, 
-             flip_y = FALSE)
-
+             plot_title = siteID)
 
 ```
 
