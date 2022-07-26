@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Single Site Water Level">
@@ -155,9 +155,9 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Groundwater level above NAVD 1988, feet</td>
-<td align="left">2019-07-14</td>
+<td align="left">2019-07-27</td>
 <td align="left">2022-07-07</td>
-<td align="right">1090</td>
+<td align="right">1077</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
@@ -219,148 +219,159 @@ body {
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/weekly_frequency_plot.html">weekly_frequency_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
-<span>                      date_col <span class="op">=</span> <span class="st">"Date"</span>,</span>
-<span>                      value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,</span>
-<span>                      approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span>,</span>
+<span>                      parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
 <span>                      plot_title <span class="op">=</span> <span class="va">site_title</span>,</span>
 <span>                      y_axis_label <span class="op">=</span> <span class="st">"Groundwater level above NGVD 1929, feet"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Single_site_water_level_files/figure-html/weeklyFrequencyShow-1.png" width="672"></p>
 <p>Weekly frequency analysis of daily maximum water level record. Only showing the first 10 rows for this example:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weekly_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weekly_frequency_table.html">weekly_frequency_table</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
-<span>                                       parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"Week"</span> <span class="op">=</span> <span class="va">week</span>,</span>
-<span>         <span class="st">"Lowest median"</span> <span class="op">=</span> <span class="va">minMed</span>,</span>
-<span>         <span class="st">"10th"</span> <span class="op">=</span> <span class="va">p10</span>,</span>
-<span>         <span class="st">"25th"</span> <span class="op">=</span> <span class="va">p25</span>,</span>
-<span>         <span class="st">"50th"</span> <span class="op">=</span> <span class="va">p50</span>,</span>
-<span>         <span class="st">"75th"</span> <span class="op">=</span> <span class="va">p75</span>,</span>
-<span>         <span class="st">"90th"</span> <span class="op">=</span> <span class="va">p90</span>,</span>
-<span>         <span class="st">"Highest median"</span> <span class="op">=</span> <span class="va">maxMed</span>,</span>
-<span>         <span class="st">"# Years"</span> <span class="op">=</span> <span class="va">nYears</span><span class="op">)</span></span>
+<span>                                       parameter_cd <span class="op">=</span> <span class="va">parameterCd</span><span class="op">)</span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weekly_table</span>, <span class="fl">10</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="right">Week</th>
-<th align="right">Lowest median</th>
-<th align="right">10th</th>
-<th align="right">25th</th>
-<th align="right">50th</th>
-<th align="right">75th</th>
-<th align="right">90th</th>
-<th align="right">Highest median</th>
-<th align="right"># Years</th>
+<th align="right">week</th>
+<th align="right">p5</th>
+<th align="right">p10</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p90</th>
+<th align="right">p95</th>
+<th align="right">nYears</th>
+<th align="right">minMed</th>
+<th align="right">maxMed</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">-40.6</td>
+<td align="right">-36.0</td>
 <td align="right">-32.8</td>
 <td align="right">-28.7</td>
 <td align="right">-21.3</td>
 <td align="right">-17.5</td>
 <td align="right">-14.6</td>
-<td align="right">-5.5</td>
+<td align="right">-8.7</td>
 <td align="right">42</td>
+<td align="right">-40.6</td>
+<td align="right">-5.5</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">-41.4</td>
+<td align="right">-34.6</td>
 <td align="right">-32.7</td>
 <td align="right">-29.0</td>
 <td align="right">-21.4</td>
 <td align="right">-17.5</td>
 <td align="right">-14.7</td>
-<td align="right">-5.5</td>
+<td align="right">-8.0</td>
 <td align="right">42</td>
+<td align="right">-41.4</td>
+<td align="right">-5.5</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="right">-42.1</td>
+<td align="right">-35.4</td>
 <td align="right">-32.5</td>
 <td align="right">-29.2</td>
 <td align="right">-21.2</td>
 <td align="right">-17.8</td>
 <td align="right">-14.0</td>
-<td align="right">-5.7</td>
+<td align="right">-7.7</td>
 <td align="right">42</td>
+<td align="right">-42.1</td>
+<td align="right">-5.7</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="right">-41.9</td>
+<td align="right">-38.1</td>
 <td align="right">-31.7</td>
 <td align="right">-29.5</td>
 <td align="right">-21.6</td>
 <td align="right">-18.2</td>
 <td align="right">-13.7</td>
-<td align="right">-6.1</td>
+<td align="right">-7.9</td>
 <td align="right">42</td>
+<td align="right">-41.9</td>
+<td align="right">-6.1</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="right">-41.6</td>
+<td align="right">-39.0</td>
 <td align="right">-32.1</td>
 <td align="right">-29.8</td>
 <td align="right">-21.6</td>
 <td align="right">-18.3</td>
 <td align="right">-13.7</td>
-<td align="right">-6.8</td>
+<td align="right">-7.7</td>
 <td align="right">43</td>
+<td align="right">-41.6</td>
+<td align="right">-6.8</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
-<td align="right">-42.1</td>
+<td align="right">-37.8</td>
 <td align="right">-32.3</td>
 <td align="right">-29.0</td>
 <td align="right">-21.9</td>
 <td align="right">-18.9</td>
 <td align="right">-12.8</td>
-<td align="right">-7.0</td>
+<td align="right">-8.0</td>
 <td align="right">43</td>
+<td align="right">-42.1</td>
+<td align="right">-7.0</td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
-<td align="right">-43.5</td>
+<td align="right">-38.0</td>
 <td align="right">-32.5</td>
 <td align="right">-29.1</td>
 <td align="right">-22.1</td>
 <td align="right">-19.0</td>
 <td align="right">-13.0</td>
-<td align="right">-7.4</td>
+<td align="right">-8.0</td>
 <td align="right">43</td>
+<td align="right">-43.5</td>
+<td align="right">-7.4</td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
-<td align="right">-44.6</td>
+<td align="right">-40.1</td>
 <td align="right">-33.5</td>
 <td align="right">-29.3</td>
 <td align="right">-22.3</td>
 <td align="right">-18.6</td>
 <td align="right">-11.4</td>
-<td align="right">-6.1</td>
+<td align="right">-8.1</td>
 <td align="right">43</td>
+<td align="right">-44.6</td>
+<td align="right">-6.1</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
-<td align="right">-42.6</td>
+<td align="right">-40.5</td>
 <td align="right">-34.0</td>
 <td align="right">-29.5</td>
 <td align="right">-22.4</td>
 <td align="right">-19.3</td>
 <td align="right">-11.7</td>
-<td align="right">-6.2</td>
+<td align="right">-7.9</td>
 <td align="right">43</td>
+<td align="right">-42.6</td>
+<td align="right">-6.2</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
-<td align="right">-43.3</td>
+<td align="right">-40.9</td>
 <td align="right">-33.9</td>
 <td align="right">-29.7</td>
 <td align="right">-22.7</td>
 <td align="right">-19.5</td>
 <td align="right">-11.6</td>
-<td align="right">-6.3</td>
+<td align="right">-7.7</td>
 <td align="right">43</td>
+<td align="right">-43.3</td>
+<td align="right">-6.3</td>
 </tr>
 </tbody>
 </table>
@@ -370,7 +381,7 @@ body {
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/daily_gwl_2yr_plot.html">daily_gwl_2yr_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
-<span>                   parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span>
+<span>                   parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
 <span>                   plot_title <span class="op">=</span> <span class="va">site_title</span>,</span>
 <span>                   historical_stat <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>                   month_breaks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -379,22 +390,16 @@ body {
 <p>Statistics of maximum daily water level record (DOY = day of year). Only showing the first 10 rows for this example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">daily_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/daily_frequency_table.html">daily_frequency_table</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
-<span>                                     date_col <span class="op">=</span> <span class="st">"Date"</span>,</span>
-<span>                                     value_col <span class="op">=</span> <span class="st">"X_62610_00001"</span>,</span>
-<span>                                     approved_col <span class="op">=</span> <span class="st">"X_62610_00001_cd"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"DOY"</span> <span class="op">=</span> <span class="va">DOY</span>,</span>
-<span>         <span class="st">"Maximum"</span> <span class="op">=</span> <span class="va">max</span>,</span>
-<span>         <span class="st">"Mean"</span> <span class="op">=</span> <span class="va">mean</span>,</span>
-<span>         <span class="st">"Minimum"</span> <span class="op">=</span> <span class="va">min</span>,</span>
-<span>         <span class="st">"# Points"</span> <span class="op">=</span> <span class="va">points</span><span class="op">)</span></span>
+<span>                                     parameter_cd <span class="op">=</span> <span class="va">parameterCd</span><span class="op">)</span> </span>
+<span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">daily_table</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">DOY</th>
-<th align="right">Maximum</th>
-<th align="right">Mean</th>
-<th align="right">Minimum</th>
-<th align="right"># Points</th>
+<th align="right">max</th>
+<th align="right">mean</th>
+<th align="right">min</th>
+<th align="right">points</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -474,12 +479,12 @@ body {
 <h3 id="daily-value-trends">Daily value trends<a class="anchor" aria-label="anchor" href="#daily-value-trends"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="st">"62610"</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span></span>
+<code class="sourceCode R"><span><span class="va">y_label</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="va">parameterCd</span><span class="op">)</span><span class="op">$</span><span class="va">parameter_nm</span></span>
 <span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_all</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, <span class="va">gwl_data</span>, </span>
 <span>             y_label <span class="op">=</span> <span class="va">y_label</span>,</span>
-<span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span>
+<span>             parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
 <span>             plot_title <span class="op">=</span> <span class="va">site_title</span>,</span>
 <span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span>, flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Single_site_water_level_files/figure-html/gwlTrendplot-1.png" width="672"></p>
@@ -487,31 +492,33 @@ body {
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">siteDV</span> <span class="op">&lt;-</span> <span class="va">gw_level_dv</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">X_62610_00001</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>Minimum <span class="op">=</span> <span class="va">min_site</span>,    </span>
-<span>         `1st` <span class="op">=</span> <span class="va">p25</span>, </span>
-<span>         Median <span class="op">=</span> <span class="va">p50</span>,</span>
-<span>         Mean <span class="op">=</span> <span class="va">mean_site</span>,</span>
-<span>         `3rd` <span class="op">=</span> <span class="va">p75</span>,</span>
-<span>         Maximum <span class="op">=</span> <span class="va">max_site</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="va">siteDV</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="right">Minimum</th>
-<th align="right">1st</th>
-<th align="right">Median</th>
-<th align="right">Mean</th>
-<th align="right">3rd</th>
-<th align="right">Maximum</th>
+<th align="left">site_no</th>
+<th align="right">min_site</th>
+<th align="right">max_site</th>
+<th align="right">mean_site</th>
+<th align="right">p10</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p90</th>
+<th align="right">count</th>
 </tr></thead>
 <tbody><tr class="odd">
+<td align="left">263819081585801</td>
 <td align="right">-51.1</td>
+<td align="right">-2.8</td>
+<td align="right">-22.5</td>
+<td align="right">-33.7</td>
 <td align="right">-28</td>
 <td align="right">-21.6</td>
-<td align="right">-22.5</td>
 <td align="right">-16.6</td>
-<td align="right">-2.8</td>
+<td align="right">-12.1</td>
+<td align="right">15301</td>
 </tr></tbody>
 </table>
 <p>Results of trend analysis on maximum daily water levels:</p>
@@ -566,30 +573,33 @@ body {
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">quantiles</span> <span class="op">&lt;-</span> <span class="va">gwl_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">sl_lev_va</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>Minimum <span class="op">=</span> <span class="va">min_site</span>,    </span>
-<span>         `1st` <span class="op">=</span> <span class="va">p25</span>, </span>
-<span>         Median <span class="op">=</span> <span class="va">p50</span>,</span>
-<span>         Mean <span class="op">=</span> <span class="va">mean_site</span>,</span>
-<span>         `3rd` <span class="op">=</span> <span class="va">p75</span>,</span>
-<span>         Maximum <span class="op">=</span> <span class="va">max_site</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/site_data_summary.html">site_data_summary</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="va">quantiles</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="right">Minimum</th>
-<th align="right">1st</th>
-<th align="right">Median</th>
-<th align="right">Mean</th>
-<th align="right">3rd</th>
-<th align="right">Maximum</th>
+<th align="left">site_no</th>
+<th align="right">min_site</th>
+<th align="right">max_site</th>
+<th align="right">mean_site</th>
+<th align="right">p10</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p90</th>
+<th align="right">count</th>
 </tr></thead>
 <tbody><tr class="odd">
+<td align="left">263819081585801</td>
 <td align="right">-52.4</td>
+<td align="right">-4.8</td>
+<td align="right">-26.9</td>
+<td align="right">-36.9</td>
 <td align="right">-32.5</td>
 <td align="right">-26.2</td>
-<td align="right">-26.9</td>
 <td align="right">-20.7</td>
-<td align="right">-4.8</td>
+<td align="right">-17.1</td>
+<td align="right">1398</td>
 </tr></tbody>
 </table>
 </div>

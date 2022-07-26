@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 2.0.5
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   Contributing: Contributing.html
@@ -9,5 +9,5 @@ articles:
   Single_site_combo_data: Single_site_combo_data.html
   Single_site_water_level: Single_site_water_level.html
   shinyApp: shinyApp.html
-last_built: 2022-07-13T22:07Z
+last_built: 2022-07-26T16:45Z
 
