@@ -57,6 +57,7 @@ available_statCds <- unique(pcodes$stat_cd[pcodes$data_type_cd == "dv"])
 parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
                                       max(pcodes$count_nu,na.rm = TRUE) & 
                                       pcodes$data_type_cd == "dv")])
+
 statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
                                       max(pcodes$count_nu,na.rm = TRUE) & 
                                       pcodes$data_type_cd == "dv")][1]
@@ -92,6 +93,22 @@ monthly_frequency_plot(gw_level_dv,
 
 ```
 
+
+
+```{r}
+month_table <- monthly_frequency_table(gw_level_dv,
+                       parameter_cd = parameterCd,
+                       stat_cd = statCd)
+
+knitr::kable(month_table, digits = 1) %>%
+    kableExtra::kable_styling()%>%
+    kableExtra::row_spec(as.integer(strftime(Sys.Date(), format = "%m")),
+                         bold = TRUE,
+                         hline_after = TRUE)
+
+```
+
+
 ### Weekly frequency
 
 ```{r weeklyFrequency}
@@ -114,7 +131,17 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 weekly_table <- weekly_frequency_table(gw_level_dv, 
                                        parameter_cd = parameterCd, 
                                        stat_cd = statCd) 
-knitr::kable(head(weekly_table, 10), digits = 1)
+
+todays_week <- as.integer(strftime(Sys.Date(), format = "%V"))
+
+  
+knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1) %>%
+    kableExtra::kable_styling()%>%
+    kableExtra::row_spec(5,
+                         bold = TRUE,
+                         hline_after = TRUE)
+
+
 
 ```
 
@@ -140,7 +167,14 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 daily_table <- daily_frequency_table(gw_level_dv, 
                                      parameter_cd = parameterCd,
                                      stat_cd = statCd) 
-knitr::kable(head(daily_table, 10))
+
+todays_day <- as.POSIXlt(Sys.Date())$yday
+
+knitr::kable(daily_table[(todays_day-4):(todays_day + 5),]) %>%
+    kableExtra::kable_styling()%>%
+    kableExtra::row_spec(5,
+                         bold = TRUE,
+                         hline_after = TRUE)
 ```
 
 
