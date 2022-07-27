@@ -23,6 +23,7 @@ pkgdown/
 ^pkgdown$
 ^codecov\.yml$
 ^\.github$
+^reports/*
 vignettes/back_to_main.png
 vignettes/delete_branch.png
 vignettes/pipeline.png

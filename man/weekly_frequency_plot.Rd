@@ -6,6 +6,7 @@
 \usage{
 weekly_frequency_plot(
   gw_level_dv,
+  gwl_data,
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
@@ -21,6 +22,11 @@ weekly_frequency_plot(
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
 from \code{readNWISdv}.}
+
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
@@ -66,14 +72,19 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 weekly_frequency_plot(gw_level_dv, 
+                      gwl_data = NULL,
                       date_col = "Date",
                       value_col = "X_62610_00001",
                       approved_col = "X_62610_00001_cd")
                       
+gwl_data <- L2701_example_data$Discrete
+
 weekly_frequency_plot(gw_level_dv, 
+                      gwl_data = gwl_data,
                       parameter_cd = "62610")
                       
 weekly_frequency_plot(gw_level_dv, 
+                      gwl_data = gwl_data,
                       parameter_cd = "62610", 
                       flip_y = TRUE)
 

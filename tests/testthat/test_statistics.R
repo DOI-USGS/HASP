@@ -38,6 +38,7 @@ test_that("Kendall Seasonal Trend", {
 test_that("Weekly frequency table", {
   
   wft <- weekly_frequency_table(L2701_example_data$Daily, 
+                                NULL,
                                 date_col = "Date",
                                 value_col = "X_62610_00001",
                                 approved_col = "X_62610_00001_cd")
@@ -45,14 +46,25 @@ test_that("Weekly frequency table", {
   expect_equal(as.numeric(head(wft$nYears, 6)), c(41, 42, 42, 42, 43, 43))
   expect_equal(tail(wft$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
   
+  wft2 <- weekly_frequency_table(L2701_example_data$Daily, 
+                                L2701_example_data$Discrete,
+                                parameter_cd = "62610")
+  
+  expect_equal(as.numeric(head(wft2$p25, 6)), c(-28.7, -29.1, -29.3, -29.7, -29.8, -29.1), tolerance = 0.05)
+  expect_equal(as.numeric(head(wft2$nYears, 6)), c(41, 42, 42, 42, 43, 43))
+  expect_equal(tail(wft2$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
+  
+  
 })
 
 test_that("Monthly frequency table", {
   
   mft <- monthly_frequency_table(L2701_example_data$Daily,
+                                 NULL,
                                  date_col = "Date",
                                  value_col = "X_62610_00001",
                                  approved_col = "X_62610_00001_cd")
+  
   expect_equal(as.numeric(head(mft$p75, 6)),
                c(-18.0575, -19.0500, -20.2625, -22.0500, -23.5100, -21.0200),
                tolerance = 0.05)
@@ -62,11 +74,25 @@ test_that("Monthly frequency table", {
                c(-6.790, -4.820, -3.240, -4.800, -4.535, -4.860),
                tolerance = 0.05)
   
+  mft2 <- monthly_frequency_table(L2701_example_data$Daily,
+                                 L2701_example_data$Discrete,
+                                 parameter_cd = "62610")
+  
+  expect_equal(as.numeric(head(mft2$p75, 6)),
+               c(-18.0575, -19.0500, -20.2625, -22.0500, -23.5100, -21.0200),
+               tolerance = 0.05)
+  expect_equal(as.numeric(head(mft2$nYears, 6)),
+               c(43, 43, 43, 42, 42, 41))
+  expect_equal(tail(mft2$maxMed, 6),
+               c(-6.790, -4.820, -3.240, -4.800, -4.535, -4.860),
+               tolerance = 0.05)
+  
 })
 
 test_that("Daily summary table", {
   
   daily_summary_table <- daily_gwl_summary(L2701_example_data$Daily,
+                                           NULL,
                                            parameter_cd = "62610")
   expect_equal(nrow(daily_summary_table), 1)
   expect_equal(daily_summary_table$percent_complete, 96)
@@ -74,17 +100,35 @@ test_that("Daily summary table", {
   expect_equal(daily_summary_table$p25, -28.4, tolerance = 0.005)
   expect_equal(daily_summary_table$highest_level, -2.81, tolerance = 0.05)
   
+  daily_summary_table2 <- daily_gwl_summary(L2701_example_data$Daily,
+                                           L2701_example_data$Discrete,
+                                           parameter_cd = "62610")
+  expect_equal(nrow(daily_summary_table2), 1)
+  expect_equal(daily_summary_table2$percent_complete, 99)
+  expect_equal(daily_summary_table2$begin_date, as.Date("1978-10-01"))
+  expect_equal(daily_summary_table2$p25, -28.4, tolerance = 0.005)
+  expect_equal(daily_summary_table2$highest_level, -2.81, tolerance = 0.05)
+  
 })
 
 test_that("Daily frequency table", {
   
   daily_frequency_table <- daily_frequency_table(L2701_example_data$Daily,
+                                                 gwl_data = NULL,
                                                  date_col = "Date",
                                                  value_col = "X_62610_00001",
                                                  approved_col = "X_62610_00001_cd")
   expect_equal(daily_frequency_table$max[1], -5.29, tolerance = 0.005)
   expect_equal(daily_frequency_table$min[365], -42.2, tolerance = 0.05)
   expect_equal(daily_frequency_table$mean[183], -24.3, tolerance = 0.05)
+  
+  daily_frequency_table2 <- daily_frequency_table(L2701_example_data$Daily,
+                                                 gwl_data = L2701_example_data$Discrete,
+                                                 parameter_cd = "62610")
+  
+  expect_equal(daily_frequency_table2$max[1], -5.29, tolerance = 0.005)
+  expect_equal(daily_frequency_table2$min[365], -42.2, tolerance = 0.05)
+  expect_equal(daily_frequency_table2$mean[183], -24.3, tolerance = 0.05)
   
 })
 
@@ -142,9 +186,9 @@ test_that("trend segments",{
 
 test_that("utils", {
   
-  no_zero <- zero_on_top(c(1:10))
-  yes_zero <- zero_on_top(c(-10:-2))
-  crosses_zero <- zero_on_top(c(-10:5))
+  no_zero <- HASP:::zero_on_top(c(1:10))
+  yes_zero <- HASP:::zero_on_top(c(-10:-2))
+  crosses_zero <- HASP:::zero_on_top(c(-10:5))
   
   expect_false(no_zero)
   expect_true(yes_zero)

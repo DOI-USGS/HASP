@@ -72,10 +72,16 @@ if(any(pcodes$data_type_cd == "dv")){
   gw_level_dv <- dataRetrieval::readNWISdv(siteID,
                             available_pcodes,
                             statCd = available_statCds)
+} else {
+  gw_level_dv <-  L2701_example_data$Discrete
+  gw_level_dv <- gw_level_dv[-1:-nrow(gw_level_dv),]
 }
 # Field GWL measured:
 if(any(pcodes$data_type_cd == "gw")){
   gwl_data <- dataRetrieval::readNWISgwl(siteID)
+} else {
+  gwl_data <-  L2701_example_data$Discrete
+  gwl_data <- gwl_data[-1:-nrow(gwl_data),]
 }
 ```
 
@@ -85,6 +91,7 @@ if(any(pcodes$data_type_cd == "gw")){
 
 ```{r monthlyFreq}
 monthly_frequency_plot(gw_level_dv,
+                       gwl_data,
                        parameter_cd = parameterCd,
                        stat_cd = statCd, 
                        plot_title = siteID, 
@@ -97,8 +104,9 @@ monthly_frequency_plot(gw_level_dv,
 
 ```{r}
 month_table <- monthly_frequency_table(gw_level_dv,
-                       parameter_cd = parameterCd,
-                       stat_cd = statCd)
+                                       gwl_data,
+                                       parameter_cd = parameterCd,
+                                       stat_cd = statCd)
 
 knitr::kable(month_table, digits = 1) %>%
     kableExtra::kable_styling()%>%
@@ -114,6 +122,7 @@ knitr::kable(month_table, digits = 1) %>%
 ```{r weeklyFrequency}
 
 weekly_frequency_plot(gw_level_dv, 
+                      gwl_data,
                       parameter_cd = parameterCd, 
                       stat_cd = statCd,
                       plot_title = siteID,
@@ -129,6 +138,7 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 
 ```{r weekly_table}
 weekly_table <- weekly_frequency_table(gw_level_dv, 
+                                       gwl_data, 
                                        parameter_cd = parameterCd, 
                                        stat_cd = statCd) 
 
@@ -150,6 +160,7 @@ knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1) %>%
 
 ```{r dailyPlotShow, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
+                   gwl_data,
                    parameter_cd = parameterCd,
                    plot_title = siteID,
                    stat_cd = statCd,
@@ -165,6 +176,7 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 
 ```{r dailyShow2}
 daily_table <- daily_frequency_table(gw_level_dv, 
+                                     gwl_data,
                                      parameter_cd = parameterCd,
                                      stat_cd = statCd) 
 

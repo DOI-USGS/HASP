@@ -61,6 +61,7 @@ names(qw_data)
 
 ```{r}
 monthly_frequency_plot(gw_level_dv = daily_data,
+                       gwl_data = NULL,
                        date_col = "Date",
                        value_col = "Value",
                        approved_col = "Remark",
