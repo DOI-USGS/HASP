@@ -67,6 +67,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">weekly_frequency_table</span><span class="op">(</span></span>
 <span>  <span class="va">gw_level_dv</span>,</span>
+<span>  <span class="va">gwl_data</span>,</span>
 <span>  parameter_cd <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  value_col <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -80,6 +81,13 @@
     <dl><dt>gw_level_dv</dt>
 <dd><p>data frame, daily groundwater level data. Often obtained
 from <code>readNWISdv</code>.</p></dd>
+
+
+<dt>gwl_data</dt>
+<dd><p>data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).</p></dd>
 
 
 <dt>parameter_cd</dt>
@@ -124,17 +132,24 @@ can be used to help define the value_col.</p></dd>
 <span class="r-in"><span><span class="co"># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span></span></span>
 <span class="r-in"><span><span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">Daily</span></span></span>
 <span class="r-in"><span><span class="va">weekly_frequency</span> <span class="op">&lt;-</span> <span class="fu">weekly_frequency_table</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>                                           <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>                                           parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weekly_frequency</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    week    p5   p10   p25   p50   p75   p90   p95 nYears minMed maxMed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1 -<span style="color: #BB0000;">36.0</span> -<span style="color: #BB0000;">32.8</span> -<span style="color: #BB0000;">28.7</span> -<span style="color: #BB0000;">21.4</span> -<span style="color: #BB0000;">17.6</span> -<span style="color: #BB0000;">15.1</span> -<span style="color: #BB0000;">8.71</span>     41  -<span style="color: #BB0000;">40.6</span>  -<span style="color: #BB0000;">5.48</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     2 -<span style="color: #BB0000;">34.6</span> -<span style="color: #BB0000;">32.7</span> -<span style="color: #BB0000;">29.0</span> -<span style="color: #BB0000;">21.4</span> -<span style="color: #BB0000;">17.5</span> -<span style="color: #BB0000;">14.7</span> -<span style="color: #BB0000;">7.97</span>     42  -<span style="color: #BB0000;">41.4</span>  -<span style="color: #BB0000;">5.52</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     3 -<span style="color: #BB0000;">35.4</span> -<span style="color: #BB0000;">32.5</span> -<span style="color: #BB0000;">29.2</span> -<span style="color: #BB0000;">21.2</span> -<span style="color: #BB0000;">17.8</span> -<span style="color: #BB0000;">14.0</span> -<span style="color: #BB0000;">7.69</span>     42  -<span style="color: #BB0000;">42.1</span>  -<span style="color: #BB0000;">5.68</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     4 -<span style="color: #BB0000;">38.1</span> -<span style="color: #BB0000;">31.7</span> -<span style="color: #BB0000;">29.5</span> -<span style="color: #BB0000;">21.6</span> -<span style="color: #BB0000;">18.2</span> -<span style="color: #BB0000;">13.7</span> -<span style="color: #BB0000;">7.89</span>     42  -<span style="color: #BB0000;">41.9</span>  -<span style="color: #BB0000;">6.12</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     5 -<span style="color: #BB0000;">39.0</span> -<span style="color: #BB0000;">32.1</span> -<span style="color: #BB0000;">29.8</span> -<span style="color: #BB0000;">21.6</span> -<span style="color: #BB0000;">18.3</span> -<span style="color: #BB0000;">13.7</span> -<span style="color: #BB0000;">7.73</span>     43  -<span style="color: #BB0000;">41.6</span>  -<span style="color: #BB0000;">6.8</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     6 -<span style="color: #BB0000;">37.8</span> -<span style="color: #BB0000;">32.3</span> -<span style="color: #BB0000;">29.0</span> -<span style="color: #BB0000;">21.9</span> -<span style="color: #BB0000;">18.9</span> -<span style="color: #BB0000;">12.8</span> -<span style="color: #BB0000;">8</span>        43  -<span style="color: #BB0000;">42.1</span>  -<span style="color: #BB0000;">7.02</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1 -<span style="color: #BB0000;">36.0</span> -<span style="color: #BB0000;">33.0</span> -<span style="color: #BB0000;">28.7</span> -<span style="color: #BB0000;">21.4</span> -<span style="color: #BB0000;">17.5</span> -<span style="color: #BB0000;">14.4</span> -<span style="color: #BB0000;">8.67</span>     41  -<span style="color: #BB0000;">40.6</span>  -<span style="color: #BB0000;">5.48</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     2 -<span style="color: #BB0000;">34.6</span> -<span style="color: #BB0000;">32.8</span> -<span style="color: #BB0000;">29.0</span> -<span style="color: #BB0000;">21.4</span> -<span style="color: #BB0000;">17.5</span> -<span style="color: #BB0000;">14.6</span> -<span style="color: #BB0000;">7.94</span>     42  -<span style="color: #BB0000;">41.4</span>  -<span style="color: #BB0000;">5.52</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     3 -<span style="color: #BB0000;">35.4</span> -<span style="color: #BB0000;">32.6</span> -<span style="color: #BB0000;">29.3</span> -<span style="color: #BB0000;">21.2</span> -<span style="color: #BB0000;">17.8</span> -<span style="color: #BB0000;">14.0</span> -<span style="color: #BB0000;">7.26</span>     42  -<span style="color: #BB0000;">42.1</span>  -<span style="color: #BB0000;">5.68</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     4 -<span style="color: #BB0000;">38.1</span> -<span style="color: #BB0000;">31.8</span> -<span style="color: #BB0000;">29.6</span> -<span style="color: #BB0000;">21.6</span> -<span style="color: #BB0000;">18.2</span> -<span style="color: #BB0000;">13.7</span> -<span style="color: #BB0000;">7.59</span>     42  -<span style="color: #BB0000;">41.9</span>  -<span style="color: #BB0000;">6.12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     5 -<span style="color: #BB0000;">39.0</span> -<span style="color: #BB0000;">32.1</span> -<span style="color: #BB0000;">29.8</span> -<span style="color: #BB0000;">21.6</span> -<span style="color: #BB0000;">18.3</span> -<span style="color: #BB0000;">13.6</span> -<span style="color: #BB0000;">7.68</span>     43  -<span style="color: #BB0000;">41.6</span>  -<span style="color: #BB0000;">6.8</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     6 -<span style="color: #BB0000;">37.8</span> -<span style="color: #BB0000;">32.3</span> -<span style="color: #BB0000;">29.0</span> -<span style="color: #BB0000;">21.9</span> -<span style="color: #BB0000;">18.7</span> -<span style="color: #BB0000;">12.7</span> -<span style="color: #BB0000;">7.94</span>     43  -<span style="color: #BB0000;">42.1</span>  -<span style="color: #BB0000;">7.02</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">Discrete</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">weekly_frequency</span> <span class="op">&lt;-</span> <span class="fu">weekly_frequency_table</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>                                           <span class="va">gwl_data</span>,</span></span>
+<span class="r-in"><span>                                           parameter_cd <span class="op">=</span> <span class="st">"62610"</span><span class="op">)</span> </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

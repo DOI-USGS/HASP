@@ -67,6 +67,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">daily_gwl_summary</span><span class="op">(</span></span>
 <span>  <span class="va">gw_level_dv</span>,</span>
+<span>  <span class="va">gwl_data</span>,</span>
 <span>  parameter_cd <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  value_col <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -80,6 +81,13 @@
     <dl><dt>gw_level_dv</dt>
 <dd><p>daily groundwater level data
 from readNWISdv</p></dd>
+
+
+<dt>gwl_data</dt>
+<dd><p>data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).</p></dd>
 
 
 <dt>parameter_cd</dt>
@@ -125,12 +133,21 @@ and percentile values</p>
 <span class="r-in"><span><span class="co"># gw_level_dv &lt;- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)</span></span></span>
 <span class="r-in"><span><span class="va">gw_level_dv</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">Daily</span></span></span>
 <span class="r-in"><span><span class="fu">daily_gwl_summary</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>                  gwl_data <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>                  parameter_cd <span class="op">=</span> <span class="va">p_code_dv</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   begin_date   end_date  days percent_complete lowest_level      p5     p10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1978-10-01 2021-02-28 14807               96       -51.08 -38.397 -33.874</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      p25    p50    p75    p90    p95 highest_level</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -28.34 -21.84 -16.84 -12.12 -9.153         -2.81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   begin_date   end_date  days percent_complete lowest_level      p5    p10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1978-10-01 2021-02-28 14807               96       -51.08 -38.418 -33.88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      p25    p50    p75     p90   p95 highest_level</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -28.34 -21.84 -16.84 -12.118 -9.15         -2.81</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">gwl_data</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">Discrete</span></span></span>
+<span class="r-in"><span><span class="fu">daily_gwl_summary</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>                  gwl_data <span class="op">=</span> <span class="va">gwl_data</span>,</span></span>
+<span class="r-in"><span>                  parameter_cd <span class="op">=</span> <span class="va">p_code_dv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   begin_date   end_date  days percent_complete lowest_level     p5 p10    p25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1978-10-01 2021-03-01 15261               99        -51.3 -38.49 -34 -28.49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      p50    p75    p90    p95 highest_level</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -21.96 -16.96 -12.25 -9.211         -2.81</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
