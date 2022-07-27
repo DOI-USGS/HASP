@@ -1,7 +1,10 @@
 #' Create a table of monthly frequency analysis
 #' 
 #' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
-#' 
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -29,55 +32,59 @@
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' monthly_frequency <- monthly_frequency_table(gw_level_dv,
+#'                                              NULL,
 #'                                              parameter_cd = "62610")
 #' head(monthly_frequency)
+#' gwl_data <- L2701_example_data$Discrete
+#' 
+#' monthly_frequency_combo <- monthly_frequency_table(gw_level_dv,
+#'                                              gwl_data,
+#'                                              parameter_cd = "62610")
+#' head(monthly_frequency_combo) 
 monthly_frequency_table <- function(gw_level_dv, 
+                                    gwl_data, 
                                     parameter_cd = NA,
                                     date_col = NA,
-                                    value_col = NA,
-                                    stat_cd = NA,
-                                    approved_col = NA) {
+                                    value_col = NA, 
+                                    approved_col = NA,
+                                    stat_cd = NA) {
 
-  checkmate::assert_data_frame(gw_level_dv)
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
+  
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
+  
+  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
+                                  gwl_data)
+  
+  gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv$Approve), ]
+  
+  gw_level_dv$year = as.POSIXlt(gw_level_dv$Date)$year + 1900
+  gw_level_dv$month = as.POSIXlt(gw_level_dv$Date)$mon + 1
+  gw_level_dv$week = as.POSIXlt(gw_level_dv$Date)$yday%/%7 + 1
 
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv,
-                                value_col, stat_cd)
-  approved_col <- ifelse(is.na(approved_col),
-                        paste0(value_col, "_cd"),
-                        approved_col) 
-  
-  checkmate::assert_string(date_col)
-  checkmate::assert_string(value_col)
-  checkmate::assert_string(approved_col)
-  
-  needed_cols <- c(date_col, value_col, approved_col)
-  
-  checkmate::assertNames(names(gw_level_dv), must.include = needed_cols)
-  
-  gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv[[approved_col]]), ]
-  gw_level_dv$year = as.POSIXlt(gw_level_dv[[date_col]])$year + 1900
-  gw_level_dv$month = as.POSIXlt(gw_level_dv[[date_col]])$mon + 1
-  gw_level_dv$week = as.POSIXlt(gw_level_dv[[date_col]])$yday%/%7 + 1
-  
-  gw_level_dv$result <- gw_level_dv[[value_col]]
-  
   annual_stats <- gw_level_dv %>%
     dplyr::group_by(year, month) %>%
-    dplyr::summarize(median = stats::median(result, na.rm = TRUE)) %>%
+    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
     dplyr::group_by(month) %>%
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
               maxMed = max(median, na.rm = TRUE))
   
   monthly_stats <- gw_level_dv %>%
     dplyr::group_by(month) %>%
-    dplyr::summarize(p5 = quantile(result, probs=0.05, na.rm=TRUE),
-              p10 = quantile(result, probs=0.1, na.rm=TRUE),
-              p25 = quantile(result, probs=0.25, na.rm=TRUE),
-              p50 = quantile(result, probs=0.5, na.rm=TRUE),
-              p75 = quantile(result, probs=0.75, na.rm=TRUE),
-              p90 = quantile(result, probs=0.9, na.rm=TRUE),
-              p95 = quantile(result, probs=0.95,na.rm=TRUE),
+    dplyr::summarize(p5 = quantile(Value, probs=0.05, type = 6, na.rm=TRUE),
+              p10 = quantile(Value, probs=0.1, type = 6, na.rm=TRUE),
+              p25 = quantile(Value, probs=0.25, type = 6, na.rm=TRUE),
+              p50 = quantile(Value, probs=0.5, type = 6, na.rm=TRUE),
+              p75 = quantile(Value, probs=0.75, type = 6, na.rm=TRUE),
+              p90 = quantile(Value, probs=0.9, type = 6, na.rm=TRUE),
+              p95 = quantile(Value, probs=0.95, type = 6,na.rm=TRUE),
               nYears = length(unique(year))) %>%
     dplyr::left_join(annual_stats, by = "month")
   
@@ -88,6 +95,10 @@ monthly_frequency_table <- function(gw_level_dv,
 #' Plot monthly frequency analysis
 #' 
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained from \code{readNWISdv}
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -124,20 +135,32 @@ monthly_frequency_table <- function(gw_level_dv,
 #' gw_level_dv <- L2701_example_data$Daily
 #' label <- dataRetrieval::readNWISpCode(p_code_dv)[["parameter_nm"]]
 #' monthly_frequency <- monthly_frequency_plot(gw_level_dv,
+#'                                             gwl_data = NULL,
 #'                                             parameter_cd = "62610",
 #'                                             plot_title = "L2701 Groundwater Level",
 #'                                             y_axis_label = label,
 #'                                             flip_y = FALSE)
 #' monthly_frequency
 #' 
+#' gwl_data <- L2701_example_data$Discrete
+#' 
+#' monthly_frequency_plot(gw_level_dv,
+#'                        gwl_data = gwl_data,
+#'                        parameter_cd = "62610",
+#'                        plot_title = "L2701 Groundwater Level",
+#'                        y_axis_label = label,
+#'                        flip_y = FALSE)
+#' 
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-#'                                              parameter_cd = "62610",
-#'                                              y_axis_label = label,
-#'                                              plot_title = "L2701 Groundwater Level", 
-#'                                              flip_y = TRUE)
+#'                                                  gwl_data,
+#'                                                  parameter_cd = "62610",
+#'                                                  y_axis_label = label,
+#'                                                  plot_title = "L2701 Groundwater Level", 
+#'                                                  flip_y = TRUE)
 #' monthly_frequency_flip 
 #' 
 monthly_frequency_plot <- function(gw_level_dv, 
+                                   gwl_data, 
                                    parameter_cd = NA,
                                    date_col = NA,
                                    value_col = NA, 
@@ -149,36 +172,32 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    y_axis_label = "",
                                    flip_y = FALSE) {
   
-  checkmate::assert_data_frame(gw_level_dv)
   
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, 
-                                value_col, stat_cd)
-  approved_col <- ifelse(is.na(approved_col),
-                         paste0(value_col, "_cd"),
-                         approved_col) 
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
-  checkmate::assert_string(date_col)
-  checkmate::assert_string(value_col)
-  checkmate::assert_string(approved_col)
-  
-  needed_cols <- c(date_col, value_col, approved_col)
-  
-  checkmate::assertNames(names(gw_level_dv), must.include = needed_cols)
-  
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
   
   plot_range <- match.arg(plot_range)
   
-  date <- max(gw_level_dv[[date_col]], na.rm = TRUE)
+  date <- max(c(gw_level_dv$Date,
+                gwl_data$Date),
+              na.rm = TRUE)
   
-  #Convert date column to date just in case its a POSIXct:
-  gw_level_dv[[date_col]] <- as.Date(gw_level_dv[[date_col]])
-  
+
   # Calculate the percentiles
   site_statistics <- monthly_frequency_table(gw_level_dv, 
-                                             date_col = date_col,
-                                             value_col = value_col,
-                                             approved_col = approved_col)
+                                             gwl_data,
+                                             parameter_cd = NA,
+                                             date_col = c("Date", "Date"),
+                                             value_col = c("Value", "Value"),
+                                             approved_col = c("Approve", "Approve"))
   
   # Find the bounds of the plot.
   if(plot_range == "Past year") {
@@ -191,8 +210,8 @@ monthly_frequency_plot <- function(gw_level_dv,
   }
   
   # The last year of groundwater level measurements will plot
-  gw_level_dv <- gw_level_dv[gw_level_dv[[date_col]] >= plot_start &
-                               gw_level_dv[[date_col]] <= plot_end, ]
+  gw_level_dv <- gw_level_dv[gw_level_dv$Date >= plot_start &
+                               gw_level_dv$Date <= plot_end, ]
 
   # Add the first day of the month to the site_statistics table for plotting
   plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
@@ -254,7 +273,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   points_plot <- gw_level_dv 
   points_plot$group <- "Data point"
 
-  points_plot <- points_plot[, c(date_col, value_col, "group")]
+  points_plot <- points_plot[, c("Date", "Value", "group")]
   names(points_plot) <- c("month", "value", "group")
   
   points_plot <- dplyr::bind_rows(site_statistics_med,
@@ -335,6 +354,10 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' 
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained
 #' from \code{readNWISdv}.
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -359,44 +382,57 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv,
+#'                                            NULL,
 #'                                            parameter_cd = "62610")
 #' head(weekly_frequency)
-weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
-                                   date_col = NA, value_col = NA, 
-                                   approved_col = NA, stat_cd = NA) {
+#' 
+#' gwl_data <- L2701_example_data$Discrete
+#' 
+#' weekly_frequency <- weekly_frequency_table(gw_level_dv,
+#'                                            gwl_data,
+#'                                            parameter_cd = "62610") 
+weekly_frequency_table <- function(gw_level_dv, 
+                                   gwl_data,
+                                   parameter_cd = NA,
+                                   date_col = NA, 
+                                   value_col = NA, 
+                                   approved_col = NA,
+                                   stat_cd = NA) {
 
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, value_col, stat_cd)
-  approved_col <- ifelse(is.na(approved_col),
-                        paste0(value_col, "_cd"),
-                        approved_col)   
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
   
-  if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
-    stop("not all columns found in gw_level_dv")
-  }
+  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
+                                  gwl_data)
   
-  gw_level_dv <- gw_level_dv[ grepl("A", gw_level_dv[[approved_col]]), ]
-  gw_level_dv$year <- as.POSIXlt(gw_level_dv[[date_col]])$year + 1900
-  gw_level_dv$week <- as.POSIXlt(gw_level_dv[[date_col]])$yday%/%7 + 1
-  gw_level_dv$result <- gw_level_dv[[value_col]]
+  gw_level_dv <- gw_level_dv[ grepl("A", gw_level_dv$Approve), ]
+  gw_level_dv$year <- as.POSIXlt(gw_level_dv$Date)$year + 1900
+  gw_level_dv$week <- as.POSIXlt(gw_level_dv$Date)$yday%/%7 + 1
 
   annual_stats <- gw_level_dv %>%
     dplyr::group_by(year, week) %>%
-    dplyr::summarize(median = median(result, na.rm = TRUE)) %>%
+    dplyr::summarize(median = median(Value, na.rm = TRUE)) %>%
     dplyr::group_by(week) %>%
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
                      maxMed = max(median, na.rm = TRUE))
   
   weekly_stats <- gw_level_dv %>%
     dplyr::group_by(week) %>%
-    dplyr::summarize(p5 = quantile(result, probs=0.05, na.rm=TRUE),
-              p10 = quantile(result, probs=0.1, na.rm=TRUE),
-              p25 = quantile(result, probs=0.25, na.rm=TRUE),
-              p50 = quantile(result, probs=0.5, na.rm=TRUE),
-              p75 = quantile(result, probs=0.75, na.rm=TRUE),
-              p90 = quantile(result, probs=0.9, na.rm=TRUE),
-              p95 = quantile(result, probs=0.95,na.rm=TRUE),
+    dplyr::summarize(p5 = quantile(Value, probs=0.05, na.rm=TRUE),
+              p10 = quantile(Value, probs=0.1, type = 6, na.rm=TRUE),
+              p25 = quantile(Value, probs=0.25, type = 6, na.rm=TRUE),
+              p50 = quantile(Value, probs=0.5, type = 6, na.rm=TRUE),
+              p75 = quantile(Value, probs=0.75, type = 6, na.rm=TRUE),
+              p90 = quantile(Value, probs=0.9, type = 6, na.rm=TRUE),
+              p95 = quantile(Value, probs=0.95, type = 6,na.rm=TRUE),
               nYears = length(unique(year))) %>%
     dplyr::left_join(annual_stats, by = "week")
   
@@ -410,6 +446,10 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' 
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained
 #' from \code{readNWISdv}.
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -444,19 +484,27 @@ weekly_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' weekly_frequency_plot(gw_level_dv, 
+#'                       gwl_data = NULL,
 #'                       date_col = "Date",
 #'                       value_col = "X_62610_00001",
 #'                       approved_col = "X_62610_00001_cd")
 #'                       
+#' gwl_data <- L2701_example_data$Discrete
+#' 
 #' weekly_frequency_plot(gw_level_dv, 
+#'                       gwl_data = gwl_data,
 #'                       parameter_cd = "62610")
 #'                       
 #' weekly_frequency_plot(gw_level_dv, 
+#'                       gwl_data = gwl_data,
 #'                       parameter_cd = "62610", 
 #'                       flip_y = TRUE)
 #' 
-weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
-                                  date_col = NA, value_col = NA,
+weekly_frequency_plot <- function(gw_level_dv, 
+                                  gwl_data, 
+                                  parameter_cd = NA,
+                                  date_col = NA,
+                                  value_col = NA, 
                                   approved_col = NA,
                                   stat_cd = NA,
                                   plot_range = "Past year",
@@ -465,25 +513,31 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
                                   y_axis_label = "",
                                   flip_y = FALSE) {
   
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv, 
-                                value_col, stat_cd = stat_cd)
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
-  approved_col <- ifelse(is.na(approved_col),
-                         paste0(value_col, "_cd"),
-                         approved_col)   
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
   
   plot_range <- match.arg(plot_range, choices = c("Past year",
                                                   "Calendar year"),
                           several.ok = FALSE)
   
-  date <- max(gw_level_dv[[date_col]], na.rm = TRUE)
+  date <- max(c(gw_level_dv$Date,
+                gwl_data$Date),
+              na.rm = TRUE)
   
   # Calculate the percentiles
   site_statistics <- weekly_frequency_table(gw_level_dv, 
-                                            date_col = date_col, 
-                                            value_col = value_col,
-                                            approved_col = approved_col)
+                                            gwl_data,
+                                            date_col = c("Date", "Date"), 
+                                            value_col = c("Value", "Value"),
+                                            approved_col = c("Approve", "Approve"))
   
   if(flip_y){
     site_statistics <- site_statistics %>% 
@@ -504,7 +558,7 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   
   # The last year of groundwater level measurements will plot
   gw_level_plot <- gw_level_dv %>%
-    dplyr::filter(!!sym(date_col) >= plot_start)
+    dplyr::filter(Date >= plot_start)
   
   # Add the first day of the week to the site_statistics table for plotting
   plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
@@ -546,10 +600,10 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
     dplyr::rename(x = plot_week_med, y = p50)
   
   data_points <- gw_level_plot %>%
-    dplyr::mutate(gw_code = ifelse(grepl("A", !!sym(approved_col)), "Approved", "Provisional"),
+    dplyr::mutate(gw_code = ifelse(grepl("A", Approve), "Approved", "Provisional"),
            group = sprintf("%s daily value", gw_code)) %>%
     dplyr::rename(x = Date,
-           y = !!sym(value_col)) %>%
+           y = Value) %>%
     dplyr::select(x, y, group)
   
   point_data <- dplyr::bind_rows(site_statistics_med, data_points) %>%
@@ -659,10 +713,14 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
   
 }
 
-#' Plot the last two years of daily data
+#' Plot the last two years of data
 #'
 #' @param gw_level_dv data frame daily groundwater level data
 #' from \code{readNWISdv}
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -698,12 +756,16 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' daily_gwl_2yr_plot(gw_level_dv,
+#'                    NULL,
 #'                    parameter_cd = "62610",
 #'                    plot_title = "Groundwater Level", 
 #'                    month_breaks = TRUE,
 #'                    historical_stat = "median")
 #' 
+#' gwl_data <- L2701_example_data$Discrete
+#' 
 #' daily_gwl_2yr_plot(gw_level_dv,
+#'                    gwl_data,
 #'                    date_col = "Date",
 #'                    value_col = "X_62610_00001",
 #'                    approved_col = "X_62610_00001_cd", 
@@ -711,9 +773,11 @@ weekly_frequency_plot <- function(gw_level_dv, parameter_cd = NA,
 #'                    month_breaks = TRUE,
 #'                    historical_stat = "median",
 #'                    flip_y = FALSE)
-daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
+daily_gwl_2yr_plot <- function(gw_level_dv, 
+                               gwl_data,
+                               parameter_cd = NA,
                                date_col = NA,
-                               value_col = NA,
+                               value_col = NA, 
                                approved_col = NA,
                                stat_cd = NA,
                                historical_stat = "mean", 
@@ -723,16 +787,19 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
                                y_axis_label = "",
                                flip_y = FALSE) {
 
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv,
-                                value_col, stat_cd = stat_cd)
-  approved_col <- ifelse(is.na(approved_col),
-                         paste0(value_col, "_cd"),
-                         approved_col)   
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = NULL, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
-  if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
-    stop("Not all required columns found in gw_level_dv")
-  }
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
+  
+  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
+                                  gwl_data)
   
   historical_stat <- match.arg(historical_stat, 
                                choices = c("mean", "median"), 
@@ -742,18 +809,18 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
   
   # Calculate the historical max/min/median for each day
 
-  gw_level_dv$J = as.numeric(as.character(gw_level_dv[[date_col]], format = "%j"))
-  gw_level_dv$result <- gw_level_dv[[value_col]]
-  
-  historical_stats <- gw_level_dv[grepl("A", gw_level_dv[[approved_col]]), ] %>%
+  gw_level_dv$J = as.numeric(as.character(gw_level_dv$Date,
+                                          format = "%j"))
+
+  historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] %>%
     dplyr::group_by(J) %>%
-    dplyr::summarize(max = max(result, na.rm = TRUE),
-              middle = historical_function(result, na.rm = TRUE),
-              min = min(result, na.rm = TRUE))
+    dplyr::summarize(max = max(Value, na.rm = TRUE),
+              middle = historical_function(Value, na.rm = TRUE),
+              min = min(Value, na.rm = TRUE))
   
   # Pull the last two years of data & join with the historical data
   
-  most_recent <- max(gw_level_dv[, date_col], na.rm = TRUE)
+  most_recent <- max(c(gw_level_dv$Date), na.rm = TRUE)
   #TODO: check here!
   plot_start_year <- as.numeric(as.character(most_recent, format = "%Y")) - 2
   plot_start <- as.Date(paste(plot_start_year,
@@ -765,24 +832,20 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
   buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
   buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
   buffer_j <- as.numeric(as.character(buffer_dates, "%j"))
-  buffer <- stats::setNames(data.frame(buffer_dates, buffer_j), c(date_col, "J"))
-  
-  names(gw_level_dv)[names(gw_level_dv) == date_col] <- "Date"
-  names(gw_level_dv)[names(gw_level_dv) == value_col] <- "gw_level"
-  names(gw_level_dv)[names(gw_level_dv) == approved_col] <- "gw_level_cd"
-  
+  buffer <- stats::setNames(data.frame(buffer_dates, buffer_j), c("Date", "J"))
+
   plot_data <- gw_level_dv %>%
     dplyr::right_join(buffer, by = c("Date", "J")) %>%
     dplyr::left_join(historical_stats, by = "J") %>%
     dplyr::mutate(group = "Approved Daily\nMin & Max")
   
   line_data <- plot_data %>%
-    dplyr::select(Date, gw_level_cd, gw_level, middle) %>%
-    tidyr::pivot_longer(-Date:-gw_level_cd) %>%
-    dplyr::mutate(group = ifelse(name == "gw_level",
-                          ifelse(gw_level_cd == "A", "Approved daily value", "Provisional daily value"),
+    dplyr::select(Date, Approve, Value, middle) %>%
+    tidyr::pivot_longer(-Date:-Approve) %>%
+    dplyr::mutate(group = ifelse(name == "Value",
+                          ifelse(Approve == "A", "Approved daily value", "Provisional daily value"),
                           historical_name)) %>%
-    dplyr::select(-gw_level_cd, -name) %>%
+    dplyr::select(-Approve, -name) %>%
     dplyr::filter(!is.na(value))
   
   line_data$group <- ordered(line_data$group, 
@@ -853,6 +916,10 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
 #' 
 #' @param gw_level_dv data frame, daily groundwater level data
 #' from \code{readNWISdv}
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -878,34 +945,41 @@ daily_gwl_2yr_plot <- function(gw_level_dv, parameter_cd = NA,
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' daily_frequency_table(gw_level_dv,
+#'                       NULL,
 #'                       parameter_cd = "62610")
 #' 
-
-daily_frequency_table <- function(gw_level_dv, parameter_cd = NA, 
+#' gwl_data <- L2701_example_data$Discrete
+#' daily_frequency_table(gw_level_dv,
+#'                       gwl_data,
+#'                       parameter_cd = "62610")
+daily_frequency_table <- function(gw_level_dv,
+                                  gwl_data,
+                                  parameter_cd = NA, 
                                   date_col = NA, value_col = NA, 
                                   approved_col = NA, stat_cd = NA) {
   
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
+  
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
 
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv,
-                                value_col, stat_cd = stat_cd)
-  approved_col <- ifelse(is.na(approved_col),
-                         paste0(value_col, "_cd"),
-                         approved_col)  
+  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
+                                  gwl_data)
   
-  if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
-    stop("Not all columns found in gw_level_dv")
-  }
-  
-  historical_stats <- gw_level_dv[grepl("A", gw_level_dv[[approved_col]]), ] 
-  historical_stats$DOY <- as.numeric(as.character(historical_stats[[date_col]], "%j")) 
-  historical_stats$results <- historical_stats[[value_col]]
-  
+  historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] 
+  historical_stats$DOY <- as.numeric(as.character(historical_stats$Date, "%j")) 
+
   historical_stats <- historical_stats %>%
     dplyr::group_by(DOY) %>%
-    dplyr::summarize(max = max(results, na.rm = TRUE),
-              mean = mean(results, na.rm = TRUE),
-              min = min(results, na.rm = TRUE),
+    dplyr::summarize(max = max(Value, na.rm = TRUE),
+              mean = mean(Value, na.rm = TRUE),
+              min = min(Value, na.rm = TRUE),
               points = dplyr::n())
   return(historical_stats)
   
@@ -915,6 +989,10 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' 
 #' @param gw_level_dv daily groundwater level data
 #' from readNWISdv
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -940,40 +1018,47 @@ daily_frequency_table <- function(gw_level_dv, parameter_cd = NA,
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' daily_gwl_summary(gw_level_dv,
+#'                   gwl_data = NULL,
 #'                   parameter_cd = p_code_dv)
 #' 
-daily_gwl_summary <- function(gw_level_dv, parameter_cd = NA,
+#' gwl_data <- L2701_example_data$Discrete
+#' daily_gwl_summary(gw_level_dv,
+#'                   gwl_data = gwl_data,
+#'                   parameter_cd = p_code_dv)
+daily_gwl_summary <- function(gw_level_dv, 
+                              gwl_data,
+                              parameter_cd = NA,
                               date_col = NA,
                               value_col = NA,
                               approved_col = NA,
                               stat_cd = NA) {
   
-  gw_level <- gw_level_cd <- ".dplyr"
-
-  date_col <- ifelse(is.na(date_col), "Date", date_col)
-  value_col <- get_value_column(parameter_cd, gw_level_dv,
-                                value_col, stat_cd = stat_cd)
-  approved_col <- ifelse(is.na(approved_col),
-                        paste0(value_col, "_cd"),
-                        approved_col)   
-
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
-  if(!all(c(date_col, value_col, approved_col) %in% names(gw_level_dv))) {
-    stop("Not all columns found in gw_level_dv")
-  }
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
+  
+  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
+                                  gwl_data)
     
-  gw_level_dv$gw_level <- gw_level_dv[[value_col]]
-  gw_level_dv$gw_level_cd <- gw_level_dv[[approved_col]]
+  gw_level_dv$gw_level <- gw_level_dv$Value
+  gw_level_dv$gw_level_cd <- gw_level_dv$Approve
   
   gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv$gw_level_cd), ]
   
-  begin_date <- min(gw_level_dv[,date_col], na.rm = TRUE)
-  end_date <- max(gw_level_dv[,date_col], na.rm = TRUE)
+  begin_date <- min(gw_level_dv$Date, na.rm = TRUE)
+  end_date <- max(gw_level_dv$Date, na.rm = TRUE)
   days <- nrow(gw_level_dv)
   percent_complete <- round(days/length(seq.Date(begin_date, end_date, by = "day")) * 100, 0)
   lowest_level <- min(gw_level_dv$gw_level, na.rm = TRUE)
   highest_level <- max(gw_level_dv$gw_level, na.rm = TRUE)
-  quant <- quantile(gw_level_dv$gw_level, 
+  quant <- quantile(gw_level_dv$gw_level, type = 6,
                     probs = c(0.05, 0.1, 0.25, 0.5, 0.75, 0.90, 0.95),
                     na.rm = TRUE)
   dv_summary <- data.frame(

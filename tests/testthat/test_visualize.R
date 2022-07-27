@@ -55,28 +55,41 @@ test_that("SC Chloride graphs and table", {
 test_that("Monthly frequency plot", {
   
   plot <- monthly_frequency_plot(L2701_example_data$Daily,
-                                 date_col = "Date",
-                                 value_col = "X_62610_00001",
-                                 approved_col = "X_62610_00001_cd")
+                                 L2701_example_data$Discrete,
+                                 parameter_cd = "62610")
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("plot_month", "ymin", "ymax", "month", "value", "group") %in%
                 plot_data_elements))
   
+  plot <- monthly_frequency_plot(L2701_example_data$Daily,
+                                 NULL,
+                                 parameter_cd = "62610")
+  
+  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("plot_month", "ymin", "ymax", "month", "value", "group") %in%
+                    plot_data_elements))
+  
 })
 
 test_that("Weekly frequency plot", {
   
-  plot <- weekly_frequency_plot(L2701_example_data$Daily, 
-                                date_col = "Date",
-                                value_col = "X_62610_00001",
-                                approved_col = "X_62610_00001_cd")
+  plot <- weekly_frequency_plot(L2701_example_data$Daily,
+                                L2701_example_data$Discrete,
+                                parameter_cd = "62610")
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("plot_week", "x", "y", "ymin", "group", "plot_week_last") %in%
                     plot_data_elements))
+  
+  plot <- weekly_frequency_plot(L2701_example_data$Daily,
+                                L2701_example_data$Discrete,
+                                date_col = c("Date", "lev_dt"),
+                                value_col = c("X_62610_00001", "sl_lev_va"),
+                                approved_col = c("X_62610_00001_cd", "lev_status_cd"))
   
 })
 
@@ -90,10 +103,7 @@ test_that("Field gwl plot", {
   plot2 <- gwl_plot_all(dv, gwl_data,
                         parameter_cd = "62610",
                         plot_title = "title",)
-  
-  expect_true(all(c("lev_dt", "sl_lev_va", "lev_age_cd") %in%
-                    names(plot_out[["data"]])))
-  
+
   expect_true(all(c("data", "layers", "scales",     
                     "mapping", "theme", "coordinates",
                     "facet","plot_env", "labels") %in%
@@ -115,17 +125,20 @@ test_that("Field gwl plot", {
                                 parameter_cd = "62610",
                                 add_trend = FALSE)
   plot_elements <- unlist(lapply(plot_with_gwl$layers, function(x) {names(x$data)}))
-  expect_true(all(c("lev_dt", "sl_lev_va", "year") %in%
+  expect_true(all(c("Date", "Value", "year", "Approve") %in%
                     plot_elements))
   
 })
 
 test_that("Daily gwl plot", {
   
-  gwl_data <- L2701_example_data$Daily
-  plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
+  gw_daily <- L2701_example_data$Daily
+  gw_discrete <- L2701_example_data$Discrete
   
-  plot1 <- daily_gwl_2yr_plot(gwl_data, 
+  plot_title <- attr(gw_daily, "siteInfo")[["station_nm"]]
+  
+  plot1 <- daily_gwl_2yr_plot(gw_daily, 
+                              gwl_data = NULL,
                               date_col = "Date",
                               value_col = "X_62610_00001",
                               approved_col = "X_62610_00001_cd",
@@ -138,7 +151,7 @@ test_that("Daily gwl plot", {
   expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
   
-  plot2 <- daily_gwl_2yr_plot(gwl_data,
+  plot2 <- daily_gwl_2yr_plot(gw_daily, 
                               date_col = "Date",
                               value_col = "X_62610_00001",
                               approved_col = "X_62610_00001_cd",
@@ -150,6 +163,19 @@ test_that("Daily gwl plot", {
   
   expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
+  
+  plot3 <- daily_gwl_2yr_plot(gw_daily, 
+                              gw_discrete, 
+                              parameter_cd = "62610",
+                              historical_stat = "median",
+                              month_breaks = FALSE,
+                              plot_title = plot_title)
+  
+  plot_data_elements <- unlist(lapply(plot3$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("Date", "middle", "min", "max") %in%
+                    plot_data_elements))
+  
   
 })
 

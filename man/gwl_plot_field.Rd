@@ -73,8 +73,9 @@ Function to create the field groundwater level data plot.
 gwl_data <- L2701_example_data$Discrete
 plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
-gwl_plot_field(gwl_data, paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
+gwl_plot_field(gwl_data, 
+               plot_title = paste(plot_title,
+                                  pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
                parameter_cd = "62610",
                flip_y = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
