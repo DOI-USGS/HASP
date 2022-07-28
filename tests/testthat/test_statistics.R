@@ -54,6 +54,17 @@ test_that("Weekly frequency table", {
   expect_equal(as.numeric(head(wft2$nYears, 6)), c(41, 42, 42, 42, 43, 43))
   expect_equal(tail(wft2$minMed, 6), c(-42.2, -42.4, -42.8, -42.7, -42.5, -40.9), tolerance = 0.05)
   
+  wft2 <- weekly_frequency_table(L2701_example_data$Daily, 
+                                 L2701_example_data$Discrete,
+                                 parameter_cd = "62610",
+                                 flip = TRUE)
+  
+  expect_equal(as.numeric(head(wft2$p25, 6)),
+               c(-17.55, -17.50, -17.77, -18.28, -18.34, -18.82),
+               tolerance = 0.05)
+  expect_equal(as.numeric(head(wft2$nYears, 6)), c(41, 42, 42, 42, 43, 43))
+  expect_equal(tail(wft2$minMed, 6), 
+               c(-4.91, -4.71, -4.89, -4.71, -4.86, -5.11), tolerance = 0.05)
   
 })
 
@@ -85,6 +96,20 @@ test_that("Monthly frequency table", {
                c(43, 43, 43, 42, 42, 41))
   expect_equal(tail(mft2$maxMed, 6),
                c(-6.790, -4.820, -3.240, -4.800, -4.535, -4.860),
+               tolerance = 0.05)
+  
+  mft2 <- monthly_frequency_table(L2701_example_data$Daily,
+                                  L2701_example_data$Discrete,
+                                  parameter_cd = "62610",
+                                  flip = TRUE)
+  
+  expect_equal(as.numeric(head(mft2$p75, 6)),
+               c(-29.1325, -29.2400, -30.0975, -32.6600, -35.0900, -33.0800),
+               tolerance = 0.05)
+  expect_equal(as.numeric(head(mft2$nYears, 6)),
+               c(43, 43, 43, 42, 42, 41))
+  expect_equal(tail(mft2$maxMed, 6),
+               c(-37.515, -32.360, -32.670, -36.155, -41.400, -42.450),
                tolerance = 0.05)
   
 })
