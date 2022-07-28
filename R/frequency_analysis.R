@@ -16,6 +16,8 @@
 #' @param approved_col name of column to get provisional/approved status.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
+#' @param flip logical. If \code{TRUE}, flips labels so that the lower numbers 
+#' are in the higher percentages. Default is \code{TRUE}. 
 #' 
 #' @return a data frame of monthly groundwater level statistics including the
 #' 5th, 10th, 25th, 75th, 90th, and 95th percentiles; the number of
@@ -41,14 +43,49 @@
 #'                                              gwl_data,
 #'                                              parameter_cd = "62610")
 #' head(monthly_frequency_combo) 
+#' monthly_flip <- monthly_frequency_table(gw_level_dv,
+#'                                         gwl_data,
+#'                                         parameter_cd = "62610",
+#'                                         flip = TRUE)
+#' head(monthly_flip) 
 monthly_frequency_table <- function(gw_level_dv, 
                                     gwl_data, 
                                     parameter_cd = NA,
                                     date_col = NA,
                                     value_col = NA, 
                                     approved_col = NA,
-                                    stat_cd = NA) {
+                                    stat_cd = NA,
+                                    flip = FALSE) {
 
+  monthly_stats <- stats_by_interval(interval = "month",
+                                     gw_level_dv = gw_level_dv, 
+                                     gwl_data = gwl_data, 
+                                     parameter_cd = parameter_cd,
+                                     date_col = date_col,
+                                     value_col = value_col, 
+                                     approved_col = approved_col,
+                                     stat_cd = stat_cd,
+                                     flip = flip)
+
+  return(monthly_stats)
+  
+}
+
+
+stats_by_interval <- function(interval,
+                              gw_level_dv, 
+                              gwl_data, 
+                              parameter_cd = NA,
+                              date_col = NA,
+                              value_col = NA, 
+                              approved_col = NA,
+                              stat_cd = NA,
+                              flip = FALSE){
+  
+  interval <- match.arg(interval, 
+                        choices = c("week", "month", "year"), 
+                        several.ok = FALSE)
+  
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = gwl_data, 
                            parameter_cd = parameter_cd,
@@ -68,28 +105,56 @@ monthly_frequency_table <- function(gw_level_dv,
   gw_level_dv$year = as.POSIXlt(gw_level_dv$Date)$year + 1900
   gw_level_dv$month = as.POSIXlt(gw_level_dv$Date)$mon + 1
   gw_level_dv$week = as.POSIXlt(gw_level_dv$Date)$yday%/%7 + 1
-
+  
+  gw_level_dv$interval <- gw_level_dv[[interval]]
+  
   annual_stats <- gw_level_dv %>%
-    dplyr::group_by(year, month) %>%
+    dplyr::group_by(year, interval) %>%
     dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
-    dplyr::group_by(month) %>%
+    dplyr::group_by(interval) %>%
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
-              maxMed = max(median, na.rm = TRUE))
+                     maxMed = max(median, na.rm = TRUE))
   
-  monthly_stats <- gw_level_dv %>%
-    dplyr::group_by(month) %>%
-    dplyr::summarize(p5 = quantile(Value, probs=0.05, type = 6, na.rm=TRUE),
-              p10 = quantile(Value, probs=0.1, type = 6, na.rm=TRUE),
-              p25 = quantile(Value, probs=0.25, type = 6, na.rm=TRUE),
-              p50 = quantile(Value, probs=0.5, type = 6, na.rm=TRUE),
-              p75 = quantile(Value, probs=0.75, type = 6, na.rm=TRUE),
-              p90 = quantile(Value, probs=0.9, type = 6, na.rm=TRUE),
-              p95 = quantile(Value, probs=0.95, type = 6,na.rm=TRUE),
-              nYears = length(unique(year))) %>%
-    dplyr::left_join(annual_stats, by = "month")
+  stats <- gw_level_dv %>%
+    dplyr::group_by(interval) %>%
+    dplyr::summarize(p5_1 = quantile(Value, probs=0.05, type = 6, na.rm=TRUE),
+                     p10_1 = quantile(Value, probs=0.1, type = 6, na.rm=TRUE),
+                     p25_1 = quantile(Value, probs=0.25, type = 6, na.rm=TRUE),
+                     p50 = quantile(Value, probs=0.5, type = 6, na.rm=TRUE),
+                     p75_1 = quantile(Value, probs=0.75, type = 6, na.rm=TRUE),
+                     p90_1 = quantile(Value, probs=0.9, type = 6, na.rm=TRUE),
+                     p95_1 = quantile(Value, probs=0.95, type = 6, na.rm=TRUE),
+                     nYears = length(unique(year))) %>%
+    dplyr::left_join(annual_stats, by = "interval")
   
-  return(monthly_stats)
+  if(flip){
+    names(stats)[names(stats) == "p5_1"] <- "p95"
+    names(stats)[names(stats) == "p10_1"] <- "p90"
+    names(stats)[names(stats) == "p25_1"] <- "p75"
+    names(stats)[names(stats) == "p75_1"] <- "p25"
+    names(stats)[names(stats) == "p90_1"] <- "p10"
+    names(stats)[names(stats) == "p95_1"] <- "p05"
+    names(stats)[names(stats) == "minMed"] <- "maxMedium"
+    names(stats)[names(stats) == "maxMed"] <- "minMedium"
+    names(stats)[names(stats) == "maxMedium"] <- "maxMed"
+    names(stats)[names(stats) == "minMedium"] <- "minMed"
+  } else {
+    names(stats)[names(stats) == "p5_1"] <- "p05"
+    names(stats)[names(stats) == "p10_1"] <- "p10"
+    names(stats)[names(stats) == "p25_1"] <- "p25"
+    names(stats)[names(stats) == "p75_1"] <- "p75"
+    names(stats)[names(stats) == "p90_1"] <- "p90"
+    names(stats)[names(stats) == "p95_1"] <- "p95"
+  }
   
+  stats <- stats[, c("interval",
+                     "p05", "p10", "p25", "p50",
+                     "p75", "p90", "p95",
+                     "nYears", "minMed", "maxMed" )]
+  
+  names(stats)[names(stats) == "interval"] <- interval
+  
+  return(stats)
 }
 
 #' Plot monthly frequency analysis
@@ -116,7 +181,7 @@ monthly_frequency_table <- function(gw_level_dv,
 #' @param plot_title the title to use on the plot.
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
-#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}. 
 #' @return a ggplot with rectangles representing the historical monthly percentile,
 #' black triangles representing the historical monthly median, and red diamonds
@@ -139,7 +204,7 @@ monthly_frequency_table <- function(gw_level_dv,
 #'                                             parameter_cd = "62610",
 #'                                             plot_title = "L2701 Groundwater Level",
 #'                                             y_axis_label = label,
-#'                                             flip_y = FALSE)
+#'                                             flip = FALSE)
 #' monthly_frequency
 #' 
 #' gwl_data <- L2701_example_data$Discrete
@@ -149,14 +214,14 @@ monthly_frequency_table <- function(gw_level_dv,
 #'                        parameter_cd = "62610",
 #'                        plot_title = "L2701 Groundwater Level",
 #'                        y_axis_label = label,
-#'                        flip_y = FALSE)
+#'                        flip = FALSE)
 #' 
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
 #'                                                  gwl_data,
 #'                                                  parameter_cd = "62610",
 #'                                                  y_axis_label = label,
 #'                                                  plot_title = "L2701 Groundwater Level", 
-#'                                                  flip_y = TRUE)
+#'                                                  flip = TRUE)
 #' monthly_frequency_flip 
 #' 
 monthly_frequency_plot <- function(gw_level_dv, 
@@ -170,7 +235,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    subtitle = "U.S. Geological Survey",
                                    plot_range = c("Past year"),
                                    y_axis_label = "",
-                                   flip_y = FALSE) {
+                                   flip = FALSE) {
   
   
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
@@ -197,7 +262,8 @@ monthly_frequency_plot <- function(gw_level_dv,
                                              parameter_cd = NA,
                                              date_col = c("Date", "Date"),
                                              value_col = c("Value", "Value"),
-                                             approved_col = c("Approve", "Approve"))
+                                             approved_col = c("Approve", "Approve"),
+                                             flip = flip)
   
   # Find the bounds of the plot.
   if(plot_range == "Past year") {
@@ -220,13 +286,6 @@ monthly_frequency_plot <- function(gw_level_dv,
   site_statistics <- dplyr::left_join(site_statistics,
                                       plot_month_lookup, by = "month")
   
-  if(flip_y){
-    site_statistics <- site_statistics %>% 
-      dplyr::rename(p95_new = p5, p90_new = p10, p75_new = p25, 
-                    p25_new = p75, p10_new = p90, p5_new = p95)
-    names(site_statistics) <- gsub("_new", "", names(site_statistics))
-  }
-  
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
     dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
@@ -234,7 +293,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                         names_to = "name", 
                         values_to = "value")
   
-  cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
+  cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
   
@@ -279,7 +338,6 @@ monthly_frequency_plot <- function(gw_level_dv,
   points_plot <- dplyr::bind_rows(site_statistics_med,
                                   points_plot)
     
-  
   # Assign colors and shapes
   rectangle_colors <- c("5 - 10" = "firebrick4",
                         "10 - 25" = "orange2",
@@ -336,7 +394,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                                 override.aes = list(shape = point_shapes)),
            shape = "none",
            fill = guide_legend(order = 2))  
-  if(flip_y){
+  if(flip){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }
@@ -358,6 +416,8 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
 #' approval code), and a column representing the measured value (either lev_va,
 #' sl_lev_va, or value).
+#' @param flip logical. If \code{TRUE}, flips labels so that the lower numbers 
+#' are in the higher percentages. Default is \code{TRUE}. 
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -391,50 +451,30 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv,
 #'                                            gwl_data,
 #'                                            parameter_cd = "62610") 
+#' weekly_frequency
+#' weekly_flip <- weekly_frequency_table(gw_level_dv,
+#'                                            gwl_data,
+#'                                            parameter_cd = "62610",
+#'                                            flip = TRUE) 
+#' weekly_flip
 weekly_frequency_table <- function(gw_level_dv, 
                                    gwl_data,
                                    parameter_cd = NA,
                                    date_col = NA, 
                                    value_col = NA, 
                                    approved_col = NA,
-                                   stat_cd = NA) {
+                                   stat_cd = NA,
+                                   flip = FALSE) {
 
-  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
-                           gwl_data = gwl_data, 
-                           parameter_cd = parameter_cd,
-                           date_col = date_col,
-                           value_col = value_col, 
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
-  
-  gw_level_dv <- data_list$gw_level_dv
-  gwl_data <- data_list$gwl_data
-  
-  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
-                                  gwl_data)
-  
-  gw_level_dv <- gw_level_dv[ grepl("A", gw_level_dv$Approve), ]
-  gw_level_dv$year <- as.POSIXlt(gw_level_dv$Date)$year + 1900
-  gw_level_dv$week <- as.POSIXlt(gw_level_dv$Date)$yday%/%7 + 1
-
-  annual_stats <- gw_level_dv %>%
-    dplyr::group_by(year, week) %>%
-    dplyr::summarize(median = median(Value, na.rm = TRUE)) %>%
-    dplyr::group_by(week) %>%
-    dplyr::summarize(minMed = min(median, na.rm = TRUE),
-                     maxMed = max(median, na.rm = TRUE))
-  
-  weekly_stats <- gw_level_dv %>%
-    dplyr::group_by(week) %>%
-    dplyr::summarize(p5 = quantile(Value, probs=0.05, na.rm=TRUE),
-              p10 = quantile(Value, probs=0.1, type = 6, na.rm=TRUE),
-              p25 = quantile(Value, probs=0.25, type = 6, na.rm=TRUE),
-              p50 = quantile(Value, probs=0.5, type = 6, na.rm=TRUE),
-              p75 = quantile(Value, probs=0.75, type = 6, na.rm=TRUE),
-              p90 = quantile(Value, probs=0.9, type = 6, na.rm=TRUE),
-              p95 = quantile(Value, probs=0.95, type = 6,na.rm=TRUE),
-              nYears = length(unique(year))) %>%
-    dplyr::left_join(annual_stats, by = "week")
+  weekly_stats <- stats_by_interval(interval = "week",
+                                     gw_level_dv = gw_level_dv, 
+                                     gwl_data = gwl_data, 
+                                     parameter_cd = parameter_cd,
+                                     date_col = date_col,
+                                     value_col = value_col, 
+                                     approved_col = approved_col,
+                                     stat_cd = stat_cd,
+                                     flip = flip)
   
   return(weekly_stats)
   
@@ -467,7 +507,7 @@ weekly_frequency_table <- function(gw_level_dv,
 #' @param plot_title the title to use on the plot
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
-#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{FALSE}. 
 #' @return a ggplot object with rectangles representing the historical weekly percentiles,
 #' and points representing the historical median and daily values
@@ -498,7 +538,7 @@ weekly_frequency_table <- function(gw_level_dv,
 #' weekly_frequency_plot(gw_level_dv, 
 #'                       gwl_data = gwl_data,
 #'                       parameter_cd = "62610", 
-#'                       flip_y = TRUE)
+#'                       flip = TRUE)
 #' 
 weekly_frequency_plot <- function(gw_level_dv, 
                                   gwl_data, 
@@ -511,7 +551,7 @@ weekly_frequency_plot <- function(gw_level_dv,
                                   plot_title = "", 
                                   subtitle = "U.S. Geological Survey",
                                   y_axis_label = "",
-                                  flip_y = FALSE) {
+                                  flip = FALSE) {
   
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = gwl_data, 
@@ -538,14 +578,7 @@ weekly_frequency_plot <- function(gw_level_dv,
                                             date_col = c("Date", "Date"), 
                                             value_col = c("Value", "Value"),
                                             approved_col = c("Approve", "Approve"))
-  
-  if(flip_y){
-    site_statistics <- site_statistics %>% 
-      dplyr::rename(p95_new = p5, p90_new = p10, p75_new = p25, 
-             p25_new = p75, p10_new = p90, p5_new = p95)
-    names(site_statistics) <- gsub("_new", "", names(site_statistics))
-  }
-  
+
   # Find the bounds of the plot
   if(plot_range == "Past year") {
     plot_end <- last_day(date) + 1
@@ -571,7 +604,7 @@ weekly_frequency_plot <- function(gw_level_dv,
     dplyr::select(-week, -nYears, -minMed, -maxMed) %>%
     tidyr::pivot_longer(cols = -plot_week, names_to = "name", values_to = "value")
   
-  cols <- list(c("p5", "p10"), c("p10", "p25"), c("p25", "p75"),
+  cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
   plot_list <- data.frame()
@@ -704,7 +737,7 @@ weekly_frequency_plot <- function(gw_level_dv,
              fill = guide_legend(order = 2))     
   }
   
-  if(flip_y){
+  if(flip){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }
@@ -738,7 +771,7 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' @param plot_title the title to use on the plot
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label to use for the y axis
-#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{FALSE}. 
 #' @return a ggplot object with a ribbon indicating the historical daily range,
 #' the historical daily mean or median, and approved and provisional
@@ -772,7 +805,7 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'                    plot_title = "Groundwater Level", 
 #'                    month_breaks = TRUE,
 #'                    historical_stat = "median",
-#'                    flip_y = FALSE)
+#'                    flip = FALSE)
 daily_gwl_2yr_plot <- function(gw_level_dv, 
                                gwl_data,
                                parameter_cd = NA,
@@ -785,7 +818,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
                                plot_title = "",
                                subtitle = "U.S. Geological Survey",
                                y_axis_label = "",
-                               flip_y = FALSE) {
+                               flip = FALSE) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = NULL, 
@@ -900,7 +933,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
     
   } 
   
-  if(flip_y){
+  if(flip){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }

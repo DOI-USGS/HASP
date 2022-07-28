@@ -141,7 +141,7 @@ kable(t(daily_summary_table))
 gwl_plot_field(gwl_data, 
                parameter_cd = parameterCd,
                plot_title = plot_title,
-               flip_y = FALSE)
+               flip = FALSE)
 ```
 
 
@@ -168,7 +168,7 @@ gwl_plot_all(gw_level_dv,
              y_label = y_label,
              plot_title = plot_title,
              parameter_cd = parameterCd,
-             flip_y = FALSE)
+             flip = FALSE)
 
 ```
 

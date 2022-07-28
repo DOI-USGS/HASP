@@ -17,7 +17,7 @@ daily_gwl_2yr_plot(
   plot_title = "",
   subtitle = "U.S. Geological Survey",
   y_axis_label = "",
-  flip_y = FALSE
+  flip = FALSE
 )
 }
 \arguments{
@@ -56,7 +56,7 @@ can be used to help define the value_col.}
 
 \item{y_axis_label}{the label to use for the y axis}
 
-\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{FALSE}.}
 }
 \value{
@@ -91,5 +91,5 @@ daily_gwl_2yr_plot(gw_level_dv,
                    plot_title = "Groundwater Level", 
                    month_breaks = TRUE,
                    historical_stat = "median",
-                   flip_y = FALSE)
+                   flip = FALSE)
 }

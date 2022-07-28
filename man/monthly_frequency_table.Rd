@@ -11,7 +11,8 @@ monthly_frequency_table(
   date_col = NA,
   value_col = NA,
   approved_col = NA,
-  stat_cd = NA
+  stat_cd = NA,
+  flip = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ which the code will try to get the column name automatically.}
 
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
+
+\item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers 
+are in the higher percentages. Default is \code{TRUE}.}
 }
 \value{
 a data frame of monthly groundwater level statistics including the
@@ -64,4 +68,9 @@ monthly_frequency_combo <- monthly_frequency_table(gw_level_dv,
                                              gwl_data,
                                              parameter_cd = "62610")
 head(monthly_frequency_combo) 
+monthly_flip <- monthly_frequency_table(gw_level_dv,
+                                        gwl_data,
+                                        parameter_cd = "62610",
+                                        flip = TRUE)
+head(monthly_flip) 
 }
