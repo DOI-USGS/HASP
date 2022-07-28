@@ -16,7 +16,7 @@ monthly_frequency_plot(
   subtitle = "U.S. Geological Survey",
   plot_range = c("Past year"),
   y_axis_label = "",
-  flip_y = FALSE
+  flip = FALSE
 )
 }
 \arguments{
@@ -53,7 +53,7 @@ in January.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 
-\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
 }
 \value{
@@ -77,7 +77,7 @@ monthly_frequency <- monthly_frequency_plot(gw_level_dv,
                                             parameter_cd = "62610",
                                             plot_title = "L2701 Groundwater Level",
                                             y_axis_label = label,
-                                            flip_y = FALSE)
+                                            flip = FALSE)
 monthly_frequency
 
 gwl_data <- L2701_example_data$Discrete
@@ -87,14 +87,14 @@ monthly_frequency_plot(gw_level_dv,
                        parameter_cd = "62610",
                        plot_title = "L2701 Groundwater Level",
                        y_axis_label = label,
-                       flip_y = FALSE)
+                       flip = FALSE)
 
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
                                                  gwl_data,
                                                  parameter_cd = "62610",
                                                  y_axis_label = label,
                                                  plot_title = "L2701 Groundwater Level", 
-                                                 flip_y = TRUE)
+                                                 flip = TRUE)
 monthly_frequency_flip 
 
 }

@@ -14,7 +14,7 @@
 #' @param parameter_cd Parameter code to be filtered to in a column specifically
 #' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
 #' can be set to \code{NA},and this argument will be ignored.
-#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
 #' @import ggplot2
 #' @rdname gwl_plot_field
@@ -32,11 +32,11 @@
 #'                plot_title = paste(plot_title,
 #'                                   pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
 #'                parameter_cd = "62610",
-#'                flip_y = FALSE)
+#'                flip = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
 #'                parameter_cd = "62611",
-#'                flip_y = FALSE)
+#'                flip = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
 #'                parameter_cd = "72019")
@@ -45,7 +45,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
                            date_col = "lev_dt",
                            value_col = NA,
                            approved_col = "lev_age_cd",
-                           flip_y = TRUE, y_label = ""){
+                           flip = TRUE, y_label = ""){
   
   plot_out <- gwl_plot_all(NULL, 
                            gwl_data, 
@@ -57,7 +57,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
                            y_label = y_label,
                            plot_title = plot_title,
                            add_trend = FALSE,
-                           flip_y = flip_y)
+                           flip = flip)
   return(plot_out)
   
 }
@@ -126,7 +126,7 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #'              NULL, 
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title,
-#'              flip_y = FALSE) 
+#'              flip = FALSE) 
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              gwl_data, 
@@ -151,7 +151,7 @@ gwl_plot_all <- function(gw_level_dv,
                          y_label = "GWL",
                          plot_title = "",
                          add_trend = FALSE,
-                         flip_y = FALSE){
+                         flip = FALSE){
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = gwl_data, 
@@ -250,7 +250,7 @@ gwl_plot_all <- function(gw_level_dv,
              color = guide_legend(order = 2))
   }
   
-  if(flip_y){
+  if(flip){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }

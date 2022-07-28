@@ -16,7 +16,7 @@ weekly_frequency_plot(
   plot_title = "",
   subtitle = "U.S. Geological Survey",
   y_axis_label = "",
-  flip_y = FALSE
+  flip = FALSE
 )
 }
 \arguments{
@@ -54,7 +54,7 @@ in January.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 
-\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{FALSE}.}
 }
 \value{
@@ -86,6 +86,6 @@ weekly_frequency_plot(gw_level_dv,
 weekly_frequency_plot(gw_level_dv, 
                       gwl_data = gwl_data,
                       parameter_cd = "62610", 
-                      flip_y = TRUE)
+                      flip = TRUE)
 
 }

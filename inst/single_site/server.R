@@ -83,7 +83,7 @@ shinyServer(function(input, output, session) {
   
   setup <- reactive({
     
-    p_code <- rawData_data[["p_code_df"]]
+    p_code <- input$pcode
     site_id <- input$siteID
     stat_cd <- input$statcd
     pcodeqw <- rawData_data[["p_code_qw"]]
@@ -117,7 +117,7 @@ plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
 
 pcodes_qw <- c("', paste(pcodeqw, collapse = '", "'),'")
 qw_data <- readWQPqw(siteNumbers = paste0("USGS-", site_id),
-                     parameterCd = "")')
+                     parameterCd = pcodes_qw)')
         
     }
     
