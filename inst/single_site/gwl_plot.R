@@ -68,10 +68,7 @@ gwl_plot <- reactive({
 
   gwl_plot <-  gwl_plot_all(dv_data, 
                             gwl_data, 
-                            date_col = columns$date_col,
-                            value_col = columns$value_col,
                             parameter_cd = p_code_dv, 
-                            approved_col = columns$approved_col,
                             plot_title = plot_title,
                             y_label = columns$y_label,
                             add_trend = TRUE, 
@@ -122,17 +119,12 @@ gwl_plot_out <- reactive({
   y_label <- columns$y_label
 
   code_out <- paste0(setup(),'
-val_col <- c("', paste(val_col, collapse = '", "'),'")
-date_col <- c("', paste(date_col, collapse = '", "'),'")
-approved_col <- c("', paste(approved_col, collapse = '", "'),'")
 y_label <- "', y_label,'"
 flip <- ', input$flip_plot,'
 gwl_plot <-  gwl_plot_all(gw_level_dv, 
                           gwl_data, 
-                          date_col = date_col,
-                          value_col = val_col,
                           parameter_cd = "', p_code_dv,'",
-                          approved_col = approved_col,
+                          stat_cd = "', input$statcd,'",
                           y_label = y_label,
                           plot_title = plot_title,
                           flip = flip,
@@ -164,10 +156,7 @@ week_plot <- reactive({
   
   dv_data <- dvData()
   gwl_data <- gwlData()
-  
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
   
@@ -176,6 +165,7 @@ week_plot <- reactive({
     week_plot <-  weekly_frequency_plot(dv_data, 
                                         gwl_data,
                                         parameter_cd = p_code_dv,
+                                        stat_cd = stat_cd,
                                         plot_title = plot_title, 
                                         y_axis_label = y_label,
                                         flip = input$flip_plot) 
@@ -192,12 +182,10 @@ week_table_df <- reactive({
   
   p_code_dv <- input$pcode
   stat_cd <- input$statcd
-  
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
 
   week_tab <-  weekly_frequency_table(dvData(), gwlData(),
                                       parameter_cd = p_code_dv,
+                                      stat_cd = stat_cd,
                                       flip = input$flip_plot) %>% 
     select("Week" = week,
            "Lowest<br>median" = minMed,
@@ -226,16 +214,14 @@ week_plot_out <- reactive({
   
   p_code_dv <- input$pcode
   stat_cd <- input$statcd
-  
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   code_out <- paste0(setup(),'
 flip <- ', input$flip_plot,'
 
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
                                     gwl_data,
                                     parameter_cd = "', p_code_dv,'",
+                                    stat_cd = "', stat_cd, '"
                                     plot_title = plot_title,
                                     flip = flip)
 week_plot
@@ -243,6 +229,7 @@ week_plot
 week_table <- weekly_frequency_table(gw_level_dv,
                                      gwl_data,
                                      parameter_cd = "', p_code_dv,'",
+                                     stat_cd = "', stat_cd, '"
                                      flip = flip)
 
 # To save:
@@ -262,16 +249,14 @@ year2_plot <- reactive({
   )
   p_code_dv <- input$pcode
   stat_cd <- input$statcd
-  
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
                                      gwlData(),
                                      parameter_cd = p_code_dv,
+                                     stat_cd = stat_cd,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
                                      month_breaks = TRUE, 
@@ -290,11 +275,11 @@ year2_table_df <- reactive({
   )
   p_code_dv <- input$pcode
   stat_cd <- input$statcd
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
+
   daily_tab <-  daily_frequency_table(dvData(),
                                       gwlData(),
-                                      parameter_cd = p_code_dv) %>%
+                                      parameter_cd = p_code_dv,
+                                      stat_cd = stat_cd) %>%
     rename("DOY" = DOY,
            "Maximum" = max,
            "Mean" = mean,
@@ -319,16 +304,14 @@ year2_plot_out <- reactive({
   
   p_code_dv <- input$pcode
   stat_cd <- input$statcd
-  
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   code_out <- paste0(setup(),'
 flip <- ', input$flip_plot, '
 
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
                                   gwl_data,
                                   parameter_cd = "', p_code_dv, '",
+                                  stat_cd = "', stat_cd, '"
                                   plot_title = plot_title,
                                   historical_stat = "mean",
                                   flip = flip,
@@ -336,7 +319,9 @@ year2_plot <-  daily_gwl_2yr_plot(gw_level_dv,
 year2_plot
 
 daily_frequencies <- daily_frequency_table(gw_level_dv,
-                                           gwl_data)
+                                           gwl_data,
+                                           parameter_cd = "', p_code_dv, '"
+                                           stat_cd = "', stat_cd, '")
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
@@ -354,9 +339,7 @@ month_plot <- reactive({
   )
   p_code_dv <-  input$pcode
   stat_cd <- input$statcd
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
@@ -365,10 +348,10 @@ month_plot <- reactive({
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         gwlData(),
                                         parameter_cd = p_code_dv,
+                                        stat_cd = stat_cd,
                                         plot_title = plot_title, 
                                         y_axis_label = y_label,
-                                        flip = input$flip_plot) 
-  
+                                        flip = input$flip_plot)
   
   return(month_plot)
   
@@ -380,12 +363,11 @@ month_table_df <- reactive({
   )
   p_code_dv <- input$pcode 
   stat_cd <- input$statcd
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   month_tab <-  monthly_frequency_table(dvData(), 
                                         gwlData(),
                                         parameter_cd = p_code_dv,
+                                        stat_cd = stat_cd,
                                         flip = input$flip_plot) %>%
     select(month, minMed, p25, p50, p75, maxMed, nYears) %>%
     mutate(month = month.abb[month]) %>%
@@ -415,23 +397,22 @@ month_plot_out <- reactive({
   
   p_code_dv <- input$pcode
   stat_cd <- input$statcd
-  
-  value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
-  approv_col <- paste0(value_col, "_cd")
-  
+
   code_out <- paste0(setup(),'
 flip <- ', input$flip_plot, '
 
 month_plot <-  monthly_frequency_plot(gw_level_dv,  
                                       gwl_data,
-                                      parameter_cd = ', p_code_dv,'
+                                      parameter_cd = "', p_code_dv,'"
+                                      stat_cd = "', stat_cd, '"
                                       plot_title = plot_title,
                                       flip = flip)
 month_plot
 
 month_frequencies <- monthly_frequency_table(gw_level_dv,  
                                              gwl_data,
-                                             parameter_cd = ', p_code_dv,'
+                                             parameter_cd = "', p_code_dv,'"
+                                             stat_cd = "', stat_cd, '"
                                              flip = flip)
 # To save:
 # Fiddle with height and width (in inches) for best results:
