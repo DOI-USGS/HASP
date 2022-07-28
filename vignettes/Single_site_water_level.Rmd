@@ -169,7 +169,7 @@ gwl_plot_all(gw_level_dv, gwl_data,
              y_label = y_label,
              parameter_cd = parameterCd,
              plot_title = site_title,
-             add_trend = TRUE, flip_y = FALSE)
+             add_trend = TRUE, flip = FALSE)
 
 
 ```
@@ -210,7 +210,7 @@ gwl_plot_all(NULL, gwl_data,
              y_label = y_label,
              parameter_cd = parameterCd,
              plot_title = site_title, 
-             flip_y = FALSE)
+             flip = FALSE)
 
 
 ```
