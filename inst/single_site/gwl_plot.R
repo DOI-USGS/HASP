@@ -75,7 +75,7 @@ gwl_plot <- reactive({
                             plot_title = plot_title,
                             y_label = columns$y_label,
                             add_trend = TRUE, 
-                            flip_y = input$flip_plot) 
+                            flip = input$flip_plot) 
   
   return(gwl_plot)
   
@@ -126,6 +126,7 @@ val_col <- c("', paste(val_col, collapse = '", "'),'")
 date_col <- c("', paste(date_col, collapse = '", "'),'")
 approved_col <- c("', paste(approved_col, collapse = '", "'),'")
 y_label <- "', y_label,'"
+flip <- ', input$flip_plot,'
 gwl_plot <-  gwl_plot_all(gw_level_dv, 
                           gwl_data, 
                           date_col = date_col,
@@ -134,6 +135,7 @@ gwl_plot <-  gwl_plot_all(gw_level_dv,
                           approved_col = approved_col,
                           y_label = y_label,
                           plot_title = plot_title,
+                          flip = flip,
                           add_trend = TRUE)
 gwl_plot
 
@@ -161,6 +163,7 @@ week_plot <- reactive({
   stat_cd <- input$statcd
   
   dv_data <- dvData()
+  gwl_data <- gwlData()
   
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
@@ -171,13 +174,11 @@ week_plot <- reactive({
   y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   
     week_plot <-  weekly_frequency_plot(dv_data, 
-                                      date_col = "Date",
-                                      value_col = value_col,
-                                      parameter_cd = p_code_dv,
-                                      approved_col = approv_col,
-                                      plot_title = plot_title, 
-                                      y_axis_label = y_label,
-                                      flip_y = input$flip_plot) 
+                                        gwl_data,
+                                        parameter_cd = p_code_dv,
+                                        plot_title = plot_title, 
+                                        y_axis_label = y_label,
+                                        flip = input$flip_plot) 
   
   return(week_plot)
   
@@ -195,11 +196,9 @@ week_table_df <- reactive({
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
 
-  week_tab <-  weekly_frequency_table(dvData(), 
-                                      date_col = "Date",
+  week_tab <-  weekly_frequency_table(dvData(), gwlData(),
                                       parameter_cd = p_code_dv,
-                                      value_col = value_col,
-                                      approved_col = approv_col) %>% 
+                                      flip = input$flip_plot) %>% 
     select("Week" = week,
            "Lowest<br>median" = minMed,
            "10th" = p10,
@@ -232,22 +231,19 @@ week_plot_out <- reactive({
   approv_col <- paste0(value_col, "_cd")
   
   code_out <- paste0(setup(),'
-val_col <- "',value_col, '"
-approved_col <- "', approv_col,'"
+flip <- ', input$flip_plot,'
 
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
-                                    date_col = "Date",
-                                    value_col = val_col,
+                                    gwl_data,
                                     parameter_cd = "', p_code_dv,'",
-                                    approved_col = approved_col,
-                                    plot_title = plot_title)
+                                    plot_title = plot_title,
+                                    flip = flip)
 week_plot
 
 week_table <- weekly_frequency_table(gw_level_dv,
-                                     value_col = val_col,
+                                     gwl_data,
                                      parameter_cd = "', p_code_dv,'",
-                                     approved_col = approved_col,
-                                     date_col = "Date")
+                                     flip = flip)
 
 # To save:
 # Fiddle with height and width (in inches) for best results:
@@ -274,15 +270,13 @@ year2_plot <- reactive({
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   year2_graph <-  daily_gwl_2yr_plot(dvData(), 
-                                     date_col = "Date",
-                                     value_col = value_col,
+                                     gwlData(),
                                      parameter_cd = p_code_dv,
-                                     approved_col = approv_col,
                                      plot_title = plot_title,
                                      historical_stat = "mean",
                                      month_breaks = TRUE, 
                                      y_axis_label = y_label,
-                                     flip_y = input$flip_plot)
+                                     flip = input$flip_plot)
  
   
   
@@ -299,10 +293,8 @@ year2_table_df <- reactive({
   value_col <- paste("X", p_code_dv, stat_cd, sep = "_")
   approv_col <- paste0(value_col, "_cd")
   daily_tab <-  daily_frequency_table(dvData(),
-                                      parameter_cd = p_code_dv,
-                                      date_col = "Date",
-                                      value_col = value_col,
-                                      approved_col = approv_col) %>%
+                                      gwlData(),
+                                      parameter_cd = p_code_dv) %>%
     rename("DOY" = DOY,
            "Maximum" = max,
            "Mean" = mean,
@@ -332,23 +324,19 @@ year2_plot_out <- reactive({
   approv_col <- paste0(value_col, "_cd")
   
   code_out <- paste0(setup(),'
-val_col <- "',value_col, '"
-approved_col <- "', approv_col,'"
+flip <- ', input$flip_plot, '
 
 year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
-                                  date_col = "Date",
-                                  value_col = val_col,
+                                  gwl_data,
                                   parameter_cd = "', p_code_dv, '",
-                                  approved_col = approved_col,
                                   plot_title = plot_title,
                                   historical_stat = "mean",
+                                  flip = flip,
                                   month_breaks = TRUE)
 year2_plot
 
 daily_frequencies <- daily_frequency_table(gw_level_dv,
-                                           date_col = "Date",
-                                           value_col = val_col,
-                                           approved_col = approved_col)
+                                           gwl_data)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
@@ -375,13 +363,11 @@ month_plot <- reactive({
   y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
   
   month_plot <-  monthly_frequency_plot(dvData(), 
-                                        date_col = "Date",
+                                        gwlData(),
                                         parameter_cd = p_code_dv,
-                                        value_col = value_col,
-                                        approved_col = approv_col,
                                         plot_title = plot_title, 
                                         y_axis_label = y_label,
-                                        flip_y = input$flip_plot) 
+                                        flip = input$flip_plot) 
   
   
   return(month_plot)
@@ -398,10 +384,9 @@ month_table_df <- reactive({
   approv_col <- paste0(value_col, "_cd")
   
   month_tab <-  monthly_frequency_table(dvData(), 
+                                        gwlData(),
                                         parameter_cd = p_code_dv,
-                                        date_col = "Date",
-                                        value_col = value_col,
-                                        approved_col = approv_col) %>%
+                                        flip = input$flip_plot) %>%
     select(month, minMed, p25, p50, p75, maxMed, nYears) %>%
     mutate(month = month.abb[month]) %>%
     rename("Month" = month,
@@ -435,21 +420,19 @@ month_plot_out <- reactive({
   approv_col <- paste0(value_col, "_cd")
   
   code_out <- paste0(setup(),'
-val_col <- "',value_col, '"
-approved_col <- "', approv_col,'"
-
+flip <- ', input$flip_plot, '
 
 month_plot <-  monthly_frequency_plot(gw_level_dv,  
-                                      date_col = "Date",
-                                      value_col = val_col,
-                                      approved_col = approved_col,
-                                      plot_title = plot_title)
+                                      gwl_data,
+                                      parameter_cd = ', p_code_dv,'
+                                      plot_title = plot_title,
+                                      flip = flip)
 month_plot
 
 month_frequencies <- monthly_frequency_table(gw_level_dv,  
-                                             date_col = "Date",
-                                             value_col = val_col,
-                                             approved_col = approved_col)
+                                             gwl_data,
+                                             parameter_cd = ', p_code_dv,'
+                                             flip = flip)
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.

@@ -577,7 +577,8 @@ weekly_frequency_plot <- function(gw_level_dv,
                                             gwl_data,
                                             date_col = c("Date", "Date"), 
                                             value_col = c("Value", "Value"),
-                                            approved_col = c("Approve", "Approve"))
+                                            approved_col = c("Approve", "Approve"),
+                                            flip = flip)
 
   # Find the bounds of the plot
   if(plot_range == "Past year") {
