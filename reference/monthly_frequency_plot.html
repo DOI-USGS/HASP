@@ -16,7 +16,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@
 <span>  subtitle <span class="op">=</span> <span class="st">"U.S. Geological Survey"</span>,</span>
 <span>  plot_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Past year"</span><span class="op">)</span>,</span>
 <span>  y_axis_label <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  flip_y <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  flip <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -138,7 +138,7 @@ in January.</p></dd>
 <dd><p>the label used for the y-axis of the plot.</p></dd>
 
 
-<dt>flip_y</dt>
+<dt>flip</dt>
 <dd><p>logical. If <code>TRUE</code>, flips the y axis so that the smallest number is on top.
 Default is <code>TRUE</code>.</p></dd>
 
@@ -166,7 +166,7 @@ showing the last year of groundwater level measurements.</p>
 <span class="r-in"><span>                                            parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
 <span class="r-in"><span>                                            plot_title <span class="op">=</span> <span class="st">"L2701 Groundwater Level"</span>,</span></span>
 <span class="r-in"><span>                                            y_axis_label <span class="op">=</span> <span class="va">label</span>,</span></span>
-<span class="r-in"><span>                                            flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                            flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">monthly_frequency</span></span></span>
 <span class="r-plt img"><img src="monthly_frequency_plot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -177,7 +177,7 @@ showing the last year of groundwater level measurements.</p>
 <span class="r-in"><span>                       parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
 <span class="r-in"><span>                       plot_title <span class="op">=</span> <span class="st">"L2701 Groundwater Level"</span>,</span></span>
 <span class="r-in"><span>                       y_axis_label <span class="op">=</span> <span class="va">label</span>,</span></span>
-<span class="r-in"><span>                       flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                       flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="monthly_frequency_plot-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">monthly_frequency_flip</span> <span class="op">&lt;-</span> <span class="fu">monthly_frequency_plot</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
@@ -185,7 +185,7 @@ showing the last year of groundwater level measurements.</p>
 <span class="r-in"><span>                                                 parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
 <span class="r-in"><span>                                                 y_axis_label <span class="op">=</span> <span class="va">label</span>,</span></span>
 <span class="r-in"><span>                                                 plot_title <span class="op">=</span> <span class="st">"L2701 Groundwater Level"</span>, </span></span>
-<span class="r-in"><span>                                                 flip_y <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                                 flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">monthly_frequency_flip</span> </span></span>
 <span class="r-plt img"><img src="monthly_frequency_plot-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

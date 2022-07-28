@@ -16,7 +16,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
 <span>  date_col <span class="op">=</span> <span class="st">"lev_dt"</span>,</span>
 <span>  value_col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  approved_col <span class="op">=</span> <span class="st">"lev_age_cd"</span>,</span>
-<span>  flip_y <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  flip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  y_label <span class="op">=</span> <span class="st">""</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -87,7 +87,7 @@
 <span>  y_label <span class="op">=</span> <span class="st">"GWL"</span>,</span>
 <span>  plot_title <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  add_trend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  flip_y <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  flip <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -123,7 +123,7 @@ based on parameter_cd</p></dd>
 <dd><p>name of approval column. Default is "lev_age_cd".</p></dd>
 
 
-<dt>flip_y</dt>
+<dt>flip</dt>
 <dd><p>logical. If <code>TRUE</code>, flips the y axis so that the smallest number is on top.
 Default is <code>TRUE</code>.</p></dd>
 
@@ -160,12 +160,12 @@ can be used to help define the value_col.</p></dd>
 <span class="r-in"><span>               plot_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
 <span class="r-in"><span>                                  <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>               parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
-<span class="r-in"><span>               flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gwl_plot_field-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
 <span class="r-in"><span>               <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62611"</span><span class="op">]</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>               parameter_cd <span class="op">=</span> <span class="st">"62611"</span>,</span></span>
-<span class="r-in"><span>               flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gwl_plot_field-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
 <span class="r-in"><span>                         <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"72019"</span><span class="op">]</span><span class="op">)</span>, </span></span>
@@ -185,7 +185,7 @@ can be used to help define the value_col.</p></dd>
 <span class="r-in"><span>             <span class="cn">NULL</span>, </span></span>
 <span class="r-in"><span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
 <span class="r-in"><span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>             flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></span>
+<span class="r-in"><span>             flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></span>
 <span class="r-plt img"><img src="gwl_plot_field-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gwl_plot_all</span><span class="op">(</span><span class="va">gw_level_dv</span>, </span></span>

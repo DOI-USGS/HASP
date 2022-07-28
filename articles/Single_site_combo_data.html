@@ -40,7 +40,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,9 +152,9 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Groundwater level above NAVD 1988, feet</td>
-<td align="left">2019-07-28</td>
+<td align="left">2019-07-29</td>
 <td align="left">2022-07-07</td>
-<td align="right">1076</td>
+<td align="right">1075</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
@@ -218,7 +218,7 @@ body {
 <table class="table">
 <thead><tr class="header">
 <th align="right">month</th>
-<th align="right">p5</th>
+<th align="right">p05</th>
 <th align="right">p10</th>
 <th align="right">p25</th>
 <th align="right">p50</th>
@@ -462,7 +462,7 @@ body {
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gwl_plot_field.html">gwl_plot_field</a></span><span class="op">(</span><span class="va">gwl_data</span>, </span>
 <span>               parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
 <span>               plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span>
-<span>               flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>               flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Single_site_combo_data_files/figure-html/fieldPlot-1.png" width="576"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">siteField</span> <span class="op">&lt;-</span> <span class="va">gwl_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -507,7 +507,7 @@ body {
 <span>             y_label <span class="op">=</span> <span class="va">y_label</span>,</span>
 <span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span>
 <span>             parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
-<span>             flip_y <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>             flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Single_site_combo_data_files/figure-html/dvPlot-1.png" width="576"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">siteDaily</span> <span class="op">&lt;-</span> <span class="va">gw_level_dv</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
