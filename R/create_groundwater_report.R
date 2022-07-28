@@ -1,6 +1,7 @@
 #' Generate HASP report
 #'
-#' @description Opens a template of the blanks sample report, optionally rendering it.
+#' @description Opens a template of the blanks sample report. Running the function
+#' will create a Rmd file. The file can be "knit" as-is, or adjusted before rendering.
 #'
 #' @param siteID character. USGS site ID, should be a groundwater site.
 #' @param report_folder character. Report folder, can be full path or partial.

@@ -21,7 +21,8 @@ create_groundwater_report(
 \item{output_type}{should be either "word", "html", or "pdf".}
 }
 \description{
-Opens a template of the blanks sample report, optionally rendering it.
+Opens a template of the blanks sample report. Running the function
+will create a Rmd file. The file can be "knit" as-is, or adjusted before rendering.
 }
 \examples{
 

@@ -131,6 +131,50 @@ test_that("Normalized composite hydrodata", {
 })
 
 
+test_that("Create html reports", {
+
+  report_folder <- system.file("extdata", package="HASP")
+  
+  report_name <-  "My_sample_report_test"
+  
+  path_to_rmd <- file.path(report_folder, 
+                           paste0(report_name, ".Rmd"))
+  
+  exists_before <- file.exists(path_to_rmd)
+  expect_false(exists_before)
+  
+  create_groundwater_report(siteID = "424520070562401",
+                            report_name = report_name,
+                            report_folder = report_folder,
+                            output_type = "html")
+  
+  exists_after <- file.exists(path_to_rmd)
+  expect_true(exists_after)
+  file.remove(path_to_rmd)
+})
+
+test_that("Create word reports", {
+  
+  report_folder <- system.file("extdata", package="HASP")
+  
+  report_name <-  "My_sample_report_test"
+  
+  path_to_rmd <- file.path(report_folder, 
+                           paste0(report_name, ".Rmd"))
+  
+  exists_before <- file.exists(path_to_rmd)
+  expect_false(exists_before)
+  
+  create_groundwater_report(siteID = "424520070562401",
+                            report_name = report_name,
+                            report_folder = report_folder,
+                            output_type = "word")
+  
+  exists_after <- file.exists(path_to_rmd)
+  expect_true(exists_after)
+  file.remove(path_to_rmd)
+})
+
 test_that("water year", {
   
   x <- c("2010-01-01", "1994-02", "1980", "2009-11-01")
