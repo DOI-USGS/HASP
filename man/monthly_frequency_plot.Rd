@@ -6,6 +6,7 @@
 \usage{
 monthly_frequency_plot(
   gw_level_dv,
+  gwl_data,
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
@@ -15,11 +16,16 @@ monthly_frequency_plot(
   subtitle = "U.S. Geological Survey",
   plot_range = c("Past year"),
   y_axis_label = "",
-  flip_y = FALSE
+  flip = FALSE
 )
 }
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained from \code{readNWISdv}}
+
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
@@ -47,7 +53,7 @@ in January.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 
-\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
 }
 \value{
@@ -67,17 +73,28 @@ statCd <- "00001"
 gw_level_dv <- L2701_example_data$Daily
 label <- dataRetrieval::readNWISpCode(p_code_dv)[["parameter_nm"]]
 monthly_frequency <- monthly_frequency_plot(gw_level_dv,
+                                            gwl_data = NULL,
                                             parameter_cd = "62610",
                                             plot_title = "L2701 Groundwater Level",
                                             y_axis_label = label,
-                                            flip_y = FALSE)
+                                            flip = FALSE)
 monthly_frequency
 
+gwl_data <- L2701_example_data$Discrete
+
+monthly_frequency_plot(gw_level_dv,
+                       gwl_data = gwl_data,
+                       parameter_cd = "62610",
+                       plot_title = "L2701 Groundwater Level",
+                       y_axis_label = label,
+                       flip = FALSE)
+
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-                                             parameter_cd = "62610",
-                                             y_axis_label = label,
-                                             plot_title = "L2701 Groundwater Level", 
-                                             flip_y = TRUE)
+                                                 gwl_data,
+                                                 parameter_cd = "62610",
+                                                 y_axis_label = label,
+                                                 plot_title = "L2701 Groundwater Level", 
+                                                 flip = TRUE)
 monthly_frequency_flip 
 
 }

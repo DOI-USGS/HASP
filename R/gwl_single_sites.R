@@ -14,7 +14,7 @@
 #' @param parameter_cd Parameter code to be filtered to in a column specifically
 #' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
 #' can be set to \code{NA},and this argument will be ignored.
-#' @param flip_y logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
 #' @import ggplot2
 #' @rdname gwl_plot_field
@@ -28,14 +28,15 @@
 #' gwl_data <- L2701_example_data$Discrete
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 #' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
-#' gwl_plot_field(gwl_data, paste(plot_title,
-#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
+#' gwl_plot_field(gwl_data, 
+#'                plot_title = paste(plot_title,
+#'                                   pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
 #'                parameter_cd = "62610",
-#'                flip_y = FALSE)
+#'                flip = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
 #'                parameter_cd = "62611",
-#'                flip_y = FALSE)
+#'                flip = FALSE)
 #' gwl_plot_field(gwl_data,  paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
 #'                parameter_cd = "72019")
@@ -44,45 +45,19 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
                            date_col = "lev_dt",
                            value_col = NA,
                            approved_col = "lev_age_cd",
-                           flip_y = TRUE, y_label = ""){
+                           flip = TRUE, y_label = ""){
   
-  value_col <- get_value_column(parameter_cd, gwl_data, value_col )
-
-  if(!all(c(date_col, value_col, approved_col) %in% names(gwl_data))){
-    missing_cols <- c(date_col, value_col, approved_col)[!c(date_col,
-                                                           value_col,
-                                                           approved_col) %in%
-                                                      names(gwl_data)]
-    stop("data frame gwl_data doesn't include mandatory column(s):", 
-         paste(missing_cols, collapse = ", "))
-  }
-  
-  gwl_data <- filter_pcode(gwl_data, parameter_cd)
-
-  if(!is.na(parameter_cd)){
-    y_label <- dataRetrieval::readNWISpCode(parameter_cd)[["parameter_nm"]]
-  } 
-  
-  
-  gwl_data$year <- as.numeric(format(gwl_data[[date_col]], "%Y")) + 
-    as.numeric(as.character(gwl_data[[date_col]], "%j"))/365
-  
-  plot_out <- ggplot(data = gwl_data,
-         aes_string(x = "year", y = value_col)) +
-    geom_line(linetype = "dashed", color = "blue") +
-    geom_point(aes_string(color = approved_col), size = 1) +
-    hasp_framework("Years", y_label, plot_title = plot_title) +
-    scale_color_manual("EXPLANATION\nWater-level\nmeasurement",
-                       values = c("A" = "blue", "P" = "red"), 
-                       labels = c("A" = "Approved",
-                                  "P" = "Provisional")) +
-    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
-                                           name = NULL)) 
-
-  if(flip_y){
-    plot_out <- plot_out +
-      scale_y_continuous(trans = "reverse")
-  }
+  plot_out <- gwl_plot_all(NULL, 
+                           gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = NA,
+                           y_label = y_label,
+                           plot_title = plot_title,
+                           add_trend = FALSE,
+                           flip = flip)
   return(plot_out)
   
 }
@@ -92,7 +67,8 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
   
   if(is.na(parameter_cd)){
     if("parameter_cd" %in% names(df)){
-      parameter_cd <- unique(df$parameter_cd)[1]
+      parameter_cds <- unique(df$parameter_cd)
+      which(parameter_cds)
       message("parameter_cd unspecified, using", parameter_cd)
     }
   }
@@ -123,14 +99,7 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
     }
     return(value_col)
   }
-  
-  if(!is.na(parameter_cd)){
-    if(parameter_cd == "72019"){
-      value_col <- "lev_va"
-    } else if(is.na(value_col)){
-      value_col <- "sl_lev_va"
-    } 
-  } 
+
   
   return(value_col)
 }
@@ -157,7 +126,7 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #'              NULL, 
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title,
-#'              flip_y = FALSE) 
+#'              flip = FALSE) 
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              gwl_data, 
@@ -182,81 +151,28 @@ gwl_plot_all <- function(gw_level_dv,
                          y_label = "GWL",
                          plot_title = "",
                          add_trend = FALSE,
-                         flip_y = FALSE){
+                         flip = FALSE){
 
-  includes_gwl <- !is.null(gwl_data) || !all(is.na(gwl_data))
-  includes_dv <- !is.null(gw_level_dv) || !all(is.na(gw_level_dv))
-  includes_both <- includes_gwl & includes_dv
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
-  if(includes_gwl){
-    
-    if(includes_both){
-      date_col_per <- date_col[2]
-      value_col_per <- value_col[2]
-      approved_col_per <- approved_col[2]
-      
-    } else {
-      date_col_per <- date_col[1]
-      value_col_per <- value_col[1]
-      approved_col_per <- approved_col[1]
-      
-    }
-    date_col_per <- ifelse(is.na(date_col_per), "lev_dt", date_col_per)
-    approved_col_per <- ifelse(is.na(approved_col_per), "lev_age_cd", approved_col_per)
-    value_col_per <- get_value_column(parameter_cd, gwl_data, value_col_per, stat_cd)
-      
-    gwl_data <- filter_pcode(gwl_data, parameter_cd)
-    
-    gwl_data[, value_col_per] <- as.numeric(gwl_data[[value_col_per]])
-    
-    if(all(is.na(gwl_data[[value_col_per]]))){
-      value_col_init <- value_col_per
-      if(value_col_per == "lev_va") {
-        value_col_per <- "sl_lev_va"
-      } else if (value_col_per == "sl_lev_va"){
-        value_col_per <- "lev_va"
-      }
-      message("All data in", value_col_init, "are NA, switching to: ", value_col_per)
-    }
-    
-    if(!all(c(date_col_per, value_col_per, approved_col_per) %in% names(gwl_data))){
-      stop("gwl_data data frame doesn't include all specified columns")
-    }
-    
-    gwl_data$year <- as.numeric(format(gwl_data[[date_col_per]], "%Y")) + 
-      as.numeric(as.character(gwl_data[[date_col_per]], "%j"))/365
-    
-  }
-  
-  if(includes_dv){
-
-    date_col_dv <- ifelse(is.na(date_col[1]), "Date", date_col[1])
-    value_col_dv <- get_value_column(parameter_cd, gw_level_dv, value_col[1])
-    approved_dv <- ifelse(is.na(approved_col[1]),
-                          paste0(value_col_dv, "_cd"),
-                          approved_col[1])   
-    
-    if(!all(c(date_col_dv, value_col_dv, approved_dv) %in% names(gw_level_dv))){
-      stop("gw_level_dv data frame doesn't include all specified columns")
-    }
-    
-    #Convert date column to date just in case its a POSIXct:
-    gw_level_dv[[date_col_dv]] <- as.Date(gw_level_dv[[date_col_dv]])
-    
-  }
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
   
   linetype = c('solid', 'dashed')
   
-  if(includes_dv){
-    complete_df <- data.frame(Date = seq.Date(from = min(gw_level_dv[[date_col_dv]], na.rm = TRUE),
-                                       to = max(gw_level_dv[[date_col_dv]], na.rm = TRUE), 
+  if(data_list$includes["dv"]){
+    complete_df <- data.frame(Date = seq.Date(from = min(gw_level_dv$Date, na.rm = TRUE),
+                                       to = max(gw_level_dv$Date, na.rm = TRUE), 
                                        by = "day"))
 
-    gw_lev <- gw_level_dv[ , c(date_col_dv, value_col_dv, approved_dv)]
-    names(gw_lev) <- c("Date", "Value", "Approve")
     gw_complete <- complete_df %>% 
-      dplyr::left_join(gw_lev, 
-                by = "Date") %>% 
+      dplyr::left_join(gw_level_dv, by = "Date") %>% 
       dplyr::mutate(year = as.numeric(format(Date, "%Y")) + 
                               as.numeric(as.character(Date, "%j"))/365,
                      is_na_before = is.na(dplyr::lag(Value)),
@@ -279,7 +195,8 @@ gwl_plot_all <- function(gw_level_dv,
     }
     
     plot_out <- plot_out +
-      scale_color_manual(ifelse(includes_both,"Daily Data", "EXPLANATION\nDaily Data"),
+      scale_color_manual(ifelse(data_list$includes["both"],
+                                "Daily Data", "EXPLANATION\nDaily Data"),
                          values = c("A" = "blue", "P" = "red"), 
                          labels = c("A" = "Approved",
                                     "P" = "Provisional"))
@@ -288,12 +205,11 @@ gwl_plot_all <- function(gw_level_dv,
     
   }
   
-  if(includes_gwl){
+  if(data_list$includes["gwl"]){
     plot_out <- plot_out +
       geom_point(data = gwl_data,
-                 aes_string(x = "year", 
-                            y = value_col_per, 
-                            fill = approved_col_per),
+                 aes(x = year, y = Value, 
+                     fill = Approve),
                  size = 1.5, shape = 21, color = "transparent") +
       scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
                         values = c("A" = "navy", "P" = "red"), 
@@ -306,11 +222,11 @@ gwl_plot_all <- function(gw_level_dv,
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) 
   
-  if(add_trend & includes_dv){
+  if(add_trend & data_list$includes["dv"]){
     
     gw_monthly <- monthly_mean(gw_level_dv, 
-                               date_col = date_col_dv, 
-                               value_col = value_col_dv)
+                               date_col = "Date", 
+                               value_col = "Value")
     
     seg_df <- create_segs(gw_monthly, 
                           date_col = "mid_date",
@@ -334,7 +250,7 @@ gwl_plot_all <- function(gw_level_dv,
              color = guide_legend(order = 2))
   }
   
-  if(flip_y){
+  if(flip){
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }
@@ -351,6 +267,141 @@ zero_on_top <- function(x){
     }
   }
   return(on_top)
+}
+
+set_up_data <- function(gw_level_dv, 
+                        gwl_data, 
+                        parameter_cd,
+                        date_col,
+                        value_col, 
+                        approved_col,
+                        stat_cd){
+  
+  includes_gwl <- !is.null(gwl_data) ||
+    !all(is.na(gwl_data))
+  
+  includes_dv <- !is.null(gw_level_dv) ||
+    !all(is.na(gw_level_dv)) 
+  
+  includes_both <- includes_gwl & includes_dv
+  
+  if(includes_gwl && nrow(gwl_data) != 0){
+    
+    checkmate::assert_data_frame(gwl_data)
+    
+    if(includes_both){
+      date_col_per <- date_col[2]
+      value_col_per <- value_col[2]
+      approved_col_per <- approved_col[2]
+      
+    } else {
+      date_col_per <- date_col[1]
+      value_col_per <- value_col[1]
+      approved_col_per <- approved_col[1]
+      
+    }
+
+    date_col_per <- ifelse(is.na(date_col_per), "lev_dt", date_col_per)
+    checkmate::assert_string(date_col_per)
+    
+    approved_col_per <- ifelse(is.na(approved_col_per), "lev_age_cd", approved_col_per)
+    checkmate::assert_string(approved_col_per)
+    
+    if(is.na(value_col_per)){
+      if(!is.na(parameter_cd)){
+        if(parameter_cd == "72019"){
+          value_col_per <- "lev_va"
+        } else if(is.na(value_col)){
+          value_col_per <- "sl_lev_va"
+        } 
+      } 
+    }
+    
+    checkmate::assert_string(value_col_per)
+    
+    if(is.na(parameter_cd)){
+      if("parameter_cd" %in% names(gwl_data)){
+        pcodes <- unique(gwl_data$parameter_cd)
+        for(i in pcodes){
+          if(grepl(i, value_col[1])){
+            parameter_cd <- i
+          }
+        }
+      }
+    }
+    
+    gwl_data <- filter_pcode(gwl_data, parameter_cd)
+    
+    gwl_data[, value_col_per] <- as.numeric(gwl_data[[value_col_per]])
+    
+    if(all(is.na(gwl_data[[value_col_per]]))){
+      value_col_init <- value_col_per
+      if(value_col_per == "lev_va") {
+        value_col_per <- "sl_lev_va"
+      } else if (value_col_per == "sl_lev_va"){
+        value_col_per <- "lev_va"
+      }
+      message("All data in", value_col_init, "are NA, switching to: ", value_col_per)
+    }
+    
+    
+    needed_cols <- c(date_col_per, value_col_per, approved_col_per)
+    checkmate::assertNames(names(gwl_data), must.include = needed_cols)
+
+    gwl_data$year <- as.numeric(format(gwl_data[[date_col_per]], "%Y")) + 
+      as.numeric(as.character(gwl_data[[date_col_per]], "%j"))/365
+    
+    gwl_data$Date <- gwl_data[[date_col_per]]
+    gwl_data$Value <- gwl_data[[value_col_per]]
+    gwl_data$Approve <- gwl_data[[approved_col_per]]
+    
+    gwl_data <- gwl_data[, c("year", "Date", "Value", "Approve")]
+  } else {
+    gwl_data <- data.frame(year = numeric(),
+                           Date = as.Date(character()),
+                           Value = numeric(),
+                           Approve = character())
+
+  }
+  
+  if(includes_dv && nrow(gw_level_dv) != 0){
+    
+    checkmate::assert_data_frame(gw_level_dv)
+    
+    date_col_dv <- ifelse(is.na(date_col[1]), "Date", date_col[1])
+    value_col_dv <- get_value_column(parameter_cd, gw_level_dv, value_col[1])
+    approved_dv <- ifelse(is.na(approved_col[1]),
+                          paste0(value_col_dv, "_cd"),
+                          approved_col[1])   
+    
+    needed_cols <- c(date_col_dv, value_col_dv, approved_dv)
+    checkmate::assertNames(names(gw_level_dv), must.include = needed_cols)
+    
+    
+    if(!all(c(date_col_dv, value_col_dv, approved_dv) %in% names(gw_level_dv))){
+      stop("gw_level_dv data frame doesn't include all specified columns")
+    }
+    
+    #Convert date column to date just in case its a POSIXct:
+    gw_level_dv$Date <- as.Date(gw_level_dv[[date_col_dv]])
+    
+    gw_level_dv$Value <- as.numeric(gw_level_dv[[value_col_dv]])
+    gw_level_dv$Approve <- gw_level_dv[[approved_dv]]
+
+    gw_level_dv <- gw_level_dv[, c("Date", "Value", "Approve")]
+    
+  } else {
+    gw_level_dv <- data.frame(Date = integer(),
+                              Value = numeric(),
+                              Approve = character())
+  }
+  
+  includes <- c(includes_gwl, includes_dv, includes_both)
+  names(includes) <- c("gwl", "dv", "both")
+  
+  return(list(gw_level_dv = gw_level_dv,
+              gwl_data = gwl_data,
+              includes = includes))
 }
 
 filter_pcode <- function(df, pcode){

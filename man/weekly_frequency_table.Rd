@@ -6,16 +6,23 @@
 \usage{
 weekly_frequency_table(
   gw_level_dv,
+  gwl_data,
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
   approved_col = NA,
-  stat_cd = NA
+  stat_cd = NA,
+  flip = FALSE
 )
 }
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
 from \code{readNWISdv}.}
+
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
@@ -32,6 +39,9 @@ which the code will try to get the column name automatically.}
 
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
+
+\item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers 
+are in the higher percentages. Default is \code{TRUE}.}
 }
 \value{
 a data frame of weekly frequency analysis
@@ -47,6 +57,19 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 weekly_frequency <- weekly_frequency_table(gw_level_dv,
+                                           NULL,
                                            parameter_cd = "62610")
 head(weekly_frequency)
+
+gwl_data <- L2701_example_data$Discrete
+
+weekly_frequency <- weekly_frequency_table(gw_level_dv,
+                                           gwl_data,
+                                           parameter_cd = "62610") 
+weekly_frequency
+weekly_flip <- weekly_frequency_table(gw_level_dv,
+                                           gwl_data,
+                                           parameter_cd = "62610",
+                                           flip = TRUE) 
+weekly_flip
 }

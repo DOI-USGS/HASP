@@ -72,10 +72,16 @@ if(any(pcodes$data_type_cd == "dv")){
   gw_level_dv <- dataRetrieval::readNWISdv(siteID,
                             available_pcodes,
                             statCd = available_statCds)
+} else {
+  gw_level_dv <-  L2701_example_data$Discrete
+  gw_level_dv <- gw_level_dv[-1:-nrow(gw_level_dv),]
 }
 # Field GWL measured:
 if(any(pcodes$data_type_cd == "gw")){
   gwl_data <- dataRetrieval::readNWISgwl(siteID)
+} else {
+  gwl_data <-  L2701_example_data$Discrete
+  gwl_data <- gwl_data[-1:-nrow(gwl_data),]
 }
 ```
 
@@ -85,10 +91,11 @@ if(any(pcodes$data_type_cd == "gw")){
 
 ```{r monthlyFreq}
 monthly_frequency_plot(gw_level_dv,
+                       gwl_data,
                        parameter_cd = parameterCd,
                        stat_cd = statCd, 
                        plot_title = siteID, 
-                       flip_y = flip,
+                       flip = flip,
                        y_axis_label = yaxis)
 
 ```
@@ -97,14 +104,20 @@ monthly_frequency_plot(gw_level_dv,
 
 ```{r}
 month_table <- monthly_frequency_table(gw_level_dv,
-                       parameter_cd = parameterCd,
-                       stat_cd = statCd)
+                                       gwl_data,
+                                       parameter_cd = parameterCd,
+                                       stat_cd = statCd,
+                                       flip = flip)
 
-knitr::kable(month_table, digits = 1) %>%
-    kableExtra::kable_styling()%>%
-    kableExtra::row_spec(as.integer(strftime(Sys.Date(), format = "%m")),
-                         bold = TRUE,
-                         hline_after = TRUE)
+if(type == "html"){
+  knitr::kable(month_table, digits = 1) %>%
+      kableExtra::kable_styling()%>%
+      kableExtra::row_spec(as.integer(strftime(Sys.Date(), format = "%m")),
+                           bold = TRUE,
+                           hline_after = TRUE)
+} else {
+  knitr::kable(month_table, digits = 1)
+}
 
 ```
 
@@ -114,10 +127,11 @@ knitr::kable(month_table, digits = 1) %>%
 ```{r weeklyFrequency}
 
 weekly_frequency_plot(gw_level_dv, 
+                      gwl_data,
                       parameter_cd = parameterCd, 
                       stat_cd = statCd,
                       plot_title = siteID,
-                      flip_y = flip,
+                      flip = flip,
                       y_axis_label = yaxis)
 
 
@@ -129,18 +143,22 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 
 ```{r weekly_table}
 weekly_table <- weekly_frequency_table(gw_level_dv, 
+                                       gwl_data, 
                                        parameter_cd = parameterCd, 
-                                       stat_cd = statCd) 
+                                       stat_cd = statCd,
+                                       flip = flip) 
 
 todays_week <- as.integer(strftime(Sys.Date(), format = "%V"))
 
-  
-knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1) %>%
-    kableExtra::kable_styling()%>%
-    kableExtra::row_spec(5,
-                         bold = TRUE,
-                         hline_after = TRUE)
-
+if(type == "html"){
+  knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1) %>%
+      kableExtra::kable_styling()%>%
+      kableExtra::row_spec(5,
+                           bold = TRUE,
+                           hline_after = TRUE)
+} else {
+  knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1)
+}
 
 
 ```
@@ -150,10 +168,11 @@ knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1) %>%
 
 ```{r dailyPlotShow, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
+                   gwl_data,
                    parameter_cd = parameterCd,
                    plot_title = siteID,
                    stat_cd = statCd,
-                   flip_y = flip,
+                   flip = flip,
                    historical_stat = "mean",
                    month_breaks = TRUE,
                    y_axis_label = yaxis)
@@ -165,16 +184,21 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 
 ```{r dailyShow2}
 daily_table <- daily_frequency_table(gw_level_dv, 
+                                     gwl_data,
                                      parameter_cd = parameterCd,
                                      stat_cd = statCd) 
 
 todays_day <- as.POSIXlt(Sys.Date())$yday
 
-knitr::kable(daily_table[(todays_day-4):(todays_day + 5),]) %>%
-    kableExtra::kable_styling()%>%
-    kableExtra::row_spec(5,
-                         bold = TRUE,
-                         hline_after = TRUE)
+if(type == "html"){
+  knitr::kable(daily_table[(todays_day-4):(todays_day + 5),]) %>%
+      kableExtra::kable_styling()%>%
+      kableExtra::row_spec(5,
+                           bold = TRUE,
+                           hline_after = TRUE)
+} else {
+  knitr::kable(daily_table[(todays_day-4):(todays_day + 5),])
+}
 ```
 
 
@@ -187,7 +211,7 @@ gwl_plot_all(gw_level_dv, gwl_data,
              y_label = yaxis,
              parameter_cd = parameterCd, 
              stat_cd = statCd,
-             flip_y = flip,
+             flip = flip,
              plot_title = siteID,
              add_trend = TRUE)
 
@@ -237,7 +261,7 @@ kable(trend_result, digits = 1)
 ```{r manualPlot}
 gwl_plot_all(NULL, gwl_data,
              y_label = yaxis,
-             flip_y = flip,
+             flip = flip,
              parameter_cd = parameterCd,
              plot_title = siteID)
 

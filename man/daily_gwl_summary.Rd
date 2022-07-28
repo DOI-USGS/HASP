@@ -6,6 +6,7 @@
 \usage{
 daily_gwl_summary(
   gw_level_dv,
+  gwl_data,
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
@@ -16,6 +17,11 @@ daily_gwl_summary(
 \arguments{
 \item{gw_level_dv}{daily groundwater level data
 from readNWISdv}
+
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
@@ -48,6 +54,11 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 daily_gwl_summary(gw_level_dv,
+                  gwl_data = NULL,
                   parameter_cd = p_code_dv)
 
+gwl_data <- L2701_example_data$Discrete
+daily_gwl_summary(gw_level_dv,
+                  gwl_data = gwl_data,
+                  parameter_cd = p_code_dv)
 }

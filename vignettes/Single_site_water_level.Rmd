@@ -83,6 +83,8 @@ gwl_data <- readNWISgwl(siteID)
 
 site_title <- "L -2701\n263819081585801"
 
+y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+
 ```
 
 </td><td>
@@ -99,6 +101,8 @@ gw_level_dv <-  L2701_example_data$Daily
 # Field
 gwl_data <- L2701_example_data$Discrete
 
+y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+
 ```
 
 </td></tr> </table>
@@ -110,9 +114,10 @@ gwl_data <- L2701_example_data$Discrete
 ```{r weeklyFrequencyShow}
 
 weekly_frequency_plot(gw_level_dv, 
+                      gwl_data = gwl_data,
                       parameter_cd = parameterCd,
                       plot_title = site_title,
-                      y_axis_label = "Groundwater level above NGVD 1929, feet")
+                      y_axis_label = y_label)
 
 
 ```
@@ -123,6 +128,7 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 
 ```{r weekly_table}
 weekly_table <- weekly_frequency_table(gw_level_dv, 
+                                       gwl_data,
                                        parameter_cd = parameterCd)
 kable(head(weekly_table, 10), digits = 1)
 
@@ -133,11 +139,12 @@ kable(head(weekly_table, 10), digits = 1)
 
 ```{r dailyPlotShow, fig.width=9}
 daily_gwl_2yr_plot(gw_level_dv, 
+                   gwl_data,
                    parameter_cd = parameterCd,
                    plot_title = site_title,
                    historical_stat = "mean",
                    month_breaks = TRUE,
-                   y_axis_label = "Groundwater level above NGVD 1929, feet")
+                   y_axis_label = y_label)
 
 ```
 
@@ -146,6 +153,7 @@ Statistics of maximum daily water level record (DOY = day of year). Only showing
 
 ```{r dailyShow2}
 daily_table <- daily_frequency_table(gw_level_dv, 
+                                     gwl_data,
                                      parameter_cd = parameterCd) 
 
 kable(head(daily_table, 10))
@@ -156,14 +164,12 @@ kable(head(daily_table, 10))
 
 
 ```{r gwlTrendplot}
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm
-
 
 gwl_plot_all(gw_level_dv, gwl_data, 
              y_label = y_label,
              parameter_cd = parameterCd,
              plot_title = site_title,
-             add_trend = TRUE, flip_y = FALSE)
+             add_trend = TRUE, flip = FALSE)
 
 
 ```
@@ -204,7 +210,7 @@ gwl_plot_all(NULL, gwl_data,
              y_label = y_label,
              parameter_cd = parameterCd,
              plot_title = site_title, 
-             flip_y = FALSE)
+             flip = FALSE)
 
 
 ```

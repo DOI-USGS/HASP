@@ -12,7 +12,7 @@ gwl_plot_field(
   date_col = "lev_dt",
   value_col = NA,
   approved_col = "lev_age_cd",
-  flip_y = TRUE,
+  flip = TRUE,
   y_label = ""
 )
 
@@ -27,7 +27,7 @@ gwl_plot_all(
   y_label = "GWL",
   plot_title = "",
   add_trend = FALSE,
-  flip_y = FALSE
+  flip = FALSE
 )
 }
 \arguments{
@@ -49,7 +49,7 @@ based on parameter_cd}
 
 \item{approved_col}{name of approval column. Default is "lev_age_cd".}
 
-\item{flip_y}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
+\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
 
 \item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
@@ -73,14 +73,15 @@ Function to create the field groundwater level data plot.
 gwl_data <- L2701_example_data$Discrete
 plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
-gwl_plot_field(gwl_data, paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
+gwl_plot_field(gwl_data, 
+               plot_title = paste(plot_title,
+                                  pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
                parameter_cd = "62610",
-               flip_y = FALSE)
+               flip = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
                pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
                parameter_cd = "62611",
-               flip_y = FALSE)
+               flip = FALSE)
 gwl_plot_field(gwl_data,  paste(plot_title,
                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
                parameter_cd = "72019")
@@ -98,7 +99,7 @@ gwl_plot_all(gw_level_dv,
              NULL, 
              parameter_cd = "62610",
              plot_title = plot_title,
-             flip_y = FALSE) 
+             flip = FALSE) 
 
 gwl_plot_all(gw_level_dv, 
              gwl_data, 

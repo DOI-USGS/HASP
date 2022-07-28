@@ -76,7 +76,8 @@ cl_sc <- c("Chloride", "Specific conductance")
 qw_data <- readWQPqw(siteNumbers = paste0("USGS-", siteID),
                      parameterCd = cl_sc)
 
-plot_title <- "L -2701\n263819081585801 "
+plot_title <- "L -2701\n263819081585801"
+y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
 
 ```
 
@@ -87,7 +88,9 @@ plot_title <- "L -2701\n263819081585801 "
 
 ```{r monthlyFreqPlot}
 monthly_frequency_plot(gw_level_dv,
+                       gwl_data = gwl_data,
                        parameter_cd = parameterCd,
+                       y_axis_label = y_label,
                        plot_title = plot_title,
                        plot_range = "Past year")
 ```
@@ -95,6 +98,7 @@ monthly_frequency_plot(gw_level_dv,
 
 ```{r monthlyFreqTable}
 monthly_freq_table <- monthly_frequency_table(gw_level_dv,
+                                              gwl_data,
                                               parameter_cd = parameterCd) 
 kable(monthly_freq_table, digits = 1)
 ```
@@ -105,16 +109,18 @@ kable(monthly_freq_table, digits = 1)
 ```{r dailyPlotShow, fig.width=9}
 
 daily_gwl_2yr_plot(gw_level_dv, 
+                   gwl_data,
                    parameter_cd = parameterCd,
                    plot_title = plot_title, 
                    month_breaks = TRUE, 
                    historical_stat = "median",
-                   y_axis_label = "Groundwater level above NGVD 1929, feet")
+                   y_axis_label = y_label)
 ```
 
 
 ```{r dailySummary}
 daily_summary_table <- daily_gwl_summary(gw_level_dv, 
+                                         gwl_data,
                                          parameter_cd = parameterCd) %>%
   select("Begin Date" = begin_date,
          "End Date" = end_date,
@@ -135,7 +141,7 @@ kable(t(daily_summary_table))
 gwl_plot_field(gwl_data, 
                parameter_cd = parameterCd,
                plot_title = plot_title,
-               flip_y = FALSE)
+               flip = FALSE)
 ```
 
 
@@ -162,7 +168,7 @@ gwl_plot_all(gw_level_dv,
              y_label = y_label,
              plot_title = plot_title,
              parameter_cd = parameterCd,
-             flip_y = FALSE)
+             flip = FALSE)
 
 ```
 
