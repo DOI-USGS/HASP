@@ -12,7 +12,7 @@ test_that("Site summaries", {
   expect_type(summary_info2, "list")
   
   expect_true(all(names(summary_info2) %in% 
-                    c("site_no", "min_site",
+                    c("site", "min_site",
                       "max_site",  "mean_site",
                       "p10", "p25", "p75", "p50",     
                       "p90",  "count")))
