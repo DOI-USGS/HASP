@@ -62,6 +62,12 @@ statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
                                       max(pcodes$count_nu,na.rm = TRUE) & 
                                       pcodes$data_type_cd == "dv")][1]
 
+if(length(parameterCd) == 0){
+  parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
+                                      max(pcodes$count_nu,na.rm = TRUE) & 
+                                      pcodes$data_type_cd == "gw")])[1]
+}
+
 pCode_info <- dataRetrieval::readNWISpCode(parameterCd)
 yaxis <- pCode_info$parameter_nm
 
@@ -167,15 +173,18 @@ if(type == "html"){
 ### Daily 2-year
 
 ```{r dailyPlotShow, fig.width=9}
-daily_gwl_2yr_plot(gw_level_dv, 
-                   gwl_data,
-                   parameter_cd = parameterCd,
-                   plot_title = siteID,
-                   stat_cd = statCd,
-                   flip = flip,
-                   historical_stat = "mean",
-                   month_breaks = TRUE,
-                   y_axis_label = yaxis)
+if(nrow(gw_level_dv) > 0){
+  daily_gwl_2yr_plot(gw_level_dv, 
+                     parameter_cd = parameterCd,
+                     plot_title = siteID,
+                     stat_cd = statCd,
+                     flip = flip,
+                     historical_stat = "mean",
+                     month_breaks = TRUE,
+                     y_axis_label = yaxis)
+} else {
+  cat("Daily plot only useful for sites with daily data.")
+}
 
 ```
 
@@ -183,21 +192,23 @@ daily_gwl_2yr_plot(gw_level_dv,
 Statistics of maximum daily water level record (DOY = day of year). Only showing the first 10 rows for this example:
 
 ```{r dailyShow2}
-daily_table <- daily_frequency_table(gw_level_dv, 
-                                     gwl_data,
-                                     parameter_cd = parameterCd,
-                                     stat_cd = statCd) 
-
-todays_day <- as.POSIXlt(Sys.Date())$yday
-
-if(type == "html"){
-  knitr::kable(daily_table[(todays_day-4):(todays_day + 5),]) %>%
-      kableExtra::kable_styling()%>%
-      kableExtra::row_spec(5,
-                           bold = TRUE,
-                           hline_after = TRUE)
-} else {
-  knitr::kable(daily_table[(todays_day-4):(todays_day + 5),])
+if(nrow(gw_level_dv) > 0){
+  daily_table <- daily_frequency_table(gw_level_dv, 
+                                       gwl_data,
+                                       parameter_cd = parameterCd,
+                                       stat_cd = statCd) 
+  
+  todays_day <- as.POSIXlt(Sys.Date())$yday
+  
+  if(type == "html"){
+    knitr::kable(daily_table[(todays_day-4):(todays_day + 5),]) %>%
+        kableExtra::kable_styling()%>%
+        kableExtra::row_spec(5,
+                             bold = TRUE,
+                             hline_after = TRUE)
+  } else {
+    knitr::kable(daily_table[(todays_day-4):(todays_day + 5),])
+  }
 }
 ```
 
@@ -221,34 +232,42 @@ gwl_plot_all(gw_level_dv, gwl_data,
 Summary statistics for maximum daily water level measurements:
 
 ```{r siteStatsDaily}
-gw <- gw_level_dv
-names(gw)[names(gw) == paste("X",
-                             parameterCd,
-                             statCd, sep = "_")] <- "value"
-siteDV <- site_data_summary(gw) 
 
-site_out <- knitr::kable(t(siteDV), digits = 1)
+if(nrow(gw_level_dv) > 0){
 
-if(type == "html"){
-  site_out <- site_out %>%
-  kableExtra::kable_styling(full_width = FALSE)
+  siteDV <- daily_gwl_summary(gw_level_dv,
+                              gwl_data,
+                              parameter_cd = parameterCd,
+                              stat_cd = statCd) 
+  
+  site_out <- knitr::kable(t(siteDV), digits = 1)
+  
+  if(type == "html"){
+    site_out <- site_out %>%
+    kableExtra::kable_styling(full_width = FALSE)
+  }
+  
+  site_out
+} else {
+  cat("No daily data to aggregate.")
 }
-
-site_out
 ```
 
 Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
-gw_monthly <- monthly_mean(gw_level_dv, 
-                           value_col = paste("X", parameterCd, statCd, sep = "_"))
-
-trend_result <- kendell_test_5_20_years(gw_monthly, 
-                        seasonal = TRUE, 
-                        date_col = "mid_date", 
-                        value_col = "mean_va")
-kable(trend_result, digits = 1)
-
+if(nrow(gw_level_dv) > 0){
+  gw_monthly <- monthly_mean(gw_level_dv, 
+                             value_col = paste("X", parameterCd, statCd, sep = "_"))
+  
+  trend_result <- kendell_test_5_20_years(gw_monthly, 
+                          seasonal = TRUE, 
+                          date_col = "mid_date", 
+                          value_col = "mean_va")
+  kable(trend_result, digits = 1)
+} else {
+  cat("No daily data to aggregate.")
+}
 
 ```
 

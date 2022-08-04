@@ -6,7 +6,6 @@
 \usage{
 daily_gwl_2yr_plot(
   gw_level_dv,
-  gwl_data,
   parameter_cd = NA,
   date_col = NA,
   value_col = NA,
@@ -23,11 +22,6 @@ daily_gwl_2yr_plot(
 \arguments{
 \item{gw_level_dv}{data frame daily groundwater level data
 from \code{readNWISdv}}
-
-\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
-data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-approval code), and a column representing the measured value (either lev_va,
-sl_lev_va, or value).}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
@@ -75,21 +69,9 @@ statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
 daily_gwl_2yr_plot(gw_level_dv,
-                   NULL,
                    parameter_cd = "62610",
                    plot_title = "Groundwater Level", 
                    month_breaks = TRUE,
                    historical_stat = "median")
 
-gwl_data <- L2701_example_data$Discrete
-
-daily_gwl_2yr_plot(gw_level_dv,
-                   gwl_data,
-                   date_col = "Date",
-                   value_col = "X_62610_00001",
-                   approved_col = "X_62610_00001_cd", 
-                   plot_title = "Groundwater Level", 
-                   month_breaks = TRUE,
-                   historical_stat = "median",
-                   flip = FALSE)
 }

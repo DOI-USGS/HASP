@@ -88,8 +88,9 @@ gwl_table <- reactive({
   columns <- col_stuff()
 
   val_col <- columns$value_col[1]
-  gwl_tab <-  site_data_summary(dvData() %>%
-                                  rename(value = val_col)) 
+  gwl_tab <-  site_data_summary(dvData(),
+                                value_col = val_col,
+                                site_col = "site_no") 
   
   gwl_tab <- gwl_tab[,-1]
   names(gwl_tab) <- gsub("_site", "", names(gwl_tab))
