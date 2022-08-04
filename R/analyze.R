@@ -5,6 +5,8 @@
 #' take the summaries
 #' 
 #' @param x data frame
+#' @param value_col name of value column. The default is \code{"value"}.
+#' @param site_col name of site column. This is the column we are grouping by.
 #' @return data frame with 10 columns 
 #' @export
 #' @importFrom stats quantile
@@ -13,25 +15,30 @@
 #' aquifer_data <- aquifer_data
 #' aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
 #' summary_info <- site_data_summary(aquifer_data)
-site_data_summary <- function(x){
+site_data_summary <- function(x,
+                              value_col = "value",
+                              site_col = "site_no"){
 
   site_no <- value <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
-  if(!all(c("site_no", "value") %in% names(x))) stop("Missing columns")
+  if(!all(c(site_col, value_col) %in% names(x))) stop("Missing columns")
 
-  summaries <- dplyr::group_by(x, site_no)
+  x$val <- x[[value_col]]
+  x$site <- x[[site_col]]
+  
+  summaries <- dplyr::group_by(x, site)
   
   summaries <- dplyr::summarise(summaries,
-                         min_site = min(value, na.rm = TRUE),
-                         max_site = max(value, na.rm = TRUE),
-                         mean_site = mean(value, na.rm = TRUE),
-                         p10 = stats::quantile(value, probs = 0.1, na.rm = TRUE),
-                         p25 = stats::quantile(value, probs = 0.25, na.rm = TRUE),
-                         p50 = stats::quantile(value, probs = 0.5, na.rm = TRUE),
-                         p75 = stats::quantile(value, probs = 0.75, na.rm = TRUE),
-                         p90 = stats::quantile(value, probs = 0.90, na.rm = TRUE),
+                         min_site = min(val, na.rm = TRUE),
+                         max_site = max(val, na.rm = TRUE),
+                         mean_site = mean(val, na.rm = TRUE),
+                         p10 = stats::quantile(val, probs = 0.1, na.rm = TRUE),
+                         p25 = stats::quantile(val, probs = 0.25, na.rm = TRUE),
+                         p50 = stats::quantile(val, probs = 0.5, na.rm = TRUE),
+                         p75 = stats::quantile(val, probs = 0.75, na.rm = TRUE),
+                         p90 = stats::quantile(val, probs = 0.90, na.rm = TRUE),
                          count = dplyr::n())
   
   summaries <- dplyr::ungroup(summaries)

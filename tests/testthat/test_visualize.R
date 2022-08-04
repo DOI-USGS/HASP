@@ -138,7 +138,6 @@ test_that("Daily gwl plot", {
   plot_title <- attr(gw_daily, "siteInfo")[["station_nm"]]
   
   plot1 <- daily_gwl_2yr_plot(gw_daily, 
-                              gwl_data = NULL,
                               date_col = "Date",
                               value_col = "X_62610_00001",
                               approved_col = "X_62610_00001_cd",
@@ -165,7 +164,6 @@ test_that("Daily gwl plot", {
                     plot_data_elements))
   
   plot3 <- daily_gwl_2yr_plot(gw_daily, 
-                              gw_discrete, 
                               parameter_cd = "62610",
                               historical_stat = "median",
                               month_breaks = FALSE,

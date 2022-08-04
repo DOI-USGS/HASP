@@ -164,9 +164,9 @@ qw_summary <- function(qw_data, CharacteristicName,
         last_sample = max(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),
         last_sample_result = qw_sub$ResultMeasureValue[nrow(qw_sub)]
       ) %>%  
-    dplyr::bind_cols(site_data_summary(dplyr::rename(qw_sub,
-                                                     site_no = MonitoringLocationIdentifier,
-                                                     value = ResultMeasureValue)))
+    dplyr::bind_cols(site_data_summary(qw_sub, 
+                                       site_col = "MonitoringLocationIdentifier",
+                                       value_col = "ResultMeasureValue"))
                 
   Analysis = c("Date of first sample",
                paste0("First sample result (",unit_meas,")"),

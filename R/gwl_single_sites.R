@@ -277,11 +277,13 @@ set_up_data <- function(gw_level_dv,
                         approved_col,
                         stat_cd){
   
-  includes_gwl <- !is.null(gwl_data) ||
-    !all(is.na(gwl_data))
+  includes_gwl <- !(is.null(gwl_data) ||
+    all(is.na(gwl_data))||
+      nrow(gwl_data) == 0 )
   
-  includes_dv <- !is.null(gw_level_dv) ||
-    !all(is.na(gw_level_dv)) 
+  includes_dv <- !(is.null(gw_level_dv) ||
+    all(is.na(gw_level_dv)) ||
+    nrow(gw_level_dv) == 0 )
   
   includes_both <- includes_gwl & includes_dv
   
@@ -391,7 +393,7 @@ set_up_data <- function(gw_level_dv,
     gw_level_dv <- gw_level_dv[, c("Date", "Value", "Approve")]
     
   } else {
-    gw_level_dv <- data.frame(Date = integer(),
+    gw_level_dv <- data.frame(Date =  as.Date(character()),
                               Value = numeric(),
                               Approve = character())
   }

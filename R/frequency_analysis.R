@@ -115,15 +115,17 @@ stats_by_interval <- function(interval,
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
                      maxMed = max(median, na.rm = TRUE))
   
-  stats <- gw_level_dv %>%
+  stats <- gw_level_dv %>%    
+    dplyr::group_by(year, interval) %>%
+    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
     dplyr::group_by(interval) %>%
-    dplyr::summarize(p5_1 = quantile(Value, probs=0.05, type = 6, na.rm=TRUE),
-                     p10_1 = quantile(Value, probs=0.1, type = 6, na.rm=TRUE),
-                     p25_1 = quantile(Value, probs=0.25, type = 6, na.rm=TRUE),
-                     p50 = quantile(Value, probs=0.5, type = 6, na.rm=TRUE),
-                     p75_1 = quantile(Value, probs=0.75, type = 6, na.rm=TRUE),
-                     p90_1 = quantile(Value, probs=0.9, type = 6, na.rm=TRUE),
-                     p95_1 = quantile(Value, probs=0.95, type = 6, na.rm=TRUE),
+    dplyr::summarize(p5_1 = quantile(median, probs=0.05, type = 6, na.rm=TRUE),
+                     p10_1 = quantile(median, probs=0.1, type = 6, na.rm=TRUE),
+                     p25_1 = quantile(median, probs=0.25, type = 6, na.rm=TRUE),
+                     p50 = quantile(median, probs=0.5, type = 6, na.rm=TRUE),
+                     p75_1 = quantile(median, probs=0.75, type = 6, na.rm=TRUE),
+                     p90_1 = quantile(median, probs=0.9, type = 6, na.rm=TRUE),
+                     p95_1 = quantile(median, probs=0.95, type = 6, na.rm=TRUE),
                      nYears = length(unique(year))) %>%
     dplyr::left_join(annual_stats, by = "interval")
   
@@ -328,16 +330,16 @@ monthly_frequency_plot <- function(gw_level_dv,
   
   site_statistics_med <- site_statistics_med[, c("plot_month_med", "p50", "group")]
   names(site_statistics_med) <- c("month", "value", "group")
+  points_plot <- gw_level_dv
   
-  points_plot <- gw_level_dv 
-  points_plot$group <- "Data point"
-
-  points_plot <- points_plot[, c("Date", "Value", "group")]
-  names(points_plot) <- c("month", "value", "group")
+  if(nrow(gw_level_dv) > 0){
+    points_plot$group <- "Data point"
+    points_plot <- points_plot[, c("Date", "Value", "group")]
+    names(points_plot) <- c("month", "value", "group")
+    points_plot <- dplyr::bind_rows(site_statistics_med,
+                                    points_plot)
+  }
   
-  points_plot <- dplyr::bind_rows(site_statistics_med,
-                                  points_plot)
-    
   # Assign colors and shapes
   rectangle_colors <- c("5 - 10" = "firebrick4",
                         "10 - 25" = "orange2",
@@ -368,13 +370,19 @@ monthly_frequency_plot <- function(gw_level_dv,
                   ymax = ymax, 
                   fill = group),
               color = "black") +
-    geom_vline(xintercept = plot_month) +
-    geom_point(data = points_plot,
-               aes(x = month,
-                   y = value,
-                   shape = group,
-                   color = group),
-               size = 2.5) +
+    geom_vline(xintercept = plot_month) 
+  
+  if(nrow(points_plot) > 0){
+    plot_out <- plot_out +
+      geom_point(data = points_plot,
+                 aes(x = month,
+                     y = value,
+                     shape = group,
+                     color = group),
+                 size = 2.5)
+  }
+  
+  plot_out <- plot_out +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile",
                       breaks = c("90 - 95",
@@ -728,7 +736,7 @@ weekly_frequency_plot <- function(gw_level_dv,
                                                     linetype = c("solid", "solid", "blank"))),
            shape = "none",
            fill = guide_legend(order = 2)) 
-  } else {
+  } else if (length(unique(point_data$group)) == 2) {
     #TODO: be smarter:
     plot_out <- plot_out +
       guides(color = guide_legend(order = 1,
@@ -751,10 +759,6 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'
 #' @param gw_level_dv data frame daily groundwater level data
 #' from \code{readNWISdv}
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -790,25 +794,12 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
 #' daily_gwl_2yr_plot(gw_level_dv,
-#'                    NULL,
 #'                    parameter_cd = "62610",
 #'                    plot_title = "Groundwater Level", 
 #'                    month_breaks = TRUE,
 #'                    historical_stat = "median")
 #' 
-#' gwl_data <- L2701_example_data$Discrete
-#' 
-#' daily_gwl_2yr_plot(gw_level_dv,
-#'                    gwl_data,
-#'                    date_col = "Date",
-#'                    value_col = "X_62610_00001",
-#'                    approved_col = "X_62610_00001_cd", 
-#'                    plot_title = "Groundwater Level", 
-#'                    month_breaks = TRUE,
-#'                    historical_stat = "median",
-#'                    flip = FALSE)
 daily_gwl_2yr_plot <- function(gw_level_dv, 
-                               gwl_data,
                                parameter_cd = NA,
                                date_col = NA,
                                value_col = NA, 
