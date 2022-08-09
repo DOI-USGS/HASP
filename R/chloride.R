@@ -82,7 +82,17 @@ trend_plot <- function(qw_data, plot_title,
   
   on_top <- zero_on_top(qw_sub$ResultMeasureValue)
   
-  seg_df <- create_segs(qw_sub,
+  trend_results <- kendall_test_5_20_years(gw_level_dv = NULL,
+                                           gwl_data = qw_sub,
+                                           parameter_cd = NA,
+                                           date_col = "ActivityStartDateTime",
+                                           value_col = "ResultMeasureValue", 
+                                           approved_col = "condition",
+                                           stat_cd = NA,
+                                           seasonal = FALSE)
+  
+  seg_df <- create_segs(trend_results,
+                        qw_sub,
                         value_col = "ResultMeasureValue",
                         date_col = "ActivityStartDateTime")
   
@@ -119,11 +129,6 @@ trend_plot <- function(qw_data, plot_title,
   
   if(include_table){
     
-    trend_results <- kendell_test_5_20_years(qw_sub, seasonal = FALSE,
-                                             date_col = "ActivityStartDateTime", 
-                                             value_col = "ResultMeasureValue",
-                                             enough_5 = 1, enough_20 = 1)
-    
     trend_results$tau <- signif(trend_results$tau, digits = 4)
     trend_results$pValue <- signif(trend_results$pValue, digits = 4)
     trend_results$slope <- signif(trend_results$slope, digits = 4)
@@ -139,16 +144,14 @@ trend_plot <- function(qw_data, plot_title,
   
 }
 
-create_segs <- function(x, 
+create_segs <- function(trend_results,
+                        x, 
                         date_col = "sample_dt", 
                         value_col = "result_va",
                         enough_5 = 1, enough_20 = 1){
-  
-  trend_results <- kendell_test_5_20_years(x, seasonal = FALSE,
-                                           enough_5 = enough_5, enough_20 = enough_20,
-                                           date_col = date_col, 
-                                           value_col = value_col)
 
+
+  
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
                        x2 = rep(max(as.Date(x[[date_col]]), na.rm = FALSE), 2),
                        y1 = c(NA, NA),

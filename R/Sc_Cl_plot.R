@@ -168,7 +168,7 @@ qw_summary <- function(qw_data, CharacteristicName,
                                        site_col = "MonitoringLocationIdentifier",
                                        value_col = "ResultMeasureValue"))
                 
-  Analysis = c("Date of first sample",
+  Analysis <- c("Date of first sample",
                paste0("First sample result (",unit_meas,")"),
                "Date of last sample",
                paste0("Last sample result (",unit_meas,")"),
@@ -184,7 +184,7 @@ qw_summary <- function(qw_data, CharacteristicName,
                paste0("Third quartile (", unit_meas, ")"),
                "Number of samples")
   
-  Result = c(as.character(qw_info$first_sample),
+  Result <- c(as.character(qw_info$first_sample),
              signif(qw_info$first_sample_result, 3),
              as.character(qw_info$last_sample),
              signif(qw_info$last_sample_result, 3),

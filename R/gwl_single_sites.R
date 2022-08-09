@@ -107,7 +107,7 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' @rdname gwl_plot_field
 #' @export
 #' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
-#' @param add_trend logical. Uses \code{kendell_test_5_20_years}.
+#' @param add_trend logical. Uses \code{kendall_test_5_20_years}.
 #' @param gw_level_dv daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
@@ -228,7 +228,16 @@ gwl_plot_all <- function(gw_level_dv,
                                date_col = "Date", 
                                value_col = "Value")
     
-    seg_df <- create_segs(gw_monthly, 
+    trend_results <- kendall_test_5_20_years(gw_level_dv = gw_level_dv,
+                                             gwl_data = gwl_data,
+                                             parameter_cd = NA,
+                                             date_col = c("Date", "Date"),
+                                             value_col = c("Value", "Value"), 
+                                             approved_col = c("Approve", "Approve"),
+                                             stat_cd = stat_cd,
+                                             seasonal = FALSE)
+    seg_df <- create_segs(trend_results,
+                          gw_monthly, 
                           date_col = "mid_date",
                           value_col = "mean_va")
     

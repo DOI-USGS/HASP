@@ -114,10 +114,8 @@ NULL
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
-    paste(strwrap('USGS Research Package:
-https://owi.usgs.gov/R/packages.html#research
-PACKAGE IN HEAVY DEVELOPMENT
-NO FUTURE BEHAVIOR PROMISED', width = 40),
+    paste(strwrap('More information:
+https://rconnect.usgs.gov/HASP_docs/', width = 40),
           collapse='\n'))
 }
 

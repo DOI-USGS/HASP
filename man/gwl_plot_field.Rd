@@ -59,7 +59,7 @@ Default is \code{TRUE}.}
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
 
-\item{add_trend}{logical. Uses \code{kendell_test_5_20_years}.}
+\item{add_trend}{logical. Uses \code{kendall_test_5_20_years}.}
 }
 \description{
 Function to create the field groundwater level data plot.

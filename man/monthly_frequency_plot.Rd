@@ -20,12 +20,13 @@ monthly_frequency_plot(
 )
 }
 \arguments{
-\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained from \code{readNWISdv}}
+\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
+from \code{readNWISdv}. Use \code{NULL} for no daily data.}
 
 \item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
 data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
 approval code), and a column representing the measured value (either lev_va,
-sl_lev_va, or value).}
+sl_lev_va, or value). Use \code{NULL} for no discrete data.}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
