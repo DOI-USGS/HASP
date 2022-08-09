@@ -51,9 +51,11 @@ qw_data <- dataRetrieval::readWQPqw(paste0("USGS-", site),
 ```
 
 ``` r
+
 y_axis_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
 
 monthly_frequency_plot(dv,
+                       gwl_data,
                        parameter_cd = "62610",
                        plot_title = "L2701_example_data",
                        y_axis_label = y_axis_label)
@@ -62,16 +64,18 @@ monthly_frequency_plot(dv,
 ![](man/figures/README-graphs-1.png)<!-- -->
 
 ``` r
+
 gwl_plot_all(gw_level_dv = dv, 
              gwl_data = gwl_data, 
              parameter_cd = "62610",
              plot_title = "L2701_example_data", 
-             add_trend = TRUE, flip_y = FALSE)
+             add_trend = TRUE)
 ```
 
 ![](man/figures/README-graphs-2.png)<!-- -->
 
 ``` r
+
 Sc_Cl_plot(qw_data, "L2701_example_data")
 ```
 
@@ -86,6 +90,7 @@ trend_plot(qw_data, plot_title = "L2701_example_data")
 ### Composite workflows:
 
 ``` r
+
 #included sample data:
 
 aquifer_data <- aquifer_data
@@ -97,16 +102,11 @@ plot_composite_data(aquifer_data, num_years)
 ![](man/figures/README-example-1.png)<!-- -->
 
 ``` r
+
 plot_normalized_data(aquifer_data, num_years)
 ```
 
 ![](man/figures/README-example-2.png)<!-- -->
-
-## Shiny App
-
-<p align="center">
-<img src="https://code.usgs.gov/water/stats/HASP/raw/master/man/figures/app.gif" alt="app_demo">
-</p>
 
 ## Installation of R and RStudio
 
@@ -180,3 +180,6 @@ material nor shall the fact of release constitute any such warranty. The
 software is provided on the condition that neither the USGS nor the U.S.
 Government shall be held liable for any damages resulting from the
 authorized or unauthorized use of the software.
+
+Any use of trade, firm, or product names is for descriptive purposes
+only and does not imply endorsement by the U.S. Government.
