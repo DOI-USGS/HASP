@@ -7,8 +7,11 @@
 #' 5-year test, and at least 6 readings for the last 20 years are required
 #' for the 20-year test. The current calendar year is excluded by default.
 #' 
-#' @param gwl data frame that must include a numeric column defined by "value_col",
-#'  and a Date or POSIXct column defined by "date_col"
+#' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
 #' @param date_col the heading of the date column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
 #' @param value_col name of value column. The default is \code{NA},
@@ -188,9 +191,6 @@ kendall_test_5_20_years <- function(gw_level_dv,
 #'                                            parameter_cd = parameterCd)
 #' 
 #' gw_monthly <- monthly_mean(gw_level_dv)
-#' 
-#' kendall_test_5_20_years(gw_monthly, seasonal = TRUE, 
-#'                         date_col = "mid_date", value_col = "mean_va")
 #' 
 monthly_mean <- function(x,
                          date_col = "Date",

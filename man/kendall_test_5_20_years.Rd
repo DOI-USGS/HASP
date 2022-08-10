@@ -20,6 +20,13 @@ kendall_test_5_20_years(
 )
 }
 \arguments{
+\item{gw_level_dv}{daily groundwater level data frame. Often obtained from from \code{readNWISdv}}
+
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
+data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+approval code), and a column representing the measured value (either lev_va,
+sl_lev_va, or value).}
+
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
  If the data doesn't come directly from NWIS services, this 
@@ -46,9 +53,6 @@ can be used to help define the value_col.}
 
 \item{include_current_year}{a logical indicating whether to include data from
 the current calendar year in the test.}
-
-\item{gwl}{data frame that must include a numeric column defined by "value_col",
-and a Date or POSIXct column defined by "date_col"}
 }
 \value{
 a data frame of test results from 5 and 20 year Kendall Seasonal Trend test

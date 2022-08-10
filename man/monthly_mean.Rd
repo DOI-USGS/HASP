@@ -33,7 +33,4 @@ site_statistics <- monthly_frequency_table(gw_level_dv,
 
 gw_monthly <- monthly_mean(gw_level_dv)
 
-kendall_test_5_20_years(gw_monthly, seasonal = TRUE, 
-                        date_col = "mid_date", value_col = "mean_va")
-
 }
