@@ -222,18 +222,25 @@ gwl_plot_all <- function(gw_level_dv,
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) 
   
-  if(add_trend & data_list$includes["dv"]){
+  if(add_trend){
     
-    gw_monthly <- monthly_mean(gw_level_dv, 
+    combo <- dplyr::bind_rows(gw_level_dv,
+                              gwl_data)
+    
+    combo_approved <- combo[combo$Approve == "A", ]
+    
+    gw_monthly <- monthly_mean(combo_approved, 
                                date_col = "Date", 
                                value_col = "Value")
     
-    trend_results <- kendall_test_5_20_years(gw_level_dv = gw_level_dv,
-                                             gwl_data = gwl_data,
+    gw_monthly$Approved <- "A"
+    
+    trend_results <- kendall_test_5_20_years(gw_level_dv = NULL,
+                                             gwl_data = gw_monthly,
                                              parameter_cd = NA,
-                                             date_col = c("Date", "Date"),
-                                             value_col = c("Value", "Value"), 
-                                             approved_col = c("Approve", "Approve"),
+                                             date_col = c("mid_date"),
+                                             value_col = c("mean_va"), 
+                                             approved_col = c("Approved"),
                                              stat_cd = stat_cd,
                                              seasonal = FALSE)
     seg_df <- create_segs(trend_results,

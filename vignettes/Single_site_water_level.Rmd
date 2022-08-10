@@ -1,0 +1,229 @@
+---
+title: "Single Site Water Level"
+output: 
+  rmarkdown::html_vignette
+editor_options: 
+  chunk_output_type: console
+vignette: >
+  %\VignetteIndexEntry{Single Site Water Level}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE,
+               warning = FALSE,
+               message = FALSE,
+               fig.width = 7,
+               fig.height = 6)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(HASP)
+
+options(knitr.kable.NA = '')
+```
+
+<style>
+
+body {
+    max-width: 1600px;
+    margin-left:10px;
+    padding-left:10px;
+}
+</style>
+
+This vignette shows how to use `HASP` and other R tools to reproduce:
+
+https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801
+
+
+## Site Information
+
+<table>
+<tr><td>
+
+```{r siteInfo, results='asis'}
+library(HASP)
+
+siteID <- "263819081585801"
+site_metadata <- site_summary(siteID, markdown = TRUE)
+```
+
+</td><td>
+
+```{r whatData}
+data_info <- data_available(siteID)
+kable(data_info)
+```
+
+</td></tr> </table>
+
+## Get data using dataRetrieval
+
+
+<table>
+<tr><td>
+
+Using `dataRetrieval` code to get the data for this site:
+
+```{r getData, eval=TRUE}
+library(dataRetrieval)
+siteID <- "263819081585801"
+parameterCd <- "62610"
+statCd <- "00001"
+# Daily data:
+gw_level_dv <- readNWISdv(siteID,
+                          parameterCd,
+                          statCd = statCd)
+
+# Field GWL measured:
+gwl_data <- readNWISgwl(siteID)
+
+site_title <- "L -2701\n263819081585801"
+
+y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+
+```
+
+</td><td>
+
+Using the example data provided in the package:
+
+```{r getDataReal, eval=FALSE}
+siteID <- "263819081585801"
+parameterCd <- "62610"
+statCd <- "00001"
+
+# Daily
+gw_level_dv <-  L2701_example_data$Daily
+# Field
+gwl_data <- L2701_example_data$Discrete
+
+y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+
+```
+
+</td></tr> </table>
+
+## Water Level Data and Analysis
+
+### Weekly frequency
+
+```{r weeklyFrequencyShow}
+
+weekly_frequency_plot(gw_level_dv, 
+                      gwl_data = gwl_data,
+                      parameter_cd = parameterCd,
+                      plot_title = site_title,
+                      y_axis_label = y_label)
+
+
+```
+
+
+
+Weekly frequency analysis of daily maximum water level record. Only showing the first 10 rows for this example:
+
+```{r weekly_table}
+weekly_table <- weekly_frequency_table(gw_level_dv, 
+                                       gwl_data,
+                                       parameter_cd = parameterCd)
+kable(head(weekly_table, 10), digits = 1)
+
+```
+
+
+### Daily 2-year
+
+```{r dailyPlotShow, fig.width=9}
+daily_gwl_2yr_plot(gw_level_dv, 
+                   parameter_cd = parameterCd,
+                   plot_title = site_title,
+                   historical_stat = "mean",
+                   month_breaks = TRUE,
+                   y_axis_label = y_label)
+
+```
+
+
+Statistics of maximum daily water level record (DOY = day of year). Only showing the first 10 rows for this example:
+
+```{r dailyShow2}
+daily_table <- daily_frequency_table(gw_level_dv, 
+                                     gwl_data,
+                                     parameter_cd = parameterCd) 
+
+kable(head(daily_table, 10))
+```
+
+
+### Daily value trends
+
+
+```{r gwlTrendplot}
+
+gwl_plot_all(gw_level_dv, gwl_data, 
+             y_label = y_label,
+             parameter_cd = parameterCd,
+             plot_title = site_title,
+             add_trend = TRUE, flip = FALSE)
+
+
+```
+
+Summary statistics for maximum daily water level measurements:
+
+```{r siteStatsDaily}
+siteDV <- gw_level_dv %>%
+  rename(value = X_62610_00001) %>% 
+  site_data_summary() 
+
+kable(siteDV, digits = 1)
+
+```
+
+Results of trend analysis on maximum daily water levels:
+
+```{r trendTableDaily}
+
+trend_result <- kendall_test_5_20_years(gw_level_dv, 
+                                        NULL,
+                                        parameter_cd = parameterCd,
+                                        seasonal = TRUE)
+kable(trend_result, digits = 1)
+
+
+```
+
+
+
+### Field GWL values
+
+
+
+```{r manualPlot}
+gwl_plot_all(NULL, gwl_data,
+             y_label = y_label,
+             parameter_cd = parameterCd,
+             plot_title = site_title, 
+             flip = FALSE)
+
+
+```
+
+
+
+Summary statistics for manual water level measurements
+
+```{r manualTable}
+quantiles <- gwl_data %>% 
+  rename(value = sl_lev_va) %>% 
+  site_data_summary() 
+
+kable(quantiles, digits = 1)
+
+```
+
+

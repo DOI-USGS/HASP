@@ -108,7 +108,7 @@ kendall_test_5_20_years <- function(gw_level_dv,
   if(enough_data_5yr) {
     # Don't assume the tail is bringing back all years:
     last_5 <- dplyr::filter(gwl, year >= latest_measured_year - 5)
-    
+
     if(seasonal){
       test_5yr <- 
         EnvStats::kendallSeasonalTrendTest(form, 
@@ -117,7 +117,7 @@ kendall_test_5_20_years <- function(gw_level_dv,
       test_5yr <- EnvStats::kendallTrendTest(form, 
                                              data = last_5)
     }
-
+    
     test[length(test) + 1] <- "5-year trend"
     tau[length(tau) + 1] <- test_5yr$estimate['tau']
     pValue[length(pValue) + 1] <- test_5yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
