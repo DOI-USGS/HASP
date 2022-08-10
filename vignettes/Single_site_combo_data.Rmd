@@ -194,7 +194,7 @@ kable(siteDaily, digits = 1)
 
 
 ```{r chloride_plotSHOW}
-trend_plot(qw_data, plot_title = plot_title)
+qw_plot(qw_data, plot_title = plot_title)
 ```
 
 
@@ -204,8 +204,6 @@ cl_trend <- kendall_test_5_20_years(NULL,
                                       dplyr::filter(qw_data, 
                    CharacteristicName == "Chloride"), 
                      seasonal = TRUE,
-                     enough_5 = 1,
-                     enough_20 = 1,
                      approved_col = "ResultStatusIdentifier",
                      date_col = "ActivityStartDateTime",
                      value_col = "ResultMeasureValue")
