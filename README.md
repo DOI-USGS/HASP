@@ -25,6 +25,32 @@ Inspiration: <https://fl.water.usgs.gov/mapper/>
 
 See <https://rconnect.usgs.gov/HASP_docs/> for more information!
 
+## Installation of HASP
+
+You can install the `HASP` package using the `remotes` package.
+
+To install the remotes package, copy the following line into R or the
+“Console” window in RStudio:
+
+``` r
+install.packages("remotes")
+```
+
+To install the `HASP` package:
+
+``` r
+remotes::install_gitlab("water/stats/hasp",
+                        host = "code.usgs.gov",
+                        build_opts = c("--no-resave-data",
+                                       "--no-manual"),
+                        build_vignettes = TRUE, 
+                        dependencies = TRUE)
+```
+
+During this installation, you may be prompted to update or install some
+packages. Press 3 to skip the updates, but don’t forget to update all of
+your packages later.
+
 ## Sample workflow
 
 ### Single site workflows:
@@ -89,6 +115,9 @@ trend_plot(qw_data, plot_title = "L2701_example_data")
 
 ### Composite workflows:
 
+More information on the composite aquifer workflow can be found
+`vignette("Priniciple_Aquifers", package = "HASP")`.
+
 ``` r
 
 #included sample data:
@@ -124,38 +153,14 @@ Useful links:
 -   [Download
     RStudio](https://www.rstudio.com/products/rstudio/download/)
 
-## Installation of HASP
-
-You can install the `HASP` package using the `remotes` package.
-
-To install the remotes package, copy the following line into R or the
-“Console” window in RStudio:
-
-``` r
-install.packages("remotes")
-```
-
-To install the `HASP` package:
-
-``` r
-remotes::install_gitlab("water/stats/hasp",
-                        host = "code.usgs.gov",
-                        build_opts = c("--no-resave-data",
-                                       "--no-manual"),
-                        build_vignettes = TRUE, 
-                        dependencies = TRUE)
-```
-
-During this installation, you may be prompted to update or install some
-packages. Press 3 to skip the updates, but don’t forget to update all of
-your packages later.
-
 ## Running the apps
 
 `HASP` includes two interactive applications as a way to explore the
 functionality of this package. One has functions for exploring data from
 a single site, and the other has functions for exploring data from an
 aquifer.
+
+For more information see `vignette("shinyApp", package = "HASP")`.
 
 To run the single site application, use the following code:
 
