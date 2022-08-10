@@ -6,6 +6,7 @@
 #' @param qw_data data frame returned from dataRetrieval::readWQPqw,
 #' must include columns sample_dt, parm_cd, result_va
 #' @param plot_title character title for plot
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @rdname sc_cl
 #' @export
 #' @import ggplot2
@@ -19,7 +20,9 @@
 #' qw_data <- L2701_example_data$QW
 #' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
 #' Sc_Cl_plot(qw_data, plot_title)
-Sc_Cl_plot <- function(qw_data, plot_title){
+Sc_Cl_plot <- function(qw_data, 
+                       plot_title,
+                       subtitle = "U.S. Geological Survey"){
   
 
   # Specify the plot titles using the function getParmCodeDef
@@ -40,6 +43,7 @@ Sc_Cl_plot <- function(qw_data, plot_title){
                 formula = y ~ x , se = FALSE) +
     hasp_framework(y_label = Cltitle, 
                    x_label = Sctitle, include_y_scale = TRUE,
+                   subtitle = subtitle,
                    plot_title = plot_title,
                    zero_on_top = NA) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
@@ -87,14 +91,26 @@ Sc_Cl_table <- function(qw_data){
 #' @param y_label character label for y axis. If left as NA, the function
 #' will attempt to use the "variableInfo" attribute of qw_data. This is
 #' attached to dataRetrieval output.
+#' @param start_date Date to start plot. If \code{NA} (which is the default),
+#' the plot will start at the earliest measurement.
+#' @param end_date Date to end plot. If \code{NA} (which is the default), 
+#' the plot will end with the latest measurement. 
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @export
 #' @examples
 #' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
 #' qw_plot(qw_data, plot_title, CharacteristicName = "Chloride")
 #' qw_plot(qw_data, plot_title, CharacteristicName = "Specific conductance")
+#' qw_plot(qw_data,
+#'         plot_title, 
+#'         CharacteristicName = "Specific conductance",
+#'         start_date = "1990-01-01")
 qw_plot <- function(qw_data, plot_title,
                     y_label = NA,
-                    CharacteristicName = "Chloride"){
+                    CharacteristicName = "Chloride",
+                    start_date = NA,
+                    end_date = NA, 
+                    subtitle = "U.S. Geological Survey"){
   
   if(!all(c("ActivityStartDateTime", "CharacteristicName", "ResultMeasureValue") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
@@ -103,6 +119,14 @@ qw_plot <- function(qw_data, plot_title,
   qw_data <- qw_data %>% 
     dplyr::filter(CharacteristicName %in% !!CharacteristicName)  %>% 
     dplyr::mutate(year = as.numeric(format(as.Date(ActivityStartDate), "%Y")) + as.numeric(as.character(as.Date(ActivityStartDate), "%j"))/365)
+  
+  if(!is.na(start_date)){
+    qw_data <- qw_data[qw_data$ActivityStartDate >= as.Date(start_date) ,]
+  }
+  
+  if(!is.na(end_date)){
+    qw_data <- qw_data[qw_data$ActivityStartDate <= as.Date(end_date) ,]
+  }
   
   if(is.na(y_label)){
     y_label <- attr(qw_data, "variableInfo")
@@ -121,7 +145,8 @@ qw_plot <- function(qw_data, plot_title,
                aes(x = year, y = ResultMeasureValue),
                size = 1.5, color = "blue") +
     hasp_framework(x_label = "Date", y_label = y_label, include_y_scale = TRUE,
-                   plot_title = plot_title, zero_on_top = on_top) +
+                   plot_title = plot_title, zero_on_top = on_top, 
+                   subtitle = subtitle) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL))
   
@@ -135,7 +160,7 @@ qw_plot <- function(qw_data, plot_title,
 #' @examples
 #' 
 #' qw_summary(qw_data, CharacteristicName = "Chloride",
-#'  norm_range = c(225,999))
+#'  norm_range = c(230, 860))
 #' qw_summary(qw_data, CharacteristicName = "Specific conductance",
 #'  norm_range = NA)
 qw_summary <- function(qw_data, CharacteristicName, 

@@ -10,6 +10,7 @@
 #' @param y_label character label for y axis. If left as NA, the function
 #' will attempt to use the "variableInfo" attribute of qw_data. This is
 #' attached to dataRetrieval output.
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param include_table logical whether or not to include the trend table in the upper left corner.
 #' @rdname chloridetrend
 #' @export
@@ -27,7 +28,8 @@
 trend_plot <- function(qw_data, plot_title,
                        y_label = NA, 
                        CharacteristicName = c("Chloride"),
-                       norm_range = c(225,999),
+                       norm_range = c(230, 860),
+                       subtitle = "U.S. Geological Survey",
                        include_table = TRUE){
   
   if(!all(c("ActivityStartDateTime", "ResultMeasureValue", "CharacteristicName") %in% names(qw_data))){
@@ -108,6 +110,7 @@ trend_plot <- function(qw_data, plot_title,
                      y = y1, yend = y2,
                      group = trend, linetype = trend)) +
     hasp_framework("Date", y_label, plot_title, 
+                   subtitle = subtitle,
                    zero_on_top = on_top, include_y_scale = TRUE) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
