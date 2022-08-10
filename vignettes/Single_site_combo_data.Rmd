@@ -108,12 +108,12 @@ kable(monthly_freq_table, digits = 1)
 
 ```{r dailyPlotShow, fig.width=9}
 
-daily_gwl_2yr_plot(gw_level_dv, 
-                   parameter_cd = parameterCd,
-                   plot_title = plot_title, 
-                   month_breaks = TRUE, 
-                   historical_stat = "median",
-                   y_axis_label = y_label)
+daily_gwl_plot(gw_level_dv, 
+               parameter_cd = parameterCd,
+               plot_title = plot_title, 
+               month_breaks = TRUE, 
+               historical_stat = "median",
+               y_axis_label = y_label)
 ```
 
 

@@ -68,8 +68,8 @@ weekly_frequency <- weekly_frequency_table(gw_level_dv,
                                            parameter_cd = "62610") 
 weekly_frequency
 weekly_flip <- weekly_frequency_table(gw_level_dv,
-                                           gwl_data,
-                                           parameter_cd = "62610",
-                                           flip = TRUE) 
+                                      gwl_data,
+                                      parameter_cd = "62610",
+                                      flip = TRUE) 
 weekly_flip
 }

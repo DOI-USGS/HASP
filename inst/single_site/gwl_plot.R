@@ -254,15 +254,15 @@ year2_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
-  year2_graph <-  daily_gwl_2yr_plot(dvData(), 
-                                     gwlData(),
-                                     parameter_cd = p_code_dv,
-                                     stat_cd = stat_cd,
-                                     plot_title = plot_title,
-                                     historical_stat = "mean",
-                                     month_breaks = TRUE, 
-                                     y_axis_label = y_label,
-                                     flip = input$flip_plot)
+  year2_graph <-  daily_gwl_plot(dvData(), 
+                                 gwlData(),
+                                 parameter_cd = p_code_dv,
+                                 stat_cd = stat_cd,
+                                 plot_title = plot_title,
+                                 historical_stat = "mean",
+                                 month_breaks = TRUE, 
+                                 y_axis_label = y_label,
+                                 flip = input$flip_plot)
  
   
   
@@ -309,14 +309,14 @@ year2_plot_out <- reactive({
   code_out <- paste0(setup(),'
 flip <- ', input$flip_plot, '
 
-year2_plot <-  daily_gwl_2yr_plot(gw_level_dv, 
-                                  gwl_data,
-                                  parameter_cd = "', p_code_dv, '",
-                                  stat_cd = "', stat_cd, '"
-                                  plot_title = plot_title,
-                                  historical_stat = "mean",
-                                  flip = flip,
-                                  month_breaks = TRUE)
+year2_plot <-  daily_gwl_plot(gw_level_dv, 
+                              gwl_data,
+                              parameter_cd = "', p_code_dv, '",
+                              stat_cd = "', stat_cd, '"
+                              plot_title = plot_title,
+                              historical_stat = "mean",
+                              flip = flip,
+                              month_breaks = TRUE)
 year2_plot
 
 daily_frequencies <- daily_frequency_table(gw_level_dv,

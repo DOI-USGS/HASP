@@ -138,12 +138,12 @@ kable(head(weekly_table, 10), digits = 1)
 ### Daily 2-year
 
 ```{r dailyPlotShow, fig.width=9}
-daily_gwl_2yr_plot(gw_level_dv, 
-                   parameter_cd = parameterCd,
-                   plot_title = site_title,
-                   historical_stat = "mean",
-                   month_breaks = TRUE,
-                   y_axis_label = y_label)
+daily_gwl_plot(gw_level_dv, 
+               parameter_cd = parameterCd,
+               plot_title = site_title,
+               historical_stat = "mean",
+               month_breaks = TRUE,
+               y_axis_label = y_label)
 
 ```
 

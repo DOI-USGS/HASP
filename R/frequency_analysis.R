@@ -462,9 +462,9 @@ monthly_frequency_plot <- function(gw_level_dv,
 #'                                            parameter_cd = "62610") 
 #' weekly_frequency
 #' weekly_flip <- weekly_frequency_table(gw_level_dv,
-#'                                            gwl_data,
-#'                                            parameter_cd = "62610",
-#'                                            flip = TRUE) 
+#'                                       gwl_data,
+#'                                       parameter_cd = "62610",
+#'                                       flip = TRUE) 
 #' weekly_flip
 weekly_frequency_table <- function(gw_level_dv, 
                                    gwl_data,
@@ -484,6 +484,9 @@ weekly_frequency_table <- function(gw_level_dv,
                                      approved_col = approved_col,
                                      stat_cd = stat_cd,
                                      flip = flip)
+  
+  weekly_stats$week_start <- format(as.Date(paste(weekly_stats$week-1, 1, sep="-"), 
+                                    "%U-%u"), "%m-%d")
   
   return(weekly_stats)
   
@@ -607,12 +610,17 @@ weekly_frequency_plot <- function(gw_level_dv,
   plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
   plot_week_lookup <- data.frame(plot_week = plot_week, 
                                  week = as.POSIXlt(plot_week)$yday%/%7 + 1)
-  site_statistics <- dplyr::left_join(site_statistics, plot_week_lookup, by = "week")
+  
+  site_statistics <- dplyr::left_join(site_statistics,
+                                      plot_week_lookup,
+                                      by = "week")
   
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
-    dplyr::select(-week, -nYears, -minMed, -maxMed) %>%
-    tidyr::pivot_longer(cols = -plot_week, names_to = "name", values_to = "value")
+    dplyr::select(-week, -nYears, -minMed, -maxMed, -week_start) %>%
+    tidyr::pivot_longer(cols = -plot_week, 
+                        names_to = "name",
+                        values_to = "value")
   
   cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
@@ -756,7 +764,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   
 }
 
-#' Plot the last two years of data
+#' Plot recent data
 #'
 #' @param gw_level_dv data frame daily groundwater level data
 #' from \code{readNWISdv}
@@ -771,6 +779,10 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' @param approved_col name of column to get provisional/approved status.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
+#' @param start_date Date to start plot. If \code{NA} (which is the default),
+#' the plot will start 2 years before the most recent value.
+#' @param end_data Date to end plot. If \code{NA} (which is the default), 
+#' the plot will end with the latest measurement. 
 #' @param historical_stat the summary statistic to use for middle line of the plot. Either
 #' "mean" or "median." 
 #' @param month_breaks a logical indicating whether to use monthly breaks for the plot
@@ -794,24 +806,41 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' statCd <- "00001"
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
-#' daily_gwl_2yr_plot(gw_level_dv,
-#'                    parameter_cd = "62610",
-#'                    plot_title = "Groundwater Level", 
-#'                    month_breaks = TRUE,
-#'                    historical_stat = "median")
+#' daily_gwl_plot(gw_level_dv,
+#'                parameter_cd = "62610",
+#'                plot_title = "Groundwater Level", 
+#'                month_breaks = TRUE,
+#'                historical_stat = "median")
+#'                
+#' daily_gwl_plot(gw_level_dv,
+#'                parameter_cd = "62610",
+#'                plot_title = "Groundwater Level", 
+#'                month_breaks = TRUE,
+#'                start_date = "2020-10-01",
+#'                historical_stat = "median")
+#'                
+#' daily_gwl_plot(gw_level_dv,
+#'                parameter_cd = "62610",
+#'                plot_title = "Groundwater Level", 
+#'                month_breaks = TRUE,
+#'                start_date = "2018-10-01",
+#'                end_date = "2020-10-01",
+#'                historical_stat = "median")
 #' 
-daily_gwl_2yr_plot <- function(gw_level_dv, 
-                               parameter_cd = NA,
-                               date_col = NA,
-                               value_col = NA, 
-                               approved_col = NA,
-                               stat_cd = NA,
-                               historical_stat = "mean", 
-                               month_breaks = FALSE,
-                               plot_title = "",
-                               subtitle = "U.S. Geological Survey",
-                               y_axis_label = "",
-                               flip = FALSE) {
+daily_gwl_plot <- function(gw_level_dv, 
+                           parameter_cd = NA,
+                           date_col = NA,
+                           value_col = NA, 
+                           approved_col = NA,
+                           stat_cd = NA,
+                           start_date = NA,
+                           end_date = NA,
+                           historical_stat = "mean", 
+                           month_breaks = FALSE,
+                           plot_title = "",
+                           subtitle = "U.S. Geological Survey",
+                           y_axis_label = "",
+                           flip = FALSE) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = NULL, 
@@ -830,7 +859,9 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
   historical_stat <- match.arg(historical_stat, 
                                choices = c("mean", "median"), 
                                several.ok = FALSE)
-  historical_function <- switch(historical_stat, "median" = median, "mean" = mean)
+  historical_function <- switch(historical_stat, 
+                                "median" = median,
+                                "mean" = mean)
   historical_name <- paste("Historical", historical_stat)
   
   # Calculate the historical max/min/median for each day
@@ -841,24 +872,34 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
   historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] %>%
     dplyr::group_by(J) %>%
     dplyr::summarize(max = max(Value, na.rm = TRUE),
-              middle = historical_function(Value, na.rm = TRUE),
-              min = min(Value, na.rm = TRUE))
+                     middle = historical_function(Value, na.rm = TRUE),
+                     min = min(Value, na.rm = TRUE))
   
   # Pull the last two years of data & join with the historical data
   
-  most_recent <- max(c(gw_level_dv$Date), na.rm = TRUE)
-  #TODO: check here!
-  plot_start_year <- as.numeric(as.character(most_recent, format = "%Y")) - 2
-  plot_start <- as.Date(paste(plot_start_year,
-                              as.character(most_recent, format = "%m-%d"),
-                              sep = "-"))
+  if(is.na(end_date)){
+    end_date <- max(c(gw_level_dv$Date), na.rm = TRUE)
+  } else {
+    end_date <- as.Date(end_date)
+  }
+  
+  if(is.na(start_date)){
+    plot_start_year <- as.numeric(as.character(end_date, format = "%Y")) - 2
+    plot_start <- as.Date(paste(plot_start_year,
+                                as.character(end_date, format = "%m-%d"),
+                                sep = "-"))
+  } else {
+    plot_start <- as.Date(start_date)
+  }
+
   
   # add a 10 day buffer following the most recent value
-  plot_end <- most_recent + as.difftime(10, units = "days")
+  plot_end <- end_date + as.difftime(10, units = "days")
   buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
   buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
   buffer_j <- as.numeric(as.character(buffer_dates, "%j"))
-  buffer <- stats::setNames(data.frame(buffer_dates, buffer_j), c("Date", "J"))
+  buffer <- stats::setNames(data.frame(buffer_dates, buffer_j),
+                            c("Date", "J"))
 
   plot_data <- gw_level_dv %>%
     dplyr::right_join(buffer, by = c("Date", "J")) %>%
@@ -895,7 +936,7 @@ daily_gwl_2yr_plot <- function(gw_level_dv,
     x_tick_labels <- substr(as.character(x_breaks, format = "%B"), 1, 1)
   } else {
     x_label <- "Date"
-    x_breaks <- seq.Date(plot_start, most_recent, by = "year")
+    x_breaks <- seq.Date(plot_start, end_date, by = "year")
     x_tick_labels <- as.character(x_breaks, format = "%Y")
   }
   

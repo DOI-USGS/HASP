@@ -137,33 +137,33 @@ test_that("Daily gwl plot", {
   
   plot_title <- attr(gw_daily, "siteInfo")[["station_nm"]]
   
-  plot1 <- daily_gwl_2yr_plot(gw_daily, 
-                              date_col = "Date",
-                              value_col = "X_62610_00001",
-                              approved_col = "X_62610_00001_cd",
-                              historical_stat = "mean",
-                              month_breaks = TRUE,
-                              plot_title = plot_title)
+  plot1 <- daily_gwl_plot(gw_daily, 
+                          date_col = "Date",
+                          value_col = "X_62610_00001",
+                          approved_col = "X_62610_00001_cd",
+                          historical_stat = "mean",
+                          month_breaks = TRUE,
+                          plot_title = plot_title)
   
   plot_data_elements <- unlist(lapply(plot1$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
   
-  plot2 <- daily_gwl_2yr_plot(gw_daily, 
-                              date_col = "Date",
-                              value_col = "X_62610_00001",
-                              approved_col = "X_62610_00001_cd",
-                              historical_stat = "median",
-                              month_breaks = FALSE,
-                              plot_title = plot_title)
+  plot2 <- daily_gwl_plot(gw_daily, 
+                          date_col = "Date",
+                          value_col = "X_62610_00001",
+                          approved_col = "X_62610_00001_cd",
+                          historical_stat = "median",
+                          month_breaks = FALSE,
+                          plot_title = plot_title)
   
   plot_data_elements <- unlist(lapply(plot2$layers, function(x) {names(x$data)}))
   
   expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
   
-  plot3 <- daily_gwl_2yr_plot(gw_daily, 
+  plot3 <- daily_gwl_plot(gw_daily, 
                               parameter_cd = "62610",
                               historical_stat = "median",
                               month_breaks = FALSE,
@@ -174,6 +174,20 @@ test_that("Daily gwl plot", {
   expect_true(all(c("Date", "middle", "min", "max") %in%
                     plot_data_elements))
   
+  plot4 <- daily_gwl_plot(gw_daily, 
+                          date_col = "Date",
+                          value_col = "X_62610_00001",
+                          approved_col = "X_62610_00001_cd",
+                          start_date = "2018-10-01",
+                          end_date = "2020-10-01",
+                          historical_stat = "mean",
+                          month_breaks = TRUE,
+                          plot_title = plot_title)
+  
+  plot_data_elements <- unlist(lapply(plot4$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("Date", "middle", "min", "max") %in%
+                    plot_data_elements))
   
 })
 
