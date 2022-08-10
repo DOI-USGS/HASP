@@ -139,6 +139,7 @@ kable(head(weekly_table, 10), digits = 1)
 
 ```{r dailyPlotShow, fig.width=9}
 daily_gwl_plot(gw_level_dv, 
+               gwl_data,
                parameter_cd = parameterCd,
                plot_title = site_title,
                historical_stat = "mean",

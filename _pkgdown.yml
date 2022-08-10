@@ -29,6 +29,8 @@ navbar:
       href: articles/shinyApp.html
     - text: Water Level
       href: articles/Single_site_water_level.html
+    - text: Site Report
+      href: articles/Single_site_combo_data.html
     - text: Principle Aquifers
       href: articles/Single_basin.html
     - text: How to Contribute
@@ -42,7 +44,7 @@ reference:
     contents:
       - trend_plot
       - gwl_plot_all
-      - daily_gwl_2yr_plot
+      - daily_gwl_plot
       - weekly_frequency_plot
       - monthly_frequency_plot
       - qw_plot

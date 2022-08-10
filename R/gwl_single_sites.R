@@ -1,6 +1,7 @@
 #' Single site groundwater level plots and tables
 #' 
 #' Function to create the field groundwater level data plot.
+#' 
 #' @export
 #' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
 #' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
@@ -227,7 +228,7 @@ gwl_plot_all <- function(gw_level_dv,
     combo <- dplyr::bind_rows(gw_level_dv,
                               gwl_data)
     
-    combo_approved <- combo[combo$Approve == "A", ]
+    combo_approved <- combo[grepl("A", combo$Approve), ]
     
     gw_monthly <- monthly_mean(combo_approved, 
                                date_col = "Date", 

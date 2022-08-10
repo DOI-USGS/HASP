@@ -1,19 +1,36 @@
 #' Create a table of monthly frequency analysis
 #' 
-#' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
+#' The table will accept daily, discrete, or a both types of data. The median of each 
+#' year/month is calculated. Then using that median, monthly stats are calculated.
+#' Percentiles are calculated using the \code{quantile} function with "type=6".
+#' 
+#' 
+#' 
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
+#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+#' data frame with a date, value, and approval columns. Using the convention:
+#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+#' or sl_lev_va (representing value) will allow defaults to work.
+#' Use \code{NULL} for no discrete data.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param approved_col name of column to get provisional/approved status.
+#' can be used to define the value_col. If the data doesn't come directly from
+#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the name of the date column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the date
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param value_col the name of the value column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the value
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param approved_col the name of the column to get provisional/approved status.
+#' The default is \code{NA}, in which case, the code will try to get the column name
+#' automatically based on NWIS naming conventions. If both gw_level_dv and
+#' gwl_data data frames require custom column names, the first value of this 
+#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
 #' @param flip logical. If \code{TRUE}, flips labels so that the lower numbers 
@@ -161,22 +178,34 @@ stats_by_interval <- function(interval,
 
 #' Plot monthly frequency analysis
 #' 
+#' This plot uses calculations from \code{monthly_frequency_table}. Daily, discrete,
+#' or both types of data can be included.
+#' 
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
-#' from \code{readNWISdv}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value). Use \code{NULL} for no discrete data.
+#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+#' data frame with a date, value, and approval columns. Using the convention:
+#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+#' or sl_lev_va (representing value) will allow defaults to work.
+#' Use \code{NULL} for no discrete data.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param approved_col name of column to get provisional/approved status.
-#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
+#' can be used to define the value_col. If the data doesn't come directly from
+#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the name of the date column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the date
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param value_col the name of the value column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the value
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param approved_col the name of the column to get provisional/approved status.
+#' The default is \code{NA}, in which case, the code will try to get the column name
+#' automatically based on NWIS naming conventions. If both gw_level_dv and
+#' gwl_data data frames require custom column names, the first value of this 
+#' input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
@@ -417,27 +446,39 @@ monthly_frequency_plot <- function(gw_level_dv,
 
 #' Create a table of weekly frequency analysis
 #' 
-#' The weekly frequency analysis is based on daily values
+#' The weekly frequency analysis is based on daily, discrete, or both types of 
+#' data. The median of each year/week combo is calculated, then overall weekly
+#' statistics are calculated off of that median.
 #' 
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{readNWISdv}.
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
+#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+#' data frame with a date, value, and approval columns. Using the convention:
+#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+#' or sl_lev_va (representing value) will allow defaults to work.
+#' Use \code{NULL} for no discrete data.
+#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
+#' can be used to define the value_col. If the data doesn't come directly from
+#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the name of the date column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the date
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param value_col the name of the value column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the value
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param approved_col the name of the column to get provisional/approved status.
+#' The default is \code{NA}, in which case, the code will try to get the column name
+#' automatically based on NWIS naming conventions. If both gw_level_dv and
+#' gwl_data data frames require custom column names, the first value of this 
+#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
 #' @param flip logical. If \code{TRUE}, flips labels so that the lower numbers 
 #' are in the higher percentages. Default is \code{TRUE}. 
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
-#' @param approved_col name of column to get provisional/approved status.
 #' 
 #' @return a data frame of weekly frequency analysis
 #' 
@@ -494,23 +535,34 @@ weekly_frequency_table <- function(gw_level_dv,
 
 #' Plot weekly frequency analysis
 #' 
-#' The weekly frequency analysis is based on daily data
+#' Weekly statistics are calculated using the \code{weekly_frequency_table} function.
+#' Daily, discrete, or both types of data can be used.
 #' 
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{readNWISdv}.
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
+#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+#' data frame with a date, value, and approval columns. Using the convention:
+#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+#' or sl_lev_va (representing value) will allow defaults to work.
+#' Use \code{NULL} for no discrete data.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param approved_col name of column to get provisional/approved status.
+#' can be used to define the value_col. If the data doesn't come directly from
+#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the name of the date column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the date
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param value_col the name of the value column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the value
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param approved_col the name of the column to get provisional/approved status.
+#' The default is \code{NA}, in which case, the code will try to get the column name
+#' automatically based on NWIS naming conventions. If both gw_level_dv and
+#' gwl_data data frames require custom column names, the first value of this 
+#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
 #' @param plot_range the time frame to use for the plot. Either "Past year" to use the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
 #' in January.
@@ -766,18 +818,31 @@ weekly_frequency_plot <- function(gw_level_dv,
 
 #' Plot recent data
 #'
-#' @param gw_level_dv data frame daily groundwater level data
-#' from \code{readNWISdv}
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
+#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+#' data frame with a date, value, and approval columns. Using the convention:
+#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+#' or sl_lev_va (representing value) will allow defaults to work.
+#' Use \code{NULL} for no discrete data.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param approved_col name of column to get provisional/approved status.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to define the value_col. If the data doesn't come directly from
+#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the name of the date column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the date
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param value_col the name of the value column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the value
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param approved_col the name of the column to get provisional/approved status.
+#' The default is \code{NA}, in which case, the code will try to get the column name
+#' automatically based on NWIS naming conventions. If both gw_level_dv and
+#' gwl_data data frames require custom column names, the first value of this 
+#' input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
 #' @param start_date Date to start plot. If \code{NA} (which is the default),
 #' the plot will start 2 years before the most recent value.
@@ -828,6 +893,7 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'                historical_stat = "median")
 #' 
 daily_gwl_plot <- function(gw_level_dv, 
+                           gwl_data,
                            parameter_cd = NA,
                            date_col = NA,
                            value_col = NA, 
@@ -843,7 +909,7 @@ daily_gwl_plot <- function(gw_level_dv,
                            flip = FALSE) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
-                           gwl_data = NULL, 
+                           gwl_data = gwl_data, 
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col, 
@@ -1054,21 +1120,31 @@ daily_frequency_table <- function(gw_level_dv,
 
 #' Summary table of daily data
 #' 
-#' @param gw_level_dv daily groundwater level data
-#' from readNWISdv
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
+#' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
+#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+#' data frame with a date, value, and approval columns. Using the convention:
+#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+#' or sl_lev_va (representing value) will allow defaults to work.
+#' Use \code{NULL} for no discrete data.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to define the value_col. If the data doesn't come directly from
+#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
+#' @param date_col the name of the date column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the date
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param value_col the name of the value column. The default is \code{NA},
+#' in which case, the code will try to get the column name automatically based on NWIS
+#' naming conventions. If both gw_level_dv and gwl_data data frames 
+#' require custom column names, the first value of this input defines the value
+#' column for gw_level_dv, and the second defines gwl_data.
+#' @param approved_col the name of the column to get provisional/approved status.
+#' The default is \code{NA}, in which case, the code will try to get the column name
+#' automatically based on NWIS naming conventions. If both gw_level_dv and
+#' gwl_data data frames require custom column names, the first value of this 
+#' input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
 #' @param approved_col name of column to get provisional/approved status.
 #' 

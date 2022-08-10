@@ -175,6 +175,7 @@ if(type == "html"){
 ```{r dailyPlotShow, fig.width=9}
 if(nrow(gw_level_dv) > 0){
   daily_gwl_plot(gw_level_dv, 
+                 gwl_data,
                  parameter_cd = parameterCd,
                  plot_title = siteID,
                  stat_cd = statCd,
@@ -258,8 +259,9 @@ Results of trend analysis on maximum daily water levels:
 ```{r trendTableDaily}
 if(nrow(gw_level_dv) > 0){
   val_col <- paste("X", parameterCd, statCd, sep = "_")
+  approve <- paste0(val_col, "_cd")
   
-  gw_monthly <- monthly_mean(gw_level_dv[gw_level_dv[[paste0(val_col, "_cd")]] == "A",], 
+  gw_monthly <- monthly_mean(gw_level_dv[grepl("A", gw_level_dv[[approve]]),], 
                              value_col = paste("X",
                                                parameterCd, 
                                                statCd, sep = "_"))
