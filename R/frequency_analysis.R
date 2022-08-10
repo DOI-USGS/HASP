@@ -817,6 +817,10 @@ weekly_frequency_plot <- function(gw_level_dv,
 }
 
 #' Plot recent data
+#' 
+#' Calculates daily statistics based on all approved data.
+#' Daily, discrete, or both types are included.
+#' Historic median or mean are plotted based on all of the approved data.
 #'
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
 #' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
@@ -844,9 +848,11 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' gwl_data data frames require custom column names, the first value of this 
 #' input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param start_date Date to start plot. If \code{NA} (which is the default),
 #' the plot will start 2 years before the most recent value.
-#' @param end_data Date to end plot. If \code{NA} (which is the default), 
+#' @param end_date Date to end plot. If \code{NA} (which is the default), 
 #' the plot will end with the latest measurement. 
 #' @param historical_stat the summary statistic to use for middle line of the plot. Either
 #' "mean" or "median." 
@@ -871,20 +877,30 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' statCd <- "00001"
 #' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 #' gw_level_dv <- L2701_example_data$Daily
+#' 
+#' gwl_data <- L2701_example_data$Discrete
+#' 
 #' daily_gwl_plot(gw_level_dv,
+#'                NULL,
 #'                parameter_cd = "62610",
 #'                plot_title = "Groundwater Level", 
-#'                month_breaks = TRUE,
 #'                historical_stat = "median")
 #'                
 #' daily_gwl_plot(gw_level_dv,
+#'                gwl_data,
+#'                parameter_cd = "62610",
+#'                plot_title = "Groundwater Level", 
+#'                historical_stat = "median")
+#'                
+#' daily_gwl_plot(gw_level_dv,
+#'                gwl_data,
 #'                parameter_cd = "62610",
 #'                plot_title = "Groundwater Level", 
 #'                month_breaks = TRUE,
 #'                start_date = "2020-10-01",
 #'                historical_stat = "median")
 #'                
-#' daily_gwl_plot(gw_level_dv,
+#' daily_gwl_plot(gw_level_dv, gwl_data,
 #'                parameter_cd = "62610",
 #'                plot_title = "Groundwater Level", 
 #'                month_breaks = TRUE,
@@ -1044,7 +1060,7 @@ daily_gwl_plot <- function(gw_level_dv,
 
 #' Daily frequency table
 #' 
-#' Give the historical max, mean, minimum, and number of available points
+#' Calculates the historical max, mean, minimum, and number of available points
 #' for each day of the year
 #' 
 #' @param gw_level_dv data frame, daily groundwater level data

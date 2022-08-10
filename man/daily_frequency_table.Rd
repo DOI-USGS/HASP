@@ -44,7 +44,7 @@ a data frame giving the max, mean, min, and number of available
 days of data for each day of the year.
 }
 \description{
-Give the historical max, mean, minimum, and number of available points
+Calculates the historical max, mean, minimum, and number of available points
 for each day of the year
 }
 \examples{

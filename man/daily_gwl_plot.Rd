@@ -55,8 +55,14 @@ gwl_data data frames require custom column names, the first value of this
 input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
 
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
+
 \item{start_date}{Date to start plot. If \code{NA} (which is the default),
 the plot will start 2 years before the most recent value.}
+
+\item{end_date}{Date to end plot. If \code{NA} (which is the default), 
+the plot will end with the latest measurement.}
 
 \item{historical_stat}{the summary statistic to use for middle line of the plot. Either
 "mean" or "median."}
@@ -71,9 +77,6 @@ the plot will start 2 years before the most recent value.}
 
 \item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{FALSE}.}
-
-\item{end_data}{Date to end plot. If \code{NA} (which is the default), 
-the plot will end with the latest measurement.}
 }
 \value{
 a ggplot object with a ribbon indicating the historical daily range,
@@ -81,7 +84,9 @@ the historical daily mean or median, and approved and provisional
 daily data for the last two years
 }
 \description{
-Plot recent data
+Calculates daily statistics based on all approved data.
+Daily, discrete, or both types are included.
+Historic median or mean are plotted based on all of the approved data.
 }
 \examples{
 
@@ -90,20 +95,30 @@ p_code_dv <- "62610"
 statCd <- "00001"
 # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
 gw_level_dv <- L2701_example_data$Daily
+
+gwl_data <- L2701_example_data$Discrete
+
 daily_gwl_plot(gw_level_dv,
+               NULL,
                parameter_cd = "62610",
                plot_title = "Groundwater Level", 
-               month_breaks = TRUE,
                historical_stat = "median")
                
 daily_gwl_plot(gw_level_dv,
+               gwl_data,
+               parameter_cd = "62610",
+               plot_title = "Groundwater Level", 
+               historical_stat = "median")
+               
+daily_gwl_plot(gw_level_dv,
+               gwl_data,
                parameter_cd = "62610",
                plot_title = "Groundwater Level", 
                month_breaks = TRUE,
                start_date = "2020-10-01",
                historical_stat = "median")
                
-daily_gwl_plot(gw_level_dv,
+daily_gwl_plot(gw_level_dv, gwl_data,
                parameter_cd = "62610",
                plot_title = "Groundwater Level", 
                month_breaks = TRUE,
