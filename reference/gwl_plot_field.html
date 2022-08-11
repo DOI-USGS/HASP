@@ -16,7 +16,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,8 +32,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/PrepareData.html">Prepare External Data</a>
     <a class="dropdown-item" href="../articles/shinyApp.html">Introduction to Shiny App</a>
-    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Single Site</a>
     <a class="dropdown-item" href="../articles/Single_site_water_level.html">Water Level</a>
+    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Site Report</a>
     <a class="dropdown-item" href="../articles/Single_basin.html">Principle Aquifers</a>
     <a class="dropdown-item" href="../articles/Contributing.html">How to Contribute</a>
   </div>
@@ -55,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Single site groundwater level plots and tables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/HEAD/R/gwl_single_sites.R" class="external-link"><code>R/gwl_single_sites.R</code></a></small>
+      
       <div class="d-none name"><code>gwl_plot_field.Rd</code></div>
     </div>
 
@@ -94,33 +94,45 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>gwl_data</dt>
-<dd><p>data frame returned from dataRetrieval::readNWISgwl, or 
-data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-approval code), and a column representing the measured value (either lev_va,
-sl_lev_va, or value).</p></dd>
+<dd><p>data frame returned from  <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></code>, or 
+data frame with a date, value, and approval columns. Using the convention:
+lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+or sl_lev_va (representing value) will allow defaults to work.
+Use <code>NULL</code> for no discrete data.</p></dd>
 
 
 <dt>plot_title</dt>
-<dd><p>character</p></dd>
+<dd><p>character, title for plot.</p></dd>
 
 
 <dt>parameter_cd</dt>
-<dd><p>Parameter code to be filtered to in a column specifically
-named "parameter_cd". If the data doesn't come directly from NWIS services, this 
-can be set to <code>NA</code>,and this argument will be ignored.</p></dd>
+<dd><p>If data in gw_level_dv comes from NWIS, the parameter_cd 
+can be used to define the value_col. If the data doesn't come directly from
+NWIS services, this can be set to <code>NA</code>,and this argument will be ignored.</p></dd>
 
 
 <dt>date_col</dt>
-<dd><p>name of date column. Default is "lev_dt".</p></dd>
+<dd><p>the name of the date column. The default is <code>NA</code>,
+in which case, the code will try to get the column name automatically based on NWIS
+naming conventions. If both gw_level_dv and gwl_data data frames 
+require custom column names, the first value of this input defines the date
+column for gw_level_dv, and the second defines gwl_data.</p></dd>
 
 
 <dt>value_col</dt>
-<dd><p>name of value column. If NA, the code will attempt to autogenerate
-based on parameter_cd</p></dd>
+<dd><p>the name of the value column. The default is <code>NA</code>,
+in which case, the code will try to get the column name automatically based on NWIS
+naming conventions. If both gw_level_dv and gwl_data data frames 
+require custom column names, the first value of this input defines the value
+column for gw_level_dv, and the second defines gwl_data.</p></dd>
 
 
 <dt>approved_col</dt>
-<dd><p>name of approval column. Default is "lev_age_cd".</p></dd>
+<dd><p>the name of the column to get provisional/approved status.
+The default is <code>NA</code>, in which case, the code will try to get the column name
+automatically based on NWIS naming conventions. If both gw_level_dv and
+gwl_data data frames require custom column names, the first value of this 
+input defines the approval column for gw_level_dv, and the second defines gwl_data.</p></dd>
 
 
 <dt>flip</dt>
@@ -133,7 +145,8 @@ Default is <code>TRUE</code>.</p></dd>
 
 
 <dt>gw_level_dv</dt>
-<dd><p>daily value groundwater levels. Must include columns specified in date_col, value_col, and approved_col.</p></dd>
+<dd><p>data frame, daily groundwater level data. Often obtained 
+from <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></code>. Use <code>NULL</code> for no daily data.</p></dd>
 
 
 <dt>stat_cd</dt>
@@ -142,7 +155,7 @@ can be used to help define the value_col.</p></dd>
 
 
 <dt>add_trend</dt>
-<dd><p>logical. Uses <code>kendell_test_5_20_years</code>.</p></dd>
+<dd><p>logical. Uses <code>kendall_test_5_20_years</code>.</p></dd>
 
 </dl></div>
 

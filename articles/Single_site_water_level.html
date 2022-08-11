@@ -40,7 +40,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/PrepareData.html">Prepare External Data</a>
     <a class="dropdown-item" href="../articles/shinyApp.html">Introduction to Shiny App</a>
-    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Single Site</a>
     <a class="dropdown-item" href="../articles/Single_site_water_level.html">Water Level</a>
+    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Site Report</a>
     <a class="dropdown-item" href="../articles/Single_basin.html">Principle Aquifers</a>
     <a class="dropdown-item" href="../articles/Contributing.html">How to Contribute</a>
   </div>
@@ -89,7 +89,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Single Site Water Level</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/HEAD/vignettes/Single_site_water_level.Rmd" class="external-link"><code>vignettes/Single_site_water_level.Rmd</code></a></small>
+      
       <div class="d-none name"><code>Single_site_water_level.Rmd</code></div>
     </div>
 
@@ -155,9 +155,9 @@ body {
 </tr>
 <tr class="odd">
 <td align="left">Groundwater level above NAVD 1988, feet</td>
-<td align="left">2019-08-05</td>
+<td align="left">2019-08-11</td>
 <td align="left">2022-07-07</td>
-<td align="right">1068</td>
+<td align="right">1062</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=263819081585801" class="external-link">Field/Lab water-quality samples</a></td>
@@ -247,6 +247,7 @@ body {
 <th align="right">nYears</th>
 <th align="right">minMed</th>
 <th align="right">maxMed</th>
+<th align="left">week_start</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -261,6 +262,7 @@ body {
 <td align="right">42</td>
 <td align="right">-40.6</td>
 <td align="right">-5.5</td>
+<td align="left">01-01</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
@@ -274,6 +276,7 @@ body {
 <td align="right">42</td>
 <td align="right">-41.4</td>
 <td align="right">-5.5</td>
+<td align="left">01-08</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
@@ -287,6 +290,7 @@ body {
 <td align="right">42</td>
 <td align="right">-42.1</td>
 <td align="right">-5.7</td>
+<td align="left">01-15</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
@@ -300,6 +304,7 @@ body {
 <td align="right">42</td>
 <td align="right">-42.4</td>
 <td align="right">-6.1</td>
+<td align="left">01-22</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -313,6 +318,7 @@ body {
 <td align="right">43</td>
 <td align="right">-41.6</td>
 <td align="right">-6.8</td>
+<td align="left">01-29</td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
@@ -326,6 +332,7 @@ body {
 <td align="right">43</td>
 <td align="right">-42.1</td>
 <td align="right">-7.0</td>
+<td align="left">02-05</td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
@@ -339,6 +346,7 @@ body {
 <td align="right">43</td>
 <td align="right">-43.5</td>
 <td align="right">-7.4</td>
+<td align="left">02-12</td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
@@ -352,6 +360,7 @@ body {
 <td align="right">43</td>
 <td align="right">-45.0</td>
 <td align="right">-6.1</td>
+<td align="left">02-19</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
@@ -365,6 +374,7 @@ body {
 <td align="right">43</td>
 <td align="right">-42.6</td>
 <td align="right">-6.2</td>
+<td align="left">02-26</td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
@@ -378,6 +388,7 @@ body {
 <td align="right">43</td>
 <td align="right">-43.3</td>
 <td align="right">-6.3</td>
+<td align="left">03-04</td>
 </tr>
 </tbody>
 </table>
@@ -386,12 +397,13 @@ body {
 <h3 id="daily-2-year">Daily 2-year<a class="anchor" aria-label="anchor" href="#daily-2-year"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/daily_gwl_2yr_plot.html">daily_gwl_2yr_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
-<span>                   parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
-<span>                   plot_title <span class="op">=</span> <span class="va">site_title</span>,</span>
-<span>                   historical_stat <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>                   month_breaks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                   y_axis_label <span class="op">=</span> <span class="va">y_label</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/daily_gwl_plot.html">daily_gwl_plot</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
+<span>               <span class="va">gwl_data</span>,</span>
+<span>               parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
+<span>               plot_title <span class="op">=</span> <span class="va">site_title</span>,</span>
+<span>               historical_stat <span class="op">=</span> <span class="st">"mean"</span>,</span>
+<span>               month_breaks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>               y_axis_label <span class="op">=</span> <span class="va">y_label</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Single_site_water_level_files/figure-html/dailyPlotShow-1.png" width="864"></p>
 <p>Statistics of maximum daily water level record (DOY = day of year). Only showing the first 10 rows for this example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -527,12 +539,10 @@ body {
 </table>
 <p>Results of trend analysis on maximum daily water levels:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gw_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/monthly_mean.html">monthly_mean</a></span><span class="op">(</span><span class="va">gw_level_dv</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">trend_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kendell_test_5_20_years.html">kendell_test_5_20_years</a></span><span class="op">(</span><span class="va">gw_monthly</span>, </span>
-<span>                        seasonal <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                        date_col <span class="op">=</span> <span class="st">"mid_date"</span>, </span>
-<span>                        value_col <span class="op">=</span> <span class="st">"mean_va"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">trend_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kendall_test_5_20_years.html">kendall_test_5_20_years</a></span><span class="op">(</span><span class="va">gw_level_dv</span>, </span>
+<span>                                        <span class="cn">NULL</span>,</span>
+<span>                                        parameter_cd <span class="op">=</span> <span class="va">parameterCd</span>,</span>
+<span>                                        seasonal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="va">trend_result</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -547,17 +557,17 @@ body {
 <tr class="odd">
 <td align="left">5-year trend</td>
 <td align="right">0.1</td>
-<td align="right">0.5</td>
+<td align="right">0</td>
 <td align="right">0.2</td>
-<td align="right">-270.0</td>
-<td align="left">Not significant</td>
+<td align="right">-391.2</td>
+<td align="left">Up</td>
 </tr>
 <tr class="even">
 <td align="left">20-year trend</td>
-<td align="right">0.4</td>
-<td align="right">0.0</td>
+<td align="right">0.3</td>
+<td align="right">0</td>
 <td align="right">0.7</td>
-<td align="right">-1439.5</td>
+<td align="right">-1423.5</td>
 <td align="left">Up</td>
 </tr>
 </tbody>

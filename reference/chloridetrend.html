@@ -16,7 +16,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,8 +32,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/PrepareData.html">Prepare External Data</a>
     <a class="dropdown-item" href="../articles/shinyApp.html">Introduction to Shiny App</a>
-    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Single Site</a>
     <a class="dropdown-item" href="../articles/Single_site_water_level.html">Water Level</a>
+    <a class="dropdown-item" href="../articles/Single_site_combo_data.html">Site Report</a>
     <a class="dropdown-item" href="../articles/Single_basin.html">Principle Aquifers</a>
     <a class="dropdown-item" href="../articles/Contributing.html">How to Contribute</a>
   </div>
@@ -55,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chloride plot with trend</h1>
-      <small class="dont-index">Source: <a href="https://github.com/USGS-R/HASP/blob/HEAD/R/chloride.R" class="external-link"><code>R/chloride.R</code></a></small>
+      
       <div class="d-none name"><code>chloridetrend.Rd</code></div>
     </div>
 
@@ -70,7 +70,8 @@
 <span>  <span class="va">plot_title</span>,</span>
 <span>  y_label <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  CharacteristicName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Chloride"</span><span class="op">)</span>,</span>
-<span>  norm_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">225</span>, <span class="fl">999</span><span class="op">)</span>,</span>
+<span>  norm_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">230</span>, <span class="fl">860</span><span class="op">)</span>,</span>
+<span>  subtitle <span class="op">=</span> <span class="st">"U.S. Geological Survey"</span>,</span>
 <span>  include_table <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -100,6 +101,10 @@ attached to dataRetrieval output.</p></dd>
 <dd><p>a numerical range to potentially group the data. If NA, no grouping is shown.</p></dd>
 
 
+<dt>subtitle</dt>
+<dd><p>character. Sub-title for plot, default is "U.S. Geological Survey".</p></dd>
+
+
 <dt>include_table</dt>
 <dd><p>logical whether or not to include the trend table in the upper left corner.</p></dd>
 
@@ -116,6 +121,8 @@ attached to dataRetrieval output.</p></dd>
 <span class="r-in"><span><span class="va">qw_data</span> <span class="op">&lt;-</span> <span class="va">L2701_example_data</span><span class="op">$</span><span class="va">QW</span></span></span>
 <span class="r-in"><span><span class="va">plot_title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">qw_data</span>, <span class="st">"siteInfo"</span><span class="op">)</span><span class="op">[[</span><span class="st">"station_nm"</span><span class="op">]</span><span class="op">]</span>, <span class="st">": Chloride"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">trend_plot</span><span class="op">(</span><span class="va">qw_data</span>, <span class="va">plot_title</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Not enough measurements in each of the the last 5 years to proceed</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Not enough measurements in each of the the last 20 years to proceed</span>
 <span class="r-plt img"><img src="chloridetrend-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
