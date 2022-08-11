@@ -174,14 +174,15 @@ if(type == "html"){
 
 ```{r dailyPlotShow, fig.width=9}
 if(nrow(gw_level_dv) > 0){
-  daily_gwl_2yr_plot(gw_level_dv, 
-                     parameter_cd = parameterCd,
-                     plot_title = siteID,
-                     stat_cd = statCd,
-                     flip = flip,
-                     historical_stat = "mean",
-                     month_breaks = TRUE,
-                     y_axis_label = yaxis)
+  daily_gwl_plot(gw_level_dv, 
+                 gwl_data,
+                 parameter_cd = parameterCd,
+                 plot_title = siteID,
+                 stat_cd = statCd,
+                 flip = flip,
+                 historical_stat = "mean",
+                 month_breaks = TRUE,
+                 y_axis_label = yaxis)
 } else {
   cat("Daily plot only useful for sites with daily data.")
 }
@@ -257,13 +258,20 @@ Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
 if(nrow(gw_level_dv) > 0){
-  gw_monthly <- monthly_mean(gw_level_dv, 
-                             value_col = paste("X", parameterCd, statCd, sep = "_"))
+  val_col <- paste("X", parameterCd, statCd, sep = "_")
+  approve <- paste0(val_col, "_cd")
   
-  trend_result <- kendell_test_5_20_years(gw_monthly, 
-                          seasonal = TRUE, 
-                          date_col = "mid_date", 
-                          value_col = "mean_va")
+  gw_monthly <- monthly_mean(gw_level_dv[grepl("A", gw_level_dv[[approve]]),], 
+                             value_col = paste("X",
+                                               parameterCd, 
+                                               statCd, sep = "_"))
+  gw_monthly$Approved <- "A"
+  trend_result <- kendall_test_5_20_years(NULL,
+                                          gw_monthly, 
+                                          seasonal = TRUE, 
+                                          date_col = "mid_date", 
+                                          value_col = "mean_va", 
+                                          approved_col = "Approved")
   kable(trend_result, digits = 1)
 } else {
   cat("No daily data to aggregate.")

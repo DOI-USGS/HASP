@@ -6,6 +6,7 @@
 #' @param qw_data data frame returned from dataRetrieval::readWQPqw,
 #' must include columns sample_dt, parm_cd, result_va
 #' @param plot_title character title for plot
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @rdname sc_cl
 #' @export
 #' @import ggplot2
@@ -19,7 +20,9 @@
 #' qw_data <- L2701_example_data$QW
 #' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
 #' Sc_Cl_plot(qw_data, plot_title)
-Sc_Cl_plot <- function(qw_data, plot_title){
+Sc_Cl_plot <- function(qw_data, 
+                       plot_title,
+                       subtitle = "U.S. Geological Survey"){
   
 
   # Specify the plot titles using the function getParmCodeDef
@@ -40,6 +43,7 @@ Sc_Cl_plot <- function(qw_data, plot_title){
                 formula = y ~ x , se = FALSE) +
     hasp_framework(y_label = Cltitle, 
                    x_label = Sctitle, include_y_scale = TRUE,
+                   subtitle = subtitle,
                    plot_title = plot_title,
                    zero_on_top = NA) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
@@ -87,22 +91,63 @@ Sc_Cl_table <- function(qw_data){
 #' @param y_label character label for y axis. If left as NA, the function
 #' will attempt to use the "variableInfo" attribute of qw_data. This is
 #' attached to dataRetrieval output.
+#' @param start_date Date to start plot. If \code{NA} (which is the default),
+#' the plot will start at the earliest measurement.
+#' @param end_date Date to end plot. If \code{NA} (which is the default), 
+#' the plot will end with the latest measurement. 
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @export
 #' @examples
 #' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
 #' qw_plot(qw_data, plot_title, CharacteristicName = "Chloride")
 #' qw_plot(qw_data, plot_title, CharacteristicName = "Specific conductance")
+#' qw_plot(qw_data,
+#'         plot_title, 
+#'         CharacteristicName = "Specific conductance",
+#'         start_date = "1990-01-01")
+#'        
+#' site <- "USGS-01491000"
+#' qw_data_phos <- dataRetrieval::readWQPqw(site, "Orthophosphate")
+#' qw_plot(qw_data_phos ,
+#'         CharacteristicName = "Orthophosphate",
+#'         plot_title = "Choptank: Orthophosphate")
 qw_plot <- function(qw_data, plot_title,
                     y_label = NA,
-                    CharacteristicName = "Chloride"){
+                    CharacteristicName = "Chloride",
+                    start_date = NA,
+                    end_date = NA, 
+                    subtitle = "U.S. Geological Survey"){
   
-  if(!all(c("ActivityStartDateTime", "CharacteristicName", "ResultMeasureValue") %in% names(qw_data))){
+  if(!all(c("ActivityStartDateTime", "CharacteristicName",
+            "ResultMeasureValue", "ResultDetectionConditionText") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
 
   qw_data <- qw_data %>% 
     dplyr::filter(CharacteristicName %in% !!CharacteristicName)  %>% 
     dplyr::mutate(year = as.numeric(format(as.Date(ActivityStartDate), "%Y")) + as.numeric(as.character(as.Date(ActivityStartDate), "%j"))/365)
+  
+  if(!is.na(start_date)){
+    qw_data <- qw_data[qw_data$ActivityStartDate >= as.Date(start_date) ,]
+  }
+  
+  if(!is.na(end_date)){
+    qw_data <- qw_data[qw_data$ActivityStartDate <= as.Date(end_date) ,]
+  }
+  
+  qw_data$qualifier <- FALSE
+  suppressWarnings(qw_data$qualifier[is.na(as.numeric(qw_data$ResultMeasureValue)) & 
+                      !is.na(qw_data$ResultMeasureValue)] <- TRUE)
+
+  qw_data$DetectCondition <- toupper(qw_data$ResultDetectionConditionText)
+  qw_data$qualifier[grep("NON-DETECT",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("NON DETECT",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("NOT DETECTED",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("DETECTED NOT QUANTIFIED",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("BELOW QUANTIFICATION LIMIT",qw_data$DetectCondition)] <- TRUE
+  
+  any_censored <- any(qw_data$qualifier)
+  qw_data$qualifier <- ifelse(qw_data$qualifier, "Not Detected", "Detected")
   
   if(is.na(y_label)){
     y_label <- attr(qw_data, "variableInfo")
@@ -114,16 +159,32 @@ qw_plot <- function(qw_data, plot_title,
     }
   }
   
-  on_top <- zero_on_top(qw_data$ResultMeasureValue)
-  
   plot_out <- ggplot() +
-    geom_point(data = qw_data ,
-               aes(x = year, y = ResultMeasureValue),
-               size = 1.5, color = "blue") +
-    hasp_framework(x_label = "Date", y_label = y_label, include_y_scale = TRUE,
-                   plot_title = plot_title, zero_on_top = on_top) +
+    hasp_framework(x_label = "Date", y_label = y_label, 
+                   include_y_scale = TRUE,
+                   plot_title = plot_title, 
+                   zero_on_top = FALSE, 
+                   subtitle = subtitle) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL))
+
+  if(any_censored){
+    plot_out <- plot_out +
+      geom_point(data = qw_data ,
+                 aes(x = year, y = ResultMeasureValue, shape = qualifier),
+                 size = 1.5, color = "blue") +
+      scale_shape_manual(name = NULL,
+                         values = c("Not Detected" = 1, "Detected" = 16),
+                         drop = FALSE) 
+  } else {
+    plot_out <- plot_out +
+      geom_point(data = qw_data ,
+                 aes(x = year, y = ResultMeasureValue),
+                 size = 1.5, color = "blue")
+  }
+ 
+
+    
   
   return(plot_out)
   
@@ -135,7 +196,7 @@ qw_plot <- function(qw_data, plot_title,
 #' @examples
 #' 
 #' qw_summary(qw_data, CharacteristicName = "Chloride",
-#'  norm_range = c(225,999))
+#'  norm_range = c(230, 860))
 #' qw_summary(qw_data, CharacteristicName = "Specific conductance",
 #'  norm_range = NA)
 qw_summary <- function(qw_data, CharacteristicName, 
@@ -168,7 +229,7 @@ qw_summary <- function(qw_data, CharacteristicName,
                                        site_col = "MonitoringLocationIdentifier",
                                        value_col = "ResultMeasureValue"))
                 
-  Analysis = c("Date of first sample",
+  Analysis <- c("Date of first sample",
                paste0("First sample result (",unit_meas,")"),
                "Date of last sample",
                paste0("Last sample result (",unit_meas,")"),
@@ -184,7 +245,7 @@ qw_summary <- function(qw_data, CharacteristicName,
                paste0("Third quartile (", unit_meas, ")"),
                "Number of samples")
   
-  Result = c(as.character(qw_info$first_sample),
+  Result <- c(as.character(qw_info$first_sample),
              signif(qw_info$first_sample_result, 3),
              as.character(qw_info$last_sample),
              signif(qw_info$last_sample_result, 3),

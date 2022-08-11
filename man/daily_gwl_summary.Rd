@@ -15,26 +15,37 @@ daily_gwl_summary(
 )
 }
 \arguments{
-\item{gw_level_dv}{daily groundwater level data
-from readNWISdv}
+\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
+from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
 
-\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
-data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-approval code), and a column representing the measured value (either lev_va,
-sl_lev_va, or value).}
+\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+data frame with a date, value, and approval columns. Using the convention:
+lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
+or sl_lev_va (representing value) will allow defaults to work.
+Use \code{NULL} for no discrete data.}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
-can be used to define the value_col.
- If the data doesn't come directly from NWIS services, this 
-can be set to \code{NA},and this argument will be ignored.}
+can be used to define the value_col. If the data doesn't come directly from
+NWIS services, this can be set to \code{NA},and this argument will be ignored.}
 
-\item{date_col}{the heading of the date column. The default is \code{NA},
-which the code will try to get the column name automatically.}
+\item{date_col}{the name of the date column. The default is \code{NA},
+in which case, the code will try to get the column name automatically based on NWIS
+naming conventions. If both gw_level_dv and gwl_data data frames 
+require custom column names, the first value of this input defines the date
+column for gw_level_dv, and the second defines gwl_data.}
 
-\item{value_col}{name of value column. The default is \code{NA},
-which the code will try to get the column name automatically.}
+\item{value_col}{the name of the value column. The default is \code{NA},
+in which case, the code will try to get the column name automatically based on NWIS
+naming conventions. If both gw_level_dv and gwl_data data frames 
+require custom column names, the first value of this input defines the value
+column for gw_level_dv, and the second defines gwl_data.}
 
-\item{approved_col}{name of column to get provisional/approved status.}
+\item{approved_col}{the name of the column to get provisional/approved status.
+The default is \code{NA}, in which case, the code will try to get the column name
+automatically based on NWIS naming conventions. If both gw_level_dv and
+gwl_data data frames require custom column names, the first value of this 
+input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}

@@ -9,7 +9,8 @@ trend_plot(
   plot_title,
   y_label = NA,
   CharacteristicName = c("Chloride"),
-  norm_range = c(225, 999),
+  norm_range = c(230, 860),
+  subtitle = "U.S. Geological Survey",
   include_table = TRUE
 )
 }
@@ -26,6 +27,8 @@ attached to dataRetrieval output.}
 \item{CharacteristicName}{character CharacteristicName to plot}
 
 \item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
+
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{include_table}{logical whether or not to include the trend table in the upper left corner.}
 }

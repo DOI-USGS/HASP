@@ -26,9 +26,11 @@ parameterCd <- "62610"
 #                                           statCd = statCd)
 # Using package example data:
 gw_level_dv <- L2701_example_data$Daily
-gw_monthly <- monthly_mean(gw_level_dv)
 
-kendell_test_5_20_years(gw_monthly, seasonal = TRUE, 
-                        date_col = "mid_date", value_col = "mean_va")
+site_statistics <- monthly_frequency_table(gw_level_dv, 
+                                           NULL,
+                                           parameter_cd = parameterCd)
+
+gw_monthly <- monthly_mean(gw_level_dv)
 
 }

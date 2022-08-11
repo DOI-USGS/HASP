@@ -7,18 +7,27 @@
 #' 5-year test, and at least 6 readings for the last 20 years are required
 #' for the 20-year test. The current calendar year is excluded by default.
 #' 
-#' @param gwl data frame that must include a numeric column defined by "value_col",
-#'  and a Date or POSIXct column defined by "date_col"
-#' @param date_col name of date column.
-#' @param value_col name of value column.
+#' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
+#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
+#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
+#' approval code), and a column representing the measured value (either lev_va,
+#' sl_lev_va, or value).
+#' @param date_col the heading of the date column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
+#' @param value_col name of value column. The default is \code{NA},
+#' which the code will try to get the column name automatically.
+#' @param approved_col name of column to get provisional/approved status.
+#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+#' can be used to help define the value_col.
 #' @param seasonal logical. Use a seasonal kendall test or not seasonal. Default is \code{TRUE}.
 #' @param enough_5 number per year. Default is 10.
 #' @param enough_20 number per year. Default is 6.
 #' @param alpha the confidence level to use for statistical significance
 #' @param include_current_year a logical indicating whether to include data from
 #' the current calendar year in the test.
-#' @param parameter_cd_gwl Parameter code to be filtered to in a column specifically
-#' named "parameter_cd". If the data doesn't come directly from NWIS services, this 
+#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
+#' can be used to define the value_col.
+#'  If the data doesn't come directly from NWIS services, this 
 #' can be set to \code{NA},and this argument will be ignored.
 #' @importFrom stats as.formula
 #' @return a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
@@ -32,24 +41,41 @@
 #' 
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
-#' kendell_test_5_20_years(gwl_data, parameter_cd_gwl = "62610")
-#' 
-kendell_test_5_20_years <- function(gwl, 
-                                    parameter_cd_gwl = NA,
-                                    date_col = "lev_dt",
-                                    value_col = "sl_lev_va",
+#' kendall_test_5_20_years(NULL,
+#'                         gwl_data,
+#'                         parameter_cd = "62610")
+#'                         
+#' gw_level_dv <- L2701_example_data$Daily
+#' kendall_test_5_20_years(gw_level_dv,
+#'                         gwl_data,
+#'                         parameter_cd = "62610")
+kendall_test_5_20_years <- function(gw_level_dv, 
+                                    gwl_data,
+                                    parameter_cd = NA,
+                                    date_col = NA,
+                                    value_col = NA,
+                                    approved_col = NA,
+                                    stat_cd = NA,
                                     alpha = 0.95,
                                     seasonal = TRUE, 
                                     enough_5 = 10, enough_20 = 6,
                                     include_current_year = FALSE) {
 
-  if(!all(c(date_col, value_col) %in% names(gwl))) {
-    stop("gwl should include ", date_col, " and ", value_col, " columns")
-  }
+  data_list <- set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameter_cd,
+                           date_col = date_col,
+                           value_col = value_col, 
+                           approved_col = approved_col,
+                           stat_cd = stat_cd)
   
-  gwl <- filter_pcode(gwl, parameter_cd_gwl)
+  gw_level_dv <- data_list$gw_level_dv
+  gwl_data <- data_list$gwl_data
+
+  gwl <- dplyr::bind_rows(gw_level_dv,
+                          gwl_data)
   
-  gwl$year <- as.numeric(format(gwl[[date_col]], "%Y"))
+  gwl$year <- as.numeric(format(gwl$Date, "%Y"))
   
   if(!include_current_year) {
     current_year <- max(gwl$year, na.rm = TRUE)
@@ -58,19 +84,18 @@ kendell_test_5_20_years <- function(gwl,
 
   latest_measured_year <- max(gwl$year, na.rm = TRUE)
   
-  
-  enough_data_5yr <- enough_data(gwl, date_col = date_col, 
+  enough_data_5yr <- enough_data(gwl, date_col = "Date", 
                                  required_per_year = enough_5) 
-  enough_data_20yr <- enough_data(gwl, date_col = date_col, 
+  enough_data_20yr <- enough_data(gwl, date_col = "Date", 
                                   n_years = 20, 
                                   required_per_year = enough_20) # 50% of monthly data
 
   if(seasonal){
-    gwl$month <- as.numeric(format(gwl[[date_col]], "%m"))
-    form <- as.formula(paste(value_col, " ~ month + year"))
+    gwl$month <- as.numeric(format(gwl$Date, "%m"))
+    form <- as.formula(Value ~ month + year)
   } else {
-    gwl[date_col] <- as.numeric(as.Date(gwl[[date_col]]))
-    form <- as.formula(paste(value_col, " ~ ", date_col ))
+    gwl$Date <- as.numeric(as.Date(gwl$Date))
+    form <- as.formula(Value ~ Date )
   }
   
   test <- vector()
@@ -83,7 +108,7 @@ kendell_test_5_20_years <- function(gwl,
   if(enough_data_5yr) {
     # Don't assume the tail is bringing back all years:
     last_5 <- dplyr::filter(gwl, year >= latest_measured_year - 5)
-    
+
     if(seasonal){
       test_5yr <- 
         EnvStats::kendallSeasonalTrendTest(form, 
@@ -92,7 +117,7 @@ kendell_test_5_20_years <- function(gwl,
       test_5yr <- EnvStats::kendallTrendTest(form, 
                                              data = last_5)
     }
-
+    
     test[length(test) + 1] <- "5-year trend"
     tau[length(tau) + 1] <- test_5yr$estimate['tau']
     pValue[length(pValue) + 1] <- test_5yr$p.value[ifelse(seasonal, 'z (Trend)', 'z')]
@@ -160,10 +185,12 @@ kendell_test_5_20_years <- function(gwl,
 #' #                                           statCd = statCd)
 #' # Using package example data:
 #' gw_level_dv <- L2701_example_data$Daily
-#' gw_monthly <- monthly_mean(gw_level_dv)
 #' 
-#' kendell_test_5_20_years(gw_monthly, seasonal = TRUE, 
-#'                         date_col = "mid_date", value_col = "mean_va")
+#' site_statistics <- monthly_frequency_table(gw_level_dv, 
+#'                                            NULL,
+#'                                            parameter_cd = parameterCd)
+#' 
+#' gw_monthly <- monthly_mean(gw_level_dv)
 #' 
 monthly_mean <- function(x,
                          date_col = "Date",

@@ -8,3 +8,5 @@ vignettes/*.html
 tests/testthat/Rplots.pdf
 Meta
 docs/*
+/doc/
+/Meta/

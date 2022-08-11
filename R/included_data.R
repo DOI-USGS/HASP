@@ -114,10 +114,8 @@ NULL
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
-    paste(strwrap('USGS Research Package:
-https://owi.usgs.gov/R/packages.html#research
-PACKAGE IN HEAVY DEVELOPMENT
-NO FUTURE BEHAVIOR PROMISED', width = 40),
+    paste(strwrap('More information:
+https://rconnect.usgs.gov/HASP_docs/', width = 40),
           collapse='\n'))
 }
 
@@ -153,8 +151,8 @@ utils::globalVariables(c("lev_dt", "nYears","minMed", "maxMed", "name", "value",
                          "mean_med", "max_med", "min_med", "x_norm", "station_nm",
                          "prep_map_data", "MonitoringLocationIdentifier", "site", "val",
                          "ResultMeasureValue", "lev_va", "agency_cd", "tz_cd", "state_call", 
-                         "pcode", "lev_status_cd", "ActivityStartDate", "cd",
-                         "..eq.label..", "..rr.label..", "ActivityStartDateTime",
+                         "pcode", "lev_status_cd", "ActivityStartDate", "cd", "week_start",
+                         "..eq.label..", "..rr.label..", "ActivityStartDateTime", "qualifier",
                          "Approve", "Aqfr_Name_prpr", "CharacteristicName", "Chloride", "DOY", "Data Type", "Date", "J",
                          "Specific conductance", "Value", "begin", "begin_date", "condition", "count", "count_nu",
                          "county_cd", "data_type_cd", "dateTime", "dec_lat_va", "dec_long_va", "end", "end_date",
