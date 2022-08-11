@@ -40,7 +40,15 @@ naming conventions. If both gw_level_dv and gwl_data data frames
 require custom column names, the first value of this input defines the value
 column for gw_level_dv, and the second defines gwl_data.}
 
-\item{approved_col}{name of column to get provisional/approved status.}
+\item{approved_col}{the name of the column to get provisional/approved status.
+The default is \code{NA}, in which case, the code will try to get the column name
+automatically based on NWIS naming conventions. If both gw_level_dv and
+gwl_data data frames require custom column names, the first value of this 
+input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
+
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+can be used to help define the value_col.}
 }
 \value{
 a summary table giving the period of record, completeness

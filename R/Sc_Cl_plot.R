@@ -105,6 +105,12 @@ Sc_Cl_table <- function(qw_data){
 #'         plot_title, 
 #'         CharacteristicName = "Specific conductance",
 #'         start_date = "1990-01-01")
+#'        
+#' site <- "USGS-01491000"
+#' qw_data_phos <- dataRetrieval::readWQPqw(site, "Orthophosphate")
+#' qw_plot(qw_data_phos ,
+#'         CharacteristicName = "Orthophosphate",
+#'         plot_title = "Choptank: Orthophosphate")
 qw_plot <- function(qw_data, plot_title,
                     y_label = NA,
                     CharacteristicName = "Chloride",
@@ -112,7 +118,8 @@ qw_plot <- function(qw_data, plot_title,
                     end_date = NA, 
                     subtitle = "U.S. Geological Survey"){
   
-  if(!all(c("ActivityStartDateTime", "CharacteristicName", "ResultMeasureValue") %in% names(qw_data))){
+  if(!all(c("ActivityStartDateTime", "CharacteristicName",
+            "ResultMeasureValue", "ResultDetectionConditionText") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
 
@@ -128,6 +135,20 @@ qw_plot <- function(qw_data, plot_title,
     qw_data <- qw_data[qw_data$ActivityStartDate <= as.Date(end_date) ,]
   }
   
+  qw_data$qualifier <- FALSE
+  suppressWarnings(qw_data$qualifier[is.na(as.numeric(qw_data$ResultMeasureValue)) & 
+                      !is.na(qw_data$ResultMeasureValue)] <- TRUE)
+
+  qw_data$DetectCondition <- toupper(qw_data$ResultDetectionConditionText)
+  qw_data$qualifier[grep("NON-DETECT",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("NON DETECT",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("NOT DETECTED",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("DETECTED NOT QUANTIFIED",qw_data$DetectCondition)] <- TRUE
+  qw_data$qualifier[grep("BELOW QUANTIFICATION LIMIT",qw_data$DetectCondition)] <- TRUE
+  
+  any_censored <- any(qw_data$qualifier)
+  qw_data$qualifier <- ifelse(qw_data$qualifier, "Not Detected", "Detected")
+  
   if(is.na(y_label)){
     y_label <- attr(qw_data, "variableInfo")
     if(is.null(y_label)){
@@ -138,17 +159,32 @@ qw_plot <- function(qw_data, plot_title,
     }
   }
   
-  on_top <- zero_on_top(qw_data$ResultMeasureValue)
-  
   plot_out <- ggplot() +
-    geom_point(data = qw_data ,
-               aes(x = year, y = ResultMeasureValue),
-               size = 1.5, color = "blue") +
-    hasp_framework(x_label = "Date", y_label = y_label, include_y_scale = TRUE,
-                   plot_title = plot_title, zero_on_top = on_top, 
+    hasp_framework(x_label = "Date", y_label = y_label, 
+                   include_y_scale = TRUE,
+                   plot_title = plot_title, 
+                   zero_on_top = FALSE, 
                    subtitle = subtitle) +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL))
+
+  if(any_censored){
+    plot_out <- plot_out +
+      geom_point(data = qw_data ,
+                 aes(x = year, y = ResultMeasureValue, shape = qualifier),
+                 size = 1.5, color = "blue") +
+      scale_shape_manual(name = NULL,
+                         values = c("Not Detected" = 1, "Detected" = 16),
+                         drop = FALSE) 
+  } else {
+    plot_out <- plot_out +
+      geom_point(data = qw_data ,
+                 aes(x = year, y = ResultMeasureValue),
+                 size = 1.5, color = "blue")
+  }
+ 
+
+    
   
   return(plot_out)
   

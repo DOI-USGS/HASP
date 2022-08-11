@@ -49,9 +49,7 @@ column for gw_level_dv, and the second defines gwl_data.}
 The default is \code{NA}, in which case, the code will try to get the column name
 automatically based on NWIS naming conventions. If both gw_level_dv and
 gwl_data data frames require custom column names, the first value of this 
-input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
-last year of data, or "Calendar year" to use the current calendar year, beginning
-in January.}
+input defines the approval column for gw_level_dv, and the second defines gwl_data.}
 
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
@@ -59,6 +57,10 @@ can be used to help define the value_col.}
 \item{plot_title}{the title to use on the plot.}
 
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
+
+\item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
+last year of data, or "Calendar year" to use the current calendar year, beginning
+in January.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 

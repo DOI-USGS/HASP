@@ -7,11 +7,19 @@
 \alias{qw_summary}
 \title{Specific conductance and chloride}
 \usage{
-Sc_Cl_plot(qw_data, plot_title)
+Sc_Cl_plot(qw_data, plot_title, subtitle = "U.S. Geological Survey")
 
 Sc_Cl_table(qw_data)
 
-qw_plot(qw_data, plot_title, y_label = NA, CharacteristicName = "Chloride")
+qw_plot(
+  qw_data,
+  plot_title,
+  y_label = NA,
+  CharacteristicName = "Chloride",
+  start_date = NA,
+  end_date = NA,
+  subtitle = "U.S. Geological Survey"
+)
 
 qw_summary(qw_data, CharacteristicName, norm_range = NA)
 }
@@ -21,11 +29,19 @@ must include columns sample_dt, parm_cd, result_va}
 
 \item{plot_title}{character title for plot}
 
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
+
 \item{y_label}{character label for y axis. If left as NA, the function
 will attempt to use the "variableInfo" attribute of qw_data. This is
 attached to dataRetrieval output.}
 
 \item{CharacteristicName}{character CharacteristicName to filter to.}
+
+\item{start_date}{Date to start plot. If \code{NA} (which is the default),
+the plot will start at the earliest measurement.}
+
+\item{end_date}{Date to end plot. If \code{NA} (which is the default), 
+the plot will end with the latest measurement.}
 
 \item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
 }
@@ -48,9 +64,19 @@ sc_cl <- Sc_Cl_table(qw_data)
 plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
 qw_plot(qw_data, plot_title, CharacteristicName = "Chloride")
 qw_plot(qw_data, plot_title, CharacteristicName = "Specific conductance")
+qw_plot(qw_data,
+        plot_title, 
+        CharacteristicName = "Specific conductance",
+        start_date = "1990-01-01")
+       
+site <- "USGS-01491000"
+qw_data_phos <- dataRetrieval::readWQPqw(site, "Orthophosphate")
+qw_plot(qw_data_phos ,
+        CharacteristicName = "Orthophosphate",
+        plot_title = "Choptank: Orthophosphate")
 
 qw_summary(qw_data, CharacteristicName = "Chloride",
- norm_range = c(225,999))
+ norm_range = c(230, 860))
 qw_summary(qw_data, CharacteristicName = "Specific conductance",
  norm_range = NA)
 }
