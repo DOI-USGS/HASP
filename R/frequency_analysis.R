@@ -309,6 +309,9 @@ monthly_frequency_plot <- function(gw_level_dv,
   }
   
   # The last year of groundwater level measurements will plot
+  gw_level_dv <- dplyr::bind_rows(gw_level_dv,
+                                  gwl_data)
+  
   gw_level_dv <- gw_level_dv[gw_level_dv$Date >= plot_start &
                                gw_level_dv$Date <= plot_end, ]
 
