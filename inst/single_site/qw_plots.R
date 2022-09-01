@@ -19,10 +19,12 @@ cl_trend_table <- reactive({
     need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   qw_data <- qwData()
-  qw_table <-  trend_test(dplyr::filter(qw_data, 
+  qw_table <-  trend_test(gw_level_dv = NULL,
+                          gwl_data = dplyr::filter(qw_data, 
                                         CharacteristicName %in% "Chloride"), 
-                                      date_col = "ActivityStartDateTime",
-                                      value_col = "ResultMeasureValue", 
+                          approved_col = "ResultStatusIdentifier", 
+                          date_col = "ActivityStartDate",
+                          value_col = "ResultMeasureValue", 
                           days_required_per_month = 0)
   
   qw_table_DT <- DT::datatable(qw_table, 
@@ -46,9 +48,11 @@ cl_trend <-  trend_plot(qw_data,
                         plot_title = plot_title)
 cl_trend
 
-trend_test(dplyr::filter(qw_data, CharacteristicName == "Chloride"), 
-           date_col = "ActivityStartDateTime",
-           value_col = "ResultMeasureValue",
+trend_test(gw_level_dv = NULL,
+           gwl_data =  dplyr::filter(qw_data, CharacteristicName == "Chloride"), 
+           approved_col = "ResultStatusIdentifier", 
+           date_col = "ActivityStartDate",
+           value_col = "ResultMeasureValue", 
            days_required_per_month = 0)
 
 qw_summary(qw_data, 

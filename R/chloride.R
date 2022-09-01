@@ -53,6 +53,10 @@ trend_plot <- function(qw_data, plot_title,
     qw_sub$ActivityStartDate <- as.Date(qw_sub$ActivityStartDateTime)
   }
   
+  if(all(is.na(qw_sub$ActivityStartDate))){
+    qw_sub$ActivityStartDate <- as.Date(qw_sub$ActivityStartDate)
+  }
+  
   qw_sub$year <- as.numeric(format(as.Date(qw_sub$ActivityStartDate), "%Y")) +
     as.numeric(as.character(as.Date(qw_sub$ActivityStartDate), "%j"))/365
 
@@ -69,7 +73,7 @@ trend_plot <- function(qw_data, plot_title,
                                  qw_sub$ResultMeasureValue < norm_range[2], "medium",
                                ifelse(qw_sub$ResultMeasureValue >= norm_range[2] , "high", NA_character_)))
     
-    qw_sub <- qw_sub[, c("ActivityStartDateTime", "year", "ResultMeasureValue", "condition")]
+    qw_sub <- qw_sub[, c("ActivityStartDate", "year", "ResultMeasureValue", "condition")]
 
     col_values <- c("low", "medium", "high")
     col_labels <- c(paste0("<", norm_range[1]), 
@@ -92,7 +96,7 @@ trend_plot <- function(qw_data, plot_title,
   
   trend_results <- trend_test(gw_level_dv = NULL,
                               gwl_data = qw_sub,
-                              date_col = "ActivityStartDateTime",
+                              date_col = "ActivityStartDate",
                               value_col = "ResultMeasureValue", 
                               approved_col = "condition",
                               n_years = n_years,
@@ -102,7 +106,7 @@ trend_plot <- function(qw_data, plot_title,
   seg_df <- create_segs(trend_results,
                         qw_sub,
                         value_col = "ResultMeasureValue",
-                        date_col = "ActivityStartDateTime")
+                        date_col = "ActivityStartDate")
   
   linetype = c('solid', 'dashed')
   
@@ -110,11 +114,17 @@ trend_plot <- function(qw_data, plot_title,
     geom_point(data = qw_sub,
                aes(x = year, y = ResultMeasureValue,
                    shape = condition, 
-                   color = condition)) +
-    geom_segment(data = seg_df, color = "blue", 
-                 aes(x = x1, xend = x2, 
-                     y = y1, yend = y2,
-                     group = years, linetype = years)) +
+                   color = condition)) 
+  
+  if(!is.null(seg_df)){
+    plot_out <- plot_out +
+      geom_segment(data = seg_df, color = "blue", 
+                   aes(x = x1, xend = x2, 
+                       y = y1, yend = y2,
+                       group = years, linetype = years))
+  }
+  
+  plot_out <- plot_out +
     hasp_framework("Date", y_label, plot_title, 
                    subtitle = subtitle,
                    zero_on_top = on_top, include_y_scale = TRUE) +
@@ -158,6 +168,9 @@ create_segs <- function(trend_results,
                         date_col = "sample_dt", 
                         value_col = "result_va"){
 
+  if(all(trend_results$trend == "Insufficient data")){
+    return(NULL)
+  }
   POR <- as.character(diff(range(decimalDate(as.Date(x[[date_col]])))))
               
   df_seg <- trend_results %>%
