@@ -21,7 +21,10 @@
 #' can be used to help define the value_col.
 #' @param days_required_per_month integer. Number of days required per month. 
 #' Default is 14.
-#' @param pctComplete number percentage complete.
+#' @param pctComplete number percentage complete. This is a fraction that represents
+#' the amount of data that must be included overall in order to calculate a trend.
+#' The default is 0.5, which means if gaps in the data span more than 50% of the
+#' total record, a trend will not be calculated.
 #' @param alpha the confidence level to use for statistical significance
 #' @param include_current_year a logical indicating whether to include data from
 #' the current calendar year in the test.
@@ -42,8 +45,9 @@
 #' # Using package example data:
 #' gwl_data <- L2701_example_data$Discrete
 #' trend_test(NULL,
-#'                         gwl_data,
-#'                         parameter_cd = "62610")
+#'            gwl_data,
+#'            parameter_cd = "62610", 
+#'            days_required_per_month = 0)
 #'                         
 #' gw_level_dv <- L2701_example_data$Daily
 #' trend_test(gw_level_dv,
