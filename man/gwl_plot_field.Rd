@@ -27,7 +27,8 @@ gwl_plot_all(
   y_label = "GWL",
   plot_title = "",
   add_trend = FALSE,
-  flip = FALSE
+  flip = FALSE,
+  days_required_per_month = 14
 )
 }
 \arguments{
@@ -72,7 +73,10 @@ from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
 
-\item{add_trend}{logical. Uses \code{kendall_test_5_20_years}.}
+\item{add_trend}{logical. Uses \code{trend_test}.}
+
+\item{days_required_per_month}{integer. Number of days required per month. 
+Default is 14. Only used if add_trend is \code{TRUE}.}
 }
 \description{
 Function to create the field groundwater level data plot.
@@ -126,5 +130,13 @@ gwl_plot_all(NULL,
              parameter_cd = "62610",
              plot_title = paste(plot_title,
                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
+
+gwl_plot_all(NULL, 
+             gwl_data, 
+             parameter_cd = "62610",
+             plot_title = paste(plot_title,
+                         pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
+             add_trend = TRUE,
+             days_required_per_month = 0)
 
 }

@@ -38,7 +38,7 @@ Imports:
     ggpmisc,
     ggpp,
     scales,
-    EnvStats,
+    rkt,
     checkmate,
     whisker,
     xfun,

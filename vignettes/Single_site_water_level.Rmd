@@ -177,9 +177,8 @@ gwl_plot_all(gw_level_dv, gwl_data,
 Summary statistics for maximum daily water level measurements:
 
 ```{r siteStatsDaily}
-siteDV <- gw_level_dv %>%
-  rename(value = X_62610_00001) %>% 
-  site_data_summary() 
+siteDV <- site_data_summary(gw_level_dv,
+                            value_col = "X_62610_00001") 
 
 kable(siteDV, digits = 1)
 
@@ -189,10 +188,9 @@ Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
 
-trend_result <- kendall_test_5_20_years(gw_level_dv, 
-                                        NULL,
-                                        parameter_cd = parameterCd,
-                                        seasonal = TRUE)
+trend_result <- trend_test(gw_level_dv, 
+                          NULL,
+                          parameter_cd = parameterCd)
 kable(trend_result, digits = 1)
 
 

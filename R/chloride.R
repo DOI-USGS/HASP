@@ -84,14 +84,12 @@ trend_plot <- function(qw_data, plot_title,
   
   on_top <- zero_on_top(qw_sub$ResultMeasureValue)
   
-  trend_results <- kendall_test_5_20_years(gw_level_dv = NULL,
-                                           gwl_data = qw_sub,
-                                           parameter_cd = NA,
-                                           date_col = "ActivityStartDateTime",
-                                           value_col = "ResultMeasureValue", 
-                                           approved_col = "condition",
-                                           stat_cd = NA,
-                                           seasonal = FALSE)
+  trend_results <- trend_test(gw_level_dv = NULL,
+                              gwl_data = qw_sub,
+                              date_col = "ActivityStartDateTime",
+                              value_col = "ResultMeasureValue", 
+                              approved_col = "condition",
+                              days_required_per_month = 0)
   
   seg_df <- create_segs(trend_results,
                         qw_sub,
@@ -108,7 +106,7 @@ trend_plot <- function(qw_data, plot_title,
     geom_segment(data = seg_df, color = "blue", 
                  aes(x = x1, xend = x2, 
                      y = y1, yend = y2,
-                     group = trend, linetype = trend)) +
+                     group = years, linetype = years)) +
     hasp_framework("Date", y_label, plot_title, 
                    subtitle = subtitle,
                    zero_on_top = on_top, include_y_scale = TRUE) +
@@ -124,8 +122,8 @@ trend_plot <- function(qw_data, plot_title,
                        values = c(24, 23, 22)) +
     scale_linetype_manual("Trend", 
                           values = linetype,
-                          breaks = c("5-year trend", "20-year trend"),
-                          labels = c("5 year", "20 year")) +
+                          breaks = trend_results$test,
+                          labels = trend_results$test) +
     guides(shape = guide_legend(order = 1),
            color = guide_legend(order = 1),
            linetype = guide_legend(order = 2)) 
@@ -150,25 +148,29 @@ trend_plot <- function(qw_data, plot_title,
 create_segs <- function(trend_results,
                         x, 
                         date_col = "sample_dt", 
-                        value_col = "result_va",
-                        enough_5 = 1, enough_20 = 1){
+                        value_col = "result_va"){
 
-
-  
   df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
                        x2 = rep(max(as.Date(x[[date_col]]), na.rm = FALSE), 2),
                        y1 = c(NA, NA),
                        y2 = c(NA, NA),
-                       trend = trend_results$test, 
-                       years = as.numeric(gsub("-year trend", "", trend_results$test)),
+                       trend = trend_results$trend, 
+                       years =trend_results$test,
                        stringsAsFactors = FALSE)
 
+  n_year <- suppressWarnings(as.numeric(gsub("-year trend", "", trend_results$test)))
   for(i in seq_len(nrow(trend_results))){
-    if(!is.na(trend_results$trend[i]) && trend_results$trend[i] != "Not significant"){
-      df_seg$x1[df_seg$trend == trend_results$test[i]] <- as.Date(df_seg$x2[df_seg$trend == trend_results$test[i]] - as.difftime(df_seg$years[i]*365+1, units = "days"), origin = "1970-01-01")
-      
-      df_seg$y1[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x1[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
-      df_seg$y2[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x2[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
+    if(!is.na(trend_results$trend[i]) &&
+       trend_results$trend[i] != "Not significant"){
+      if(is.na(n_year[i])){
+        df_seg$x1[i] <- min(x[[date_col]])
+      } else {
+        df_seg$x1[i] <- as.Date(df_seg$x2[i] - as.difftime(10*365+1, units = "days"),
+                                origin = "1970-01-01")
+      }
+
+      df_seg$y1[i] <- decimalDate(df_seg$x1[i])*trend_results$slope[i] + trend_results$intercept[i]
+      df_seg$y2[i] <- decimalDate(df_seg$x2[i])*trend_results$slope[i] + trend_results$intercept[i]
     } 
   }
 

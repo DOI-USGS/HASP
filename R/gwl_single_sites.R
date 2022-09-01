@@ -124,7 +124,9 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' @rdname gwl_plot_field
 #' @export
 #' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
-#' @param add_trend logical. Uses \code{kendall_test_5_20_years}.
+#' @param add_trend logical. Uses \code{trend_test}.
+#' @param days_required_per_month integer. Number of days required per month. 
+#' Default is 14. Only used if add_trend is \code{TRUE}.
 #' @examples 
 #' # site <- "263819081585801"
 #' parameterCd <- "62610"
@@ -155,6 +157,14 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #'              plot_title = paste(plot_title,
 #'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
 #' 
+#' gwl_plot_all(NULL, 
+#'              gwl_data, 
+#'              parameter_cd = "62610",
+#'              plot_title = paste(plot_title,
+#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
+#'              add_trend = TRUE,
+#'              days_required_per_month = 0)
+#' 
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
                          parameter_cd = NA,
@@ -165,7 +175,8 @@ gwl_plot_all <- function(gw_level_dv,
                          y_label = "GWL",
                          plot_title = "",
                          add_trend = FALSE,
-                         flip = FALSE){
+                         flip = FALSE,
+                         days_required_per_month = 14){
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = gwl_data, 
@@ -238,25 +249,22 @@ gwl_plot_all <- function(gw_level_dv,
   
   if(add_trend){
     
-    combo <- dplyr::bind_rows(gw_level_dv,
-                              gwl_data)
+    all_data <- gw_level_dv %>%
+      dplyr::bind_rows(gwl_data) %>%
+      dplyr::filter(grepl("A", Approve))
     
-    combo_approved <- combo[grepl("A", combo$Approve), ]
+    gw_monthly <- monthly_mean(all_data,
+                               date_col = "Date",
+                               value_col = "Value",
+                               days_required_per_month = days_required_per_month)
+
+    trend_results <- trend_test(all_data,
+                                gwl_data = NULL,
+                                date_col = c("Date"),
+                                value_col = c("Value"), 
+                                approved_col = c("Approve"),
+                                days_required_per_month = days_required_per_month)
     
-    gw_monthly <- monthly_mean(combo_approved, 
-                               date_col = "Date", 
-                               value_col = "Value")
-    
-    gw_monthly$Approved <- "A"
-    
-    trend_results <- kendall_test_5_20_years(gw_level_dv = NULL,
-                                             gwl_data = gw_monthly,
-                                             parameter_cd = NA,
-                                             date_col = c("mid_date"),
-                                             value_col = c("mean_va"), 
-                                             approved_col = c("Approved"),
-                                             stat_cd = stat_cd,
-                                             seasonal = FALSE)
     seg_df <- create_segs(trend_results,
                           gw_monthly, 
                           date_col = "mid_date",
@@ -269,8 +277,8 @@ gwl_plot_all <- function(gw_level_dv,
                        group = trend, linetype = trend)) +
       scale_linetype_manual("Trend", 
                             values = linetype,
-                            breaks = c("5-year trend", "20-year trend"),
-                            labels = c("5 year", "20 year")) +
+                            breaks = trend_results$trend,
+                            labels = trend_results$test) +
       guides(fill = guide_legend(order = 1),
              color = guide_legend(order = 2),
              linetype = guide_legend(order = 3))
