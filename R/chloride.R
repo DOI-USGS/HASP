@@ -31,6 +31,8 @@
 #' trend_plot(qw_data, plot_title)
 trend_plot <- function(qw_data, plot_title,
                        y_label = NA, 
+                       n_years = 10,
+                       POR_trend = TRUE,
                        CharacteristicName = c("Chloride"),
                        norm_range = c(230, 860),
                        subtitle = "U.S. Geological Survey",
@@ -93,6 +95,8 @@ trend_plot <- function(qw_data, plot_title,
                               date_col = "ActivityStartDateTime",
                               value_col = "ResultMeasureValue", 
                               approved_col = "condition",
+                              n_years = n_years,
+                              POR_trend = POR_trend, 
                               days_required_per_month = 0)
   
   seg_df <- create_segs(trend_results,

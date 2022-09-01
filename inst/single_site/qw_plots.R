@@ -19,13 +19,11 @@ cl_trend_table <- reactive({
     need(!is.null(rawData_data$qw_data), "Click the 'Get QW Data' button")
   )
   qw_data <- qwData()
-  qw_table <-  kendell_test_5_20_years(dplyr::filter(qw_data, 
-                                                     CharacteristicName %in% c("Chloride","Specific conductance")), 
-                                      seasonal = TRUE,
-                                      enough_5 = 1,
-                                      enough_20 = 1,
+  qw_table <-  trend_test(dplyr::filter(qw_data, 
+                                        CharacteristicName %in% "Chloride"), 
                                       date_col = "ActivityStartDateTime",
-                                      value_col = "ResultMeasureValue")
+                                      value_col = "ResultMeasureValue", 
+                          days_required_per_month = 0)
   
   qw_table_DT <- DT::datatable(qw_table, 
                                rownames = FALSE,
@@ -48,13 +46,10 @@ cl_trend <-  trend_plot(qw_data,
                         plot_title = plot_title)
 cl_trend
 
-kendell_test_5_20_years(dplyr::filter(qw_data, 
-                                      CharacteristicName == "Chloride"), 
-                        seasonal = TRUE,
-                        enough_5 = 1,
-                        enough_20 = 1,
-                        date_col = "ActivityStartDateTime",
-                        value_col = "ResultMeasureValue")
+trend_test(dplyr::filter(qw_data, CharacteristicName == "Chloride"), 
+           date_col = "ActivityStartDateTime",
+           value_col = "ResultMeasureValue",
+           days_required_per_month = 0)
 
 qw_summary(qw_data, 
             CharacteristicName = "Chloride",

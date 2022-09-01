@@ -8,6 +8,8 @@ trend_plot(
   qw_data,
   plot_title,
   y_label = NA,
+  n_years = 10,
+  POR_trend = TRUE,
   CharacteristicName = c("Chloride"),
   norm_range = c(230, 860),
   subtitle = "U.S. Geological Survey",
@@ -24,6 +26,12 @@ must include columns ActivityStartDateTime, CharacteristicName, result_va}
 will attempt to use the "variableInfo" attribute of qw_data. This is
 attached to dataRetrieval output.}
 
+\item{n_years}{integer. This is the number of years to calculate the trend on.
+Default is 10. This can be a vector of years.}
+
+\item{POR_trend}{a logical indicating whether to include a trend test
+for the full period of record. Default is \code{TRUE}.}
+
 \item{CharacteristicName}{character CharacteristicName to plot}
 
 \item{norm_range}{a numerical range to potentially group the data. If NA, no grouping is shown.}
@@ -31,12 +39,6 @@ attached to dataRetrieval output.}
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{include_table}{logical whether or not to include the trend table in the upper left corner.}
-
-\item{n_years}{integer. This is the number of years to calculate the trend on.
-Default is 10. This can be a vector of years.}
-
-\item{POR_trend}{a logical indicating whether to include a trend test
-for the full period of record. Default is \code{TRUE}.}
 }
 \description{
 Function creates the cloride over time plot with trends.
