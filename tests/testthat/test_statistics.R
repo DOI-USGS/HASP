@@ -207,8 +207,8 @@ test_that("trend segments",{
                                     "Period of record")))
   expect_true(all(seg_df$trend == c("Up", "Up")))
   
-  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-29.4, -15.3)))
-  expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-16.0, -28.7)))
+  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-30.1, -15.6)))
+  expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-15.4, -28.0)))
   
   gw_monthly <- monthly_mean(gw_level_dv, 
                              date_col = "Date", 
@@ -229,10 +229,11 @@ test_that("trend segments",{
   
   expect_true(all(seg_df_month$x1 == c(2011,1978)))
   expect_true(all(seg_df_month$x2 == c(2021,2021)))
-  expect_true(all(seg_df_month$years == c(5,20)))
+  expect_true(all(seg_df_month$years == c("10-year trend", 
+                                          "Period of record")))
   expect_true(all(seg_df_month$trend == c("Up", "Down")))
-  expect_true(all(signif(seg_df_month$y1, digits = 3) == c(-29.5, -15.3)))
-  expect_true(all(signif(seg_df_month$y2, digits = 3) == c(-16.1, -28.7)))
+  expect_true(all(signif(seg_df_month$y1, digits = 3) == c(-30.2, -15.7)))
+  expect_true(all(signif(seg_df_month$y2, digits = 3) == c(-15.5, -27.9)))
   
   
 })

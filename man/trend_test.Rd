@@ -16,7 +16,7 @@ trend_test(
   alpha = 0.95,
   pctComplete = 0.5,
   days_required_per_month = 14,
-  include_current_year = FALSE
+  POR_trend = TRUE
 )
 }
 \arguments{
@@ -26,6 +26,9 @@ trend_test(
 data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
 approval code), and a column representing the measured value (either lev_va,
 sl_lev_va, or value).}
+
+\item{n_years}{integer. This is the number of years to calculate the trend on.
+Default is 10. This can be a vector of years.}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
 can be used to define the value_col.
@@ -50,11 +53,12 @@ the amount of data that must be included overall in order to calculate a trend.
 The default is 0.5, which means if gaps in the data span more than 50% of the
 total record, a trend will not be calculated.}
 
-\item{days_required_per_month}{integer. Number of days required per month. 
-Default is 14.}
+\item{days_required_per_month}{integer. Number of days required per month
+to include in the trend test. Default is 14. If discrete data is used, 
+it may be required to set this to 0 to get the trend tests to work.}
 
-\item{include_current_year}{a logical indicating whether to include data from
-the current calendar year in the test.}
+\item{POR_trend}{a logical indicating whether to include a trend test
+for the full period of record. Default is \code{TRUE}.}
 }
 \value{
 a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
@@ -87,8 +91,18 @@ trend_test(gw_level_dv,
            
 trend_test(gw_level_dv,
            gwl_data,
+           POR_trend = FALSE,
+           parameter_cd = "62610")
+           
+trend_test(gw_level_dv,
+           gwl_data,
            parameter_cd = "62610",
            n_years = 5)
+           
+trend_test(gw_level_dv,
+           gwl_data,
+           parameter_cd = "62610",
+           n_years = c(5, 10, 20))
            
 trend_test(gw_level_dv,
            gwl_data,

@@ -19,15 +19,18 @@
 #' @param approved_col name of column to get provisional/approved status.
 #' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
 #' can be used to help define the value_col.
-#' @param days_required_per_month integer. Number of days required per month. 
-#' Default is 14.
+#' @param days_required_per_month integer. Number of days required per month
+#' to include in the trend test. Default is 14. If discrete data is used, 
+#' it may be required to set this to 0 to get the trend tests to work.
+#' @param n_years integer. This is the number of years to calculate the trend on.
+#' Default is 10. This can be a vector of years.
 #' @param pctComplete number percentage complete. This is a fraction that represents
 #' the amount of data that must be included overall in order to calculate a trend.
 #' The default is 0.5, which means if gaps in the data span more than 50% of the
 #' total record, a trend will not be calculated.
 #' @param alpha the confidence level to use for statistical significance
-#' @param include_current_year a logical indicating whether to include data from
-#' the current calendar year in the test.
+#' @param POR_trend a logical indicating whether to include a trend test
+#' for the full period of record. Default is \code{TRUE}.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
 #' can be used to define the value_col.
 #'  If the data doesn't come directly from NWIS services, this 
@@ -56,8 +59,18 @@
 #'            
 #' trend_test(gw_level_dv,
 #'            gwl_data,
+#'            POR_trend = FALSE,
+#'            parameter_cd = "62610")
+#'            
+#' trend_test(gw_level_dv,
+#'            gwl_data,
 #'            parameter_cd = "62610",
 #'            n_years = 5)
+#'            
+#' trend_test(gw_level_dv,
+#'            gwl_data,
+#'            parameter_cd = "62610",
+#'            n_years = c(5, 10, 20))
 #'            
 #' trend_test(gw_level_dv,
 #'            gwl_data,
@@ -76,7 +89,7 @@ trend_test <- function(gw_level_dv,
                        alpha = 0.95,
                        pctComplete = 0.5,
                        days_required_per_month = 14,
-                       include_current_year = FALSE) {
+                       POR_trend = TRUE) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv, 
                            gwl_data = gwl_data, 
@@ -102,19 +115,9 @@ trend_test <- function(gw_level_dv,
                   decYear = decimalDate(midMonth),
                   gap = decYear - dplyr::lag(decYear) >= 1000)  %>%
     dplyr::filter(ndays > !!days_required_per_month)
-  
-
-  if(!include_current_year) {
-    current_year <- max(gwl$year, na.rm = TRUE)
-    gwl <- gwl[gwl$year != current_year, ]
-  }
 
   latest_measured_year <- max(gwl$year, na.rm = TRUE)
 
-
-  enough_data_n <- enough_data(gwl,
-                               pctComplete = pctComplete,
-                               n_years = n_years) 
   enough_data_por <- enough_data(gwl,
                                  n_years = 11,
                                  pctComplete = pctComplete,
@@ -127,59 +130,69 @@ trend_test <- function(gw_level_dv,
   intercept <- vector()
   trend <- vector()
   
-  if(enough_data_n) {
-    test[length(test) + 1] <- paste0(n_years, "-year trend")
-    
-    # Don't assume the tail is bringing back all years:
-    last_n <- dplyr::filter(gwl, year >= latest_measured_year - n_years)
-
-    # Perform the seasonal Kendall Trend Test on the ten-year data set using 
-    # the rkt package.  At the recommendation of Bob Hirsch, rkt is used 
-    # b/c it can handle data sets that do not have data for all the seasons 
-    # in all years, whereas the EnvStats package cannot. 
-    TrendInfo_n <- rkt::rkt(last_n$decYear, 
-                            last_n$monthlyMean, 
-                            block = last_n$month, 
-                            rep = "m",
-                            correct = TRUE)
-    
-    medDateN <- median(last_n$decYear, na.rm = TRUE)
-    
-    medValueN <- median(last_n$monthlyMean, na.rm = TRUE)
-    
-    tauN <- TrendInfo_n[["tau"]]
-    pValueN <- TrendInfo_n[["sl"]]
-    
-    if(tauN == 0){ 
-      trendN <- "None"
-      slopeN <- NA
-      interceptN <- NA
-    } else if(pValueN >= 0.05){ 
-      trendN <- "Not significant"
-      slopeN <- NA
-      interceptN <- NA
-    } else { 
-      slopeN <- TrendInfo_n[["B"]]
-      trendN <- ifelse(slopeN > 0, "Up", "Down")
-      interceptN <- medValueN - slopeN * medDateN # Manually 
-      # calculating intercept b/c rkt package does not provide the intercept
-    }
-    tau[length(tau) + 1] <- tauN
-    pValue[length(pValue) + 1] <- pValueN
-    slope[length(slope) + 1] <- slopeN
-    intercept[length(intercept) + 1] <- interceptN
-    trend[length(trend) + 1] <- trendN
-  } else {
-    tau[length(tau) + 1] <- NA
-    pValue[length(pValue) + 1] <- NA
-    slope[length(slope) + 1] <- NA
-    intercept[length(intercept) + 1] <- NA
-    trend[length(trend) + 1] <- "Insufficient data"
-  } 
+  for(year in n_years){
+    enough_data_n <- enough_data(gwl,
+                                 pctComplete = pctComplete,
+                                 n_years = year) 
   
-  if(enough_data_por) {
-    
+    if(enough_data_n) {
+      test[length(test) + 1] <- paste0(year, "-year trend")
+      
+      # Consider making this a vector of years
+      
+      # Don't assume the tail is bringing back all years:
+      last_n <- dplyr::filter(gwl,
+                              year >= latest_measured_year - !!year)
+  
+      # Perform the seasonal Kendall Trend Test on the ten-year data set using 
+      # the rkt package.  At the recommendation of Bob Hirsch, rkt is used 
+      # b/c it can handle data sets that do not have data for all the seasons 
+      # in all years, whereas the EnvStats package cannot. 
+      TrendInfo_n <- rkt::rkt(last_n$decYear, 
+                              last_n$monthlyMean, 
+                              block = last_n$month, 
+                              rep = "m",
+                              correct = TRUE)
+      
+      medDateN <- median(last_n$decYear, na.rm = TRUE)
+      
+      medValueN <- median(last_n$monthlyMean, na.rm = TRUE)
+      
+      tauN <- TrendInfo_n[["tau"]]
+      pValueN <- TrendInfo_n[["sl"]]
+      
+      if(tauN == 0){ 
+        trendN <- "None"
+        slopeN <- NA
+        interceptN <- NA
+      } else if(pValueN >= 0.05){ 
+        trendN <- "Not significant"
+        slopeN <- NA
+        interceptN <- NA
+      } else { 
+        slopeN <- TrendInfo_n[["B"]]
+        trendN <- ifelse(slopeN > 0, "Up", "Down")
+        interceptN <- medValueN - slopeN * medDateN # Manually 
+        # calculating intercept b/c rkt package does not provide the intercept
+      }
+      tau[length(tau) + 1] <- tauN
+      pValue[length(pValue) + 1] <- pValueN
+      slope[length(slope) + 1] <- slopeN
+      intercept[length(intercept) + 1] <- interceptN
+      trend[length(trend) + 1] <- trendN
+    } else {
+      test[length(test) + 1] <- paste0(year, "-year trend")
+      tau[length(tau) + 1] <- NA
+      pValue[length(pValue) + 1] <- NA
+      slope[length(slope) + 1] <- NA
+      intercept[length(intercept) + 1] <- NA
+      trend[length(trend) + 1] <- "Insufficient data"
+    } 
+  }
+  
+  if(enough_data_por & POR_trend) {
     test[length(test) + 1] <- "Period of record"
+    
     medDatePR <- median(gwl$decYear, na.rm = TRUE)
     medValuePR <- median(gwl$monthlyMean, na.rm = TRUE)
     
@@ -215,8 +228,8 @@ trend_test <- function(gw_level_dv,
     slope[length(slope) + 1] <- slopePR
     intercept[length(intercept) + 1] <- interceptPR
     trend[length(trend) + 1] <- trendPR
-  } else {
-
+  } else if (POR_trend) {
+    test[length(test) + 1] <- "Period of record"
     tau[length(tau) + 1] <- NA
     pValue[length(pValue) + 1] <- NA
     slope[length(slope) + 1] <- NA
