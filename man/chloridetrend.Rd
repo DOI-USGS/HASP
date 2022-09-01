@@ -31,6 +31,12 @@ attached to dataRetrieval output.}
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{include_table}{logical whether or not to include the trend table in the upper left corner.}
+
+\item{n_years}{integer. This is the number of years to calculate the trend on.
+Default is 10. This can be a vector of years.}
+
+\item{POR_trend}{a logical indicating whether to include a trend test
+for the full period of record. Default is \code{TRUE}.}
 }
 \description{
 Function creates the cloride over time plot with trends.

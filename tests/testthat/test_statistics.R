@@ -8,39 +8,40 @@ test_that("Kendall Seasonal Trend", {
                              lev_dt > as.Date("2010-01-01"),
                              lev_dt < as.Date("2014-01-01"))
   
-  test1 <- kendall_test_5_20_years(NULL,
-                                   gwl_data = gw_level_data,
-                                   parameter_cd = "62610")
-  test2 <- expect_message(kendall_test_5_20_years(NULL,
-                                                  less_data,
-                                                  parameter_cd = "62610"))
+  test1 <- trend_test(NULL,
+                     gwl_data = gw_level_data,
+                     parameter_cd = "62610", 
+                     days_required_per_month = 0)
+  test2 <- expect_message(trend_test(NULL,
+                                     less_data,
+                                     parameter_cd = "62610", 
+                                     days_required_per_month = 0))
   
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test1)))
   expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test2)))
   
-  expect_true(all(is.na(c(test2$tau, test2$pValue, test2$slope, test2$intercept, test2$trend))))
-  expect_true(0.0954 == signif(test1$tau[2], digits = 3))
-  expect_true(0.0254 == signif(test1$pValue[2], digits = 3))
-  expect_true(0.22 == signif(test1$slope[2], digits = 3))
-  expect_true(-435 == signif(test1$intercept[2], digits = 3))
-  expect_true("Up" == test1$trend[2])
+  expect_true(all(is.na(c(test2$tau, test2$pValue, test2$slope, test2$intercept))))
+  expect_true(-0.202 == signif(test1$tau[2], digits = 3))
+  expect_true(3.38e-07 == signif(test1$pValue[2], digits = 3))
+  expect_true(-0.235 == signif(test1$slope[2], digits = 3))
+  expect_true(446 == signif(test1$intercept[2], digits = 3))
+  expect_true("Down" == test1$trend[2])
   
-  test3 <- kendall_test_5_20_years(gw_level_dv = NULL,
-                                   gwl_data =  gw_level_data,
-                                   seasonal = FALSE,
-                                   parameter_cd = "62610")
-  expect_true(0.152 == signif(test3$tau[2], digits = 3))
+  test3 <- trend_test(gw_level_dv = NULL,
+                      gwl_data =  gw_level_data,
+                      parameter_cd = "62610", 
+                      days_required_per_month = 0)
+  expect_true(-0.202 == signif(test3$tau[2], digits = 3))
   
   qw_data <- L2701_example_data$QW
-  test4 <- kendall_test_5_20_years(NULL,
-                                   qw_data, 
-                                   seasonal = FALSE, 
-                                   enough_5 = 1, enough_20 = 1,
-                                   approved_col = "ResultStatusIdentifier", 
-                                   date_col = "ActivityStartDateTime",
-                                   value_col = "ResultMeasureValue")
-  expect_true(0.0471 == signif(test4$slope[1], digits = 3))
-  expect_true(0.00771 == signif(test4$slope[2], digits = 3))
+  test4 <- trend_test(NULL,
+                      qw_data, 
+                      approved_col = "ResultStatusIdentifier", 
+                      date_col = "ActivityStartDateTime",
+                      value_col = "ResultMeasureValue", 
+                      days_required_per_month = 0)
+  expect_true(20 == signif(test4$slope[1], digits = 3))
+  expect_true(1.83 == signif(test4$slope[2], digits = 3))
   
 })
 
@@ -185,8 +186,8 @@ test_that("trend segments",{
                                value_col = "ResultMeasureValue",
                                date_col = "ActivityStartDateTime")
   
-  expect_true(all(seg_df$x1 == c(2011,1978)))
-  expect_true(all(seg_df$x2 == c(2021,2021)))
+  expect_true(all(signif(seg_df$x1, digits = 5) == c(2011.3, 1978.7)))
+  expect_true(all(signif(seg_df$x2, digits = 5) == c(2021.3, 2021.3)))
   expect_true(all(seg_df$years == c("10-year trend",
                                     "Period of record")))
   expect_true(all(seg_df$trend == c("Up", "Up")))
@@ -201,13 +202,14 @@ test_that("trend segments",{
                         date_col = "Date", 
                         value_col = "X_62610_00001")
   
-  expect_true(all(seg_df_dv$x1 == c(2011,1978)))
-  expect_true(all(seg_df_dv$x2 == c(2021,2021)))
+  expect_true(all(signif(seg_df$x1, digits = 5) == c(2011.3, 1978.7)))
+  expect_true(all(signif(seg_df$x2, digits = 5) == c(2021.3, 2021.3)))
+  
   expect_true(all(seg_df$years == c("10-year trend",
                                     "Period of record")))
   expect_true(all(seg_df$trend == c("Up", "Up")))
   
-  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-30.1, -15.6)))
+  expect_true(all(signif(seg_df_dv$y1, digits = 3) == c(-30.1, -15.7)))
   expect_true(all(signif(seg_df_dv$y2, digits = 3) == c(-15.4, -28.0)))
   
   gw_monthly <- monthly_mean(gw_level_dv, 
@@ -227,8 +229,9 @@ test_that("trend segments",{
                                      date_col = "mid_date",
                                      value_col = "mean_va")
   
-  expect_true(all(seg_df_month$x1 == c(2011,1978)))
-  expect_true(all(seg_df_month$x2 == c(2021,2021)))
+  expect_true(all(signif(seg_df_month$x1, digits = 5) == c(2011.6, 1978.8)))
+  expect_true(all(signif(seg_df_month$x2, digits = 5) == c(2021.6, 2021.6)))
+  
   expect_true(all(seg_df_month$years == c("10-year trend", 
                                           "Period of record")))
   expect_true(all(seg_df_month$trend == c("Up", "Down")))

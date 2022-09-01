@@ -13,7 +13,8 @@ gwl_plot_field(
   value_col = NA,
   approved_col = "lev_age_cd",
   flip = TRUE,
-  y_label = ""
+  y_label = "",
+  subtitle = "U.S. Geological Survey"
 )
 
 gwl_plot_all(
@@ -24,9 +25,12 @@ gwl_plot_all(
   value_col = NA,
   approved_col = NA,
   stat_cd = NA,
-  y_label = "GWL",
+  y_label = "",
+  subtitle = "U.S. Geological Survey",
   plot_title = "",
   add_trend = FALSE,
+  n_years = 10,
+  POR_trend = TRUE,
   flip = FALSE,
   days_required_per_month = 14
 )
@@ -67,6 +71,8 @@ Default is \code{TRUE}.}
 
 \item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
 
+\item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
+
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
 from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
 
@@ -74,6 +80,12 @@ from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
 can be used to help define the value_col.}
 
 \item{add_trend}{logical. Uses \code{trend_test}.}
+
+\item{n_years}{integer. This is the number of years to calculate the trend on.
+Default is 10. This can be a vector of years.}
+
+\item{POR_trend}{a logical indicating whether to include a trend test
+for the full period of record. Default is \code{TRUE}.}
 
 \item{days_required_per_month}{integer. Number of days required per month. 
 Default is 14. Only used if add_trend is \code{TRUE}.}
@@ -91,17 +103,20 @@ gwl_data <- L2701_example_data$Discrete
 plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 gwl_plot_field(gwl_data, 
-               plot_title = paste(plot_title,
-                                  pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
+               plot_title = plot_title, 
                parameter_cd = "62610",
-               flip = FALSE)
-gwl_plot_field(gwl_data,  paste(plot_title,
-               pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
+               flip = FALSE,
+               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+gwl_plot_field(gwl_data, 
+               plot_title = plot_title,
+               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62611"], 
                parameter_cd = "62611",
                flip = FALSE)
-gwl_plot_field(gwl_data,  paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
-               parameter_cd = "72019")
+gwl_plot_field(gwl_data,  
+               plot_title = plot_title,
+               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "72019"], 
+               parameter_cd = "72019",
+               flip = TRUE)
 # site <- "263819081585801"
 parameterCd <- "62610"
 # statCd <- "00001"
@@ -116,26 +131,38 @@ gwl_plot_all(gw_level_dv,
              NULL, 
              parameter_cd = "62610",
              plot_title = plot_title,
-             flip = FALSE) 
+             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             flip = TRUE) 
 
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
              parameter_cd = "62610",
-             plot_title = paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
+             plot_title = plot_title,
+             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             add_trend = TRUE,
+             flip = FALSE)
+             
+             
+gwl_plot_all(gw_level_dv,
+             gwl_data,
+             parameter_cd = "62610",
+             n_years = c(5, 10, 20),
+             POR_trend = TRUE,
+             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             plot_title = plot_title,
              add_trend = TRUE)
              
 gwl_plot_all(NULL, 
              gwl_data, 
              parameter_cd = "62610",
-             plot_title = paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
+             plot_title = plot_title, 
+             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
 
 gwl_plot_all(NULL, 
              gwl_data, 
              parameter_cd = "62610",
-             plot_title = paste(plot_title,
-                         pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
+             plot_title = plot_title,
+             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
              add_trend = TRUE,
              days_required_per_month = 0)
 

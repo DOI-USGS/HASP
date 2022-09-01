@@ -11,6 +11,10 @@
 #' will attempt to use the "variableInfo" attribute of qw_data. This is
 #' attached to dataRetrieval output.
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
+#' @param n_years integer. This is the number of years to calculate the trend on.
+#' Default is 10. This can be a vector of years.
+#' @param POR_trend a logical indicating whether to include a trend test
+#' for the full period of record. Default is \code{TRUE}.
 #' @param include_table logical whether or not to include the trend table in the upper left corner.
 #' @rdname chloridetrend
 #' @export
@@ -150,36 +154,23 @@ create_segs <- function(trend_results,
                         date_col = "sample_dt", 
                         value_col = "result_va"){
 
-  df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
-                       x2 = rep(max(as.Date(x[[date_col]]), na.rm = FALSE), 2),
-                       y1 = c(NA, NA),
-                       y2 = c(NA, NA),
-                       trend = trend_results$trend, 
-                       years =trend_results$test,
-                       stringsAsFactors = FALSE)
-
-  n_year <- suppressWarnings(as.numeric(gsub("-year trend", "", trend_results$test)))
-  for(i in seq_len(nrow(trend_results))){
-    if(!is.na(trend_results$trend[i]) &&
-       trend_results$trend[i] != "Not significant"){
-      if(is.na(n_year[i])){
-        df_seg$x1[i] <- min(x[[date_col]])
-      } else {
-        df_seg$x1[i] <- as.Date(df_seg$x2[i] - as.difftime(10*365+1, units = "days"),
-                                origin = "1970-01-01")
-      }
-
-      df_seg$y1[i] <- decimalDate(df_seg$x1[i])*trend_results$slope[i] + trend_results$intercept[i]
-      df_seg$y2[i] <- decimalDate(df_seg$x2[i])*trend_results$slope[i] + trend_results$intercept[i]
-    } 
-  }
-
-  df_seg <- df_seg[!(is.na(df_seg$y1)),]
-  
-  if(nrow(df_seg) != 0){
-    df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
-    df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))    
-  }
+  POR <- as.character(diff(range(decimalDate(as.Date(x[[date_col]])))))
+              
+  df_seg <- trend_results %>%
+    dplyr::rename(years = test) %>%
+    dplyr::mutate(n_year = as.numeric(dplyr::if_else(grepl("-year trend", years), 
+                                          gsub("-year trend", "", years),
+                                          POR)),
+                  x2 = max(as.Date(x[[date_col]]), na.rm = FALSE),
+                  x1 = as.Date(x2 - as.difftime(n_year * 365 + 1,
+                                                units = "days"),
+                               origin = "1970-01-01"),
+                  y1 = decimalDate(x1) * slope + intercept,
+                  y2 = decimalDate(x2) * slope + intercept) %>%
+    dplyr::filter(!is.na(y2),
+                  trend != "Not significant") %>%
+    dplyr::mutate(x2 = decimalDate(x2),
+                  x1 = decimalDate(x1))
 
   return(df_seg)
   

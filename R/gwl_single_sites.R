@@ -33,6 +33,7 @@
 #' @param plot_title character, title for plot.
 #' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
+#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @import ggplot2
 #' @rdname gwl_plot_field
 #' 
@@ -46,23 +47,27 @@
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
 #' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 #' gwl_plot_field(gwl_data, 
-#'                plot_title = paste(plot_title,
-#'                                   pcodes$parameter_nm[pcodes$parameter_cd == "62610"]), 
+#'                plot_title = plot_title, 
 #'                parameter_cd = "62610",
-#'                flip = FALSE)
-#' gwl_plot_field(gwl_data,  paste(plot_title,
-#'                pcodes$parameter_nm[pcodes$parameter_cd == "62611"]), 
+#'                flip = FALSE,
+#'                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+#' gwl_plot_field(gwl_data, 
+#'                plot_title = plot_title,
+#'                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62611"], 
 #'                parameter_cd = "62611",
 #'                flip = FALSE)
-#' gwl_plot_field(gwl_data,  paste(plot_title,
-#'                          pcodes$parameter_nm[pcodes$parameter_cd == "72019"]), 
-#'                parameter_cd = "72019")
+#' gwl_plot_field(gwl_data,  
+#'                plot_title = plot_title,
+#'                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "72019"], 
+#'                parameter_cd = "72019",
+#'                flip = TRUE)
 gwl_plot_field <- function(gwl_data, plot_title = "",
                            parameter_cd = NA,
                            date_col = "lev_dt",
                            value_col = NA,
                            approved_col = "lev_age_cd",
-                           flip = TRUE, y_label = ""){
+                           flip = TRUE, y_label = "",
+                           subtitle = "U.S. Geological Survey"){
   
   plot_out <- gwl_plot_all(NULL, 
                            gwl_data, 
@@ -74,6 +79,7 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
                            y_label = y_label,
                            plot_title = plot_title,
                            add_trend = FALSE,
+                           subtitle = subtitle,
                            flip = flip)
   return(plot_out)
   
@@ -127,6 +133,10 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' @param add_trend logical. Uses \code{trend_test}.
 #' @param days_required_per_month integer. Number of days required per month. 
 #' Default is 14. Only used if add_trend is \code{TRUE}.
+#' @param n_years integer. This is the number of years to calculate the trend on.
+#' Default is 10. This can be a vector of years.
+#' @param POR_trend a logical indicating whether to include a trend test
+#' for the full period of record. Default is \code{TRUE}.
 #' @examples 
 #' # site <- "263819081585801"
 #' parameterCd <- "62610"
@@ -142,26 +152,38 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #'              NULL, 
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title,
-#'              flip = FALSE) 
+#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+#'              flip = TRUE) 
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              gwl_data, 
 #'              parameter_cd = "62610",
-#'              plot_title = paste(plot_title,
-#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
+#'              plot_title = plot_title,
+#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+#'              add_trend = TRUE,
+#'              flip = FALSE)
+#'              
+#'              
+#' gwl_plot_all(gw_level_dv,
+#'              gwl_data,
+#'              parameter_cd = "62610",
+#'              n_years = c(5, 10, 20),
+#'              POR_trend = TRUE,
+#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+#'              plot_title = plot_title,
 #'              add_trend = TRUE)
 #'              
 #' gwl_plot_all(NULL, 
 #'              gwl_data, 
 #'              parameter_cd = "62610",
-#'              plot_title = paste(plot_title,
-#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]))
+#'              plot_title = plot_title, 
+#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
 #' 
 #' gwl_plot_all(NULL, 
 #'              gwl_data, 
 #'              parameter_cd = "62610",
-#'              plot_title = paste(plot_title,
-#'                          pcodes$parameter_nm[pcodes$parameter_cd == "62610"]),
+#'              plot_title = plot_title,
+#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
 #'              add_trend = TRUE,
 #'              days_required_per_month = 0)
 #' 
@@ -172,9 +194,12 @@ gwl_plot_all <- function(gw_level_dv,
                          value_col = NA, 
                          approved_col = NA,
                          stat_cd = NA,
-                         y_label = "GWL",
+                         y_label = "",
+                         subtitle = "U.S. Geological Survey",
                          plot_title = "",
                          add_trend = FALSE,
+                         n_years = 10,
+                         POR_trend = TRUE,
                          flip = FALSE,
                          days_required_per_month = 14){
 
@@ -243,9 +268,11 @@ gwl_plot_all <- function(gw_level_dv,
   } 
   
   plot_out <- plot_out +
-    hasp_framework("Years", y_label, plot_title = plot_title)  +
+    hasp_framework("Years", y_label,
+                   plot_title = plot_title, 
+                   subtitle = subtitle)  +
     scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
-                                           name = NULL)) 
+                                           name = NULL))  
   
   if(add_trend){
     
@@ -263,6 +290,8 @@ gwl_plot_all <- function(gw_level_dv,
                                 date_col = c("Date"),
                                 value_col = c("Value"), 
                                 approved_col = c("Approve"),
+                                n_years = n_years,
+                                POR_trend = POR_trend,
                                 days_required_per_month = days_required_per_month)
     
     seg_df <- create_segs(trend_results,
@@ -274,11 +303,8 @@ gwl_plot_all <- function(gw_level_dv,
       geom_segment(data = seg_df, color = "forestgreen", size = 1,
                    aes(x = x1, xend = x2, 
                        y = y1, yend = y2,
-                       group = trend, linetype = trend)) +
-      scale_linetype_manual("Trend", 
-                            values = linetype,
-                            breaks = trend_results$trend,
-                            labels = trend_results$test) +
+                       group = years, linetype = years)) +
+      scale_linetype_discrete("Trend") +
       guides(fill = guide_legend(order = 1),
              color = guide_legend(order = 2),
              linetype = guide_legend(order = 3))
@@ -290,7 +316,14 @@ gwl_plot_all <- function(gw_level_dv,
   
   if(flip){
     plot_out <- plot_out +
-      scale_y_continuous(trans = "reverse")
+      scale_y_continuous(trans = "reverse",
+                         sec.axis = dup_axis(labels =  NULL,
+                                             name = NULL))
+  } else {
+    
+    plot_out <- plot_out +
+      scale_y_continuous(sec.axis = dup_axis(labels =  NULL,
+                                             name = NULL))
   }
   
   return(plot_out)
