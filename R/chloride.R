@@ -11,6 +11,10 @@
 #' will attempt to use the "variableInfo" attribute of qw_data. This is
 #' attached to dataRetrieval output.
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
+#' @param n_years integer. This is the number of years to calculate the trend on.
+#' Default is 10. This can be a vector of years.
+#' @param POR_trend a logical indicating whether to include a trend test
+#' for the full period of record. Default is \code{TRUE}.
 #' @param include_table logical whether or not to include the trend table in the upper left corner.
 #' @rdname chloridetrend
 #' @export
@@ -27,6 +31,8 @@
 #' trend_plot(qw_data, plot_title)
 trend_plot <- function(qw_data, plot_title,
                        y_label = NA, 
+                       n_years = 10,
+                       POR_trend = TRUE,
                        CharacteristicName = c("Chloride"),
                        norm_range = c(230, 860),
                        subtitle = "U.S. Geological Survey",
@@ -47,6 +53,10 @@ trend_plot <- function(qw_data, plot_title,
     qw_sub$ActivityStartDate <- as.Date(qw_sub$ActivityStartDateTime)
   }
   
+  if(all(is.na(qw_sub$ActivityStartDate))){
+    qw_sub$ActivityStartDate <- as.Date(qw_sub$ActivityStartDate)
+  }
+  
   qw_sub$year <- as.numeric(format(as.Date(qw_sub$ActivityStartDate), "%Y")) +
     as.numeric(as.character(as.Date(qw_sub$ActivityStartDate), "%j"))/365
 
@@ -63,7 +73,7 @@ trend_plot <- function(qw_data, plot_title,
                                  qw_sub$ResultMeasureValue < norm_range[2], "medium",
                                ifelse(qw_sub$ResultMeasureValue >= norm_range[2] , "high", NA_character_)))
     
-    qw_sub <- qw_sub[, c("ActivityStartDateTime", "year", "ResultMeasureValue", "condition")]
+    qw_sub <- qw_sub[, c("ActivityStartDate", "year", "ResultMeasureValue", "condition")]
 
     col_values <- c("low", "medium", "high")
     col_labels <- c(paste0("<", norm_range[1]), 
@@ -84,19 +94,18 @@ trend_plot <- function(qw_data, plot_title,
   
   on_top <- zero_on_top(qw_sub$ResultMeasureValue)
   
-  trend_results <- kendall_test_5_20_years(gw_level_dv = NULL,
-                                           gwl_data = qw_sub,
-                                           parameter_cd = NA,
-                                           date_col = "ActivityStartDateTime",
-                                           value_col = "ResultMeasureValue", 
-                                           approved_col = "condition",
-                                           stat_cd = NA,
-                                           seasonal = FALSE)
+  trend_results <- trend_test(gw_level_dv = NULL,
+                              gwl_data = qw_sub,
+                              date_col = "ActivityStartDate",
+                              value_col = "ResultMeasureValue", 
+                              approved_col = "condition",
+                              n_years = n_years,
+                              POR_trend = POR_trend)
   
   seg_df <- create_segs(trend_results,
                         qw_sub,
                         value_col = "ResultMeasureValue",
-                        date_col = "ActivityStartDateTime")
+                        date_col = "ActivityStartDate")
   
   linetype = c('solid', 'dashed')
   
@@ -104,11 +113,17 @@ trend_plot <- function(qw_data, plot_title,
     geom_point(data = qw_sub,
                aes(x = year, y = ResultMeasureValue,
                    shape = condition, 
-                   color = condition)) +
-    geom_segment(data = seg_df, color = "blue", 
-                 aes(x = x1, xend = x2, 
-                     y = y1, yend = y2,
-                     group = trend, linetype = trend)) +
+                   color = condition)) 
+  
+  if(!is.null(seg_df)){
+    plot_out <- plot_out +
+      geom_segment(data = seg_df, color = "blue", 
+                   aes(x = x1, xend = x2, 
+                       y = y1, yend = y2,
+                       group = years, linetype = years))
+  }
+  
+  plot_out <- plot_out +
     hasp_framework("Date", y_label, plot_title, 
                    subtitle = subtitle,
                    zero_on_top = on_top, include_y_scale = TRUE) +
@@ -124,8 +139,8 @@ trend_plot <- function(qw_data, plot_title,
                        values = c(24, 23, 22)) +
     scale_linetype_manual("Trend", 
                           values = linetype,
-                          breaks = c("5-year trend", "20-year trend"),
-                          labels = c("5 year", "20 year")) +
+                          breaks = trend_results$test,
+                          labels = trend_results$test) +
     guides(shape = guide_legend(order = 1),
            color = guide_legend(order = 1),
            linetype = guide_legend(order = 2)) 
@@ -150,34 +165,28 @@ trend_plot <- function(qw_data, plot_title,
 create_segs <- function(trend_results,
                         x, 
                         date_col = "sample_dt", 
-                        value_col = "result_va",
-                        enough_5 = 1, enough_20 = 1){
+                        value_col = "result_va"){
 
-
-  
-  df_seg <- data.frame(x1 = as.Date(c(NA, NA)),
-                       x2 = rep(max(as.Date(x[[date_col]]), na.rm = FALSE), 2),
-                       y1 = c(NA, NA),
-                       y2 = c(NA, NA),
-                       trend = trend_results$test, 
-                       years = as.numeric(gsub("-year trend", "", trend_results$test)),
-                       stringsAsFactors = FALSE)
-
-  for(i in seq_len(nrow(trend_results))){
-    if(!is.na(trend_results$trend[i]) && trend_results$trend[i] != "Not significant"){
-      df_seg$x1[df_seg$trend == trend_results$test[i]] <- as.Date(df_seg$x2[df_seg$trend == trend_results$test[i]] - as.difftime(df_seg$years[i]*365+1, units = "days"), origin = "1970-01-01")
-      
-      df_seg$y1[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x1[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
-      df_seg$y2[df_seg$trend == trend_results$test[i]] <- as.numeric(df_seg$x2[df_seg$trend == trend_results$test[i]])*trend_results$slope[i] + trend_results$intercept[i]
-    } 
+  if(all(trend_results$trend == "Insufficient data")){
+    return(NULL)
   }
-
-  df_seg <- df_seg[!(is.na(df_seg$y1)),]
-  
-  if(nrow(df_seg) != 0){
-    df_seg$x2 <- as.numeric(format(df_seg$x2, "%Y"))
-    df_seg$x1 <- as.numeric(format(df_seg$x1, "%Y"))    
-  }
+  POR <- as.character(diff(range(decimalDate(as.Date(x[[date_col]])))))
+              
+  df_seg <- trend_results %>%
+    dplyr::rename(years = test) %>%
+    dplyr::mutate(n_year = as.numeric(dplyr::if_else(grepl("-year trend", years), 
+                                          gsub("-year trend", "", years),
+                                          POR)),
+                  x2 = max(as.Date(x[[date_col]]), na.rm = FALSE),
+                  x1 = as.Date(x2 - as.difftime(n_year * 365 + 1,
+                                                units = "days"),
+                               origin = "1970-01-01"),
+                  y1 = decimalDate(x1) * slope + intercept,
+                  y2 = decimalDate(x2) * slope + intercept) %>%
+    dplyr::filter(!is.na(y2),
+                  trend != "Not significant") %>%
+    dplyr::mutate(x2 = decimalDate(x2),
+                  x1 = decimalDate(x1))
 
   return(df_seg)
   

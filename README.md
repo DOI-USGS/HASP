@@ -1,8 +1,7 @@
 # HASP: Hydrologic AnalySis Package <img src="man/figures/R_logo.png" alt="HASP" class="logo" style="width:90px;height:auto;" align="right" />
 
 [![R build
-status](https://code.usgs.gov/water/stats/hasp/badges/master/pipeline.svg)](https://code.usgs.gov/water/stats/hasp/pipelines)
-[![status](https://img.shields.io/badge/USGS-Research-blue.svg)](https://owi.usgs.gov/R/packages.html#research)
+status](https://code.usgs.gov/water/stats/hasp/badges/main/pipeline.svg)](https://code.usgs.gov/water/stats/hasp/pipelines)
 [![status](https://img.shields.io/badge/USGS-Documentation-blue.svg)](https://rconnect.usgs.gov/HASP_docs/)
 [![status](https://img.shields.io/badge/USGS-Source-orange.svg)](https://code.usgs.gov/water/stats/hasp)
 
@@ -53,7 +52,7 @@ your packages later.
 
 ## Sample workflow
 
-### Single site workflows:
+### Get groundwater data:
 
 ``` r
 library(HASP)
@@ -69,21 +68,19 @@ statCd <- "00001"
 dv <- dataRetrieval::readNWISdv(site,
                                 parameterCd,
                                 statCd = statCd)
-
-# Water Quality data:
-parameterCd <- c("00095","90095","00940","99220")
-qw_data <- dataRetrieval::readWQPqw(paste0("USGS-", site),
-                                    parameterCd)
 ```
+
+### Plot data:
 
 ``` r
 
-y_axis_label <- dataRetrieval::readNWISpCode("62610")$parameter_nm
+y_axis_label <- readNWISpCode(parameterCd)$parameter_nm
+title <- readNWISsite(site)$station_nm
 
 monthly_frequency_plot(dv,
                        gwl_data,
-                       parameter_cd = "62610",
-                       plot_title = "L2701_example_data",
+                       parameter_cd = parameterCd,
+                       plot_title = title,
                        y_axis_label = y_axis_label)
 ```
 
@@ -91,27 +88,75 @@ monthly_frequency_plot(dv,
 
 ``` r
 
-gwl_plot_all(gw_level_dv = dv, 
-             gwl_data = gwl_data, 
-             parameter_cd = "62610",
-             plot_title = "L2701_example_data", 
-             add_trend = TRUE)
+weekly_frequency_plot(dv, 
+                      gwl_data,
+                      parameter_cd = parameterCd, 
+                      stat_cd = statCd,
+                      plot_title = title,
+                      y_axis_label = y_axis_label)
 ```
 
 ![](man/figures/README-graphs-2.png)<!-- -->
 
 ``` r
 
-Sc_Cl_plot(qw_data, "L2701_example_data")
+daily_gwl_plot(dv, 
+               gwl_data,
+               parameter_cd = parameterCd,
+               plot_title = title,
+               stat_cd = statCd,
+               y_axis_label = y_axis_label)
 ```
 
 ![](man/figures/README-graphs-3.png)<!-- -->
 
 ``` r
-trend_plot(qw_data, plot_title = "L2701_example_data")
+
+gwl_plot_all(gw_level_dv = dv, 
+             gwl_data = gwl_data, 
+             parameter_cd = parameterCd,
+             plot_title = title, 
+             add_trend = TRUE)
 ```
 
 ![](man/figures/README-graphs-4.png)<!-- -->
+
+## Create Groundwater Report:
+
+``` r
+create_groundwater_report(siteID = site,
+                          report_name = "L_2701",
+                          report_folder = "reports",
+                          output_type = "html")
+```
+
+Running this function will create an Rmarkdown file (Rmd). In RStudio,
+clicking the button “Knit” at the top of the file will render the Rmd
+file as either an HTML or Word document.
+
+## Water-quality plots
+
+HASP also includes a few water-quality plot options.
+
+``` r
+# Water Quality data:
+
+qw_data <- readWQPqw(paste0("USGS-", site),
+                     c("Chloride",
+                       "Specific conductance"))
+
+qw_plot(qw_data, CharacteristicName = "Chloride",
+        plot_title = title)
+```
+
+![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+
+Sc_Cl_plot(qw_data, plot_title = title)
+```
+
+![](man/figures/README-unnamed-chunk-3-2.png)<!-- -->
 
 ### Composite workflows:
 

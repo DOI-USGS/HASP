@@ -8,6 +8,8 @@ trend_plot(
   qw_data,
   plot_title,
   y_label = NA,
+  n_years = 10,
+  POR_trend = TRUE,
   CharacteristicName = c("Chloride"),
   norm_range = c(230, 860),
   subtitle = "U.S. Geological Survey",
@@ -23,6 +25,12 @@ must include columns ActivityStartDateTime, CharacteristicName, result_va}
 \item{y_label}{character label for y axis. If left as NA, the function
 will attempt to use the "variableInfo" attribute of qw_data. This is
 attached to dataRetrieval output.}
+
+\item{n_years}{integer. This is the number of years to calculate the trend on.
+Default is 10. This can be a vector of years.}
+
+\item{POR_trend}{a logical indicating whether to include a trend test
+for the full period of record. Default is \code{TRUE}.}
 
 \item{CharacteristicName}{character CharacteristicName to plot}
 

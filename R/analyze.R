@@ -31,14 +31,14 @@ site_data_summary <- function(x,
   summaries <- dplyr::group_by(x, site)
   
   summaries <- dplyr::summarise(summaries,
-                         min_site = min(val, na.rm = TRUE),
-                         max_site = max(val, na.rm = TRUE),
-                         mean_site = mean(val, na.rm = TRUE),
-                         p10 = stats::quantile(val, probs = 0.1, na.rm = TRUE),
-                         p25 = stats::quantile(val, probs = 0.25, na.rm = TRUE),
-                         p50 = stats::quantile(val, probs = 0.5, na.rm = TRUE),
-                         p75 = stats::quantile(val, probs = 0.75, na.rm = TRUE),
-                         p90 = stats::quantile(val, probs = 0.90, na.rm = TRUE),
+                         min_site = suppressWarnings(min(val, na.rm = TRUE)),
+                         max_site = suppressWarnings(max(val, na.rm = TRUE)),
+                         mean_site = suppressWarnings(mean(val, na.rm = TRUE)),
+                         p10 = suppressWarnings(stats::quantile(val, probs = 0.1, na.rm = TRUE)),
+                         p25 = suppressWarnings(stats::quantile(val, probs = 0.25, na.rm = TRUE)),
+                         p50 = suppressWarnings(stats::quantile(val, probs = 0.5, na.rm = TRUE)),
+                         p75 = suppressWarnings(stats::quantile(val, probs = 0.75, na.rm = TRUE)),
+                         p90 = suppressWarnings(stats::quantile(val, probs = 0.90, na.rm = TRUE)),
                          count = dplyr::n())
   
   summaries <- dplyr::ungroup(summaries)

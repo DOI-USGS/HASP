@@ -65,7 +65,7 @@ reference:
   - title: Statistics
     desc: Calculate trends and statistics
     contents:
-      - kendall_test_5_20_years
+      - trend_test
   - title: Data
     desc: Included data and functions to retrieve data.
     contents:

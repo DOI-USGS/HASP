@@ -258,21 +258,28 @@ Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
 if(nrow(gw_level_dv) > 0){
-  val_col <- paste("X", parameterCd, statCd, sep = "_")
-  approve <- paste0(val_col, "_cd")
+    data_list <- HASP:::set_up_data(gw_level_dv = gw_level_dv, 
+                           gwl_data = gwl_data, 
+                           parameter_cd = parameterCd,
+                           date_col = NA, 
+                           value_col = NA,
+                           approved_col = NA,
+                           stat_cd = statCd)
   
-  gw_monthly <- monthly_mean(gw_level_dv[grepl("A", gw_level_dv[[approve]]),], 
-                             value_col = paste("X",
-                                               parameterCd, 
-                                               statCd, sep = "_"))
-  gw_monthly$Approved <- "A"
-  trend_result <- kendall_test_5_20_years(NULL,
-                                          gw_monthly, 
-                                          seasonal = TRUE, 
-                                          date_col = "mid_date", 
-                                          value_col = "mean_va", 
-                                          approved_col = "Approved")
-  kable(trend_result, digits = 1)
+  gw_level_dv1 <- data_list$gw_level_dv
+  gwl_data1 <- data_list$gwl_data
+  
+  all_data <- gw_level_dv1 %>%
+    dplyr::bind_rows(gwl_data1) %>%
+    dplyr::filter(grepl("A", Approve))
+
+  trend_results <- trend_test(all_data,
+                                gwl_data = NULL,
+                                date_col = c("Date"),
+                                value_col = c("Value"), 
+                                approved_col = c("Approve"))
+    
+  kable(trend_results, digits = 1)
 } else {
   cat("No daily data to aggregate.")
 }

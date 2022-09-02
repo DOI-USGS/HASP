@@ -158,5 +158,7 @@ utils::globalVariables(c("lev_dt", "nYears","minMed", "maxMed", "name", "value",
                          "county_cd", "data_type_cd", "dateTime", "dec_lat_va", "dec_long_va", "end", "end_date",
                          "gw_code", "gw_level", "gw_level_cd", "is_na_after", "is_na_before", "is_point", "lat_va",
                          "lev_age_cd", "long_va", "median", "middle", "n_sites_year", "parm_cd", "plot_week_last",
-                         "plot_week_med", "results", "state_cd", "week", "x", "x1", "x2", "y", "y1", "y2"))
+                         "plot_week_med", "results", "state_cd", "week", "x", "x1", "x2", "y", "y1", "y2",
+                         "years", "doy", "midMonth", "decYear", "ndays",
+                         "intercept", "n_year", "slope", "test"))
 

@@ -200,11 +200,9 @@ qw_plot(qw_data, plot_title = plot_title)
 
 
 ```{r chloride_trend}
-cl_trend <- kendall_test_5_20_years(NULL,
-                                    gwl_data =
-                                      dplyr::filter(qw_data, 
+cl_trend <- trend_test(NULL,
+                      gwl_data = dplyr::filter(qw_data, 
                    CharacteristicName == "Chloride"), 
-                     seasonal = TRUE,
                      approved_col = "ResultStatusIdentifier",
                      date_col = "ActivityStartDateTime",
                      value_col = "ResultMeasureValue")
