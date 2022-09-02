@@ -202,7 +202,7 @@ test_that("Chloride trend graph", {
   plot_out <- trend_plot(qw_data, plot_title = title)
   plot_data_elements <- unlist(lapply(plot_out$layers, function(x) {names(x$data)}))
   
-  expect_true(all(c("ActivityStartDateTime", "ResultMeasureValue", "condition", "x1", "x2", "y1",       
+  expect_true(all(c("ActivityStartDate", "ResultMeasureValue", "condition", "x1", "x2", "y1",       
                     "y2", "trend", "y") %in% plot_data_elements))
 })
   
