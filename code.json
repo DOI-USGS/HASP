@@ -3,8 +3,8 @@
     "name": "HASP",
     "organization": "U.S. Geological Survey",
     "description": "Hydrologic AnalySis R-Package. Data aggregation and plotting of USGS groundwater level data.",
-    "version": "0.0.0.0001",
-    "status": "Development",
+    "version": "1.0.0",
+    "status": "Production",
 
     "permissions": {
       "usageType": "openSource",
@@ -16,9 +16,9 @@
       ]
     },
 
-    "homepageURL": "https://code.usgs.gov/water/stats/hasp",
-    "downloadURL": "https://code.usgs.gov/water/stats/hasp/-/archive/Provisional_release1/hasp-Provisional_release1.zip",
-    "disclaimerURL": "https://code.usgs.gov/water/stats/hasp/-/blob/master/DISCLAIMER.md",
+    "homepageURL": "https://code.usgs.gov/water/stats/hasp-/tree/1.0.0/",
+    "downloadURL": "https://code.usgs.gov/water/stats/hasp/-/archive/1.0.0/HASP-1.0.0.zip",
+    "disclaimerURL": "https://code.usgs.gov/water/stats/hasp/-/raw/1.0.0/DISCLAIMER.md",
     "repositoryURL": "https://code.usgs.gov/water/stats/HASP.git",
     "vcs": "git",
 
@@ -41,7 +41,7 @@
     },
 
     "date": {
-      "metadataLastUpdated": "2020-04-15"
+      "metadataLastUpdated": "2022-09-02"
     }
   }
 ]
