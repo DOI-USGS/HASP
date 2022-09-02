@@ -63,13 +63,12 @@ for the full period of record. Default is \code{TRUE}.}
 a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
 }
 \description{
-Test for five and twenty year trends in groundwater level using the 
-Regional Kendall Test.
+Test for period of record and user-specified ranges. The default
+trends are calculated for 10 year and the full period of record.
 }
 \details{
-At least 10 readings per year for the last 5 years are required for the
-5-year test, and at least 6 readings for the last 20 years are required
-for the 20-year test. The current calendar year is excluded by default.
+For data that is at least on a daily interval, the \link[rkt]{rkt} function
+is used. For periodic data, the \link[EnvStats]{kendallTrendTest} is used.
 }
 \examples{
 
