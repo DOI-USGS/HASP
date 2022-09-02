@@ -1,7 +1,7 @@
 Package: HASP
 Type: Package
 Title: Hydrologic AnalySis Package
-Version: 1.0.0
+Version: 1.0.0.1
 Authors@R: c(person("Laura", "DeCicco", 
                      role = c("aut", "cre"),
                      email = "ldecicco@usgs.gov",
