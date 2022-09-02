@@ -88,9 +88,6 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/kendall_test_5_20_years.html</loc>
-  </url>
-  <url>
     <loc>/reference/last_day.html</loc>
   </url>
   <url>
@@ -140,6 +137,9 @@
   </url>
   <url>
     <loc>/reference/themes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/trend_test.html</loc>
   </url>
   <url>
     <loc>/reference/water_year.html</loc>

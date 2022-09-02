@@ -16,7 +16,7 @@
     <a href="https://www.usgs.gov/" class="external-link"><img src="logo.png" id="logo" alt="Home" style="padding: 0px 50px 0px 0px;"></a>
     <a class="navbar-brand me-2" href="../index.html">HASP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,8 @@
 <span>  value_col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  approved_col <span class="op">=</span> <span class="st">"lev_age_cd"</span>,</span>
 <span>  flip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  y_label <span class="op">=</span> <span class="st">""</span></span>
+<span>  y_label <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  subtitle <span class="op">=</span> <span class="st">"U.S. Geological Survey"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gwl_plot_all</span><span class="op">(</span></span>
@@ -84,10 +85,14 @@
 <span>  value_col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  approved_col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  stat_cd <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  y_label <span class="op">=</span> <span class="st">"GWL"</span>,</span>
+<span>  y_label <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  subtitle <span class="op">=</span> <span class="st">"U.S. Geological Survey"</span>,</span>
 <span>  plot_title <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  add_trend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  flip <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  n_years <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  POR_trend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  flip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  days_required_per_month <span class="op">=</span> <span class="fl">14</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -144,6 +149,10 @@ Default is <code>TRUE</code>.</p></dd>
 <dd><p>character for y-axis label. Consider using <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></code> for USGS parameter_nm.</p></dd>
 
 
+<dt>subtitle</dt>
+<dd><p>character. Sub-title for plot, default is "U.S. Geological Survey".</p></dd>
+
+
 <dt>gw_level_dv</dt>
 <dd><p>data frame, daily groundwater level data. Often obtained 
 from <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></code>. Use <code>NULL</code> for no daily data.</p></dd>
@@ -155,7 +164,22 @@ can be used to help define the value_col.</p></dd>
 
 
 <dt>add_trend</dt>
-<dd><p>logical. Uses <code>kendall_test_5_20_years</code>.</p></dd>
+<dd><p>logical. Uses <code>trend_test</code>.</p></dd>
+
+
+<dt>n_years</dt>
+<dd><p>integer. This is the number of years to calculate the trend on.
+Default is 10. This can be a vector of years.</p></dd>
+
+
+<dt>POR_trend</dt>
+<dd><p>a logical indicating whether to include a trend test
+for the full period of record. Default is <code>TRUE</code>.</p></dd>
+
+
+<dt>days_required_per_month</dt>
+<dd><p>integer. Number of days required per month. 
+Default is 14. Only used if add_trend is <code>TRUE</code> using daily data.</p></dd>
 
 </dl></div>
 
@@ -170,19 +194,22 @@ can be used to help define the value_col.</p></dd>
 <span class="r-in"><span><span class="va">plot_title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">gwl_data</span>, <span class="st">"siteInfo"</span><span class="op">)</span><span class="op">[[</span><span class="st">"station_nm"</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">pcodes</span> <span class="op">&lt;-</span> <span class="fu">dataRetrieval</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISpCode.html" class="external-link">readNWISpCode</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gwl_data</span><span class="op">$</span><span class="va">parameter_cd</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>, </span></span>
-<span class="r-in"><span>               plot_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>                                  <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>               plot_title <span class="op">=</span> <span class="va">plot_title</span>, </span></span>
 <span class="r-in"><span>               parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
-<span class="r-in"><span>               flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               flip <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>               y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gwl_plot_field-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>               <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62611"</span><span class="op">]</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>, </span></span>
+<span class="r-in"><span>               plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
+<span class="r-in"><span>               y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62611"</span><span class="op">]</span>, </span></span>
 <span class="r-in"><span>               parameter_cd <span class="op">=</span> <span class="st">"62611"</span>,</span></span>
 <span class="r-in"><span>               flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gwl_plot_field-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>,  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>                         <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"72019"</span><span class="op">]</span><span class="op">)</span>, </span></span>
-<span class="r-in"><span>               parameter_cd <span class="op">=</span> <span class="st">"72019"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gwl_plot_field</span><span class="op">(</span><span class="va">gwl_data</span>,  </span></span>
+<span class="r-in"><span>               plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
+<span class="r-in"><span>               y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"72019"</span><span class="op">]</span>, </span></span>
+<span class="r-in"><span>               parameter_cd <span class="op">=</span> <span class="st">"72019"</span>,</span></span>
+<span class="r-in"><span>               flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gwl_plot_field-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># site &lt;- "263819081585801"</span></span></span>
 <span class="r-in"><span><span class="va">parameterCd</span> <span class="op">&lt;-</span> <span class="st">"62610"</span></span></span>
@@ -198,23 +225,44 @@ can be used to help define the value_col.</p></dd>
 <span class="r-in"><span>             <span class="cn">NULL</span>, </span></span>
 <span class="r-in"><span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
 <span class="r-in"><span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>             flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></span>
+<span class="r-in"><span>             y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>             flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></span>
 <span class="r-plt img"><img src="gwl_plot_field-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gwl_plot_all</span><span class="op">(</span><span class="va">gw_level_dv</span>, </span></span>
 <span class="r-in"><span>             <span class="va">gwl_data</span>, </span></span>
 <span class="r-in"><span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
-<span class="r-in"><span>             plot_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>                         <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
+<span class="r-in"><span>             y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>             flip <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gwl_plot_field-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>             </span></span>
+<span class="r-in"><span>             </span></span>
+<span class="r-in"><span><span class="fu">gwl_plot_all</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>             <span class="va">gwl_data</span>,</span></span>
+<span class="r-in"><span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
+<span class="r-in"><span>             n_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>             POR_trend <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>             y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
+<span class="r-in"><span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="gwl_plot_field-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>             </span></span>
 <span class="r-in"><span><span class="fu">gwl_plot_all</span><span class="op">(</span><span class="cn">NULL</span>, </span></span>
 <span class="r-in"><span>             <span class="va">gwl_data</span>, </span></span>
 <span class="r-in"><span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
-<span class="r-in"><span>             plot_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">plot_title</span>,</span></span>
-<span class="r-in"><span>                         <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gwl_plot_field-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>, </span></span>
+<span class="r-in"><span>             y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="gwl_plot_field-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">gwl_plot_all</span><span class="op">(</span><span class="cn">NULL</span>, </span></span>
+<span class="r-in"><span>             <span class="va">gwl_data</span>, </span></span>
+<span class="r-in"><span>             parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
+<span class="r-in"><span>             plot_title <span class="op">=</span> <span class="va">plot_title</span>,</span></span>
+<span class="r-in"><span>             y_label <span class="op">=</span> <span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_nm</span><span class="op">[</span><span class="va">pcodes</span><span class="op">$</span><span class="va">parameter_cd</span> <span class="op">==</span> <span class="st">"62610"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>             add_trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="gwl_plot_field-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
