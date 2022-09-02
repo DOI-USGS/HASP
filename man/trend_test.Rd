@@ -54,8 +54,7 @@ The default is 0.5, which means if gaps in the data span more than 50% of the
 total record, a trend will not be calculated.}
 
 \item{days_required_per_month}{integer. Number of days required per month
-to include in the trend test. Default is 14. If discrete data is used, 
-it may be required to set this to 0 to get the trend tests to work.}
+to include in the trend test. Default is 14.}
 
 \item{POR_trend}{a logical indicating whether to include a trend test
 for the full period of record. Default is \code{TRUE}.}
@@ -79,12 +78,9 @@ for the 20-year test. The current calendar year is excluded by default.
 
 # Using package example data:
 gwl_data <- L2701_example_data$Discrete
-trend_test(NULL,
-           gwl_data,
-           parameter_cd = "62610", 
-           days_required_per_month = 0)
                         
 gw_level_dv <- L2701_example_data$Daily
+
 trend_test(gw_level_dv,
            gwl_data,
            parameter_cd = "62610")
@@ -103,11 +99,10 @@ trend_test(gw_level_dv,
            gwl_data,
            parameter_cd = "62610",
            n_years = c(5, 10, 20))
-           
-trend_test(gw_level_dv,
+
+# Only periodic data:
+trend_test(NULL,
            gwl_data,
-           parameter_cd = "62610",
-           n_years = 5,
-           days_required_per_month = 0)
+           parameter_cd = "62610")
            
 }

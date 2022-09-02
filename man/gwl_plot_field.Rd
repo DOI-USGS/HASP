@@ -88,7 +88,7 @@ Default is 10. This can be a vector of years.}
 for the full period of record. Default is \code{TRUE}.}
 
 \item{days_required_per_month}{integer. Number of days required per month. 
-Default is 14. Only used if add_trend is \code{TRUE}.}
+Default is 14. Only used if add_trend is \code{TRUE} using daily data.}
 }
 \description{
 Function to create the field groundwater level data plot.
@@ -163,7 +163,6 @@ gwl_plot_all(NULL,
              parameter_cd = "62610",
              plot_title = plot_title,
              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
-             add_trend = TRUE,
-             days_required_per_month = 0)
+             add_trend = TRUE)
 
 }

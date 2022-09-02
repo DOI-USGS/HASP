@@ -132,7 +132,7 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
 #' @param add_trend logical. Uses \code{trend_test}.
 #' @param days_required_per_month integer. Number of days required per month. 
-#' Default is 14. Only used if add_trend is \code{TRUE}.
+#' Default is 14. Only used if add_trend is \code{TRUE} using daily data.
 #' @param n_years integer. This is the number of years to calculate the trend on.
 #' Default is 10. This can be a vector of years.
 #' @param POR_trend a logical indicating whether to include a trend test
@@ -184,8 +184,7 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title,
 #'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
-#'              add_trend = TRUE,
-#'              days_required_per_month = 0)
+#'              add_trend = TRUE)
 #' 
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
@@ -282,11 +281,10 @@ gwl_plot_all <- function(gw_level_dv,
     
     gw_monthly <- monthly_mean(all_data,
                                date_col = "Date",
-                               value_col = "Value",
-                               days_required_per_month = days_required_per_month)
+                               value_col = "Value")
 
-    trend_results <- trend_test(all_data,
-                                gwl_data = NULL,
+    trend_results <- trend_test(gw_level_dv[grepl("A", gw_level_dv$Approve),],
+                                gwl_data = gwl_data[grepl("A", gwl_data$Approve),],
                                 date_col = c("Date"),
                                 value_col = c("Value"), 
                                 approved_col = c("Approve"),

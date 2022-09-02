@@ -4,12 +4,7 @@
 \alias{monthly_mean}
 \title{Monthly mean}
 \usage{
-monthly_mean(
-  x,
-  date_col = "Date",
-  value_col = "X_62610_00001",
-  days_required_per_month = 14
-)
+monthly_mean(x, date_col = "Date", value_col = "X_62610_00001")
 }
 \arguments{
 \item{x}{data.frame}
@@ -17,9 +12,6 @@ monthly_mean(
 \item{date_col}{character name of date column}
 
 \item{value_col}{character name of value column}
-
-\item{days_required_per_month}{integer. Number of days required per month. 
-Default is 14.}
 }
 \description{
 Take the mean of each month, filter if there's not at least 15 days, 

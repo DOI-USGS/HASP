@@ -205,8 +205,7 @@ cl_trend <- trend_test(NULL,
                    CharacteristicName == "Chloride"), 
                      approved_col = "ResultStatusIdentifier",
                      date_col = "ActivityStartDateTime",
-                     value_col = "ResultMeasureValue",
-                   days_required_per_month = 0)
+                     value_col = "ResultMeasureValue")
 kable(cl_trend, digits = 3)
 ```
 

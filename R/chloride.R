@@ -100,8 +100,7 @@ trend_plot <- function(qw_data, plot_title,
                               value_col = "ResultMeasureValue", 
                               approved_col = "condition",
                               n_years = n_years,
-                              POR_trend = POR_trend, 
-                              days_required_per_month = 0)
+                              POR_trend = POR_trend)
   
   seg_df <- create_segs(trend_results,
                         qw_sub,

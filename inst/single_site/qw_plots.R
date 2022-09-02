@@ -24,8 +24,7 @@ cl_trend_table <- reactive({
                                         CharacteristicName %in% "Chloride"), 
                           approved_col = "ResultStatusIdentifier", 
                           date_col = "ActivityStartDate",
-                          value_col = "ResultMeasureValue", 
-                          days_required_per_month = 0)
+                          value_col = "ResultMeasureValue")
   
   qw_table_DT <- DT::datatable(qw_table, 
                                rownames = FALSE,
@@ -52,8 +51,7 @@ trend_test(gw_level_dv = NULL,
            gwl_data =  dplyr::filter(qw_data, CharacteristicName == "Chloride"), 
            approved_col = "ResultStatusIdentifier", 
            date_col = "ActivityStartDate",
-           value_col = "ResultMeasureValue", 
-           days_required_per_month = 0)
+           value_col = "ResultMeasureValue")
 
 qw_summary(qw_data, 
             CharacteristicName = "Chloride",
