@@ -285,9 +285,9 @@ gwl_plot_all <- function(gw_level_dv,
 
     trend_results <- trend_test(gw_level_dv[grepl("A", gw_level_dv$Approve),],
                                 gwl_data = gwl_data[grepl("A", gwl_data$Approve),],
-                                date_col = c("Date"),
-                                value_col = c("Value"), 
-                                approved_col = c("Approve"),
+                                date_col = c("Date", "Date"),
+                                value_col = c("Value", "Value"), 
+                                approved_col = c("Approve", "Approve"),
                                 n_years = n_years,
                                 POR_trend = POR_trend,
                                 days_required_per_month = days_required_per_month)

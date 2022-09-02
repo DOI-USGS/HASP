@@ -102,7 +102,7 @@ test_that("Field gwl plot", {
   dv <- L2701_example_data$Daily
   plot2 <- gwl_plot_all(dv, gwl_data,
                         parameter_cd = "62610",
-                        plot_title = "title",)
+                        plot_title = "title")
 
   expect_true(all(c("data", "layers", "scales",     
                     "mapping", "theme", "coordinates",
