@@ -292,20 +292,22 @@ gwl_plot_all <- function(gw_level_dv,
                                 POR_trend = POR_trend,
                                 days_required_per_month = days_required_per_month)
     
-    seg_df <- create_segs(trend_results,
-                          gw_monthly, 
-                          date_col = "mid_date",
-                          value_col = "mean_va")
-    
-    plot_out <- plot_out +
-      geom_segment(data = seg_df, color = "forestgreen", size = 1,
-                   aes(x = x1, xend = x2, 
-                       y = y1, yend = y2,
-                       group = years, linetype = years)) +
-      scale_linetype_discrete("Trend") +
-      guides(fill = guide_legend(order = 1),
-             color = guide_legend(order = 2),
-             linetype = guide_legend(order = 3))
+    if(!all(trend_results$trend == "Not significant")){
+      seg_df <- create_segs(trend_results,
+                            gw_monthly, 
+                            date_col = "mid_date",
+                            value_col = "mean_va")
+      
+      plot_out <- plot_out +
+        geom_segment(data = seg_df, color = "forestgreen", size = 1,
+                     aes(x = x1, xend = x2, 
+                         y = y1, yend = y2,
+                         group = years, linetype = years)) +
+        scale_linetype_discrete("Trend") +
+        guides(fill = guide_legend(order = 1),
+               color = guide_legend(order = 2),
+               linetype = guide_legend(order = 3))
+    }
   } else {
     plot_out <- plot_out +
       guides(fill = guide_legend(order = 1),
