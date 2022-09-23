@@ -50,3 +50,5 @@ vignettes/git_repository.png
 vignettes/https_clone.png
 deploy_simple.R
 ^doc$
+cobertura.xml
+test-out.xml
