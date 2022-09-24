@@ -190,12 +190,12 @@ if(nrow(gw_level_dv) > 0){
 ```
 
 
-Statistics of maximum daily water level record (DOY = day of year). Only showing the first 10 rows for this example:
+Statistics of maximum *daily* water level record (DOY = day of year). Only showing the first 10 rows for this example:
 
 ```{r dailyShow2}
 if(nrow(gw_level_dv) > 0){
   daily_table <- daily_frequency_table(gw_level_dv, 
-                                       gwl_data,
+                                       NULL,
                                        parameter_cd = parameterCd,
                                        stat_cd = statCd) 
   
@@ -216,10 +216,12 @@ if(nrow(gw_level_dv) > 0){
 
 ### Daily value trends
 
+The following plot is based on daily data:
 
 ```{r gwlTrendplot}
 
-gwl_plot_all(gw_level_dv, gwl_data, 
+gwl_plot_all(gw_level_dv, 
+             NULL, 
              y_label = yaxis,
              parameter_cd = parameterCd, 
              stat_cd = statCd,
@@ -230,14 +232,14 @@ gwl_plot_all(gw_level_dv, gwl_data,
 
 ```
 
-Summary statistics for maximum daily water level measurements:
+Summary statistics for maximum *daily* water level measurements:
 
 ```{r siteStatsDaily}
 
 if(nrow(gw_level_dv) > 0){
 
   siteDV <- daily_gwl_summary(gw_level_dv,
-                              gwl_data,
+                              NULL,
                               parameter_cd = parameterCd,
                               stat_cd = statCd) 
   
@@ -254,12 +256,12 @@ if(nrow(gw_level_dv) > 0){
 }
 ```
 
-Results of trend analysis on maximum daily water levels:
+Results of trend analysis on maximum *daily* water levels:
 
 ```{r trendTableDaily}
 if(nrow(gw_level_dv) > 0){
     data_list <- HASP:::set_up_data(gw_level_dv = gw_level_dv, 
-                           gwl_data = gwl_data, 
+                           gwl_data = NULL, 
                            parameter_cd = parameterCd,
                            date_col = NA, 
                            value_col = NA,
