@@ -26,7 +26,6 @@
 #' the amount of data that must be included overall in order to calculate a trend.
 #' The default is 0.5, which means if gaps in the data span more than 50% of the
 #' total record, a trend will not be calculated.
-#' @param alpha the confidence level to use for statistical significance
 #' @param POR_trend a logical indicating whether to include a trend test
 #' for the full period of record. Default is \code{TRUE}.
 #' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
@@ -80,7 +79,6 @@ trend_test <- function(gw_level_dv,
                        value_col = NA,
                        approved_col = NA,
                        stat_cd = NA,
-                       alpha = 0.95,
                        pctComplete = 0.5,
                        days_required_per_month = 14,
                        POR_trend = TRUE) {
