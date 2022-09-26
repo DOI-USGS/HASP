@@ -27,6 +27,21 @@ test_that("Kendall Seasonal Trend", {
   expect_true(415 == signif(test1$intercept[2], digits = 3))
   expect_true("Down" == test1$trend[2])
   
+  #both:
+  test1 <- trend_test(L2701_example_data$Daily,
+                      gwl_data = gw_level_data,
+                      parameter_cd = "62610", 
+                      days_required_per_month = 0)
+  expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test1)))
+  expect_equal(test1$trend, c("Up", "Down"))
+  #only dv:
+  test1 <- trend_test(L2701_example_data$Daily,
+                      gwl_data = NULL,
+                      parameter_cd = "62610", 
+                      days_required_per_month = 0)
+  expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test1)))
+  expect_equal(test1$trend, c("Up", "Down"))  
+  
   test3 <- trend_test(gw_level_dv = NULL,
                       gwl_data =  gw_level_data,
                       parameter_cd = "62610")
@@ -41,6 +56,15 @@ test_that("Kendall Seasonal Trend", {
   
   expect_true(23.3 == signif(test4$slope[1], digits = 3))
   expect_true(2 == signif(test4$slope[2], digits = 3))
+  
+  test1 <- trend_test(L2701_example_data$Daily,
+                      gwl_data = gw_level_data,
+                      parameter_cd = "62610", 
+                      POR_trend = FALSE,
+                      days_required_per_month = 0)
+  expect_true(all(c("test", "tau", "pValue", "slope", "intercept", "trend") %in% names(test1)))
+  expect_equal(test1$trend, c("Up"))
+
   
 })
 
