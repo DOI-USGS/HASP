@@ -1,4 +1,4 @@
-image: artifactory.wma.chs.usgs.gov/docker-official-mirror/rocker/geospatial:latest
+image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial:latest
 
 stages:
   - getready
@@ -34,9 +34,8 @@ getready:
     - mkdir -p $R_LIBS_USER
     - mkdir -p $APT_CACHE
     - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
-    - Rscript -e "install.packages(c('devtools','pkgdown', 'kableExtra','covr'))"
+    - Rscript -e "install.packages(c('rlang', 'devtools','pkgdown', 'connectapi'))"
     - Rscript -e "devtools::install_deps()"
-    - Rscript -e "devtools::install_github('rstudio/connectapi')"
   cache:
     paths:
      - $R_LIBS_USER
