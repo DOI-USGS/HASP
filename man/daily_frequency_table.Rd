@@ -18,14 +18,14 @@ daily_frequency_table(
 \item{gw_level_dv}{data frame, daily groundwater level data
 from \code{readNWISdv}}
 
-\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or 
+\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or
 data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
 approval code), and a column representing the measured value (either lev_va,
 sl_lev_va, or value).}
 
-\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
+\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd
 can be used to define the value_col.
- If the data doesn't come directly from NWIS services, this 
+ If the data doesn't come directly from NWIS services, this
 can be set to \code{NA},and this argument will be ignored.}
 
 \item{date_col}{the heading of the date column. The default is \code{NA},
@@ -36,7 +36,7 @@ which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
 can be used to help define the value_col.}
 }
 \value{
