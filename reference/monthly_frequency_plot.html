@@ -80,19 +80,20 @@ or both types of data can be included.</p>
 <span>  subtitle <span class="op">=</span> <span class="st">"U.S. Geological Survey"</span>,</span>
 <span>  plot_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Past year"</span><span class="op">)</span>,</span>
 <span>  y_axis_label <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  flip <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  flip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  percentile_colors <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>gw_level_dv</dt>
-<dd><p>data frame, daily groundwater level data. Often obtained 
+<dd><p>data frame, daily groundwater level data. Often obtained
 from <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISdv.html" class="external-link">readNWISdv</a></code>. Use <code>NULL</code> for no daily data.</p></dd>
 
 
 <dt>gwl_data</dt>
-<dd><p>data frame returned from  <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></code>, or 
+<dd><p>data frame returned from  <code><a href="https://rdrr.io/pkg/dataRetrieval/man/readNWISgwl.html" class="external-link">readNWISgwl</a></code>, or
 data frame with a date, value, and approval columns. Using the convention:
 lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
 or sl_lev_va (representing value) will allow defaults to work.
@@ -100,7 +101,7 @@ Use <code>NULL</code> for no discrete data.</p></dd>
 
 
 <dt>parameter_cd</dt>
-<dd><p>If data in gw_level_dv comes from NWIS, the parameter_cd 
+<dd><p>If data in gw_level_dv comes from NWIS, the parameter_cd
 can be used to define the value_col. If the data doesn't come directly from
 NWIS services, this can be set to <code>NA</code>,and this argument will be ignored.</p></dd>
 
@@ -108,7 +109,7 @@ NWIS services, this can be set to <code>NA</code>,and this argument will be igno
 <dt>date_col</dt>
 <dd><p>the name of the date column. The default is <code>NA</code>,
 in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames 
+naming conventions. If both gw_level_dv and gwl_data data frames
 require custom column names, the first value of this input defines the date
 column for gw_level_dv, and the second defines gwl_data.</p></dd>
 
@@ -116,7 +117,7 @@ column for gw_level_dv, and the second defines gwl_data.</p></dd>
 <dt>value_col</dt>
 <dd><p>the name of the value column. The default is <code>NA</code>,
 in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames 
+naming conventions. If both gw_level_dv and gwl_data data frames
 require custom column names, the first value of this input defines the value
 column for gw_level_dv, and the second defines gwl_data.</p></dd>
 
@@ -125,12 +126,12 @@ column for gw_level_dv, and the second defines gwl_data.</p></dd>
 <dd><p>the name of the column to get provisional/approved status.
 The default is <code>NA</code>, in which case, the code will try to get the column name
 automatically based on NWIS naming conventions. If both gw_level_dv and
-gwl_data data frames require custom column names, the first value of this 
+gwl_data data frames require custom column names, the first value of this
 input defines the approval column for gw_level_dv, and the second defines gwl_data.</p></dd>
 
 
 <dt>stat_cd</dt>
-<dd><p>If data in gw_level_dv comes from NWIS, the stat_cd 
+<dd><p>If data in gw_level_dv comes from NWIS, the stat_cd
 can be used to help define the value_col.</p></dd>
 
 
@@ -155,6 +156,12 @@ in January.</p></dd>
 <dt>flip</dt>
 <dd><p>logical. If <code>TRUE</code>, flips the y axis so that the smallest number is on top.
 Default is <code>TRUE</code>.</p></dd>
+
+
+<dt>percentile_colors</dt>
+<dd><p>Optional argument to provide a vector of 5 colors
+used to fill the percentile bars in order from 5-10th percentile bin to the
+90-95th percentile bin. Default behavior (<code>NA</code>) is to use legacy plot colors.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -198,10 +205,27 @@ showing the last year of groundwater level measurements.</p>
 <span class="r-in"><span>                                                 <span class="va">gwl_data</span>,</span></span>
 <span class="r-in"><span>                                                 parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
 <span class="r-in"><span>                                                 y_axis_label <span class="op">=</span> <span class="va">label</span>,</span></span>
-<span class="r-in"><span>                                                 plot_title <span class="op">=</span> <span class="st">"L2701 Groundwater Level"</span>, </span></span>
+<span class="r-in"><span>                                                 plot_title <span class="op">=</span> <span class="st">"L2701 Groundwater Level"</span>,</span></span>
 <span class="r-in"><span>                                                 flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">monthly_frequency_flip</span> </span></span>
+<span class="r-in"><span><span class="va">monthly_frequency_flip</span></span></span>
 <span class="r-plt img"><img src="monthly_frequency_plot-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">monthly_frequency_custom_colors</span> <span class="op">&lt;-</span> <span class="fu">monthly_frequency_plot</span><span class="op">(</span><span class="va">gw_level_dv</span>,</span></span>
+<span class="r-in"><span>                                                 <span class="va">gwl_data</span>,</span></span>
+<span class="r-in"><span>                                                 parameter_cd <span class="op">=</span> <span class="st">"62610"</span>,</span></span>
+<span class="r-in"><span>                                                 y_axis_label <span class="op">=</span> <span class="va">label</span>,</span></span>
+<span class="r-in"><span>                                                 plot_title <span class="op">=</span> <span class="st">"L2701 Groundwater Level"</span>,</span></span>
+<span class="r-in"><span>                                                 flip <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                                                 percentile_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                                                     <span class="st">"#d7191c"</span>,</span></span>
+<span class="r-in"><span>                                                     <span class="st">"#fdae61"</span>,</span></span>
+<span class="r-in"><span>                                                     <span class="st">"#ffffbf"</span>,</span></span>
+<span class="r-in"><span>                                                     <span class="st">"#abdda4"</span>,</span></span>
+<span class="r-in"><span>                                                     <span class="st">"#2b83ba"</span></span></span>
+<span class="r-in"><span>                                                 <span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">monthly_frequency_custom_colors</span></span></span>
+<span class="r-plt img"><img src="monthly_frequency_plot-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
