@@ -16,41 +16,41 @@ monthly_frequency_table(
 )
 }
 \arguments{
-\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
+\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
 from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
 
-\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
+\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
 data frame with a date, value, and approval columns. Using the convention:
 lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
 or sl_lev_va (representing value) will allow defaults to work.
 Use \code{NULL} for no discrete data.}
 
-\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
+\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd
 can be used to define the value_col. If the data doesn't come directly from
 NWIS services, this can be set to \code{NA},and this argument will be ignored.}
 
 \item{date_col}{the name of the date column. The default is \code{NA},
 in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames 
+naming conventions. If both gw_level_dv and gwl_data data frames
 require custom column names, the first value of this input defines the date
 column for gw_level_dv, and the second defines gwl_data.}
 
 \item{value_col}{the name of the value column. The default is \code{NA},
 in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames 
+naming conventions. If both gw_level_dv and gwl_data data frames
 require custom column names, the first value of this input defines the value
 column for gw_level_dv, and the second defines gwl_data.}
 
 \item{approved_col}{the name of the column to get provisional/approved status.
 The default is \code{NA}, in which case, the code will try to get the column name
 automatically based on NWIS naming conventions. If both gw_level_dv and
-gwl_data data frames require custom column names, the first value of this 
+gwl_data data frames require custom column names, the first value of this
 input defines the approval column for gw_level_dv, and the second defines gwl_data.}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
+\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
 can be used to help define the value_col.}
 
-\item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers 
+\item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers
 are in the higher percentages. Default is \code{TRUE}.}
 }
 \value{
@@ -60,7 +60,7 @@ years of data; and the lowest monthly median and the highest monthly
 median.
 }
 \description{
-The table will accept daily, discrete, or a both types of data. The median of each 
+The table will accept daily, discrete, or a both types of data. The median of each
 year/month is calculated. Then using that median, monthly stats are calculated.
 Percentiles are calculated using the \code{quantile} function with "type=6".
 }
@@ -80,10 +80,10 @@ gwl_data <- L2701_example_data$Discrete
 monthly_frequency_combo <- monthly_frequency_table(gw_level_dv,
                                              gwl_data,
                                              parameter_cd = "62610")
-head(monthly_frequency_combo) 
+head(monthly_frequency_combo)
 monthly_flip <- monthly_frequency_table(gw_level_dv,
                                         gwl_data,
                                         parameter_cd = "62610",
                                         flip = TRUE)
-head(monthly_flip) 
+head(monthly_flip)
 }
