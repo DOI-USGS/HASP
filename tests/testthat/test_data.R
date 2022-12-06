@@ -109,3 +109,47 @@ test_that("Get site summaries", {
   expect_gte(nrow(site_data_available), 6)
   
 })
+
+test_that("Data setup", {
+
+  
+  s1 <- HASP:::set_up_data(gw_level_dv = L2701_example_data[["Daily"]],
+                    gwl_data = L2701_example_data[["Discrete"]], 
+                    parameter_cd = "62610", 
+                    date_col = NA,
+                    value_col = NA,
+                    approved_col = NA,
+                    stat_cd = "00003")
+  
+  expect_true(all(names(s1) %in% c("gw_level_dv", "gwl_data", "includes")))
+  expect_true(all(s1$includes))
+  expect_true(is.numeric(s1$gw_level_dv$Value))
+  expect_true(is.character(s1$gw_level_dv$Approve))
+  expect_true(inherits(s1$gw_level_dv$Date, "Date"))
+  expect_true(is.numeric(s1$gwl_data$Value))
+  expect_true(is.character(s1$gwl_data$Approve))
+  expect_true(inherits(s1$gwl_data$Date, "Date"))
+
+  incomplete_date <-  L2701_example_data[["Daily"]]
+  incomplete_date$Date <- as.character(incomplete_date$Date)
+  incomplete_date$Date[1] <- "1980"
+  expect_warning(s2 <- HASP:::set_up_data(gw_level_dv = incomplete_date,
+                    gwl_data = L2701_example_data[["Discrete"]], 
+                    parameter_cd = "62610", 
+                    date_col = NA,
+                    value_col = NA,
+                    approved_col = NA,
+                    stat_cd = "00003"))
+  
+  incomplete_date <-  L2701_example_data[["Discrete"]]
+  incomplete_date$lev_dt <- as.character(incomplete_date$lev_dt)
+  incomplete_date$lev_dt[1] <- "1980"
+  expect_warning(s2 <- HASP:::set_up_data(gw_level_dv = L2701_example_data[["Daily"]],
+                                          gwl_data = incomplete_date, 
+                                          parameter_cd = "62610", 
+                                          date_col = NA,
+                                          value_col = NA,
+                                          approved_col = NA,
+                                          stat_cd = "00003"))
+  
+})
