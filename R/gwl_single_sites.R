@@ -299,7 +299,7 @@ gwl_plot_all <- function(gw_level_dv,
                             value_col = "mean_va")
       
       plot_out <- plot_out +
-        geom_segment(data = seg_df, color = "forestgreen", size = 1,
+        geom_segment(data = seg_df, color = "forestgreen", linewidth = 1,
                      aes(x = x1, xend = x2, 
                          y = y1, yend = y2,
                          group = years, linetype = years)) +
@@ -421,12 +421,20 @@ set_up_data <- function(gw_level_dv,
     needed_cols <- c(date_col_per, value_col_per, approved_col_per)
     checkmate::assertNames(names(gwl_data), must.include = needed_cols)
 
-    gwl_data$year <- as.numeric(format(gwl_data[[date_col_per]], "%Y")) + 
-      as.numeric(as.character(gwl_data[[date_col_per]], "%j"))/365
+    if( !inherits(gwl_data[[date_col_per]], c("Date", "POSIXt"))){
+      incomplete <- which(nchar(gwl_data[[date_col_per]]) != 10)
+      warning("Removed ", length(incomplete), " rows containing incomplete dates")
+
+      gwl_data <- gwl_data[-incomplete, ]
+
+    }
     
-    gwl_data$Date <- gwl_data[[date_col_per]]
+    gwl_data$Date <- as.Date(gwl_data[[date_col_per]])
     gwl_data$Value <- gwl_data[[value_col_per]]
     gwl_data$Approve <- gwl_data[[approved_col_per]]
+    
+    gwl_data$year <- as.numeric(format(gwl_data[["Date"]], "%Y")) + 
+      as.numeric(as.character(gwl_data[["Date"]], "%j"))/365 
     
     gwl_data <- gwl_data[, c("year", "Date", "Value", "Approve")]
   } else {
@@ -453,6 +461,14 @@ set_up_data <- function(gw_level_dv,
     
     if(!all(c(date_col_dv, value_col_dv, approved_dv) %in% names(gw_level_dv))){
       stop("gw_level_dv data frame doesn't include all specified columns")
+    }
+    
+    if( !inherits(gw_level_dv[[date_col_dv]], c("Date", "POSIXt"))){
+      incomplete <- which(nchar(gw_level_dv[[date_col_dv]]) != 10)
+      warning("Removed ", length(incomplete), " rows containing incomplete dates")
+      
+      gw_level_dv <- gw_level_dv[-incomplete, ]
+      
     }
     
     #Convert date column to date just in case its a POSIXct:

@@ -809,7 +809,7 @@ weekly_frequency_plot <- function(gw_level_dv,
                size = 1, shape = 17) +
     geom_line(data = dplyr::filter(point_data,
                                    group != "Historical weekly median"),
-               aes(x = x, y = y, color = group), size = 1) +
+               aes(x = x, y = y, color = group), linewidth = 1) +
     geom_vline(xintercept = month_start, color = "grey70") +
     scale_color_manual(values = point_colors, breaks = order_groups,
                        name = "EXPLANATION") +
