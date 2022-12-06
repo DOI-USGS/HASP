@@ -424,9 +424,8 @@ set_up_data <- function(gw_level_dv,
     if( !inherits(gwl_data[[date_col_per]], c("Date", "POSIXt"))){
       incomplete <- which(nchar(gwl_data[[date_col_per]]) != 10)
       warning("Removed ", length(incomplete), " rows containing incomplete dates")
-      
-      good_dates_index <- which(nchar(gwl_data[[date_col_per]]) == 10)
-      gwl_data <- gwl_data[good_dates_index, ]
+
+      gwl_data <- gwl_data[-incomplete, ]
 
     }
     
