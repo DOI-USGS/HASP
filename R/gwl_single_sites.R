@@ -299,7 +299,7 @@ gwl_plot_all <- function(gw_level_dv,
                             value_col = "mean_va")
       
       plot_out <- plot_out +
-        geom_segment(data = seg_df, color = "forestgreen", size = 1,
+        geom_segment(data = seg_df, color = "forestgreen", linewidth = 1,
                      aes(x = x1, xend = x2, 
                          y = y1, yend = y2,
                          group = years, linetype = years)) +
@@ -461,6 +461,14 @@ set_up_data <- function(gw_level_dv,
     
     if(!all(c(date_col_dv, value_col_dv, approved_dv) %in% names(gw_level_dv))){
       stop("gw_level_dv data frame doesn't include all specified columns")
+    }
+    
+    if( !inherits(gw_level_dv[[date_col_dv]], c("Date", "POSIXt"))){
+      incomplete <- which(nchar(gw_level_dv[[date_col_dv]]) != 10)
+      warning("Removed ", length(incomplete), " rows containing incomplete dates")
+      
+      gw_level_dv <- gw_level_dv[-incomplete, ]
+      
     }
     
     #Convert date column to date just in case its a POSIXct:
