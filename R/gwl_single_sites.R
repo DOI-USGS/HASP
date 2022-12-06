@@ -421,12 +421,21 @@ set_up_data <- function(gw_level_dv,
     needed_cols <- c(date_col_per, value_col_per, approved_col_per)
     checkmate::assertNames(names(gwl_data), must.include = needed_cols)
 
-    gwl_data$year <- as.numeric(format(gwl_data[[date_col_per]], "%Y")) + 
-      as.numeric(as.character(gwl_data[[date_col_per]], "%j"))/365
+    if( !inherits(gwl_data[[date_col_per]], c("Date", "POSIXt"))){
+      incomplete <- which(nchar(gwl_data[[date_col_per]]) != 10)
+      warning("Removed ", length(incomplete), " rows containing incomplete dates")
+      
+      good_dates_index <- which(nchar(gwl_data[[date_col_per]]) == 10)
+      gwl_data <- gwl_data[good_dates_index, ]
+
+    }
     
-    gwl_data$Date <- gwl_data[[date_col_per]]
+    gwl_data$Date <- as.Date(gwl_data[[date_col_per]])
     gwl_data$Value <- gwl_data[[value_col_per]]
     gwl_data$Approve <- gwl_data[[approved_col_per]]
+    
+    gwl_data$year <- as.numeric(format(gwl_data[["Date"]], "%Y")) + 
+      as.numeric(as.character(gwl_data[["Date"]], "%j"))/365 
     
     gwl_data <- gwl_data[, c("year", "Date", "Value", "Approve")]
   } else {
