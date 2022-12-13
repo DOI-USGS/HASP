@@ -459,6 +459,12 @@ monthly_frequency_plot <- function(gw_level_dv,
                                  "25 - 75",
                                  "10 - 25",
                                  "5 - 10")) +
+    scale_shape_manual(name = "EXPLANATION",
+                       values = point_shapes, 
+                       breaks = names(point_shapes)) +
+    scale_color_manual(name = "EXPLANATION",
+                       values = point_colors, 
+                       breaks = names(point_colors)) +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
@@ -467,18 +473,14 @@ monthly_frequency_plot <- function(gw_level_dv,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(axis.ticks.x = element_blank()) +
-    guides(color = guide_legend(order = 1,
-                                override.aes = list(shape = point_shapes)),
-           shape = "none",
+    guides(shape = guide_legend(order = 1),
+           color = guide_legend(order = 1),
            fill = guide_legend(order = 2))
+
   if (flip) {
     plot_out <- plot_out +
       scale_y_continuous(trans = "reverse")
   }
-
-  plot_out <- plot_out +
-    scale_color_manual(values = point_colors, name = "EXPLANATION") +
-    scale_shape_manual(values = point_shapes, name = "EXPLANATION")
 
   return(plot_out)
 }
