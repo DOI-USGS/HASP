@@ -95,7 +95,7 @@ deploy:
       - $PKG_PATH
     expire_in: 1 week
     
-alidate Inventory:
+Validate Inventory:
     stage: end
     image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
@@ -105,4 +105,6 @@ alidate Inventory:
         --type "provisional"
         --token "${GIT_TOKEN_CUSTOM}"
     tags:
-        - chs-shared
+      - chs-shared
+    rules:
+      - if: '$CI_COMMIT_REF_NAME == "main"'
