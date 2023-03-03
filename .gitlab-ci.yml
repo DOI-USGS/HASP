@@ -5,6 +5,7 @@ stages:
   - check
   - test
   - end
+  - deploy
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
@@ -22,6 +23,7 @@ variables:
   CONNECT_API_KEY: $CONNECT_API_KEY
   CONNECT_SERVER: $CONNECT_SERVER
   GITHUB_PAT: $GITHUB_PAT
+  PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
 
 cache:
   key: ${CI_JOB_NAME}
@@ -83,19 +85,19 @@ covertests:
         path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
 
-deploy:
+pages:
   stage: end
   only: 
     - main
   script:
-    - Rscript -e 'pkgdown::build_site()'
+    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
-      - $PKG_PATH
+      - $PAGES_OUTDIR
     expire_in: 1 week
     
-alidate Inventory:
+Validate Inventory:
     stage: end
     image: ${INTERNAL_REGISTRY}software/software-management:latest
     script:
