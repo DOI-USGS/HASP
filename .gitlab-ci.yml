@@ -37,7 +37,7 @@ getready:
     - mkdir -p $APT_CACHE
     - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
     - Rscript -e "install.packages(c('stringi', 'rlang', 'devtools','pkgdown', 'connectapi'))"
-    - Rscript -e "devtools::install_deps()"
+    - Rscript -e "devtools::install_deps(dependencies = TRUE)"
   cache:
     paths:
      - $R_LIBS_USER
@@ -107,4 +107,6 @@ Validate Inventory:
         --type "provisional"
         --token "${GIT_TOKEN_CUSTOM}"
     tags:
-        - chs-shared
+      - chs-shared
+    rules:
+      - if: '$CI_COMMIT_REF_NAME == "main"'
