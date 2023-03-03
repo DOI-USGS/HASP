@@ -39,10 +39,18 @@ test_that("SC Chloride graphs and table", {
   expect_true(all(c("Date", "Chloride", "Specific conductance") %in%
                     names(sc_plot$data)))
   
+  expect_error(Sc_Cl_plot(site_data[FALSE,], plot_title = "Hi"))
+  
+  sc_plot <- Sc_Cl_plot(site_data, plot_title = "Hi", subtitle = "NWIS")
+  expect_true(all(c("Date", "Chloride", "Specific conductance") %in%
+                    names(sc_plot$data)))
+  
   sccl_table <- Sc_Cl_table(site_data)
   expect_true(all(c("Date",   
                     "Chloride",
                     "Specific conductance" ) %in% names(sccl_table)))
+  
+  expect_error(Sc_Cl_table(site_data[,c("ActivityStartDateTime")]))
   
   qw_plot_out <- qw_plot(site_data, "hi!")
   expect_true(all(c(c("data", "layers", "scales",     

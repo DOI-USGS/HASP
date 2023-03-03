@@ -291,6 +291,24 @@ knitr::include_graphics("merge_request.png")
 
 Fill in some more information on what is being included in this merge request. You could assign someone to do a peer review of your code. This is a great place for review. It is a good idea to discuss with your collaborators if you want guidelines set up to decide who has the responsibility to perform the merge (that is...click the Merge button).
 
+### Merge Reports
+
+There are a few things to check when the pipeline has finished. The first main goal is that the package passes all the checks. The next thing to check is  the test coverage. When you write tests in the "testthat" folder, you are checking that the code is doing what it's suppose to be doing. We can also check how well your code is covered by tests. This is called "test coverage". There are programs that can analyze each line of your code and determine which lines are being tested, and which lines are not. A high percentage of test coverage is one metric of good testing. However, it is also important to write good and meaningful tests. If you only test that a function didn't fail, you still don't know if the function produced meaningful output.
+
+The test coverage should be as good if not better than the coverage currently in the canonical "main" branch. In the following screenshot, the test coverage on the "main" branch is 92.11%. The pull request is set to increase that coverage by 0.11% to 92.22%. If you notice the test coverage decreasing, you will want to look at your test suite and see where you can add tests to make sure your package is working properly. This screenshot also shows where to get a full report on the tests in your package. 
+
+```{r echo=FALSE, out.width="75%"}
+knitr::include_graphics("more_tests.png")
+```
+
+Another report that GitLab can produced is found in the "Changes" tab in the merge request. There are green and red vertical lines on the file diffs. These vertical lines indicate the code is covered by a test (green line), or that there is no test (thicker red line).
+
+```{r echo=FALSE, out.width="75%"}
+knitr::include_graphics("test_included.png")
+```
+
+This can be useful for finding parts of your code that are not covered by tests.
+
 If the Pipeline has passed and the code review was satisfactory, clicking the Merge button will move all your changes into the "main" branch. 
 
 # Clean up local enviornment

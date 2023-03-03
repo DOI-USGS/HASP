@@ -13,7 +13,6 @@ trend_test(
   value_col = NA,
   approved_col = NA,
   stat_cd = NA,
-  alpha = 0.95,
   pctComplete = 0.5,
   days_required_per_month = 14,
   POR_trend = TRUE
@@ -45,8 +44,6 @@ which the code will try to get the column name automatically.}
 
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
-
-\item{alpha}{the confidence level to use for statistical significance}
 
 \item{pctComplete}{number percentage complete. This is a fraction that represents
 the amount of data that must be included overall in order to calculate a trend.

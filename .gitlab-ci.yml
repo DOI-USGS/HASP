@@ -1,10 +1,11 @@
-image: artifactory.wma.chs.usgs.gov/docker-official-mirror/rocker/geospatial:latest
+image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial:latest
 
 stages:
   - getready
   - check
   - test
   - end
+  - deploy
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
@@ -22,6 +23,7 @@ variables:
   CONNECT_API_KEY: $CONNECT_API_KEY
   CONNECT_SERVER: $CONNECT_SERVER
   GITHUB_PAT: $GITHUB_PAT
+  PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
 
 cache:
   key: ${CI_JOB_NAME}
@@ -34,9 +36,8 @@ getready:
     - mkdir -p $R_LIBS_USER
     - mkdir -p $APT_CACHE
     - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
-    - Rscript -e "install.packages(c('devtools','pkgdown', 'kableExtra','covr'))"
-    - Rscript -e "devtools::install_deps()"
-    - Rscript -e "devtools::install_github('rstudio/connectapi')"
+    - Rscript -e "install.packages(c('stringi', 'rlang', 'devtools','pkgdown', 'connectapi'))"
+    - Rscript -e "devtools::install_deps(dependencies = TRUE)"
   cache:
     paths:
      - $R_LIBS_USER
@@ -62,28 +63,50 @@ unittests:
     - getready
     - buildcheck
   script:
-    - R -e 'if (any(as.data.frame(devtools::test())[["failed"]] > 0)) stop("Some tests failed.")'
-
+    - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
+  artifacts:
+    when: always
+    paths: 
+      - test-out.xml
+    reports:
+      junit: test-out.xml
+        
 covertests:
   stage: test
   dependencies:
     - getready
     - buildcheck
   script:
-    - R -e 'x <- covr::package_coverage();x;saveRDS(x, file = "cover.rds")'
+    - R -e 'x <- covr::package_coverage(); covr::to_cobertura(x); x; '
   artifacts:
-    paths: 
-      - cover.rds
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: cobertura.xml
   coverage: '/Coverage: \d+.\d+\%/'
 
-deploy:
+pages:
   stage: end
   only: 
     - main
   script:
-    - Rscript -e 'pkgdown::build_site()'
+    - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
     - Rscript -e 'source("deploy_simple.R")'
   artifacts:
     paths:
-      - $PKG_PATH
+      - $PAGES_OUTDIR
     expire_in: 1 week
+    
+Validate Inventory:
+    stage: end
+    image: ${INTERNAL_REGISTRY}software/software-management:latest
+    script:
+      - software-management review
+        --project "${CI_PROJECT_PATH}"
+        --ref "${CI_COMMIT_BRANCH}"
+        --type "provisional"
+        --token "${GIT_TOKEN_CUSTOM}"
+    tags:
+      - chs-shared
+    rules:
+      - if: '$CI_COMMIT_REF_NAME == "main"'
