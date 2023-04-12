@@ -1,4 +1,4 @@
-image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial:latest
+image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial@sha256:d09a38602a306da8ac3e90beed95cf0b30e0f69aca1432379e65e62de9a4db3e
 
 stages:
   - getready
@@ -36,7 +36,7 @@ getready:
     - mkdir -p $R_LIBS_USER
     - mkdir -p $APT_CACHE
     - echo "options(Ncpus=$(nproc --all), repos=c(CRAN='$CRAN'))" >> $R_PROFILE
-    - Rscript -e "install.packages(c('devtools','pkgdown', 'connectapi'))"
+    - Rscript -e "install.packages(c('devtools','pkgdown', 'connectapi', 'vctrs'))"
   cache:
     paths:
      - $R_LIBS_USER
