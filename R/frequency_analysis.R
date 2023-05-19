@@ -690,7 +690,7 @@ weekly_frequency_plot <- function(gw_level_dv,
     plot_end <- last_day(date) + 1
     plot_start <- first_day(plot_end - 363)
   } else if (plot_range == "Calendar year") {
-    calendar_year <- as.character(date, format = "%Y")
+    calendar_year <- format(date, format = "%Y")
     plot_end <- as.Date(paste0(calendar_year, "-12-31"))
     plot_start <- as.Date(paste0(calendar_year, "-01-01"))
   }
@@ -1007,9 +1007,9 @@ daily_gwl_plot <- function(gw_level_dv,
   }
 
   if (is.na(start_date)) {
-    plot_start_year <- as.numeric(as.character(end_date, format = "%Y")) - 2
+    plot_start_year <- as.numeric(format(end_date, format = "%Y")) - 2
     plot_start <- as.Date(paste(plot_start_year,
-                                as.character(end_date, format = "%m-%d"),
+                                format(end_date, format = "%m-%d"),
                                 sep = "-"))
   } else {
     plot_start <- as.Date(start_date)
@@ -1052,15 +1052,15 @@ daily_gwl_plot <- function(gw_level_dv,
   ribbon_colors <- c("Approved Daily\nMin & Max" = "lightskyblue1")
 
   if (month_breaks) {
-    x_label <- paste(as.character(plot_start, "%B %Y"),
+    x_label <- paste(format(plot_start, "%B %Y"),
                      "to",
-                     as.character(plot_end, "%B %Y"))
+                     format(plot_end, "%B %Y"))
     x_breaks <- mid_month(seq.Date(plot_start, plot_end, by = "month"))
-    x_tick_labels <- substr(as.character(x_breaks, format = "%B"), 1, 1)
+    x_tick_labels <- substr(format(x_breaks, format = "%B"), 1, 1)
   } else {
     x_label <- "Date"
     x_breaks <- seq.Date(plot_start, end_date, by = "year")
-    x_tick_labels <- as.character(x_breaks, format = "%Y")
+    x_tick_labels <- format(x_breaks, format = "%Y")
   }
 
   y_label <- y_axis_label
