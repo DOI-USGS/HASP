@@ -989,8 +989,8 @@ daily_gwl_plot <- function(gw_level_dv,
 
   # Calculate the historical max/min/median for each day
 
-  gw_level_dv$J <- as.numeric(as.character(gw_level_dv$Date,
-                                          format = "%j"))
+  gw_level_dv$J <- as.numeric(format(gw_level_dv$Date,
+                                     format = "%j"))
 
   historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] %>%
     dplyr::group_by(J) %>%
@@ -1020,7 +1020,7 @@ daily_gwl_plot <- function(gw_level_dv,
   plot_end <- end_date + as.difftime(10, units = "days")
   buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
   buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
-  buffer_j <- as.numeric(as.character(buffer_dates, "%j"))
+  buffer_j <- as.numeric(format(buffer_dates, "%j"))
   buffer <- stats::setNames(data.frame(buffer_dates, buffer_j),
                             c("Date", "J"))
 
@@ -1163,7 +1163,7 @@ daily_frequency_table <- function(gw_level_dv,
                                   gwl_data)
 
   historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ]
-  historical_stats$DOY <- as.numeric(as.character(historical_stats$Date, "%j"))
+  historical_stats$DOY <- as.numeric(format(historical_stats$Date, "%j"))
 
   historical_stats <- historical_stats %>%
     dplyr::group_by(DOY) %>%

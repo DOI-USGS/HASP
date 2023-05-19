@@ -223,7 +223,7 @@ gwl_plot_all <- function(gw_level_dv,
     gw_complete <- complete_df %>% 
       dplyr::left_join(gw_level_dv, by = "Date") %>% 
       dplyr::mutate(year = as.numeric(format(Date, "%Y")) + 
-                              as.numeric(as.character(Date, "%j"))/365,
+                              as.numeric(format(Date, "%j"))/365,
                      is_na_before = is.na(dplyr::lag(Value)),
                      is_na_after = is.na(dplyr::lead(Value)),
                      is_point = is_na_after & is_na_before & !is.na(Value),
