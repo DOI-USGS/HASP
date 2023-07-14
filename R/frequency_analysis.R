@@ -218,7 +218,10 @@ stats_by_interval <- function(interval,
 #' Default is \code{TRUE}.
 #' @param percentile_colors Optional argument to provide a vector of 5 colors
 #' used to fill the percentile bars in order from 5-10th percentile bin to the
-#' 90-95th percentile bin. Default behavior (\code{NA}) is to use legacy plot colors.
+#' 90-95th percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
+#' include_edges parameter is set to TRUE, then this vector must be 7 colors long.
+#' @param include_edges Optional argument to toggle on the "edge bins" min-5 and 95-max on the plot.
+#' Default is FALSE which does not plot those bins.
 #' @return a ggplot with rectangles representing the historical monthly percentile,
 #' black triangles representing the historical monthly median, and red diamonds
 #' showing the last year of groundwater level measurements.
@@ -274,8 +277,15 @@ stats_by_interval <- function(interval,
 #'                                                      "#2b83ba"
 #'                                                  ))
 #' monthly_frequency_custom_colors
-#'
-#'
+#' 
+#' monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
+#'                                                       gwl_data,
+#'                                                       parameter_cd = "62610",
+#'                                                       y_axis_label = label,
+#'                                                       plot_title = "L2701 Groundwater Level",
+#'                                                       flip = TRUE,
+#'                                                       include_edges = TRUE)
+#' monthly_frequency_edge_bins
 monthly_frequency_plot <- function(gw_level_dv,
                                    gwl_data,
                                    parameter_cd = NA,
@@ -288,7 +298,8 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    plot_range = c("Past year"),
                                    y_axis_label = "",
                                    flip = FALSE,
-                                   percentile_colors = NA) {
+                                   percentile_colors = NA,
+                                   include_edges = FALSE) {
 
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv,
@@ -343,15 +354,30 @@ monthly_frequency_plot <- function(gw_level_dv,
                                       plot_month_lookup, by = "month")
 
   # Set up the plot data for the percentile ranges (rectangle geometry)
-  site_statistics_pivot <- site_statistics %>%
-    dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
-    tidyr::pivot_longer(cols = -plot_month,
-                        names_to = "name",
-                        values_to = "value")
-
-  cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
-               c("p75", "p90"), c("p90", "p95"))
-  groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
+  if (include_edges == FALSE) {
+    site_statistics_pivot <- site_statistics %>%
+      dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
+      tidyr::pivot_longer(cols = -plot_month,
+                          names_to = "name",
+                          values_to = "value")
+  } else if (include_edges == TRUE) {
+    site_statistics_pivot <- site_statistics %>%
+      dplyr::select(-month, -nYears) %>%
+      tidyr::pivot_longer(cols = -plot_month,
+                          names_to = "name",
+                          values_to = "value")
+  }
+  
+  # set colors and groups based on edge case
+  if (include_edges == FALSE) {
+    cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
+                 c("p75", "p90"), c("p90", "p95"))
+    groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
+  } else if (include_edges == TRUE) {
+    cols <- list(c("minMed", "p05"), c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
+                 c("p75", "p90"), c("p90", "p95"), c("p95", "maxMed"))
+    groups <- c("0 - 5", "5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95", "95 - 100")
+  }
 
   plot_list <- data.frame()
 
@@ -396,25 +422,39 @@ monthly_frequency_plot <- function(gw_level_dv,
 
   # Assign colors and shapes
   # define default colors
-  color_list <- c("firebrick4", "orange2", "green2", "steelblue1", "blue")
-  if (length(percentile_colors) == 5) {
+  if (include_edges == FALSE) {
+    color_list <- c("firebrick4", "orange2", "green2", "steelblue1", "blue")
+  } else if (include_edges == TRUE) {
+    color_list <- c("darkred", "firebrick3", "orange2", "green2", "steelblue1", "blue", "darkblue")
+  }
+  if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
   } else if (is.na(percentile_colors) == FALSE) {
     warning(
       paste0(
         "percentile_colors argument was provided but was invalid,",
-        " should be a vector of length 5 in which each item in",
+        " should be a vector of length 5 or 7 in which each item in",
         " the vector represents a color."
       )
     )
   }
 
   # set plot colors and markers
-  rectangle_colors <- c("5 - 10" = color_list[1],
-                        "10 - 25" = color_list[2],
-                        "25 - 75" = color_list[3],
-                        "75 - 90" = color_list[4],
-                        "90 - 95" = color_list[5])
+  if (include_edges == FALSE) {
+    rectangle_colors <- c("5 - 10" = color_list[1],
+                          "10 - 25" = color_list[2],
+                          "25 - 75" = color_list[3],
+                          "75 - 90" = color_list[4],
+                          "90 - 95" = color_list[5])
+  } else if (include_edges == TRUE) {
+    rectangle_colors <- c("0 - 5" = color_list[1],
+                          "5 - 10" = color_list[2],
+                          "10 - 25" = color_list[3],
+                          "25 - 75" = color_list[4],
+                          "75 - 90" = color_list[5],
+                          "90 - 95" = color_list[6],
+                          "95 - 100" = color_list[7])
+  }
   point_shapes <- c("Monthly median" = 17,
                     "Data point" = 18)
   point_colors <- c("Monthly median" = "black",
@@ -450,15 +490,29 @@ monthly_frequency_plot <- function(gw_level_dv,
                      color = group),
                  size = 2.5)
   }
+  
+  # set scale breaks
+  if (include_edges == FALSE) {
+    scale_breaks <- c("90 - 95",
+                      "75 - 90",
+                      "25 - 75",
+                      "10 - 25",
+                      "5 - 10")
+  } else if (include_edges == TRUE) {
+    scale_breaks <- c("95 - 100",
+                      "90 - 95",
+                      "75 - 90",
+                      "25 - 75",
+                      "10 - 25",
+                      "5 - 10",
+                      "0 - 5")
+  }
 
+  # make plot
   plot_out <- plot_out +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile",
-                      breaks = c("90 - 95",
-                                 "75 - 90",
-                                 "25 - 75",
-                                 "10 - 25",
-                                 "5 - 10")) +
+                      breaks = scale_breaks) +
     scale_shape_manual(name = "EXPLANATION",
                        values = point_shapes, 
                        breaks = names(point_shapes)) +
