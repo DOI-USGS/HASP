@@ -422,10 +422,9 @@ monthly_frequency_plot <- function(gw_level_dv,
 
   # Assign colors and shapes
   # define default colors
-  if (include_edges == FALSE) {
-    color_list <- c("firebrick4", "orange2", "green2", "steelblue1", "blue")
-  } else if (include_edges == TRUE) {
-    color_list <- c("darkred", "firebrick3", "orange2", "green2", "steelblue1", "blue", "darkblue")
+  color_list <- c("firebrick4", "orange2", "green2", "steelblue1", "blue")
+  if (include_edges) {
+    color_list <- c("darkred", color_list, "darkblue")
   }
   if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
@@ -440,19 +439,14 @@ monthly_frequency_plot <- function(gw_level_dv,
   }
 
   # set plot colors and markers
-  if (include_edges == FALSE) {
-    rectangle_colors <- c("5 - 10" = color_list[1],
-                          "10 - 25" = color_list[2],
-                          "25 - 75" = color_list[3],
-                          "75 - 90" = color_list[4],
-                          "90 - 95" = color_list[5])
-  } else if (include_edges == TRUE) {
+  rectangle_colors <- c("5 - 10" = color_list[1],
+                        "10 - 25" = color_list[2],
+                        "25 - 75" = color_list[3],
+                        "75 - 90" = color_list[4],
+                        "90 - 95" = color_list[5])
+  if (include_edges) {
     rectangle_colors <- c("0 - 5" = color_list[1],
-                          "5 - 10" = color_list[2],
-                          "10 - 25" = color_list[3],
-                          "25 - 75" = color_list[4],
-                          "75 - 90" = color_list[5],
-                          "90 - 95" = color_list[6],
+                          rectangle_colors,
                           "95 - 100" = color_list[7])
   }
   point_shapes <- c("Monthly median" = 17,
@@ -492,19 +486,14 @@ monthly_frequency_plot <- function(gw_level_dv,
   }
   
   # set scale breaks
-  if (include_edges == FALSE) {
-    scale_breaks <- c("90 - 95",
-                      "75 - 90",
-                      "25 - 75",
-                      "10 - 25",
-                      "5 - 10")
-  } else if (include_edges == TRUE) {
+  scale_breaks <- c("90 - 95",
+                    "75 - 90",
+                    "25 - 75",
+                    "10 - 25",
+                    "5 - 10")
+  if (include_edges) {
     scale_breaks <- c("95 - 100",
-                      "90 - 95",
-                      "75 - 90",
-                      "25 - 75",
-                      "10 - 25",
-                      "5 - 10",
+                      scale_breaks,
                       "0 - 5")
   }
 
