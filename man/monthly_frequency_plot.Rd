@@ -18,7 +18,9 @@ monthly_frequency_plot(
   y_axis_label = "",
   flip = FALSE,
   percentile_colors = NA,
-  include_edges = FALSE
+  include_edges = FALSE,
+  median_point_size = 2.5,
+  data_point_size = 2.5
 )
 }
 \arguments{
@@ -69,13 +71,19 @@ in January.}
 \item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
 
-\item{percentile_colors}{Optional argument to provide a vector of 5 colors
-used to fill the percentile bars in order from 5-10th percentile bin to the
-90-95th percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
+\item{percentile_colors}{Optional argument to provide a vector of 5 or 7 colors
+used to fill the percentile bars in order from lowest percentile bin to the
+highest percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
 include_edges parameter is set to TRUE, then this vector must be 7 colors long.}
 
 \item{include_edges}{Optional argument to toggle on the "edge bins" min-5 and 95-max on the plot.
 Default is FALSE which does not plot those bins.}
+
+\item{median_point_size}{Optional argument to specify the size of the median point markers
+which are shown as black triangles on the plot. The default size is 2.5.}
+
+\item{data_point_size}{Optional argument to specify the size of the data point markers 
+which are shown as red diamonds on the plot. The default size is 2.5.}
 }
 \value{
 a ggplot with rectangles representing the historical monthly percentile,
@@ -132,6 +140,7 @@ monthly_frequency_custom_colors <- monthly_frequency_plot(gw_level_dv,
                                                      "#abdda4",
                                                      "#2b83ba"
                                                  ))
+                                                 
 monthly_frequency_custom_colors
 
 monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
@@ -142,4 +151,14 @@ monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
                                                       flip = TRUE,
                                                       include_edges = TRUE)
 monthly_frequency_edge_bins
+
+monthly_frequency_custom_point_sizes <- monthly_frequency_plot(gw_level_dv,
+                                                               gwl_data = gwl_data,
+                                                               parameter_cd = "62610",
+                                                               plot_title = "L2701 Groundwater Level",
+                                                               y_axis_label = label,
+                                                               median_point_size = 0.5,
+                                                               data_point_size = 3)
+monthly_frequency_custom_point_sizes 
+
 }
