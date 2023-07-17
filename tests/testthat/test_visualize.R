@@ -93,7 +93,7 @@ test_that("Monthly frequency plot", {
   plot <- monthly_frequency_plot(L2701_example_data$Daily,
                                  L2701_example_data$Discrete,
                                  parameter_cd = "62610",
-                                 percentile_colors = c("#d7191c", "#ffffbf", "#abdda4", "#2b83ba"))
+                                 percentile_colors = c("#d7191c", "#fdae61", "#ffffbf", "#abdda4", "#2b83ba"))
   
   plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
   
