@@ -369,32 +369,56 @@ monthly_frequency_plot <- function(gw_level_dv,
   site_statistics <- dplyr::left_join(site_statistics,
                                       plot_month_lookup, by = "month")
 
+  # set up default configurations for plot elements
   # Set up the plot data for the percentile ranges (rectangle geometry)
-  if (include_edges == FALSE) {
-    site_statistics_pivot <- site_statistics %>%
-      dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
-      tidyr::pivot_longer(cols = -plot_month,
-                          names_to = "name",
-                          values_to = "value")
-  } else if (include_edges == TRUE) {
+  site_statistics_pivot <- site_statistics %>%
+    dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
+    tidyr::pivot_longer(cols = -plot_month,
+                        names_to = "name",
+                        values_to = "value")
+  # set colors and groups
+  cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
+               c("p75", "p90"), c("p90", "p95"))
+  groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
+  # define default colors
+  color_list <- c("firebrick3", "orange2", "green2", "steelblue1", "blue")
+  # set plot colors and markers
+  rectangle_colors <- c("5 - 10" = color_list[1],
+                        "10 - 25" = color_list[2],
+                        "25 - 75" = color_list[3],
+                        "75 - 90" = color_list[4],
+                        "90 - 95" = color_list[5])
+  # set scale breaks
+  scale_breaks <- c("90 - 95",
+                    "75 - 90",
+                    "25 - 75",
+                    "10 - 25",
+                    "5 - 10")
+  
+  # updates if the edges are to be included on the plot
+  if (include_edges) {
+    # alternative pivot to include min/max values
     site_statistics_pivot <- site_statistics %>%
       dplyr::select(-month, -nYears) %>%
       tidyr::pivot_longer(cols = -plot_month,
                           names_to = "name",
                           values_to = "value")
-  }
+    # colors and groups
+    cols <- append(list(c("minMed", "p05")), cols)
+    cols <- append(cols, list(c("p95", "maxMed")))
+    groups <- c("0 - 5", groups, "95 - 100")
+    # expand color list
+    color_list <- c("darkred", color_list, "darkblue")
+    # expand rectangle colors
+    rectangle_colors <- c("0 - 5" = color_list[1],
+                          rectangle_colors,
+                          "95 - 100" = color_list[7])
+    # expand the scale breaks
+    scale_breaks <- c("95 - 100",
+                      scale_breaks,
+                      "0 - 5")
+  }  
   
-  # set colors and groups based on edge case
-  if (include_edges == FALSE) {
-    cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
-                 c("p75", "p90"), c("p90", "p95"))
-    groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
-  } else if (include_edges == TRUE) {
-    cols <- list(c("minMed", "p05"), c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
-                 c("p75", "p90"), c("p90", "p95"), c("p95", "maxMed"))
-    groups <- c("0 - 5", "5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95", "95 - 100")
-  }
-
   plot_list <- data.frame()
 
   for (i in seq_along(cols)) {
@@ -436,12 +460,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                                     points_plot)
   }
 
-  # Assign colors and shapes
-  # define default colors
-  color_list <- c("firebrick3", "orange2", "green2", "steelblue1", "blue")
-  if (include_edges) {
-    color_list <- c("darkred", color_list, "darkblue")
-  }
+  # custom colors and shapes
   if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
   } else if (is.na(percentile_colors) == FALSE) {
@@ -454,17 +473,6 @@ monthly_frequency_plot <- function(gw_level_dv,
     )
   }
 
-  # set plot colors and markers
-  rectangle_colors <- c("5 - 10" = color_list[1],
-                        "10 - 25" = color_list[2],
-                        "25 - 75" = color_list[3],
-                        "75 - 90" = color_list[4],
-                        "90 - 95" = color_list[5])
-  if (include_edges) {
-    rectangle_colors <- c("0 - 5" = color_list[1],
-                          rectangle_colors,
-                          "95 - 100" = color_list[7])
-  }
   point_shapes <- c("Monthly median" = 17,
                     "Data point" = 18)
   point_colors <- c("Monthly median" = "black",
@@ -504,18 +512,6 @@ monthly_frequency_plot <- function(gw_level_dv,
                  ))
   }
   
-  # set scale breaks
-  scale_breaks <- c("90 - 95",
-                    "75 - 90",
-                    "25 - 75",
-                    "10 - 25",
-                    "5 - 10")
-  if (include_edges) {
-    scale_breaks <- c("95 - 100",
-                      scale_breaks,
-                      "0 - 5")
-  }
-
   # make plot
   plot_out <- plot_out +
     scale_fill_manual(values = rectangle_colors,
