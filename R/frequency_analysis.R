@@ -219,6 +219,10 @@ stats_by_interval <- function(interval,
 #' @param percentile_colors Optional argument to provide a vector of 5 colors
 #' used to fill the percentile bars in order from 5-10th percentile bin to the
 #' 90-95th percentile bin. Default behavior (\code{NA}) is to use legacy plot colors.
+#' @param median_point_size Optional argument to specify the size of the median point markers
+#' which are shown as black triangles on the plot. The default size is 2.5.
+#' @param data_point_size Optional argument to specify the size of the data point markers 
+#' which are shown as red diamonds on the plot. The default size is 2.5.
 #' @return a ggplot with rectangles representing the historical monthly percentile,
 #' black triangles representing the historical monthly median, and red diamonds
 #' showing the last year of groundwater level measurements.
@@ -273,9 +277,17 @@ stats_by_interval <- function(interval,
 #'                                                      "#abdda4",
 #'                                                      "#2b83ba"
 #'                                                  ))
-#' monthly_frequency_custom_colors
-#'
-#'
+#' monthly_frequency_custom_colors 
+#' 
+#' monthly_frequency_custom_point_sizes <- monthly_frequency_plot(gw_level_dv,
+#'                                                                gwl_data = gwl_data,
+#'                                                                parameter_cd = "62610",
+#'                                                                plot_title = "L2701 Groundwater Level",
+#'                                                                y_axis_label = label,
+#'                                                                median_point_size = 0.5,
+#'                                                                data_point_size = 3)
+#' monthly_frequency_custom_point_sizes 
+#' 
 monthly_frequency_plot <- function(gw_level_dv,
                                    gwl_data,
                                    parameter_cd = NA,
@@ -288,7 +300,9 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    plot_range = c("Past year"),
                                    y_axis_label = "",
                                    flip = FALSE,
-                                   percentile_colors = NA) {
+                                   percentile_colors = NA,
+                                   median_point_size = 2.5,
+                                   data_point_size = 2.5) {
 
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv,
@@ -419,6 +433,8 @@ monthly_frequency_plot <- function(gw_level_dv,
                     "Data point" = 18)
   point_colors <- c("Monthly median" = "black",
                     "Data point" = "red")
+  point_sizes <- c("Monthly median" = median_point_size,
+                   "Data point" = data_point_size)
 
   # Create the plot labels
   start_year <- as.POSIXlt(plot_start)$year + 1900
@@ -444,11 +460,12 @@ monthly_frequency_plot <- function(gw_level_dv,
   if (nrow(points_plot) > 0) {
     plot_out <- plot_out +
       geom_point(data = points_plot,
-                 aes(x = month,
-                     y = value,
-                     shape = group,
-                     color = group),
-                 size = 2.5)
+                 aes(
+                   x = month,
+                   y = value,
+                   shape = group,
+                   color = group
+                 ))
   }
 
   plot_out <- plot_out +
@@ -465,6 +482,8 @@ monthly_frequency_plot <- function(gw_level_dv,
     scale_color_manual(name = "EXPLANATION",
                        values = point_colors, 
                        breaks = names(point_colors)) +
+    scale_size_manual(values = point_sizes,
+                      guide = "none") + 
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
