@@ -80,6 +80,26 @@ test_that("Monthly frequency plot", {
   expect_true(all(c("plot_month", "ymin", "ymax", "month", "value", "group") %in%
                     plot_data_elements))
   
+  plot <- monthly_frequency_plot(L2701_example_data$Daily,
+                                 L2701_example_data$Discrete,
+                                 parameter_cd = "62610",
+                                 include_edges = TRUE)
+  
+  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("plot_month", "ymin", "ymax", "month", "value", "group") %in%
+                    plot_data_elements))
+  
+  plot <- monthly_frequency_plot(L2701_example_data$Daily,
+                                 L2701_example_data$Discrete,
+                                 parameter_cd = "62610",
+                                 percentile_colors = c("#d7191c", "#fdae61", "#ffffbf", "#abdda4", "#2b83ba"))
+  
+  plot_data_elements <- unlist(lapply(plot$layers, function(x) {names(x$data)}))
+  
+  expect_true(all(c("plot_month", "ymin", "ymax", "month", "value", "group") %in%
+                    plot_data_elements))
+  
 })
 
 test_that("Weekly frequency plot", {
