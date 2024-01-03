@@ -450,7 +450,10 @@ set_up_data <- function(gw_level_dv,
     checkmate::assert_data_frame(gw_level_dv)
     
     date_col_dv <- ifelse(is.na(date_col[1]), "Date", date_col[1])
-    value_col_dv <- get_value_column(parameter_cd, gw_level_dv, value_col[1])
+    value_col_dv <- get_value_column(parameter_cd = parameter_cd,
+                                     df = gw_level_dv, 
+                                     value_col = value_col[1],
+                                     stat_cd = stat_cd)
     approved_dv <- ifelse(is.na(approved_col[1]),
                           paste0(value_col_dv, "_cd"),
                           approved_col[1])   

@@ -155,15 +155,18 @@ weekly_table <- weekly_frequency_table(gw_level_dv,
                                        flip = flip) 
 
 todays_week <- as.integer(strftime(Sys.Date(), format = "%V"))
-
+centered_index <- (todays_week-4):(todays_week+5)
+if(any(centered_index <= 0)){
+  centered_index[centered_index <= 0] <- centered_index[centered_index <= 0] + nrow(weekly_table)
+}
 if(type == "html"){
-  knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1) %>%
+  knitr::kable(weekly_table[centered_index,], digits = 1) %>%
       kableExtra::kable_styling()%>%
       kableExtra::row_spec(5,
                            bold = TRUE,
                            hline_after = TRUE)
 } else {
-  knitr::kable(weekly_table[(todays_week-4):(todays_week+5),], digits = 1)
+  knitr::kable(weekly_table[centered_index,], digits = 1)
 }
 
 
@@ -200,15 +203,20 @@ if(nrow(gw_level_dv) > 0){
                                        stat_cd = statCd) 
   
   todays_day <- as.POSIXlt(Sys.Date())$yday
+  centered_day <- (todays_day-4):(todays_day + 5)
+  
+  if(any(centered_day <= 0)){
+    centered_day[centered_day <= 0] <- centered_day[centered_day <= 0] + nrow(daily_table)
+  }
   
   if(type == "html"){
-    knitr::kable(daily_table[(todays_day-4):(todays_day + 5),]) %>%
+    knitr::kable(daily_table[centered_day,]) %>%
         kableExtra::kable_styling()%>%
         kableExtra::row_spec(5,
                              bold = TRUE,
                              hline_after = TRUE)
   } else {
-    knitr::kable(daily_table[(todays_day-4):(todays_day + 5),])
+    knitr::kable(daily_table[centered_day,])
   }
 }
 ```
