@@ -216,9 +216,16 @@ stats_by_interval <- function(interval,
 #' @param y_axis_label the label used for the y-axis of the plot.
 #' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
-#' @param percentile_colors Optional argument to provide a vector of 5 colors
-#' used to fill the percentile bars in order from 5-10th percentile bin to the
-#' 90-95th percentile bin. Default behavior (\code{NA}) is to use legacy plot colors.
+#' @param percentile_colors Optional argument to provide a vector of 5 or 7 colors
+#' used to fill the percentile bars in order from lowest percentile bin to the
+#' highest percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
+#' include_edges parameter is set to TRUE, then this vector must be 7 colors long.
+#' @param include_edges Optional argument to toggle on the "edge bins" min-5 and 95-max on the plot.
+#' Default is FALSE which does not plot those bins.
+#' @param median_point_size Optional argument to specify the size of the median point markers
+#' which are shown as black triangles on the plot. The default size is 2.5.
+#' @param data_point_size Optional argument to specify the size of the data point markers 
+#' which are shown as red diamonds on the plot. The default size is 2.5.
 #' @return a ggplot with rectangles representing the historical monthly percentile,
 #' black triangles representing the historical monthly median, and red diamonds
 #' showing the last year of groundwater level measurements.
@@ -273,9 +280,27 @@ stats_by_interval <- function(interval,
 #'                                                      "#abdda4",
 #'                                                      "#2b83ba"
 #'                                                  ))
+#'                                                  
 #' monthly_frequency_custom_colors
-#'
-#'
+#' 
+#' monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
+#'                                                       gwl_data,
+#'                                                       parameter_cd = "62610",
+#'                                                       y_axis_label = label,
+#'                                                       plot_title = "L2701 Groundwater Level",
+#'                                                       flip = TRUE,
+#'                                                       include_edges = TRUE)
+#' monthly_frequency_edge_bins
+#' 
+#' monthly_frequency_custom_point_sizes <- monthly_frequency_plot(gw_level_dv,
+#'                                                                gwl_data = gwl_data,
+#'                                                                parameter_cd = "62610",
+#'                                                                plot_title = "L2701 Groundwater Level",
+#'                                                                y_axis_label = label,
+#'                                                                median_point_size = 0.5,
+#'                                                                data_point_size = 3)
+#' monthly_frequency_custom_point_sizes 
+#' 
 monthly_frequency_plot <- function(gw_level_dv,
                                    gwl_data,
                                    parameter_cd = NA,
@@ -288,8 +313,10 @@ monthly_frequency_plot <- function(gw_level_dv,
                                    plot_range = c("Past year"),
                                    y_axis_label = "",
                                    flip = FALSE,
-                                   percentile_colors = NA) {
-
+                                   percentile_colors = NA,
+                                   include_edges = FALSE,
+                                   median_point_size = 2.5,
+                                   data_point_size = 2.5) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv,
                            gwl_data = gwl_data,
@@ -342,17 +369,56 @@ monthly_frequency_plot <- function(gw_level_dv,
   site_statistics <- dplyr::left_join(site_statistics,
                                       plot_month_lookup, by = "month")
 
+  # set up default configurations for plot elements
   # Set up the plot data for the percentile ranges (rectangle geometry)
   site_statistics_pivot <- site_statistics %>%
     dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
     tidyr::pivot_longer(cols = -plot_month,
                         names_to = "name",
                         values_to = "value")
-
+  # set colors and groups
   cols <- list(c("p05", "p10"), c("p10", "p25"), c("p25", "p75"),
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
-
+  # define default colors
+  color_list <- c("firebrick3", "orange2", "green2", "steelblue1", "blue")
+  # set plot colors and markers
+  rectangle_colors <- c("5 - 10" = color_list[1],
+                        "10 - 25" = color_list[2],
+                        "25 - 75" = color_list[3],
+                        "75 - 90" = color_list[4],
+                        "90 - 95" = color_list[5])
+  # set scale breaks
+  scale_breaks <- c("90 - 95",
+                    "75 - 90",
+                    "25 - 75",
+                    "10 - 25",
+                    "5 - 10")
+  
+  # updates if the edges are to be included on the plot
+  if (include_edges) {
+    # alternative pivot to include min/max values
+    site_statistics_pivot <- site_statistics %>%
+      dplyr::select(-month, -nYears) %>%
+      tidyr::pivot_longer(cols = -plot_month,
+                          names_to = "name",
+                          values_to = "value")
+    # colors and groups
+    cols <- append(list(c("minMed", "p05")), cols)
+    cols <- append(cols, list(c("p95", "maxMed")))
+    groups <- c("0 - 5", groups, "95 - 100")
+    # expand color list
+    color_list <- c("darkred", color_list, "darkblue")
+    # expand rectangle colors
+    rectangle_colors <- c("0 - 5" = color_list[1],
+                          rectangle_colors,
+                          "95 - 100" = color_list[7])
+    # expand the scale breaks
+    scale_breaks <- c("95 - 100",
+                      scale_breaks,
+                      "0 - 5")
+  }  
+  
   plot_list <- data.frame()
 
   for (i in seq_along(cols)) {
@@ -394,31 +460,25 @@ monthly_frequency_plot <- function(gw_level_dv,
                                     points_plot)
   }
 
-  # Assign colors and shapes
-  # define default colors
-  color_list <- c("firebrick4", "orange2", "green2", "steelblue1", "blue")
-  if (length(percentile_colors) == 5) {
+  # custom colors and shapes
+  if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
   } else if (is.na(percentile_colors) == FALSE) {
     warning(
       paste0(
         "percentile_colors argument was provided but was invalid,",
-        " should be a vector of length 5 in which each item in",
+        " should be a vector of length 5 or 7 in which each item in",
         " the vector represents a color."
       )
     )
   }
 
-  # set plot colors and markers
-  rectangle_colors <- c("5 - 10" = color_list[1],
-                        "10 - 25" = color_list[2],
-                        "25 - 75" = color_list[3],
-                        "75 - 90" = color_list[4],
-                        "90 - 95" = color_list[5])
   point_shapes <- c("Monthly median" = 17,
                     "Data point" = 18)
   point_colors <- c("Monthly median" = "black",
                     "Data point" = "red")
+  point_sizes <- c("Monthly median" = median_point_size,
+                   "Data point" = data_point_size)
 
   # Create the plot labels
   start_year <- as.POSIXlt(plot_start)$year + 1900
@@ -444,27 +504,27 @@ monthly_frequency_plot <- function(gw_level_dv,
   if (nrow(points_plot) > 0) {
     plot_out <- plot_out +
       geom_point(data = points_plot,
-                 aes(x = month,
-                     y = value,
-                     shape = group,
-                     color = group),
-                 size = 2.5)
+                 aes(
+                   x = month,
+                   y = value,
+                   shape = group,
+                   color = group
+                 ))
   }
-
+  
+  # make plot
   plot_out <- plot_out +
     scale_fill_manual(values = rectangle_colors,
                       name = "Percentile",
-                      breaks = c("90 - 95",
-                                 "75 - 90",
-                                 "25 - 75",
-                                 "10 - 25",
-                                 "5 - 10")) +
+                      breaks = scale_breaks) +
     scale_shape_manual(name = "EXPLANATION",
                        values = point_shapes, 
                        breaks = names(point_shapes)) +
     scale_color_manual(name = "EXPLANATION",
                        values = point_colors, 
                        breaks = names(point_colors)) +
+    scale_size_manual(values = point_sizes,
+                      guide = "none") + 
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +

@@ -16,7 +16,7 @@ opts_chunk$set(echo = TRUE,
                warning = FALSE,
                message = FALSE,
                fig.width = 6,
-               fig.height = 6)
+               fig.height = 5)
 
 options(knitr.kable.NA = '')
 library(dplyr)
