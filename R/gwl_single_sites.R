@@ -223,7 +223,7 @@ gwl_plot_all <- function(gw_level_dv,
     gw_complete <- complete_df %>% 
       dplyr::left_join(gw_level_dv, by = "Date") %>% 
       dplyr::mutate(year = as.numeric(format(Date, "%Y")) + 
-                              as.numeric(as.character(Date, "%j"))/365,
+                              as.numeric(format(Date, "%j"))/365,
                      is_na_before = is.na(dplyr::lag(Value)),
                      is_na_after = is.na(dplyr::lead(Value)),
                      is_point = is_na_after & is_na_before & !is.na(Value),
@@ -434,7 +434,7 @@ set_up_data <- function(gw_level_dv,
     gwl_data$Approve <- gwl_data[[approved_col_per]]
     
     gwl_data$year <- as.numeric(format(gwl_data[["Date"]], "%Y")) + 
-      as.numeric(as.character(gwl_data[["Date"]], "%j"))/365 
+      as.numeric(format(gwl_data[["Date"]], "%j"))/365 
     
     gwl_data <- gwl_data[, c("year", "Date", "Value", "Approve")]
   } else {
@@ -450,7 +450,10 @@ set_up_data <- function(gw_level_dv,
     checkmate::assert_data_frame(gw_level_dv)
     
     date_col_dv <- ifelse(is.na(date_col[1]), "Date", date_col[1])
-    value_col_dv <- get_value_column(parameter_cd, gw_level_dv, value_col[1])
+    value_col_dv <- get_value_column(parameter_cd = parameter_cd,
+                                     df = gw_level_dv, 
+                                     value_col = value_col[1],
+                                     stat_cd = stat_cd)
     approved_dv <- ifelse(is.na(approved_col[1]),
                           paste0(value_col_dv, "_cd"),
                           approved_col[1])   

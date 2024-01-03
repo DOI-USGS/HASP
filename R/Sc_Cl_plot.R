@@ -125,7 +125,8 @@ qw_plot <- function(qw_data, plot_title,
 
   qw_data <- qw_data %>% 
     dplyr::filter(CharacteristicName %in% !!CharacteristicName)  %>% 
-    dplyr::mutate(year = as.numeric(format(as.Date(ActivityStartDate), "%Y")) + as.numeric(as.character(as.Date(ActivityStartDate), "%j"))/365)
+    dplyr::mutate(year = as.numeric(format(as.Date(ActivityStartDate), "%Y")) + 
+                    as.numeric(format(as.Date(ActivityStartDate), "%j"))/365)
   
   if(!is.na(start_date)){
     qw_data <- qw_data[qw_data$ActivityStartDate >= as.Date(start_date) ,]
