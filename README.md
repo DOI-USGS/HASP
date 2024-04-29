@@ -182,6 +182,31 @@ plot_normalized_data(aquifer_data, num_years)
 
 ![](man/figures/README-example-2.png)<!-- -->
 
+## Citing HASP
+
+``` r
+citation(package = "HASP")
+#> To cite HASP in publications, please use:
+#> 
+#>   DeCicco, L.A., Prinos, S.T., Eslick-Huff, P.J., Hopkins, C.B., 2022,
+#>   HASP: Hydrologic AnalySis Package, v1.0.0.,
+#>   https://code.usgs.gov/water/stats/hasp, doi:10.5066/P9BUN5GV
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     author = {Laura DeCicco and Scott Prinos and Patrick Eslick-Huff and Candice Hopkins and Tara Root},
+#>     title = {HASP: Hydrologic AnalySis Package},
+#>     publisher = {U.S. Geological Survey},
+#>     address = {Reston, VA},
+#>     version = {1.0.0},
+#>     institution = {U.S. Geological Survey},
+#>     year = {2022},
+#>     doi = {10.5066/P9BUN5GV},
+#>     url = {https://code.usgs.gov/water/stats/hasp},
+#>   }
+```
+
 ## Installation of R and RStudio
 
 To use the HASP package, you will need to have R and RStudio installed
@@ -193,10 +218,9 @@ Instructions](https://owi.usgs.gov/R/training-curriculum/installr/)
 
 Useful links:
 
--   [Download R Windows](https://cran.r-project.org/bin/windows/base/)
--   [Download R Mac](https://cran.r-project.org/bin/macosx/)
--   [Download
-    RStudio](https://www.rstudio.com/products/rstudio/download/)
+- [Download R Windows](https://cran.r-project.org/bin/windows/base/)
+- [Download R Mac](https://cran.r-project.org/bin/macosx/)
+- [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 ## Running the apps
 

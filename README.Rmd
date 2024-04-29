@@ -163,6 +163,13 @@ plot_composite_data(aquifer_data, num_years)
 plot_normalized_data(aquifer_data, num_years)
 ```
 
+## Citing HASP
+
+
+```{r cite}
+citation(package = "HASP")
+```
+
 
 ## Installation of R and RStudio
 

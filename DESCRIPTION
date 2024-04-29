@@ -67,4 +67,4 @@ BuildVignettes: true
 LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
