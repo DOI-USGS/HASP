@@ -674,6 +674,9 @@ weekly_frequency_table <- function(gw_level_dv,
 #' @param y_axis_label the label used for the y-axis of the plot.
 #' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{FALSE}.
+#' @param percentile_colors Optional argument to provide a vector of 5 colors
+#' used to fill the percentile bars in order from lowest percentile bin to the
+#' highest percentile bin. Default behavior (NA) is to use legacy plot colors.
 #' @return a ggplot object with rectangles representing the historical weekly percentiles,
 #' and points representing the historical median and daily values
 #'
@@ -716,7 +719,8 @@ weekly_frequency_plot <- function(gw_level_dv,
                                   plot_title = "",
                                   subtitle = "U.S. Geological Survey",
                                   y_axis_label = "",
-                                  flip = FALSE) {
+                                  flip = FALSE,
+                                  percentile_colors = NA) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv,
                            gwl_data = gwl_data,
@@ -818,11 +822,22 @@ weekly_frequency_plot <- function(gw_level_dv,
                           ordered = TRUE))
 
   # Assign colors and shapes
-  rectangle_colors <- c("5 - 10" = "palevioletred2",
-                        "10 - 25" = "rosybrown1",
-                        "25 - 75" = "darkolivegreen1",
-                        "75 - 90" = "lightskyblue2",
-                        "90 - 95" = "skyblue3")
+  groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
+  color_list <- c("palevioletred2", "rosybrown1", "darkolivegreen1", "lightskyblue2",
+                                  "skyblue3")
+                                  
+  if (length(percentile_colors) >= 5) {
+    color_list <- percentile_colors
+  }
+  else if (is.na(percentile_colors) == FALSE) {
+    warning(paste0("percentile_colors argument was provided but was invalid,",
+                   " should be a vector of length 5 in which each item in",
+                   " the vector represents a color."))
+  }
+  
+  rectangle_colors <- c(`5 - 10` = color_list[1], `10 - 25` = color_list[2],
+                        `25 - 75` = color_list[3], `75 - 90` = color_list[4],
+                        `90 - 95` = color_list[5])
   point_shapes <- c("Historical weekly median" = 17,
                     "Provisional daily value" = 16,
                     "Approved daily value" = 16)
