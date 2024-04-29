@@ -24,6 +24,7 @@ knitr::opts_chunk$set(echo = TRUE,
 [![R build status](https://code.usgs.gov/water/stats/hasp/badges/main/pipeline.svg)](https://code.usgs.gov/water/stats/hasp/pipelines)
 [![status](https://img.shields.io/badge/USGS-Documentation-blue.svg)](https://rconnect.usgs.gov/HASP_docs/)
 [![status](https://img.shields.io/badge/USGS-Source-orange.svg)](https://code.usgs.gov/water/stats/hasp)
+[![status](https://img.shields.io/badge/Release-Full-blue.svg)](https://code.usgs.gov/water/stats/hasp/-/tree/1.0.0)
 
 *H*ydrologic *A*naly*S*is *P*ackage
 
@@ -161,6 +162,13 @@ num_years <- 30
 plot_composite_data(aquifer_data, num_years)
 
 plot_normalized_data(aquifer_data, num_years)
+```
+
+## Citing HASP
+
+
+```{r cite}
+citation(package = "HASP")
 ```
 
 

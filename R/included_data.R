@@ -115,7 +115,7 @@ NULL
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     paste(strwrap('More information:
-https://rconnect.usgs.gov/HASP_docs/', width = 40),
+https://doi-usgs.github.io/HASP/', width = 40),
           collapse='\n'))
 }
 
@@ -141,8 +141,9 @@ https://rconnect.usgs.gov/HASP_docs/', width = 40),
 #'
 #' @name HASP-package
 #' @docType package
-#' @keywords Groundwater levels
-NULL
+#' @keywords internal 
+"_PACKAGE"
+
 
 utils::globalVariables(c("lev_dt", "nYears","minMed", "maxMed", "name", "value",
                          "group", "plot_month_med", "p50", "sl_lev_va", "plot_month_last",
