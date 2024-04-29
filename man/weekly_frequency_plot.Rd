@@ -16,7 +16,8 @@ weekly_frequency_plot(
   plot_title = "",
   subtitle = "U.S. Geological Survey",
   y_axis_label = "",
-  flip = FALSE
+  flip = FALSE,
+  percentile_colors = NA
 )
 }
 \arguments{
@@ -66,6 +67,10 @@ in January.}
 
 \item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{FALSE}.}
+
+\item{percentile_colors}{Optional argument to provide a vector of 5 colors
+used to fill the percentile bars in order from lowest percentile bin to the
+highest percentile bin. Default behavior (NA) is to use legacy plot colors.}
 }
 \value{
 a ggplot object with rectangles representing the historical weekly percentiles,

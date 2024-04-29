@@ -2,6 +2,7 @@
 % Please edit documentation in R/included_data.R
 \docType{package}
 \name{HASP-package}
+\alias{HASP}
 \alias{HASP-package}
 \title{Analyze groundwater data}
 \description{
@@ -21,5 +22,28 @@ https://www.usgs.gov/visual-id/credit_usgs.html#copyright\cr
 LazyLoad: \tab yes\cr
 }
 }
-\keyword{Groundwater}
-\keyword{levels}
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://code.usgs.gov/water/stats/hasp/-/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Laura DeCicco \email{ldecicco@usgs.gov} (\href{https://orcid.org/0000-0002-3915-9487}{ORCID})
+
+Authors:
+\itemize{
+  \item Scott Prinos \email{stprinos@usgs.gov} (\href{https://orcid.org/0000-0002-5776-8956}{ORCID})
+  \item Patrick Eslick-Huff \email{peslick@usgs.gov} (\href{https://orcid.org/0000-0003-2611-6012}{ORCID})
+  \item Candice Hopkins \email{chopkins@usgs.gov} (\href{https://orcid.org/0000-0003-3207-7267}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Lindsay Platt \email{lplatt@usgs.gov} [contractor]
+  \item Tara Root [contractor]
+}
+
+}
+\keyword{internal}
