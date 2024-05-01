@@ -1,4 +1,4 @@
-image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/rocker/geospatial@sha256:d09a38602a306da8ac3e90beed95cf0b30e0f69aca1432379e65e62de9a4db3e
+image: code.usgs.gov:5001/water/dockerr:latest
 
 stages:
   - getready
