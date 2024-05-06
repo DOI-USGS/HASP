@@ -6,6 +6,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-tidyverse \
   r-cran-ggpp \
   r-cran-scales \
+  r-cran-ggpmisc \
   r-cran-checkmate \
   r-cran-whisker \
   r-cran-xfun \
