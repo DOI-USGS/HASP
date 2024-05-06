@@ -10,7 +10,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-whisker \
   r-cran-xfun \
   r-cran-usethis \
-  r-cran-EnvStats \
+  r-cran-envstats \
   r-cran-readxl \
   r-cran-shiny \
   r-cran-shinycssloaders \
