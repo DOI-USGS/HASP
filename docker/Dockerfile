@@ -1,8 +1,11 @@
-FROM code.usgs.gov:5001/water/dockerr:latest
+FROM code.chs.usgs.gov:5001/ctek/docker/r-lang/r-base:4.4
 
 # Necessary R libraries
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   r-cran-dataretrieval \
+  r-cran-devtools 
+  r-cran-connectapi \
+  r-cran-covr \
   r-cran-tidyverse \
   r-cran-ggpp \
   r-cran-scales \
