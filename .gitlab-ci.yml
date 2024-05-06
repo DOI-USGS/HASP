@@ -29,7 +29,7 @@ variables:
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
 
 build-image:
-  stage: buildimage
+  stage: build
   image: ${DEVOPS_REGISTRY}usgs/docker:20
   services:
   - name: ${DEVOPS_REGISTRY}usgs/docker:20-dind
