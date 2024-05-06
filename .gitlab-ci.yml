@@ -57,12 +57,10 @@ buildcheck:
   dependencies:
     - build-image
   script:
-    - mkdir -p $BUILD_LOGS_DIR
-    - apt-get update
-    - apt-get -o dir::cache::archives=${APT_CACHE} install -y --no-install-recommends qpdf pandoc pandoc-citeproc
     - R CMD build . --no-build-vignettes --no-manual
     - R -e 'devtools::check(document = FALSE, args = "--no-tests", error_on = "error", check_dir = Sys.getenv("BUILD_LOGS_DIR"))'
   artifacts:
+    expire_in: 1 week
     paths:
       - $BUILD_LOGS_DIR
 
@@ -76,6 +74,7 @@ unittests:
     - R -e 'library(testthat); options(testthat.output_file = file.path(Sys.getenv("CI_PROJECT_DIR"), "test-out.xml")); devtools::test(reporter = "junit")'
   artifacts:
     when: always
+    expire_in: 1 week
     paths: 
       - test-out.xml
     reports:
@@ -94,6 +93,7 @@ covertests:
       coverage_report:
         coverage_format: cobertura
         path: cobertura.xml
+    expire_in: 1 week
   coverage: '/Coverage: \d+.\d+\%/'
 
 pages:
