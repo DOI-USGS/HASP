@@ -274,11 +274,11 @@ stats_by_interval <- function(interval,
 #'                                                  plot_title = "L2701 Groundwater Level",
 #'                                                  flip = TRUE,
 #'                                                  percentile_colors = c(
-#'                                                      "#d7191c",
-#'                                                      "#fdae61",
-#'                                                      "#ffffbf",
-#'                                                      "#abdda4",
-#'                                                      "#2b83ba"
+#'                                                      "red",
+#'                                                      "yellow",
+#'                                                      "green",
+#'                                                      "blue",
+#'                                                      "orange"
 #'                                                  ))
 #'                                                  
 #' monthly_frequency_custom_colors
@@ -288,7 +288,7 @@ stats_by_interval <- function(interval,
 #'                                                       parameter_cd = "62610",
 #'                                                       y_axis_label = label,
 #'                                                       plot_title = "L2701 Groundwater Level",
-#'                                                       flip = TRUE,
+#'                                                       flip = FALSE,
 #'                                                       include_edges = TRUE)
 #' monthly_frequency_edge_bins
 #' 
@@ -381,7 +381,21 @@ monthly_frequency_plot <- function(gw_level_dv,
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
   # define default colors
-  color_list <- c("firebrick3", "orange2", "green2", "steelblue1", "blue")
+  color_list <- c("darkred", "orange2", "green2", "steelblue1", "blue")
+  
+  # custom colors and shapes
+  if (length(percentile_colors) >= 5) {
+    color_list <- percentile_colors
+  } else if (is.na(percentile_colors) == FALSE) {
+    warning(
+      paste0(
+        "percentile_colors argument was provided but was invalid,",
+        " should be a vector of length 5 or 7 in which each item in",
+        " the vector represents a color."
+      )
+    )
+  }
+  
   # set plot colors and markers
   rectangle_colors <- c("5 - 10" = color_list[1],
                         "10 - 25" = color_list[2],
@@ -408,7 +422,7 @@ monthly_frequency_plot <- function(gw_level_dv,
     cols <- append(cols, list(c("p95", "maxMed")))
     groups <- c("0 - 5", groups, "95 - 100")
     # expand color list
-    color_list <- c("darkred", color_list, "darkblue")
+    color_list <- c("firebrick3", color_list, "darkblue")
     # expand rectangle colors
     rectangle_colors <- c("0 - 5" = color_list[1],
                           rectangle_colors,
@@ -460,19 +474,6 @@ monthly_frequency_plot <- function(gw_level_dv,
                                     points_plot)
   }
 
-  # custom colors and shapes
-  if (length(percentile_colors) >= 5) {
-    color_list <- percentile_colors
-  } else if (is.na(percentile_colors) == FALSE) {
-    warning(
-      paste0(
-        "percentile_colors argument was provided but was invalid,",
-        " should be a vector of length 5 or 7 in which each item in",
-        " the vector represents a color."
-      )
-    )
-  }
-
   point_shapes <- c("Monthly median" = 17,
                     "Data point" = 18)
   point_colors <- c("Monthly median" = "black",
@@ -508,7 +509,8 @@ monthly_frequency_plot <- function(gw_level_dv,
                    x = month,
                    y = value,
                    shape = group,
-                   color = group
+                   color = group,
+                   size = group
                  ))
   }
   

@@ -134,11 +134,11 @@ monthly_frequency_custom_colors <- monthly_frequency_plot(gw_level_dv,
                                                  plot_title = "L2701 Groundwater Level",
                                                  flip = TRUE,
                                                  percentile_colors = c(
-                                                     "#d7191c",
-                                                     "#fdae61",
-                                                     "#ffffbf",
-                                                     "#abdda4",
-                                                     "#2b83ba"
+                                                     "red",
+                                                     "yellow",
+                                                     "green",
+                                                     "blue",
+                                                     "orange"
                                                  ))
                                                  
 monthly_frequency_custom_colors
@@ -148,7 +148,7 @@ monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
                                                       parameter_cd = "62610",
                                                       y_axis_label = label,
                                                       plot_title = "L2701 Groundwater Level",
-                                                      flip = TRUE,
+                                                      flip = FALSE,
                                                       include_edges = TRUE)
 monthly_frequency_edge_bins
 
