@@ -381,7 +381,12 @@ monthly_frequency_plot <- function(gw_level_dv,
                c("p75", "p90"), c("p90", "p95"))
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
   # define default colors
+
   color_list <- c("darkred", "orange2", "green2", "steelblue1", "blue")
+  
+  if(include_edges){
+    color_list <- c("firebrick3", color_list, "darkblue")
+  } 
   
   # custom colors and shapes
   if (length(percentile_colors) >= 5) {
@@ -396,12 +401,6 @@ monthly_frequency_plot <- function(gw_level_dv,
     )
   }
   
-  # set plot colors and markers
-  rectangle_colors <- c("5 - 10" = color_list[1],
-                        "10 - 25" = color_list[2],
-                        "25 - 75" = color_list[3],
-                        "75 - 90" = color_list[4],
-                        "90 - 95" = color_list[5])
   # set scale breaks
   scale_breaks <- c("90 - 95",
                     "75 - 90",
@@ -422,16 +421,27 @@ monthly_frequency_plot <- function(gw_level_dv,
     cols <- append(cols, list(c("p95", "maxMed")))
     groups <- c("0 - 5", groups, "95 - 100")
     # expand color list
-    color_list <- c("firebrick3", color_list, "darkblue")
+    
     # expand rectangle colors
     rectangle_colors <- c("0 - 5" = color_list[1],
-                          rectangle_colors,
+                          "5 - 10" = color_list[2],
+                          "10 - 25" = color_list[3],
+                          "25 - 75" = color_list[4],
+                          "75 - 90" = color_list[5],
+                          "90 - 95" = color_list[6],
                           "95 - 100" = color_list[7])
     # expand the scale breaks
     scale_breaks <- c("95 - 100",
                       scale_breaks,
                       "0 - 5")
-  }  
+  } else {
+    # set plot colors and markers
+    rectangle_colors <- c("5 - 10" = color_list[1],
+                          "10 - 25" = color_list[2],
+                          "25 - 75" = color_list[3],
+                          "75 - 90" = color_list[4],
+                          "90 - 95" = color_list[5])
+  }
   
   plot_list <- data.frame()
 
