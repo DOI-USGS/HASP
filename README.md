@@ -208,20 +208,7 @@ citation(package = "HASP")
 #>   }
 ```
 
-## Installation of R and RStudio
 
-To use the HASP package, you will need to have R and RStudio installed
-on your computer. This installation will only need to be done once for
-each computer. This link has instructions for installing R and RStudio:
-
-[R and RStudio Installation
-Instructions](https://owi.usgs.gov/R/training-curriculum/installr/)
-
-Useful links:
-
-- [Download R Windows](https://cran.r-project.org/bin/windows/base/)
-- [Download R Mac](https://cran.r-project.org/bin/macosx/)
-- [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 ## Running the apps
 
