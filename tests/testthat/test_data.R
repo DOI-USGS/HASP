@@ -32,7 +32,7 @@ test_that("Data", {
                       "markerDescription",
                       "r_lwd")))
   
-  expect_equal(nrow(local_aqfr), 88)
+  expect_equal(nrow(local_aqfr), 8751)
   expect_equal(ncol(local_aqfr), 2)
   expect_true(all(names(local_aqfr) %in%
                     c("aqfr_cd",
