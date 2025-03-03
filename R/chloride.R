@@ -111,7 +111,7 @@ trend_plot <- function(qw_data, plot_title,
   
   plot_out <- ggplot() +
     geom_point(data = qw_sub,
-               aes(x = year, y = ResultMeasureValue,
+               aes(x = ActivityStartDate, y = ResultMeasureValue,
                    shape = condition, 
                    color = condition)) 
   
@@ -127,7 +127,7 @@ trend_plot <- function(qw_data, plot_title,
     hasp_framework("Date", y_label, plot_title, 
                    subtitle = subtitle,
                    zero_on_top = on_top, include_y_scale = TRUE) +
-    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
+    scale_x_date(sec.axis = dup_axis(labels =  NULL,
                                            name = NULL)) +
     scale_color_manual(name = "EXPLANATION", 
                        breaks = col_values,
@@ -153,7 +153,8 @@ trend_plot <- function(qw_data, plot_title,
     trend_results$intercept <- signif(trend_results$intercept, digits = 4)
     
     plot_out <- plot_out +
-      ggpp::geom_table(aes(x = -Inf, y = Inf,
+      ggpp::geom_table(aes(x = min(qw_sub$ActivityStartDate, na.rm = TRUE),
+                           y = Inf,
                            label = list(trend_results)),
                        vjust = 1, hjust = 0)
   }
