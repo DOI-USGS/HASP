@@ -184,9 +184,9 @@ create_segs <- function(trend_results,
                   y1 = decimalDate(x1) * slope + intercept,
                   y2 = decimalDate(x2) * slope + intercept) %>%
     dplyr::filter(!is.na(y2),
-                  trend != "Not significant") %>%
-    dplyr::mutate(x2 = decimalDate(x2),
-                  x1 = decimalDate(x1))
+                  trend != "Not significant")
+    # dplyr::mutate(x2 = decimalDate(x2),
+    #               x1 = decimalDate(x1))
 
   return(df_seg)
   
