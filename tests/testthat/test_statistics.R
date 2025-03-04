@@ -208,8 +208,8 @@ test_that("trend segments",{
                                value_col = "ResultMeasureValue",
                                date_col = "ActivityStartDateTime")
   
-  expect_true(all(signif(seg_df$x1, digits = 5) == c(2011.3, 1978.7)))
-  expect_true(all(signif(seg_df$x2, digits = 5) == c(2021.3, 2021.3)))
+  expect_true(all(seg_df$x1 == as.Date(c("2011-04-29", "1978-09-16"))))
+  expect_true(all(seg_df$x2 == as.Date(c("2021-04-27", "2021-04-27"))))
   expect_true(all(seg_df$years == c("10-year trend",
                                     "Period of record")))
   expect_true(all(seg_df$trend == c("Up", "Up")))
@@ -224,8 +224,8 @@ test_that("trend segments",{
                         date_col = "Date", 
                         value_col = "X_62610_00001")
   
-  expect_true(all(signif(seg_df$x1, digits = 5) == c(2011.3, 1978.7)))
-  expect_true(all(signif(seg_df$x2, digits = 5) == c(2021.3, 2021.3)))
+  expect_true(all(seg_df$x1 == c("2011-04-29", "1978-09-16")))
+  expect_true(all(seg_df$x2 == c("2021-04-27", "2021-04-27")))
   
   expect_true(all(seg_df$years == c("10-year trend",
                                     "Period of record")))
@@ -251,8 +251,8 @@ test_that("trend segments",{
                                      date_col = "mid_date",
                                      value_col = "mean_va")
   
-  expect_true(all(signif(seg_df_month$x1, digits = 5) == c(2011.7, 1978.8)))
-  expect_true(all(signif(seg_df_month$x2, digits = 5) == c(2021.7, 2021.7)))
+  expect_true(all(seg_df_month$x1 == c("2011-09-17", "1978-10-25")))
+  expect_true(all(seg_df_month$x2 == c("2021-09-15", "2021-09-15")))
   
   expect_true(all(seg_df_month$years == c("10-year trend", 
                                           "Period of record")))

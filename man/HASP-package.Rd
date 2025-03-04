@@ -41,7 +41,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Lindsay Platt \email{lplatt@usgs.gov} [contractor]
+  \item Lindsay Platt [contractor]
   \item Tara Root [contractor]
 }
 

@@ -45,7 +45,7 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
     if(inherits(state_data, "error")) next
     
     if(!all(is.na(state_data$site_no))){
-      state_data_sites <- dataRetrieval::readNWISsite(unique(state_data$site_no))
+      state_data_sites <- attr(state_data, "siteInfo")
       
       state_data_sites <- state_data_sites %>% 
         dplyr::select(station_nm, site_no, dec_lat_va, dec_long_va)
@@ -102,6 +102,11 @@ get_state_data <- function(state, aquiferCd,
                          endDate = endDate,
                          aquiferCd = aquiferCd)
   
+  site_info <- dataRetrieval::whatNWISdata(stateCd = state, 
+                                            startDate= startDate,
+                                            endDate = endDate,
+                                           service = "gwlevels")
+  
   if(nrow(levels) + nrow(levels_dv) == 0){
     return(data.frame())
   }
@@ -157,6 +162,11 @@ get_state_data <- function(state, aquiferCd,
   
   state_data_tots <- dplyr::bind_rows(state_data, 
                                state_dv)
+  
+  site_info <- site_info |> 
+    dplyr::filter(site_no %in% unique(state_data_tots$site_no))
+  
+  attr(state_data_tots, "siteInfo") <- site_info
   
   return(state_data_tots)
 }

@@ -235,12 +235,12 @@ gwl_plot_all <- function(gw_level_dv,
 
     plot_out <- ggplot() +
       geom_path(data = gw_complete,
-                aes(x = year, color = Approve, y = Value)) 
+                aes(x = Date, color = Approve, y = Value)) 
     
     if(sum(gw_complete$is_point) > 0){
       plot_out <- plot_out +
         geom_point(data = dplyr::filter(gw_complete, is_point),
-                 aes(x = year, color = Approve, y = Value), size = 0.2) 
+                 aes(x = Date, color = Approve, y = Value), size = 0.2) 
     }
     
     plot_out <- plot_out +
@@ -257,7 +257,7 @@ gwl_plot_all <- function(gw_level_dv,
   if(data_list$includes["gwl"]){
     plot_out <- plot_out +
       geom_point(data = gwl_data,
-                 aes(x = year, y = Value, 
+                 aes(x = Date, y = Value, 
                      fill = Approve),
                  size = 1.5, shape = 21, color = "transparent") +
       scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
@@ -270,8 +270,8 @@ gwl_plot_all <- function(gw_level_dv,
     hasp_framework("Years", y_label,
                    plot_title = plot_title, 
                    subtitle = subtitle)  +
-    scale_x_continuous(sec.axis = dup_axis(labels =  NULL,
-                                           name = NULL))  
+    scale_x_date(sec.axis = dup_axis(labels =  NULL,
+                                     name = NULL))  
   
   if(add_trend){
     
