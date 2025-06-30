@@ -2,48 +2,50 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
-name: R-CMD-checka
+name: R-CMD-check
+
+permissions: read-all
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    environment: CI_config
     strategy:
       fail-fast: false
       matrix:
         config:
           - {os: macos-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       API_USGS_PAT: ${{ secrets.API_USGS_PAT }}
       R_KEEP_PKG_SOURCE: yes
+      CUSTOM_DR_UA: 'GitHub_CI'
 
     steps:
-      - uses: actions/checkout@c0a81a463886bb75afe234e07a9fd5bb79219196
+      - uses: actions/checkout@9a9194f87191a7e9055e3e9b95b8cfb13023bb08
 
-      - uses: r-lib/actions/setup-pandoc@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/setup-pandoc@6012817847b5f064d0882d67a7b5e2ca6639afb2
 
-      - uses: r-lib/actions/setup-r@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/setup-r@473c68190595b311a74f208fba61a8d8c0d4c247
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/setup-r-dependencies@96b1dc658a45175f93ed5f33fda2b2cebbb12ee8
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
           needs: check
 
-      - uses: r-lib/actions/check-r-package@756399d909bf9c180bbdafe8025f794f51f2da02
+      - uses: r-lib/actions/check-r-package@3e56ca41aa267855f36891af7a495d24bfaa8373
         with:
           upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
