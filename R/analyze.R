@@ -17,7 +17,7 @@
 #' summary_info <- site_data_summary(aquifer_data)
 site_data_summary <- function(x,
                               value_col = "value",
-                              site_col = "site_no"){
+                              site_col = "monitoring_location_id"){
 
   site_no <- value <- ".dplyr"
   

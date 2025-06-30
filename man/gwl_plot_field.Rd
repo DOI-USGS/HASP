@@ -21,9 +21,9 @@ gwl_plot_all(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = NA,
-  value_col = NA,
-  approved_col = NA,
+  date_col = c("time", "lev_dt"),
+  value_col = "value",
+  approved_col = c("approval_status", "lev_age_cd"),
   stat_cd = NA,
   y_label = "",
   subtitle = "U.S. Geological Survey",
@@ -74,7 +74,7 @@ Default is \code{TRUE}.}
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
-from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
+from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
 \item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
 can be used to help define the value_col.}
@@ -117,11 +117,13 @@ gwl_plot_field(gwl_data,
                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "72019"], 
                parameter_cd = "72019",
                flip = TRUE)
-# site <- "263819081585801"
-parameterCd <- "62610"
+# site <- "USGS-263819081585801"
+# p_code_dv <- "62610"
 # statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-# Using package example data:
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
 gw_level_dv <- L2701_example_data$Daily
 gwl_data <- L2701_example_data$Discrete
 plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
@@ -129,7 +131,6 @@ pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
 
 gwl_plot_all(gw_level_dv, 
              NULL, 
-             parameter_cd = "62610",
              plot_title = plot_title,
              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
              flip = TRUE) 

@@ -4,7 +4,7 @@
 \alias{site_data_summary}
 \title{site_data_summary}
 \usage{
-site_data_summary(x, value_col = "value", site_col = "site_no")
+site_data_summary(x, value_col = "value", site_col = "monitoring_location_id")
 }
 \arguments{
 \item{x}{data frame}

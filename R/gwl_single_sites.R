@@ -4,7 +4,7 @@
 #' 
 #' @export
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained 
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
+#' from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.
 #' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
 #' data frame with a date, value, and approval columns. Using the convention:
 #' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
@@ -72,9 +72,9 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
   plot_out <- gwl_plot_all(NULL, 
                            gwl_data, 
                            parameter_cd = parameter_cd,
-                           date_col = date_col,
-                           value_col = value_col, 
-                           approved_col = approved_col,
+                           date_col = c(NA, date_col),
+                           value_col = c(NA, value_col), 
+                           approved_col = c(NA, approved_col),
                            stat_cd = NA,
                            y_label = y_label,
                            plot_title = plot_title,
@@ -138,11 +138,13 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' @param POR_trend a logical indicating whether to include a trend test
 #' for the full period of record. Default is \code{TRUE}.
 #' @examples 
-#' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' # site <- "USGS-263819081585801"
+#' # p_code_dv <- "62610"
 #' # statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-#' # Using package example data:
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
 #' gw_level_dv <- L2701_example_data$Daily
 #' gwl_data <- L2701_example_data$Discrete
 #' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
@@ -150,7 +152,6 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              NULL, 
-#'              parameter_cd = "62610",
 #'              plot_title = plot_title,
 #'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
 #'              flip = TRUE) 
@@ -189,9 +190,9 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
                          parameter_cd = NA,
-                         date_col = NA,
-                         value_col = NA, 
-                         approved_col = NA,
+                         date_col = c("time", "lev_dt"),
+                         value_col = "value",
+                         approved_col = c("approval_status", "lev_age_cd"),
                          stat_cd = NA,
                          y_label = "",
                          subtitle = "U.S. Geological Survey",
@@ -362,18 +363,10 @@ set_up_data <- function(gw_level_dv,
     
     checkmate::assert_data_frame(gwl_data)
     
-    if(includes_both){
-      date_col_per <- date_col[2]
-      value_col_per <- value_col[2]
-      approved_col_per <- approved_col[2]
+    date_col_per <- date_col[2]
+    value_col_per <- value_col[2]
+    approved_col_per <- approved_col[2]
       
-    } else {
-      date_col_per <- date_col[1]
-      value_col_per <- value_col[1]
-      approved_col_per <- approved_col[1]
-      
-    }
-
     date_col_per <- ifelse(is.na(date_col_per), "lev_dt", date_col_per)
     checkmate::assert_string(date_col_per)
     
@@ -384,7 +377,7 @@ set_up_data <- function(gw_level_dv,
       if(!is.na(parameter_cd)){
         if(parameter_cd == "72019"){
           value_col_per <- "lev_va"
-        } else if(is.na(value_col)){
+        } else {
           value_col_per <- "sl_lev_va"
         } 
       } 
@@ -449,7 +442,7 @@ set_up_data <- function(gw_level_dv,
     
     checkmate::assert_data_frame(gw_level_dv)
     
-    date_col_dv <- ifelse(is.na(date_col[1]), "Date", date_col[1])
+    date_col_dv <- ifelse(is.na(date_col[1]), "time", date_col[1])
     value_col_dv <- get_value_column(parameter_cd = parameter_cd,
                                      df = gw_level_dv, 
                                      value_col = value_col[1],
