@@ -12,10 +12,17 @@ content <- client %>%
   deploy(bundle, name = "HASP_docs") %>% 
   poll_task()
 
-# rsconnect::writeManifest(appDir = "./inst/shiny")
-# bundle <- bundle_dir("./inst/shiny")
-# 
-# content <- client %>%
-#   deploy(bundle, name = "HASP_aquifers") %>%
-#   poll_task()
+rsconnect::writeManifest(appDir = "./inst/shiny")
+bundle <- bundle_dir("./inst/shiny")
+
+content <- client %>%
+  deploy(bundle, name = "HASP_aquifers") %>%
+  poll_task()
+
+rsconnect::writeManifest(appDir = "./inst/single_site")
+bundle <- bundle_dir("./inst/single_site")
+
+content <- client %>%
+  deploy(bundle, name = "HASP_Single_Site") %>%
+  poll_task()
 

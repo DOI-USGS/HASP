@@ -38,11 +38,11 @@ test_that("Data", {
                     c("aqfr_cd",
                       "Aqfr_Name_prpr")))
   
-  expect_equal(nrow(L2701_example_data[["Daily"]]), 15000)
-  expect_equal(nrow(L2701_example_data[["Discrete"]]), 1374)
+  expect_equal(nrow(L2701_example_data[["Daily"]]), 16275)
+  expect_equal(nrow(L2701_example_data[["Discrete"]]), 1461)
   expect_equal(nrow(L2701_example_data[["QW"]]), 472)
   
-  expect_equal(ncol(L2701_example_data[["Daily"]]), 5)
+  expect_equal(ncol(L2701_example_data[["Daily"]]), 11)
   expect_equal(ncol(L2701_example_data[["Discrete"]]), 19)
   expect_equal(ncol(L2701_example_data[["QW"]]), 65)
   
@@ -116,9 +116,9 @@ test_that("Data setup", {
   s1 <- HASP:::set_up_data(gw_level_dv = L2701_example_data[["Daily"]],
                     gwl_data = L2701_example_data[["Discrete"]], 
                     parameter_cd = "62610", 
-                    date_col = NA,
-                    value_col = NA,
-                    approved_col = NA,
+                    date_col = c("time", "lev_dt"),
+                    value_col = "value",
+                    approved_col = c("approval_status", "lev_age_cd"),
                     stat_cd = "00003")
   
   expect_true(all(names(s1) %in% c("gw_level_dv", "gwl_data", "includes")))
@@ -131,14 +131,14 @@ test_that("Data setup", {
   expect_true(inherits(s1$gwl_data$Date, "Date"))
 
   incomplete_date <-  L2701_example_data[["Daily"]]
-  incomplete_date$Date <- as.character(incomplete_date$Date)
-  incomplete_date$Date[1] <- "1980"
+  incomplete_date$time <- as.character(incomplete_date$time)
+  incomplete_date$time[1] <- "1980"
   expect_warning(s2 <- HASP:::set_up_data(gw_level_dv = incomplete_date,
                     gwl_data = L2701_example_data[["Discrete"]], 
                     parameter_cd = "62610", 
-                    date_col = NA,
-                    value_col = NA,
-                    approved_col = NA,
+                    date_col = c("time", "lev_dt"),
+                    value_col = "value",
+                    approved_col = c("approval_status", "lev_age_cd"),
                     stat_cd = "00003"))
   
   incomplete_date <-  L2701_example_data[["Discrete"]]
@@ -147,9 +147,9 @@ test_that("Data setup", {
   expect_warning(s2 <- HASP:::set_up_data(gw_level_dv = L2701_example_data[["Daily"]],
                                           gwl_data = incomplete_date, 
                                           parameter_cd = "62610", 
-                                          date_col = NA,
-                                          value_col = NA,
-                                          approved_col = NA,
+                                          date_col = c("time", "lev_dt"),
+                                          value_col = "value",
+                                          approved_col = c("approval_status", "lev_age_cd"),
                                           stat_cd = "00003"))
   
 })

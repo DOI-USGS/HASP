@@ -56,14 +56,16 @@ Using `dataRetrieval` code to get the data for this site:
 
 ```{r getData, eval=TRUE}
 library(dataRetrieval)
-siteID <- "295204099340201"
+siteID <- "USGS-295204099340201"
 parameterCd <- "62610"
 statCd <- "00001"
 # Daily data:
-gw_level_dv <- readNWISdv(siteID, parameterCd, statCd = statCd)
+gw_level_dv <- read_waterdata_daily(monitoring_location_id = siteID,
+                                    parameter_code =  parameterCd,
+                                    statistic_id = statCd)
 
 # Field GWL measured:
-gwl_data <- readNWISgwl(siteID)
+gwl_data <- readNWISgwl("295204099340201")
 ```
 
 ## Making and Customizing Plots

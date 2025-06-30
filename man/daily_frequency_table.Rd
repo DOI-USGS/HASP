@@ -8,15 +8,15 @@ daily_frequency_table(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = NA,
-  value_col = NA,
-  approved_col = NA,
+  date_col = c("time", "lev_dt"),
+  value_col = "value",
+  approved_col = c("approval_status", "lev_age_cd"),
   stat_cd = NA
 )
 }
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data
-from \code{readNWISdv}}
+from \code{read_waterdata_daily}}
 
 \item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or
 data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
@@ -49,10 +49,13 @@ for each day of the year
 }
 \examples{
 
-# site <- "263819081585801"
+# site <- "USGS-263819081585801"
 p_code_dv <- "62610"
-statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+# statCd <- "00001"
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
 gw_level_dv <- L2701_example_data$Daily
 daily_frequency_table(gw_level_dv,
                       NULL,

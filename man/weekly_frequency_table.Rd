@@ -8,16 +8,16 @@ weekly_frequency_table(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = NA,
-  value_col = NA,
-  approved_col = NA,
+  date_col = c("time", "lev_dt"),
+  value_col = "value",
+  approved_col = c("approval_status", "lev_age_cd"),
   stat_cd = NA,
   flip = FALSE
 )
 }
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
-from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
+from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
 \item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
 data frame with a date, value, and approval columns. Using the convention:
@@ -63,14 +63,16 @@ statistics are calculated off of that median.
 }
 \examples{
 
-# site <- "263819081585801"
+# site <- "USGS-263819081585801"
 p_code_dv <- "62610"
-statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+# statCd <- "00001"
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
 gw_level_dv <- L2701_example_data$Daily
 weekly_frequency <- weekly_frequency_table(gw_level_dv,
-                                           NULL,
-                                           parameter_cd = "62610")
+                                           NULL)
 head(weekly_frequency)
 
 gwl_data <- L2701_example_data$Discrete
@@ -78,10 +80,10 @@ gwl_data <- L2701_example_data$Discrete
 weekly_frequency <- weekly_frequency_table(gw_level_dv,
                                            gwl_data,
                                            parameter_cd = "62610")
-weekly_frequency
+head(weekly_frequency)
 weekly_flip <- weekly_frequency_table(gw_level_dv,
                                       gwl_data,
                                       parameter_cd = "62610",
                                       flip = TRUE)
-weekly_flip
+head(weekly_flip)
 }

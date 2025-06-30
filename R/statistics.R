@@ -75,9 +75,9 @@ trend_test <- function(gw_level_dv,
                        gwl_data,
                        n_years = 10,
                        parameter_cd = NA,
-                       date_col = NA,
-                       value_col = NA,
-                       approved_col = NA,
+                       date_col = c("time", "lev_dt"),
+                       value_col = "value",
+                       approved_col = c("approval_status", "lev_age_cd"),
                        stat_cd = NA,
                        pctComplete = 0.5,
                        days_required_per_month = 14,
@@ -318,23 +318,24 @@ trend_test <- function(gw_level_dv,
 #' @export
 #' @examples 
 #' 
-#' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' # site <- "USGS-263819081585801"
+#' p_code_dv <- "62610"
 #' # statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, 
-#' #                                           statCd = statCd)
-#' # Using package example data:
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
 #' gw_level_dv <- L2701_example_data$Daily
 #' 
 #' site_statistics <- monthly_frequency_table(gw_level_dv, 
 #'                                            NULL,
-#'                                            parameter_cd = parameterCd)
+#'                                            parameter_cd = p_code_dv)
 #' 
 #' gw_monthly <- monthly_mean(gw_level_dv)
 #' 
 monthly_mean <- function(x,
-                         date_col = "Date",
-                         value_col = "X_62610_00001"){
+                         date_col = "time",
+                         value_col = "value"){
   
   days_in_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
   
