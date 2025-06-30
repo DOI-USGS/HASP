@@ -21,7 +21,7 @@
 #' @import ggplot2
 #' @examples 
 #' 
-#' # site <- "263819081585801"
+#' # site <- "USGS-263819081585801"
 #' # parameterCd <- c("00095","90095","00940","99220")
 #' # site_data <- dataRetrieval::readWQPqw(site, 
 #' #                                        parameterCd)
@@ -96,9 +96,9 @@ trend_plot <- function(qw_data, plot_title,
   
   trend_results <- trend_test(gw_level_dv = NULL,
                               gwl_data = qw_sub,
-                              date_col = "ActivityStartDate",
-                              value_col = "ResultMeasureValue", 
-                              approved_col = "condition",
+                              date_col = c(NA, "ActivityStartDate"),
+                              value_col = c(NA, "ResultMeasureValue"), 
+                              approved_col = c(NA, "condition"),
                               n_years = n_years,
                               POR_trend = POR_trend)
   

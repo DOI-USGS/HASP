@@ -92,7 +92,7 @@ qw_data <- qw_data %>%
 Sc_Cl_plot(qw_data = qw_data, 
            "External Data")
 
-trend_plot(qw_data, 
+trend_plot(qw_data = qw_data, 
            plot_title = "External Data")
 
 ```

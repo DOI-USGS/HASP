@@ -45,7 +45,7 @@ Function creates the cloride over time plot with trends.
 }
 \examples{
 
-# site <- "263819081585801"
+# site <- "USGS-263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
 # site_data <- dataRetrieval::readWQPqw(site, 
 #                                        parameterCd)
