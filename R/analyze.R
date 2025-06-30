@@ -280,7 +280,8 @@ normalized_data <- function(x, num_years, parameter_cd = "72019"){
                     num_years = num_years, 
                     parameter_cd = parameter_cd)
   n_sites <- length(unique(x$site_no))
-  year_summaries <- site_data_summary(x)
+  year_summaries <- site_data_summary(x, 
+                                      value_col = "value", site_col = "site_no")
   
   norm_composite <- x %>% 
     dplyr::group_by(year, site_no) %>% 

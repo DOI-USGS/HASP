@@ -70,16 +70,17 @@ Using `dataRetrieval` code to get the data for this site:
 
 ```{r getData, eval=TRUE}
 library(dataRetrieval)
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
 # Daily data:
-gw_level_dv <- readNWISdv(siteID,
-                          parameterCd,
-                          statCd = statCd)
+gw_level_dv <- read_waterdata_daily(monitoring_location_id = siteID,
+                                    parameter_code = parameterCd,
+                                    statistic_id = statCd, 
+                                    skipGeometry = TRUE)
 
 # Field GWL measured:
-gwl_data <- readNWISgwl(siteID)
+gwl_data <- readNWISgwl("263819081585801")
 
 site_title <- "L -2701\n263819081585801"
 
@@ -177,8 +178,7 @@ gwl_plot_all(gw_level_dv, gwl_data,
 Summary statistics for maximum daily water level measurements:
 
 ```{r siteStatsDaily}
-siteDV <- site_data_summary(gw_level_dv,
-                            value_col = "X_62610_00001") 
+siteDV <- site_data_summary(gw_level_dv) 
 
 kable(siteDV, digits = 1)
 
@@ -188,9 +188,9 @@ Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
 
-trend_result <- trend_test(gw_level_dv, 
-                          NULL,
-                          parameter_cd = parameterCd)
+trend_result <- trend_test(gw_level_dv = gw_level_dv, 
+                           gwl_data = NULL,
+                           parameter_cd = parameterCd)
 kable(trend_result, digits = 1)
 
 
@@ -219,7 +219,7 @@ Summary statistics for manual water level measurements
 ```{r manualTable}
 quantiles <- gwl_data %>% 
   rename(value = sl_lev_va) %>% 
-  site_data_summary() 
+  site_data_summary(site_col = "site_no") 
 
 kable(quantiles, digits = 1)
 
