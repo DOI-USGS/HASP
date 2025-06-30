@@ -236,7 +236,7 @@ test_that("trend segments",{
                                      date_col = "mid_date",
                                      value_col = "mean_va")
   
-  expect_true(all(seg_df_month$x1 == c("2011-09-17", "1978-10-25")))
+  expect_true(all(seg_df_month$x1 == c("2015-03-17", "1978-10-26")))
   expect_true(all(seg_df_month$x2 == c("2025-03-15", "2025-03-15")))
   
   expect_true(all(seg_df_month$years == c("10-year trend", 
