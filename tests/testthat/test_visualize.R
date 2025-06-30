@@ -113,11 +113,6 @@ test_that("Weekly frequency plot", {
   expect_true(all(c("plot_week", "x", "y", "ymin", "group", "plot_week_last") %in%
                     plot_data_elements))
   
-  plot <- weekly_frequency_plot(L2701_example_data$Daily,
-                                L2701_example_data$Discrete,
-                                date_col = c("Date", "lev_dt"),
-                                value_col = c("X_62610_00001", "sl_lev_va"),
-                                approved_col = c("X_62610_00001_cd", "lev_status_cd"))
   
 })
 
@@ -167,9 +162,6 @@ test_that("Daily gwl plot", {
   
   plot1 <- daily_gwl_plot(gw_daily, 
                           NULL,
-                          date_col = "Date",
-                          value_col = "X_62610_00001",
-                          approved_col = "X_62610_00001_cd",
                           historical_stat = "mean",
                           month_breaks = TRUE,
                           plot_title = plot_title)
@@ -205,11 +197,12 @@ test_that("Daily gwl plot", {
   
   plot4 <- daily_gwl_plot(gw_daily, 
                           gw_discrete,
-                          date_col = c("Date",
+                          parameter_cd = "62610",
+                          date_col = c("time",
                                        "lev_dt"),
-                          value_col = c("X_62610_00001",
+                          value_col = c("value",
                                         "sl_lev_va"),
-                          approved_col = c("X_62610_00001_cd",
+                          approved_col = c("approval_status",
                                            "lev_status_cd"),
                           start_date = "2018-10-01",
                           end_date = "2020-10-01",
