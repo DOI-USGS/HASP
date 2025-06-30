@@ -14,7 +14,7 @@
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
-#' summary_info <- site_data_summary(aquifer_data)
+#' summary_info <- site_data_summary(aquifer_data, site_col = "site_no")
 site_data_summary <- function(x,
                               value_col = "value",
                               site_col = "monitoring_location_id"){
