@@ -8,10 +8,9 @@ monthly_frequency_table(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = c("time", "lev_dt"),
-  value_col = "value",
-  approved_col = c("approval_status", "lev_age_cd"),
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   flip = FALSE
 )
 }
@@ -19,10 +18,8 @@ monthly_frequency_table(
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
 from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
-\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-data frame with a date, value, and approval columns. Using the convention:
-lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-or sl_lev_va (representing value) will allow defaults to work.
+\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+data frame with a date, value, and approval columns. 
 Use \code{NULL} for no discrete data.}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd
@@ -47,9 +44,6 @@ automatically based on NWIS naming conventions. If both gw_level_dv and
 gwl_data data frames require custom column names, the first value of this
 input defines the approval column for gw_level_dv, and the second defines gwl_data.}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
-can be used to help define the value_col.}
-
 \item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers
 are in the higher percentages. Default is \code{TRUE}.}
 }
@@ -66,19 +60,18 @@ Percentiles are calculated using the \code{quantile} function with "type=6".
 }
 \examples{
 
-# site <- "USGS-263819081585801"
-# p_code_dv <- "62610"
-# statCd <- "00001"
-# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#                                                    parameter_code = p_code_dv,
-#                                                    statistic_id = statCd,
-#                                                    skipGeometry = TRUE)
-gw_level_dv <- L2701_example_data$Daily
+site <- "USGS-263819081585801"
+p_code_dv <- "62610"
+statCd <- "00001"
+gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+                                                   parameter_code = p_code_dv,
+                                                   statistic_id = statCd,
+                                                   skipGeometry = TRUE)
 
 monthly_frequency <- monthly_frequency_table(gw_level_dv,
                                              NULL)
 head(monthly_frequency)
-gwl_data <- L2701_example_data$Discrete
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
 
 monthly_frequency_combo <- monthly_frequency_table(gw_level_dv = gw_level_dv,
                                              gwl_data = gwl_data,

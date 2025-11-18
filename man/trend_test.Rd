@@ -9,10 +9,9 @@ trend_test(
   gwl_data,
   n_years = 10,
   parameter_cd = NA,
-  date_col = c("time", "lev_dt"),
-  value_col = "value",
-  approved_col = c("approval_status", "lev_age_cd"),
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   pctComplete = 0.5,
   days_required_per_month = 14,
   POR_trend = TRUE
@@ -42,9 +41,6 @@ which the code will try to get the column name automatically.}
 
 \item{approved_col}{name of column to get provisional/approved status.}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
-can be used to help define the value_col.}
-
 \item{pctComplete}{number percentage complete. This is a fraction that represents
 the amount of data that must be included overall in order to calculate a trend.
 The default is 0.5, which means if gaps in the data span more than 50% of the
@@ -69,13 +65,15 @@ is used. For periodic data, the \link[EnvStats]{kendallTrendTest} is used.
 }
 \examples{
 
-# site <- "263819081585801"
-# gw_level_data <- dataRetrieval::readNWISgwl(site)
+site <- "263819081585801"
 
 # Using package example data:
-gwl_data <- L2701_example_data$Discrete
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
                         
-gw_level_dv <- L2701_example_data$Daily
+gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+                                                   parameter_code = p_code_dv,
+                                                   statistic_id = statCd,
+                                                   skipGeometry = TRUE)
 
 trend_test(gw_level_dv,
            gwl_data,

@@ -8,10 +8,9 @@ weekly_frequency_plot(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = c("time", "lev_dt"),
-  value_col = "value",
-  approved_col = c("approval_status", "lev_age_cd"),
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   plot_range = "Past year",
   plot_title = "",
   subtitle = "U.S. Geological Survey",
@@ -52,9 +51,6 @@ automatically based on NWIS naming conventions. If both gw_level_dv and
 gwl_data data frames require custom column names, the first value of this
 input defines the approval column for gw_level_dv, and the second defines gwl_data.}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
-can be used to help define the value_col.}
-
 \item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
 last year of data, or "Calendar year" to use the current calendar year, beginning
 in January.}
@@ -82,18 +78,17 @@ Daily, discrete, or both types of data can be used.
 }
 \examples{
 
-# site <- "USGS-263819081585801"
-p_code_dv <- "62610"
-# statCd <- "00001"
-# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#                                                    parameter_code = p_code_dv,
-#                                                    statistic_id = statCd,
-#                                                    skipGeometry = TRUE)
-gw_level_dv <- L2701_example_data$Daily
+site <- "USGS-263819081585801"
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
+
+gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+                                                   parameter_code = p_code_dv,
+                                                   statistic_id = statCd,
+                                                   skipGeometry = TRUE)
+
 weekly_frequency_plot(gw_level_dv,
                       gwl_data = NULL)
-
-gwl_data <- L2701_example_data$Discrete
 
 weekly_frequency_plot(gw_level_dv,
                       gwl_data = gwl_data,

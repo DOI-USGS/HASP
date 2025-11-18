@@ -28,8 +28,6 @@
 #' automatically based on NWIS naming conventions. If both gw_level_dv and
 #' gwl_data data frames require custom column names, the first value of this 
 #' input defines the approval column for gw_level_dv, and the second defines gwl_data.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
-#' can be used to help define the value_col.
 #' @param plot_title character, title for plot.
 #' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 #' Default is \code{TRUE}.
@@ -39,33 +37,37 @@
 #' 
 #' @examples
 #' 
-#' # site <- "263819081585801"
-#' # gwl_data <- dataRetrieval::readNWISgwl(site)
+#' site <- "USGS-263819081585801"
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+#' site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 #' 
-#' # Using package example data:
-#' gwl_data <- L2701_example_data$Discrete
-#' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+#' plot_title <- site_info$monitoring_location_name
+#' pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(gwl_data$parameter_code))
+#' 
 #' gwl_plot_field(gwl_data, 
 #'                plot_title = plot_title, 
 #'                parameter_cd = "62610",
 #'                flip = FALSE,
-#'                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+#'                y_label = pcodes$parameter_name[pcodes$parameter_code == "62610"])
+#'                
 #' gwl_plot_field(gwl_data, 
 #'                plot_title = plot_title,
-#'                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62611"], 
+#'                y_label = pcodes$parameter_name[pcodes$parameter_code == "62611"], 
 #'                parameter_cd = "62611",
 #'                flip = FALSE)
+#'                
 #' gwl_plot_field(gwl_data,  
 #'                plot_title = plot_title,
-#'                y_label = pcodes$parameter_nm[pcodes$parameter_cd == "72019"], 
+#'                y_label = pcodes$parameter_name[pcodes$parameter_code == "72019"], 
 #'                parameter_cd = "72019",
 #'                flip = TRUE)
-gwl_plot_field <- function(gwl_data, plot_title = "",
+#'                
+gwl_plot_field <- function(gwl_data, 
+                           plot_title = "",
                            parameter_cd = NA,
-                           date_col = "lev_dt",
-                           value_col = NA,
-                           approved_col = "lev_age_cd",
+                           date_col = "time",
+                           value_col = "value",
+                           approved_col = "approval_status",
                            flip = TRUE, y_label = "",
                            subtitle = "U.S. Geological Survey"){
   
@@ -75,7 +77,6 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
                            date_col = c(NA, date_col),
                            value_col = c(NA, value_col), 
                            approved_col = c(NA, approved_col),
-                           stat_cd = NA,
                            y_label = y_label,
                            plot_title = plot_title,
                            add_trend = FALSE,
@@ -86,46 +87,6 @@ gwl_plot_field <- function(gwl_data, plot_title = "",
 }
 
 
-get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
-  
-  if(is.na(parameter_cd)){
-    if("parameter_cd" %in% names(df)){
-      parameter_cds <- unique(df$parameter_cd)
-      which(parameter_cds)
-      message("parameter_cd unspecified, using", parameter_cd)
-    }
-  }
-  
-  if(!is.na(parameter_cd) & any(grepl(parameter_cd, names(df)))){
-    
-    value_col_df <- names(df)[grepl(parameter_cd, names(df))]
-    value_col_df <- unique(gsub("_cd", "", value_col_df))
-    
-    if(!is.na(value_col) & !is.na(parameter_cd)){
-      if(!all(value_col == value_col_df)){
-        if(value_col %in% names(df)){
-          message("parameter_cd provided does not match value_col, using:", value_col)
-        }
-      }
-    } else {
-      
-      if(length(value_col_df) == 1){
-        value_col <- value_col_df
-      } else {
-        if(is.na(stat_cd)){
-          message("statistic code not given")
-          value_col <- value_col_df[1]
-        } else {
-          value_col <- value_col_df[grepl(stat_cd, value_col_df)]
-        }
-      }
-    }
-    return(value_col)
-  }
-
-  
-  return(value_col)
-}
 
 #' @rdname gwl_plot_field
 #' @export
@@ -138,39 +99,42 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #' @param POR_trend a logical indicating whether to include a trend test
 #' for the full period of record. Default is \code{TRUE}.
 #' @examples 
-#' # site <- "USGS-263819081585801"
-#' # p_code_dv <- "62610"
-#' # statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#' #                                                    parameter_code = p_code_dv,
-#' #                                                    statistic_id = statCd,
-#' #                                                    skipGeometry = TRUE)
-#' gw_level_dv <- L2701_example_data$Daily
-#' gwl_data <- L2701_example_data$Discrete
-#' plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-#' pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+#' site <- "USGS-263819081585801"
+#' p_code_dv <- "62610"
+#' statCd <- "00001"
+#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#'                                                    parameter_code = p_code_dv,
+#'                                                    statistic_id = statCd,
+#'                                                    skipGeometry = TRUE)
+#'
+#' site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
+#' 
+#' plot_title <- site_info$monitoring_location_name
+#' pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = p_code_dv)
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              NULL, 
 #'              plot_title = plot_title,
-#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+#'              y_label = pcodes$parameter_name,
 #'              flip = TRUE) 
+#' 
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#'                                  skipGeometry = TRUE)
 #' 
 #' gwl_plot_all(gw_level_dv, 
 #'              gwl_data, 
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title,
-#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
-#'              add_trend = TRUE,
+#'              y_label = pcodes$parameter_name,
+#'              add_trend = FALSE,
 #'              flip = FALSE)
-#'              
-#'              
+#'
 #' gwl_plot_all(gw_level_dv,
 #'              gwl_data,
 #'              parameter_cd = "62610",
-#'              n_years = c(5, 10, 20),
+#'              n_years = c(5, 20),
 #'              POR_trend = TRUE,
-#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+#'              y_label = pcodes$parameter_name,
 #'              plot_title = plot_title,
 #'              add_trend = TRUE)
 #'              
@@ -178,22 +142,21 @@ get_value_column <- function(parameter_cd, df, value_col, stat_cd = NA){
 #'              gwl_data, 
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title, 
-#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+#'              y_label = pcodes$parameter_name)
 #' 
 #' gwl_plot_all(NULL, 
 #'              gwl_data, 
 #'              parameter_cd = "62610",
 #'              plot_title = plot_title,
-#'              y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+#'              y_label = pcodes$parameter_name,
 #'              add_trend = TRUE)
 #' 
 gwl_plot_all <- function(gw_level_dv, 
                          gwl_data, 
                          parameter_cd = NA,
-                         date_col = c("time", "lev_dt"),
-                         value_col = "value",
-                         approved_col = c("approval_status", "lev_age_cd"),
-                         stat_cd = NA,
+                         date_col = c("time", "time"),
+                         value_col = c("value", "value"),
+                         approved_col = c("approval_status", "approval_status"),
                          y_label = "",
                          subtitle = "U.S. Geological Survey",
                          plot_title = "",
@@ -208,8 +171,7 @@ gwl_plot_all <- function(gw_level_dv,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col, 
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
   
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
@@ -229,10 +191,10 @@ gwl_plot_all <- function(gw_level_dv,
                      is_na_after = is.na(dplyr::lead(Value)),
                      is_point = is_na_after & is_na_before & !is.na(Value),
                      is_complete = !is.na(Value) & !is_na_after & !is_na_before,
-                     Approve = ifelse(grepl(pattern = "A",  
-                                          x =  Approve), "A", "P"))
+                     Approve = ifelse(grepl(pattern = "Approved",  
+                                          x =  Approve), "Approved", "Provisional"))
 
-    gw_complete[is.na(gw_complete$Value), "Approve"] <- "A"
+    gw_complete[is.na(gw_complete$Value), "Approve"] <- "Approved"
 
     plot_out <- ggplot() +
       geom_path(data = gw_complete,
@@ -247,9 +209,9 @@ gwl_plot_all <- function(gw_level_dv,
     plot_out <- plot_out +
       scale_color_manual(ifelse(data_list$includes["both"],
                                 "Daily Data", "EXPLANATION\nDaily Data"),
-                         values = c("A" = "blue", "P" = "red"), 
-                         labels = c("A" = "Approved",
-                                    "P" = "Provisional"))
+                         values = c("Approved" = "blue", "Provisional" = "red"), 
+                         labels = c("Approved",
+                                    "Provisional"))
   } else {
     plot_out <- ggplot()
     
@@ -262,9 +224,9 @@ gwl_plot_all <- function(gw_level_dv,
                      fill = Approve),
                  size = 1.5, shape = 21, color = "transparent") +
       scale_fill_manual("EXPLANATION\nWater-Level\nMeasurement",
-                        values = c("A" = "navy", "P" = "red"), 
-                        labels = c("A" = "Approved",
-                                   "P" = "Provisional"))
+                        values = c("Approved" = "navy", "Provisional" = "red"), 
+                        labels = c("Approved",
+                                   "Provisional"))
   } 
   
   plot_out <- plot_out +
@@ -278,14 +240,14 @@ gwl_plot_all <- function(gw_level_dv,
     
     all_data <- gw_level_dv %>%
       dplyr::bind_rows(gwl_data) %>%
-      dplyr::filter(grepl("A", Approve))
+      dplyr::filter(grepl("Approved", Approve))
     
     gw_monthly <- monthly_mean(all_data,
                                date_col = "Date",
                                value_col = "Value")
 
-    trend_results <- trend_test(gw_level_dv[grepl("A", gw_level_dv$Approve),],
-                                gwl_data = gwl_data[grepl("A", gwl_data$Approve),],
+    trend_results <- trend_test(gw_level_dv[grepl("Approved", gw_level_dv$Approve),],
+                                gwl_data = gwl_data[grepl("Approved", gwl_data$Approve),],
                                 date_col = c("Date", "Date"),
                                 value_col = c("Value", "Value"), 
                                 approved_col = c("Approve", "Approve"),
@@ -346,8 +308,7 @@ set_up_data <- function(gw_level_dv,
                         parameter_cd,
                         date_col,
                         value_col, 
-                        approved_col,
-                        stat_cd){
+                        approved_col){
   
   includes_gwl <- !(is.null(gwl_data) ||
     all(is.na(gwl_data))||
@@ -367,27 +328,21 @@ set_up_data <- function(gw_level_dv,
     value_col_per <- value_col[2]
     approved_col_per <- approved_col[2]
       
-    date_col_per <- ifelse(is.na(date_col_per), "lev_dt", date_col_per)
+    date_col_per <- ifelse(is.na(date_col_per), "time", date_col_per)
     checkmate::assert_string(date_col_per)
     
-    approved_col_per <- ifelse(is.na(approved_col_per), "lev_age_cd", approved_col_per)
+    approved_col_per <- ifelse(is.na(approved_col_per), "approval_status", approved_col_per)
     checkmate::assert_string(approved_col_per)
     
     if(is.na(value_col_per)){
-      if(!is.na(parameter_cd)){
-        if(parameter_cd == "72019"){
-          value_col_per <- "lev_va"
-        } else {
-          value_col_per <- "sl_lev_va"
-        } 
-      } 
+        value_col_per <- "value"
     }
     
     checkmate::assert_string(value_col_per)
     
     if(is.na(parameter_cd)){
-      if("parameter_cd" %in% names(gwl_data)){
-        pcodes <- unique(gwl_data$parameter_cd)
+      if("parameter_code" %in% names(gwl_data)){
+        pcodes <- unique(gwl_data$parameter_code)
         for(i in pcodes){
           if(grepl(i, value_col[1])){
             parameter_cd <- i
@@ -397,19 +352,6 @@ set_up_data <- function(gw_level_dv,
     }
     
     gwl_data <- filter_pcode(gwl_data, parameter_cd)
-    
-    gwl_data[, value_col_per] <- as.numeric(gwl_data[[value_col_per]])
-    
-    if(all(is.na(gwl_data[[value_col_per]]))){
-      value_col_init <- value_col_per
-      if(value_col_per == "lev_va") {
-        value_col_per <- "sl_lev_va"
-      } else if (value_col_per == "sl_lev_va"){
-        value_col_per <- "lev_va"
-      }
-      message("All data in", value_col_init, "are NA, switching to: ", value_col_per)
-    }
-    
     
     needed_cols <- c(date_col_per, value_col_per, approved_col_per)
     checkmate::assertNames(names(gwl_data), must.include = needed_cols)
@@ -443,12 +385,9 @@ set_up_data <- function(gw_level_dv,
     checkmate::assert_data_frame(gw_level_dv)
     
     date_col_dv <- ifelse(is.na(date_col[1]), "time", date_col[1])
-    value_col_dv <- get_value_column(parameter_cd = parameter_cd,
-                                     df = gw_level_dv, 
-                                     value_col = value_col[1],
-                                     stat_cd = stat_cd)
+    value_col_dv <- ifelse(is.na(value_col[1]), "value", value_col[1])
     approved_dv <- ifelse(is.na(approved_col[1]),
-                          paste0(value_col_dv, "_cd"),
+                          "approval_status",
                           approved_col[1])   
     
     needed_cols <- c(date_col_dv, value_col_dv, approved_dv)
@@ -491,20 +430,20 @@ set_up_data <- function(gw_level_dv,
 
 filter_pcode <- function(df, pcode){
   
-  if("parameter_cd" %in% names(df)){
+  if("parameter_code" %in% names(df)){
     if(!all(is.na(pcode))){
       pcode <- dataRetrieval::zeroPad(pcode, 5)
-      df <- df[!is.na(df$parameter_cd) & 
-                 df$parameter_cd %in% pcode, ]
+      df <- df[!is.na(df$parameter_code) & 
+                 df$parameter_code %in% pcode, ]
     } else if(all(is.na(pcode)) &
-              length(unique(df$parameter_cd)) > 1){
-      warning("Multiple parameter codes detected in column 'parameter_cd',
-            and a parameter code is not specified in 'parameter_cd'")
+              length(unique(df$parameter_code)) > 1){
+      warning("Multiple parameter codes detected in column 'parameter_code',
+            and a parameter code is not specified in 'parameter_code'")
     }
   } else {
     if(!all(is.na(pcode))){
-      message("gwl_data data frame does not contain a 'parameter_cd' column,
-            yet 'parameter_cd' is defined. Ignoring 'parameter_cd' argument.")
+      message("gwl_data data frame does not contain a 'parameter_code' column,
+            yet 'parameter_cd' is defined. Ignoring 'parameter_code' argument.")
     }
   }
   return(df)

@@ -47,24 +47,20 @@ https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801
 ```{r siteInfo, results='asis'}
 library(HASP)
 
-siteID <- "263819081585801"
-site_metadata <- site_summary(siteID, markdown = TRUE)
+# siteID <- "263819081585801"
+# site_metadata <- site_summary(siteID, markdown = TRUE)
 ```
 
 </td><td>
 
 ```{r whatData}
-data_info <- data_available(siteID)
-kable(data_info)
+# data_info <- data_available(siteID)
+# kable(data_info)
 ```
 
 </td></tr> </table>
 
 ## Get data using dataRetrieval
-
-
-<table>
-<tr><td>
 
 Using `dataRetrieval` code to get the data for this site:
 
@@ -80,33 +76,14 @@ gw_level_dv <- read_waterdata_daily(monitoring_location_id = siteID,
                                     skipGeometry = TRUE)
 
 # Field GWL measured:
-gwl_data <- readNWISgwl("263819081585801")
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID,
+                                                             skipGeometry = TRUE)
 
 site_title <- "L -2701\n263819081585801"
 
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = parameterCd)$parameter_name
 
 ```
-
-</td><td>
-
-Using the example data provided in the package:
-
-```{r getDataReal, eval=FALSE}
-siteID <- "263819081585801"
-parameterCd <- "62610"
-statCd <- "00001"
-
-# Daily
-gw_level_dv <-  L2701_example_data$Daily
-# Field
-gwl_data <- L2701_example_data$Discrete
-
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
-
-```
-
-</td></tr> </table>
 
 ## Water Level Data and Analysis
 
@@ -217,9 +194,8 @@ gwl_plot_all(NULL, gwl_data,
 Summary statistics for manual water level measurements
 
 ```{r manualTable}
-quantiles <- gwl_data %>% 
-  rename(value = sl_lev_va) %>% 
-  site_data_summary(site_col = "site_no") 
+quantiles <- gwl_data |> 
+  site_data_summary(site_col = "monitoring_location_id") 
 
 kable(quantiles, digits = 1)
 

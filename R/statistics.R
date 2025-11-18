@@ -16,8 +16,6 @@
 #' @param value_col name of value column. The default is \code{NA},
 #' which the code will try to get the column name automatically.
 #' @param approved_col name of column to get provisional/approved status.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
-#' can be used to help define the value_col.
 #' @param days_required_per_month integer. Number of days required per month
 #' to include in the trend test. Default is 14. 
 #' @param n_years integer. This is the number of years to calculate the trend on.
@@ -39,13 +37,15 @@
 #' 
 #' @examples 
 #' 
-#' # site <- "263819081585801"
-#' # gw_level_data <- dataRetrieval::readNWISgwl(site)
+#' site <- "263819081585801"
 #' 
 #' # Using package example data:
-#' gwl_data <- L2701_example_data$Discrete
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
 #'                         
-#' gw_level_dv <- L2701_example_data$Daily
+#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#'                                                    parameter_code = p_code_dv,
+#'                                                    statistic_id = statCd,
+#'                                                    skipGeometry = TRUE)
 #' 
 #' trend_test(gw_level_dv,
 #'            gwl_data,
@@ -75,10 +75,9 @@ trend_test <- function(gw_level_dv,
                        gwl_data,
                        n_years = 10,
                        parameter_cd = NA,
-                       date_col = c("time", "lev_dt"),
-                       value_col = "value",
-                       approved_col = c("approval_status", "lev_age_cd"),
-                       stat_cd = NA,
+                       date_col = c("time", "time"),
+                       value_col = c("value", "value"),
+                       approved_col = c("approval_status", "approval_status"),
                        pctComplete = 0.5,
                        days_required_per_month = 14,
                        POR_trend = TRUE) {
@@ -88,8 +87,7 @@ trend_test <- function(gw_level_dv,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col, 
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
   
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data

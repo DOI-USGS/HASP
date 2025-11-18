@@ -8,10 +8,9 @@ daily_gwl_plot(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = c("time", "lev_dt"),
-  value_col = "value",
-  approved_col = c("approval_status", "lev_age_cd"),
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   start_date = NA,
   end_date = NA,
   historical_stat = "mean",
@@ -52,11 +51,7 @@ column for gw_level_dv, and the second defines gwl_data.}
 The default is \code{NA}, in which case, the code will try to get the column name
 automatically based on NWIS naming conventions. If both gw_level_dv and
 gwl_data data frames require custom column names, the first value of this
-input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-can be used to help define the value_col.}
-
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
-can be used to help define the value_col.}
+input defines the approval column for gw_level_dv, and the second defines gwl_data.}
 
 \item{start_date}{Date to start plot. If \code{NA} (which is the default),
 the plot will start 2 years before the most recent value.}
@@ -90,16 +85,15 @@ Historic median or mean are plotted based on all of the approved data.
 }
 \examples{
 
-# site <- "USGS-263819081585801"
+site <- "USGS-263819081585801"
 p_code_dv <- "62610"
-# statCd <- "00001"
-# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#                                                    parameter_code = p_code_dv,
-#                                                    statistic_id = statCd,
-#                                                    skipGeometry = TRUE)
-gw_level_dv <- L2701_example_data$Daily
+statCd <- "00001"
+gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+                                                   parameter_code = p_code_dv,
+                                                   statistic_id = statCd,
+                                                   skipGeometry = TRUE)
 
-gwl_data <- L2701_example_data$Discrete
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
 
 daily_gwl_plot(gw_level_dv,
                NULL,

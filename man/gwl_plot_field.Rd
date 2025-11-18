@@ -9,9 +9,9 @@ gwl_plot_field(
   gwl_data,
   plot_title = "",
   parameter_cd = NA,
-  date_col = "lev_dt",
-  value_col = NA,
-  approved_col = "lev_age_cd",
+  date_col = "time",
+  value_col = "value",
+  approved_col = "approval_status",
   flip = TRUE,
   y_label = "",
   subtitle = "U.S. Geological Survey"
@@ -21,10 +21,9 @@ gwl_plot_all(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = c("time", "lev_dt"),
-  value_col = "value",
-  approved_col = c("approval_status", "lev_age_cd"),
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   y_label = "",
   subtitle = "U.S. Geological Survey",
   plot_title = "",
@@ -76,9 +75,6 @@ Default is \code{TRUE}.}
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
 from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
-can be used to help define the value_col.}
-
 \item{add_trend}{logical. Uses \code{trend_test}.}
 
 \item{n_years}{integer. This is the number of years to calculate the trend on.
@@ -95,61 +91,67 @@ Function to create the field groundwater level data plot.
 }
 \examples{
 
-# site <- "263819081585801"
-# gwl_data <- dataRetrieval::readNWISgwl(site)
+site <- "USGS-263819081585801"
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 
-# Using package example data:
-gwl_data <- L2701_example_data$Discrete
-plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+plot_title <- site_info$monitoring_location_name
+pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(gwl_data$parameter_code))
+
 gwl_plot_field(gwl_data, 
                plot_title = plot_title, 
                parameter_cd = "62610",
                flip = FALSE,
-               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+               y_label = pcodes$parameter_name[pcodes$parameter_code == "62610"])
+               
 gwl_plot_field(gwl_data, 
                plot_title = plot_title,
-               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62611"], 
+               y_label = pcodes$parameter_name[pcodes$parameter_code == "62611"], 
                parameter_cd = "62611",
                flip = FALSE)
+               
 gwl_plot_field(gwl_data,  
                plot_title = plot_title,
-               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "72019"], 
+               y_label = pcodes$parameter_name[pcodes$parameter_code == "72019"], 
                parameter_cd = "72019",
                flip = TRUE)
-# site <- "USGS-263819081585801"
-# p_code_dv <- "62610"
-# statCd <- "00001"
-# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#                                                    parameter_code = p_code_dv,
-#                                                    statistic_id = statCd,
-#                                                    skipGeometry = TRUE)
-gw_level_dv <- L2701_example_data$Daily
-gwl_data <- L2701_example_data$Discrete
-plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+               
+site <- "USGS-263819081585801"
+p_code_dv <- "62610"
+statCd <- "00001"
+gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+                                                   parameter_code = p_code_dv,
+                                                   statistic_id = statCd,
+                                                   skipGeometry = TRUE)
+
+site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
+
+plot_title <- site_info$monitoring_location_name
+pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = p_code_dv)
 
 gwl_plot_all(gw_level_dv, 
              NULL, 
              plot_title = plot_title,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             y_label = pcodes$parameter_name,
              flip = TRUE) 
+
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+                                 skipGeometry = TRUE)
 
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
              parameter_cd = "62610",
              plot_title = plot_title,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
-             add_trend = TRUE,
+             y_label = pcodes$parameter_name,
+             add_trend = FALSE,
              flip = FALSE)
-             
-             
+
 gwl_plot_all(gw_level_dv,
              gwl_data,
              parameter_cd = "62610",
-             n_years = c(5, 10, 20),
+             n_years = c(5, 20),
              POR_trend = TRUE,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             y_label = pcodes$parameter_name,
              plot_title = plot_title,
              add_trend = TRUE)
              
@@ -157,13 +159,13 @@ gwl_plot_all(NULL,
              gwl_data, 
              parameter_cd = "62610",
              plot_title = plot_title, 
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+             y_label = pcodes$parameter_name)
 
 gwl_plot_all(NULL, 
              gwl_data, 
              parameter_cd = "62610",
              plot_title = plot_title,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             y_label = pcodes$parameter_name,
              add_trend = TRUE)
 
 }

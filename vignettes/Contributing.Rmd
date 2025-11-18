@@ -59,7 +59,7 @@ The first step to collaborating via code.usgs.gov is to log in. For USGS/DOI emp
 knitr::include_graphics("login.png")
 ```
 
-Next, you'll need to set up a Personal Access Token. Go to [https://code.usgs.gov/-/profile/personal_access_tokens](https://code.usgs.gov/-/profile/personal_access_tokens) and create a new token selecting the api scope:
+Next, you'll need to set up a Personal Access Token. Go to [https://code.usgs.gov/-/user_settings/personal_access_tokens](https://code.usgs.gov/-/user_settings/personal_access_tokens) and create a new token selecting the api scope:
 
 ```{r echo=FALSE, out.width="60%"}
 knitr::include_graphics("pat.png")
