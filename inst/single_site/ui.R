@@ -12,7 +12,7 @@ header <- dashboardHeader(title = "HASP")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    textInput("siteID", label = "USGS Site ID", value = "253029080295601"),
+    textInput("siteID", label = "USGS Site ID", value = "USGS-253029080295601"),
     actionButton("get_data_avail", label = "Check Data Options"),
     actionButton("clear_data", label = "Clear Data"),
     radioButtons("flip_plot", label = "Flip y-axis", choices = c(TRUE,FALSE), selected = FALSE, inline = TRUE),
@@ -26,13 +26,6 @@ sidebar <- dashboardSidebar(
                           label = "Daily stat code")            
     ),
     actionButton("get_data_dv", label = "Get Daily Data"),
-    menuItem("Field GWL Options", icon = icon("th"), tabName = "periodicDat",
-             radioButtons("gwl_vals",
-                          choices = c("sl_lev_va", "lev_va"), 
-                          selected = "sl_lev_va", 
-                          label = "Data Column")
-             
-    ),
     actionButton("get_data_ground", label = "Get Field GWL Data"),
     menuItem("QW Options", icon = icon("th"), tabName = "wDat",
              radioButtons("pcode_plot", label = "QW Names",

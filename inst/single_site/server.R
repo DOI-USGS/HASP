@@ -103,14 +103,14 @@ stat_cd <- "00001"')
 library(dataRetrieval)
 
 site_id <- "', site_id ,'"
-p_code_dv_all <- c("', paste(rawData_data$p_code_dv$parameter_cd, collapse = '", "') ,'")
+p_code_dv_all <- c("', paste(rawData_data$p_code_dv$parameter_code, collapse = '", "') ,'")
 p_code_dv <- "', p_code, '"
 stat_cd <- "00001"
 
-gw_level_dv <- readNWISdv(siteNumbers = site_id,
-                          parameterCd = p_code_dv_all,
-                          statCd = "', stat_cd, '")
-gwl_data <- readNWISgwl(siteNumbers = site_id)
+gw_level_dv <- read_waterdata_daily(monitoring_location_id = site_id,
+                                    parameter_code = p_code_dv_all,
+                                    statistic_id = "', stat_cd, '")
+gwl_data <- read_waterdata_field_measurements(monitoring_location_id = site_id)
 
 plot_title <- paste(attr(gwl_data, "siteInfo")[["station_nm"]],
                     site_id, sep = "\\\\n")

@@ -28,12 +28,12 @@ will create a Rmd file. The file can be "knit" as-is, or adjusted before renderi
 
 
 \dontrun{
-create_groundwater_report("424520070562401",
+create_groundwater_report("USGS-253029080295601",
                           report_name = "example_report",
                           report_folder = "reports",
                           output_type = "word")
                           
-create_groundwater_report("424520070562401",
+create_groundwater_report("USGS-424520070562401",
                           report_name = "example_report",
                           report_folder = "reports",
                           output_type = "html")

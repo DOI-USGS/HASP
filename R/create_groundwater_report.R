@@ -13,12 +13,12 @@
 #' 
 #' 
 #' \dontrun{
-#' create_groundwater_report("424520070562401",
+#' create_groundwater_report("USGS-253029080295601",
 #'                           report_name = "example_report",
 #'                           report_folder = "reports",
 #'                           output_type = "word")
 #'                           
-#' create_groundwater_report("424520070562401",
+#' create_groundwater_report("USGS-253029080295601",
 #'                           report_name = "example_report",
 #'                           report_folder = "reports",
 #'                           output_type = "html")

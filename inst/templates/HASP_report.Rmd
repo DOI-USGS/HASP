@@ -32,16 +32,34 @@ type <- "{{{ output_type }}}"
 
 site_metadata <- site_summary(siteID, markdown = type == "html")
 
-pcodes <- dataRetrieval::whatNWISdata(siteNumber = siteID,
-                                      service = c("gw", "dv")) 
-  
 ```
 
 
 
 ```{r whatData}
 data_info <- data_available(siteID)
-kable(data_info)
+
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID, skipGeometry = TRUE)
+
+inventory <- gwl_data |> 
+  group_by(parameter_code) |> 
+  summarise(`Begin Date` = min(time),
+            `End Date` = max(time)) |> 
+  ungroup() |> 
+  mutate(`Data Type` = "Field") 
+
+pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(inventory$parameter_code))
+
+inventory <- inventory |> 
+  left_join(select(pcodes, parameter_code, parameter_name),
+            by = "parameter_code")
+  
+data_inventory <- data_info |> 
+  select(-time_series_id) |> 
+  bind_rows(inventory)
+  
+
+kable(data_inventory)
 ```
 
 
@@ -49,43 +67,28 @@ kable(data_info)
 library(dataRetrieval)
 
 # Figure out what data to retrieve
-available_pcodes <- unique(pcodes$parm_cd[pcodes$data_type_cd == "dv"])
-available_statCds <- unique(pcodes$stat_cd[pcodes$data_type_cd == "dv"])
+available_pcodes <- unique(data_info$parameter_code[data_info$`Data Type` == "Daily"])
+available_statCds <- unique(data_info$statistic_id[data_info$`Data Type` == "Daily"])
 
-# Use the parameter with the highest count
-# This can be changed and then r
-parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
-                                      max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "dv")])
+pCode_info <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = available_pcodes)
+parameterCd <- pCode_info$parameter_code[1]
 
-statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
-                                      max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "dv")][1]
-
-if(length(parameterCd) == 0){
-  parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
-                                      max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "gw")])[1]
-}
-
-pCode_info <- dataRetrieval::readNWISpCode(parameterCd)
-yaxis <- pCode_info$parameter_nm
+yaxis <- pCode_info$parameter_name[1]
 
 flip <- parameterCd == "72019"
 
 # Daily data:
-if(any(pcodes$data_type_cd == "dv")){
+if(nrow(pCode_info) > 0){
   gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = siteID,
                                                      parameter_code = available_pcodes,
-                                                     statistic_id = available_statCds)
+                                                     statistic_id = available_statCds, skipGeometry = TRUE)
 } else {
   gw_level_dv <-  L2701_example_data$Daily
   gw_level_dv <- gw_level_dv[-1:-nrow(gw_level_dv),]
 }
+
 # Field GWL measured:
-if(any(pcodes$data_type_cd == "gw")){
-  gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID)
-} else {
+if(nrow(gwl_data) == 0){
   gwl_data <-  L2701_example_data$Discrete
   gwl_data <- gwl_data[-1:-nrow(gwl_data),]
 }
@@ -309,7 +312,6 @@ Summary statistics for manual water level measurements
 ```{r manualTable}
 
 quantiles <- gwl_data |> 
-  rename(value = sl_lev_va) |> 
   site_data_summary() 
 
 q_out <- knitr::kable(t(quantiles), digits = 1)
