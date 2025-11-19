@@ -1142,27 +1142,23 @@ daily_frequency_table <- function(gw_level_dv,
 #'
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained
 #' from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+#' @param gwl_data data frame returned from \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
 #' data frame with a date, value, and approval columns. 
 #' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
+#' @param parameter_cd Can be used to filter data if the data frame has a 
+#' "parameter_code" column. The default is \code{NA},
+#' which will not do any filtering.
+#' @param date_col the name of the time columns. The first value is associated
+#' with the gw_level_dv input, and the second value is associated with the gwl_data
+#' input. The default is \code{c("time", "time")}.
+#' @param value_col the name of the value columns. The first value is associated
+#' with the gw_level_dv input, and the second value is associated with the gwl_data
+#' input. The default is \code{c("value", "value")}.
+#' @param approved_col the name of the column to get provisional/approved status. 
+#' The first value is associated
+#' with the gw_level_dv input, and the second value is associated with the gwl_data
+#' input. The default is \code{c("approval_status", "approval_status")}.
+#' It is expected that these columns will have only "Approved" or "Provisional".
 #' @return a summary table giving the period of record, completeness
 #' and percentile values
 #'
