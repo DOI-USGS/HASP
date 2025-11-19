@@ -16,7 +16,7 @@ col_stuff <- reactive({
   includes_dv <- !is.null(dv_data)
   includes_both <- includes_gwl & includes_dv
   
-  y_label <- dataRetrieval::readNWISpCode(input$pcode)$parameter_nm
+  y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = input$parameter_code)$parameter_name
   
   date_col = c("time", "time")
   value_col = c("value", "value")
@@ -141,7 +141,7 @@ week_plot <- reactive({
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
   
-  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = input$parameter_code)$parameter_name
   
     week_plot <-  weekly_frequency_plot(dv_data, 
                                         gwl_data,
@@ -229,7 +229,7 @@ year2_plot <- reactive({
 
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
-  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = input$parameter_code)$parameter_name
   year2_graph <-  daily_gwl_plot(dvData(), 
                                  gwlData(),
                                  parameter_cd = p_code_dv,
@@ -314,7 +314,7 @@ month_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
-  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = input$parameter_code)$parameter_name
   
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         gwlData(),

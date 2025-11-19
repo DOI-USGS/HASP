@@ -114,14 +114,14 @@ observeEvent(input$get_data_dv, {
                             editorId = "get_data_code", 
                             value = setup() )
   
-  if(!any(grepl("Daily Data", rawData_data$available_data$`Data Type`))) {
+  if(!any(grepl("Daily", rawData_data$available_data$`Data Type`))) {
     showNotification("This site doesn't have any daily data available",
                      type = "error")
     rawData_data$daily_data <- NULL
   } else {
     showNotification("Loading Daily Groundwater Data", 
                      duration = NULL, id = "load")
-    
+
     rawData_data$daily_data <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site_id, 
                                                                    parameter_code = pcodes_dv$parameter_code, 
                                                                    statistic_id = unique(pcodes_dv$statistic_id), 
@@ -142,7 +142,7 @@ observeEvent(input$get_data_ground, {
   
   site_info <- site_summary(site_id)
 
-  if(!any(grepl("GW", site_info$site_tp_cd))){
+  if(!any(grepl("GW", site_info$site_type_code))){
     showNotification("The site is not identified as a groundwater site.", 
                      type = "error")
   }
