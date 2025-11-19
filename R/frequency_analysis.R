@@ -52,7 +52,8 @@
 #' monthly_frequency <- monthly_frequency_table(gw_level_dv,
 #'                                              NULL)
 #' head(monthly_frequency)
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#'                skipGeometry = TRUE)
 #'
 #' monthly_frequency_combo <- monthly_frequency_table(gw_level_dv = gw_level_dv,
 #'                                              gwl_data = gwl_data,
@@ -690,7 +691,10 @@ weekly_frequency_table <- function(gw_level_dv,
 #' @examples
 #'
 #' site <- "USGS-263819081585801"
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+#' p_code_dv <- "62610"
+#' statCd <- "00001"
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#'                 skipGeometry = TRUE)
 #' site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 #' 
 #' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
@@ -993,7 +997,8 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'                                                    statistic_id = statCd,
 #'                                                    skipGeometry = TRUE)
 #'
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#'             skipGeometry = TRUE)
 #'
 #' daily_gwl_plot(gw_level_dv,
 #'                NULL,

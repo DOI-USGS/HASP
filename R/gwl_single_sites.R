@@ -38,7 +38,8 @@
 #' @examples
 #' 
 #' site <- "USGS-263819081585801"
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#'           skipGeometry = TRUE)
 #' site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 #' 
 #' plot_title <- site_info$monitoring_location_name
@@ -90,7 +91,8 @@ gwl_plot_field <- function(gwl_data,
 
 #' @rdname gwl_plot_field
 #' @export
-#' @param y_label character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.
+#' @param y_label character for y-axis label. Consider using 
+#' \code{\link[dataRetrieval]{read_waterdata_parameter_codes}} for USGS parameter_name.
 #' @param add_trend logical. Uses \code{trend_test}.
 #' @param days_required_per_month integer. Number of days required per month. 
 #' Default is 14. Only used if add_trend is \code{TRUE} using daily data.

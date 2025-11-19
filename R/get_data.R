@@ -295,7 +295,7 @@ data_available <- function(siteID){
                 end = max(end_date, na.rm = TRUE),
                 count = max(count_nu, na.rm = TRUE)) %>% 
       dplyr::ungroup() %>% 
-      dplyr::mutate(`Data Type` = dataRetrieval::readNWISpCode(parm_cd)[["parameter_nm"]]) %>% 
+      dplyr::mutate(`Data Type` = dataRetrieval::read_waterdata_parameter_codes(parameter_code = parm_cd)[["parameter_name"]]) %>% 
       dplyr::select(-parm_cd)
     
     data_info_clean$`Data Type`[data_info_clean$data_type_cd == "dv"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=', siteID, '">Daily Data</a>')

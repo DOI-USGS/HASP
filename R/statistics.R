@@ -42,7 +42,8 @@
 #' statCd <- "00001"
 #' 
 #' # Using package example data:
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#'                 skipGeometry = TRUE)
 #'                         
 #' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
 #'                                                    parameter_code = p_code_dv,
@@ -414,6 +415,7 @@ decimalDate <- function(rawData){
   startYear <- as.POSIXct(paste0(year,"-01-01 00:00"))
   endYear <- as.POSIXct(paste0(year+1,"-01-01 00:00"))
   
-  DecYear <- year + as.numeric(difftime(dateTime, startYear, units = "secs"))/as.numeric(difftime(endYear, startYear, units = "secs"))
+  DecYear <- year + as.numeric(difftime(dateTime, startYear, units = "secs")) / 
+    as.numeric(difftime(endYear, startYear, units = "secs"))
   return(DecYear)
 }

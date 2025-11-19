@@ -93,7 +93,8 @@ gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site
                                                    statistic_id = statCd,
                                                    skipGeometry = TRUE)
 
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+            skipGeometry = TRUE)
 
 daily_gwl_plot(gw_level_dv,
                NULL,

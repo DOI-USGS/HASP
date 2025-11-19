@@ -210,10 +210,10 @@ qw_summary <- function(qw_data, CharacteristicName,
     stop("data frame qw_data doesn't include all mandatory columns")
   }
 
-  unit_meas <- unique(qw_data$ResultMeasure.MeasureUnitCode)[1]
-
   qw_sub <- qw_data[qw_data$CharacteristicName %in% CharacteristicName, ]
   qw_sub <- qw_sub[order(qw_sub$ActivityStartDateTime) , ]
+  
+  unit_meas <- unique(qw_sub$ResultMeasure.MeasureUnitCode)[1]
 
   qw_info <- data.frame(
         first_sample = min(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),

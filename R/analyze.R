@@ -254,8 +254,6 @@ composite_data <- function(x, num_years, parameter_cd){
 #'
 #' Create normalized composite data
 #' 
-#' Information can be found here: \url{https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html}
-#' 
 #' @param x aquifer data
 #' @param num_years integer number of years required
 #' @param parameter_cd character, 5-digit parameter code, default is "72019".
@@ -333,7 +331,8 @@ water_year <- function(x){
     x[grep("^(\\d{4}-\\d{2}$)", x)] <- paste0(x[grep("^(\\d{4}-\\d{2}$)", x)],"-01")
     
     if(length(grep("^(\\d{4}$)", x)) > 0){
-      message("Calendar year being reported as water year in row(s) ", paste(grep("^(\\d{4}$)", x), collapse = ", "))
+      message("Calendar year being reported as water year in row(s) ", 
+              paste(grep("^(\\d{4}$)", x), collapse = ", "))
       # this one is less legit...maybe USGS only reports in water years?
       x[grep("^(\\d{4}$)", x)] <- paste0(x[grep("^(\\d{4}$)", x)],"-01-01")
     }

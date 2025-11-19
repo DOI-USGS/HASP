@@ -79,7 +79,10 @@ Daily, discrete, or both types of data can be used.
 \examples{
 
 site <- "USGS-263819081585801"
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+p_code_dv <- "62610"
+statCd <- "00001"
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+                skipGeometry = TRUE)
 site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 
 gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,

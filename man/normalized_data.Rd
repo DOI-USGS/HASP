@@ -19,9 +19,6 @@ data frame with year, name, and value
 \description{
 Create normalized composite data
 }
-\details{
-Information can be found here: \url{https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html}
-}
 \examples{
 aquifer_data <- aquifer_data
 num_years <- 30

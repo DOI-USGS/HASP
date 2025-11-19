@@ -68,7 +68,8 @@ input defines the approval column for gw_level_dv, and the second defines gwl_da
 \item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
 Default is \code{TRUE}.}
 
-\item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
+\item{y_label}{character for y-axis label. Consider using 
+\code{\link[dataRetrieval]{read_waterdata_parameter_codes}} for USGS parameter_name.}
 
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
@@ -92,7 +93,8 @@ Function to create the field groundwater level data plot.
 \examples{
 
 site <- "USGS-263819081585801"
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+          skipGeometry = TRUE)
 site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 
 plot_title <- site_info$monitoring_location_name

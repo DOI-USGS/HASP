@@ -71,7 +71,8 @@ gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site
 monthly_frequency <- monthly_frequency_table(gw_level_dv,
                                              NULL)
 head(monthly_frequency)
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+               skipGeometry = TRUE)
 
 monthly_frequency_combo <- monthly_frequency_table(gw_level_dv = gw_level_dv,
                                              gwl_data = gwl_data,
