@@ -6,16 +6,7 @@
 #' For data that is at least on a daily interval, the \link[rkt]{rkt} function
 #' is used. For periodic data, the \link[EnvStats]{kendallTrendTest} is used.
 #' 
-#' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param approved_col name of column to get provisional/approved status.
+#' @inheritParams monthly_frequency_table
 #' @param days_required_per_month integer. Number of days required per month
 #' to include in the trend test. Default is 14. 
 #' @param n_years integer. This is the number of years to calculate the trend on.
@@ -26,10 +17,6 @@
 #' total record, a trend will not be calculated.
 #' @param POR_trend a logical indicating whether to include a trend test
 #' for the full period of record. Default is \code{TRUE}.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
 #' @importFrom stats as.formula
 #' @return a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
 #' 

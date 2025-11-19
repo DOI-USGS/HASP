@@ -18,10 +18,8 @@ weekly_frequency_table(
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
 from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
-\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-data frame with a date, value, and approval columns. Using the convention:
-lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-or sl_lev_va (representing value) will allow defaults to work.
+\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+data frame with a date, value, and approval columns. 
 Use \code{NULL} for no discrete data.}
 
 \item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd
