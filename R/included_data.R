@@ -96,18 +96,18 @@ NULL
 NULL
 
 # library(dataRetrieval)
-# site <- "263819081585801"
+# site <- "USGS-263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
-# qw_data <- dataRetrieval::readWQPqw(paste0("USGS-", site),
-#                                     parameterCd)
-# gwl_data <- dataRetrieval::readNWISgwl(site)
+# qw_data <- dataRetrieval::readWQPqw(site, parameterCd)
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
 # parameterCd <- "62610"
 # statCd <- "00001"
-# dv <- dataRetrieval::readNWISdv(site,
-#                                 parameterCd,
-#                                 statCd = statCd)
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = parameterCd,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
 # 
-# L2701_example_data <- list("Daily" = dv,
+# L2701_example_data <- list("Daily" = gw_level_dv,
 #                            "Discrete" = gwl_data,
 #                            "QW" = qw_data)
 # save(L2701_example_data, file = "data/L2701_example_data.RData")

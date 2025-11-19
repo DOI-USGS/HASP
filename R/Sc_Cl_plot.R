@@ -12,13 +12,14 @@
 #' @import ggplot2
 #' @examples 
 #' 
-#' # site <- "263819081585801"
+#' # site <- "USGS-263819081585801"
 #' # parameterCd <- c("00095","90095","00940","99220")
 #' # site_data <- dataRetrieval::readWQPqw(site, 
 #' #                                        parameterCd)
 #' # Using package example data:
 #' qw_data <- L2701_example_data$QW
-#' plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+#' plot_title <- paste("USGS-263819081585801",
+#'  ": Specific Conductance vs Chloride")
 #' Sc_Cl_plot(qw_data, plot_title)
 Sc_Cl_plot <- function(qw_data, 
                        plot_title,
@@ -27,8 +28,8 @@ Sc_Cl_plot <- function(qw_data,
 
   # Specify the plot titles using the function getParmCodeDef
   
-  Cltitle <- trimmed_name(dataRetrieval::readNWISpCode("99220")[["parameter_nm"]])
-  Sctitle <- trimmed_name(dataRetrieval::readNWISpCode("90095")[["parameter_nm"]])
+  Cltitle <- trimmed_name(dataRetrieval::read_waterdata_parameter_codes(parameter_code = "99220")[["parameter_name"]])
+  Sctitle <- trimmed_name(dataRetrieval::read_waterdata_parameter_codes(parameter_code = "90095")[["parameter_name"]])
   
   Plotdata <- Sc_Cl_table(qw_data)
   
@@ -98,7 +99,8 @@ Sc_Cl_table <- function(qw_data){
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @export
 #' @examples
-#' plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
+#' plot_title <- paste("USGS-263819081585801",
+#'  ": Specific Conductance vs Chloride")
 #' qw_plot(qw_data, plot_title, CharacteristicName = "Chloride")
 #' qw_plot(qw_data, plot_title, CharacteristicName = "Specific conductance")
 #' qw_plot(qw_data,
@@ -203,19 +205,12 @@ qw_plot <- function(qw_data, plot_title,
 qw_summary <- function(qw_data, CharacteristicName, 
                        norm_range = NA){
 
-  if(!all(c("ActivityStartDateTime", "ResultMeasureValue", "CharacteristicName") %in% names(qw_data))){
+  if(!all(c("ActivityStartDateTime", "ResultMeasureValue", 
+            "CharacteristicName", "ResultMeasure.MeasureUnitCode") %in% names(qw_data))){
     stop("data frame qw_data doesn't include all mandatory columns")
   }
 
-  p_code_info <- attr(qw_data, "variableInfo")
-  
-  if(is.null(p_code_info)){
-    p_code_info <- ""
-  } else {
-    p_code_info <- p_code_info[p_code_info$characteristicName %in% CharacteristicName,]
-  }
-
-  unit_meas <- p_code_info$parameter_units[1]
+  unit_meas <- unique(qw_data$ResultMeasure.MeasureUnitCode)[1]
 
   qw_sub <- qw_data[qw_data$CharacteristicName %in% CharacteristicName, ]
   qw_sub <- qw_sub[order(qw_sub$ActivityStartDateTime) , ]

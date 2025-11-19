@@ -65,7 +65,9 @@ is used. For periodic data, the \link[EnvStats]{kendallTrendTest} is used.
 }
 \examples{
 
-site <- "263819081585801"
+site <- "USGS-263819081585801"
+p_code_dv <- "62610"
+statCd <- "00001"
 
 # Using package example data:
 gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, skipGeometry = TRUE)
