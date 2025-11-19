@@ -27,7 +27,7 @@ start_date <- "1989-12-31"
 aquiferCd <- "S100CSLLWD"
 
 \donttest{
-st_data <- get_state_data("WI", aquiferCd,
-                          start_date, end_date)
+# st_data <- get_state_data("WI", aquiferCd,
+#                           start_date, end_date)
 }
 }

@@ -70,13 +70,17 @@ p_code_dv <- "62610"
 statCd <- "00001"
 
 # Using package example data:
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-                skipGeometry = TRUE)
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
+gwl_data <- L2701_example_data$Discrete
                         
-gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-                                                   parameter_code = p_code_dv,
-                                                   statistic_id = statCd,
-                                                   skipGeometry = TRUE)
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
+gw_level_dv <- L2701_example_data$Daily
 
 trend_test(gw_level_dv,
            gwl_data,

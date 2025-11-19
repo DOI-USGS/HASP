@@ -1,7 +1,7 @@
 Package: HASP
 Type: Package
 Title: Hydrologic AnalySis Package
-Version: 1.0.4
+Version: 1.0.4.9000
 Authors@R: c(person("Laura", "DeCicco", 
                      role = c("aut", "cre"),
                      email = "ldecicco@usgs.gov",
@@ -30,9 +30,9 @@ Copyright: This software is in the public domain because it contains materials
     official USGS copyright policy at
     https://www.usgs.gov/visual-id/credit_usgs.html#copyright
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
-    dataRetrieval,
+    dataRetrieval (>= 2.7.21),
     dplyr,
     tidyr,
     ggplot2,
@@ -44,7 +44,6 @@ Imports:
     whisker,
     xfun,
     usethis,
-    magrittr,
     EnvStats
 Suggests:
     testthat,

@@ -74,11 +74,11 @@ Sc_Cl_table <- function(qw_data){
   }
   
   
-  Plotdata <- qw_data %>% 
+  Plotdata <- qw_data |> 
     dplyr::select(Date = ActivityStartDateTime, 
            CharacteristicName, 
-           ResultMeasureValue) %>% 
-    dplyr::filter(!is.na(ResultMeasureValue)) %>%
+           ResultMeasureValue) |> 
+    dplyr::filter(!is.na(ResultMeasureValue)) |>
     tidyr::pivot_wider(names_from = CharacteristicName, 
                 values_from = ResultMeasureValue,
                 values_fn = list(ResultMeasureValue = mean_no_na)) 
@@ -125,8 +125,8 @@ qw_plot <- function(qw_data, plot_title,
     stop("data frame qw_data doesn't include all mandatory columns")
   }
 
-  qw_data <- qw_data %>% 
-    dplyr::filter(CharacteristicName %in% !!CharacteristicName)  %>% 
+  qw_data <- qw_data |> 
+    dplyr::filter(CharacteristicName %in% !!CharacteristicName)  |> 
     dplyr::mutate(year = as.numeric(format(as.Date(ActivityStartDate), "%Y")) + 
                     as.numeric(format(as.Date(ActivityStartDate), "%j"))/365)
   
@@ -220,7 +220,7 @@ qw_summary <- function(qw_data, CharacteristicName,
         first_sample_result = qw_sub$ResultMeasureValue[1],
         last_sample = max(as.Date(qw_sub$ActivityStartDateTime), na.rm = TRUE),
         last_sample_result = qw_sub$ResultMeasureValue[nrow(qw_sub)]
-      ) %>%  
+      ) |>  
     dplyr::bind_cols(site_data_summary(qw_sub, 
                                        site_col = "MonitoringLocationIdentifier",
                                        value_col = "ResultMeasureValue"))

@@ -42,13 +42,17 @@
 #' statCd <- "00001"
 #' 
 #' # Using package example data:
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#'                 skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
 #'                         
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
 #' 
 #' trend_test(gw_level_dv,
 #'            gwl_data,
@@ -98,14 +102,14 @@ trend_test <- function(gw_level_dv,
   only_periodic <- nrow(gw_level_dv) == 0
   
   gwl <- dplyr::bind_rows(gw_level_dv,
-                          gwl_data) %>%
+                          gwl_data) |>
     dplyr::mutate(year = as.numeric(format(Date, "%Y")),
                   month = as.numeric(format(Date, "%m")),
-                  doy = as.numeric(format(Date, "%j"))) %>%
-    dplyr::group_by(year, month) %>%
+                  doy = as.numeric(format(Date, "%j"))) |>
+    dplyr::group_by(year, month) |>
     dplyr::summarize(monthlyMean = mean(Value, na.rm = TRUE),
-                     ndays = length(doy)) %>% 
-    dplyr::ungroup() %>%
+                     ndays = length(doy)) |> 
+    dplyr::ungroup() |>
     dplyr::mutate(midMonth = as.Date(sprintf("%s-%s-15", year, month)),
                   decYear = decimalDate(midMonth),
                   gap = decYear - dplyr::lag(decYear) >= 1000)  #this gets rid of nonsense first value
@@ -169,7 +173,7 @@ trend_test <- function(gw_level_dv,
         
       } else {
         
-        last_n <- last_n %>% 
+        last_n <- last_n |> 
           dplyr::filter(ndays > !!days_required_per_month)
         
         # Perform the seasonal Kendall Trend Test on the ten-year data set using 
@@ -343,13 +347,13 @@ monthly_mean <- function(x,
   x$result <- x[[value_col]]
   x$date <- x[[date_col]]
   
-  monthly_mean <- x %>% 
+  monthly_mean <- x |> 
     dplyr::mutate(month = as.numeric(format(date, "%m")),
-           year = as.numeric(format(date, "%Y"))) %>% 
-    dplyr::group_by(year, month) %>% 
+           year = as.numeric(format(date, "%Y"))) |> 
+    dplyr::group_by(year, month) |> 
     dplyr::summarize(mean_va = mean(result, na.rm = TRUE), # should user get to pick median?
-              n_days = dplyr::n()) %>% 
-    dplyr::ungroup() %>% 
+              n_days = dplyr::n()) |> 
+    dplyr::ungroup() |> 
     dplyr::mutate(mid_date = as.Date(paste(year, month, 15, sep = "-")))
     
   return(monthly_mean)
@@ -365,7 +369,7 @@ enough_data <- function(x,
   if(por){
     monthlyMeansLast_n <- x
   } else {
-    monthlyMeansLast_n <- x %>%
+    monthlyMeansLast_n <- x |>
       dplyr::filter(year >= n_years)
   }
   

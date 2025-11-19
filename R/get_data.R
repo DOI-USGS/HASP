@@ -16,7 +16,7 @@
 #'
 #' aquiferCd <- "S100CSLLWD"
 #' \donttest{
-#' aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+#' # aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
 #' }
 get_aquifer_data <- function(aquiferCd, startDate, endDate, 
                              parameter_cd = "72019"){
@@ -47,7 +47,7 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
     if(!all(is.na(state_data$site_no))){
       state_data_sites <- attr(state_data, "siteInfo")
       
-      state_data_sites <- state_data_sites %>% 
+      state_data_sites <- state_data_sites |> 
         dplyr::select(station_nm, site_no, dec_lat_va, dec_long_va)
       
       aquifer_data <- dplyr::bind_rows(aquifer_data, state_data)
@@ -81,8 +81,8 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 #' aquiferCd <- "S100CSLLWD"
 #'
 #' \donttest{
-#' st_data <- get_state_data("WI", aquiferCd,
-#'                           start_date, end_date)
+#' # st_data <- get_state_data("WI", aquiferCd,
+#' #                           start_date, end_date)
 #' }
 get_state_data <- function(state, aquiferCd, 
                            startDate, endDate, 
@@ -113,15 +113,15 @@ get_state_data <- function(state, aquiferCd,
 
   if(nrow(levels) > 0){
 
-    state_data <- levels %>% 
-      dplyr::filter(lev_age_cd == "A") %>% 
-      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) %>%
+    state_data <- levels |> 
+      dplyr::filter(lev_age_cd == "A") |> 
+      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) |>
       dplyr::mutate(value = dplyr::case_when(is.na(lev_va) ~ sl_lev_va,
                                              TRUE ~ lev_va),
                     state_call = state,
                     year = as.integer(format(as.Date(lev_dt), "%Y")),
                     water_year = water_year(lev_dt),
-                    lev_dt = as.Date(lev_dt)) %>%
+                    lev_dt = as.Date(lev_dt)) |>
       dplyr::select(-lev_va, -sl_lev_va)
     
   } else {
@@ -130,7 +130,7 @@ get_state_data <- function(state, aquiferCd,
   
   if(nrow(levels_dv) > 0){
 
-    state_dv <- levels_dv %>% 
+    state_dv <- levels_dv |> 
       dplyr::mutate(year = as.numeric(format(dateTime, "%Y")),
                     water_year = water_year(dateTime),
                     dateTime = as.character(as.Date(dateTime)),
@@ -143,17 +143,17 @@ get_state_data <- function(state, aquiferCd,
                               "state_call", "lev_dt"))
     names(state_dv)[cds] <- sprintf("%s_value", names(state_dv)[cds])
     
-    state_dv <- state_dv %>%
+    state_dv <- state_dv |>
       tidyr::pivot_longer(cols = c(-agency_cd, -site_no, -water_year,
                                    -dateTime, -tz_cd, -year,
                                    -state_call, -lev_dt), 
                    names_to = c("pcode", ".value"),
-                   names_pattern = "(.+)_(.+)") %>%
+                   names_pattern = "(.+)_(.+)") |>
       dplyr::mutate(pcode = gsub("X_", "", pcode),
-                    pcode = substr(pcode, 1, 5)) %>%
+                    pcode = substr(pcode, 1, 5)) |>
       dplyr::rename(lev_status_cd = cd,
-                    parameter_cd = pcode) %>%
-      dplyr::filter(lev_status_cd == "A") %>%
+                    parameter_cd = pcode) |>
+      dplyr::filter(lev_status_cd == "A") |>
       dplyr::select(-dateTime, -tz_cd, -agency_cd, -lev_status_cd)
       
   } else {
@@ -193,20 +193,20 @@ site_summary <- function(siteID, markdown = FALSE){
   
   end_of_line <- ifelse(markdown, "<br/>", "\n\n")
   
-  nat_aqfrs <- nat_aqfr_state %>% 
-    dplyr::select(dplyr::all_of(c("nat_aqfr_cd", "long_name"))) %>% 
+  nat_aqfrs <- nat_aqfr_state |> 
+    dplyr::select(dplyr::all_of(c("nat_aqfr_cd", "long_name"))) |> 
     dplyr::distinct()
   
   names(nat_aqfrs)[names(nat_aqfrs) == "long_name"] <- "nat_aq"
   
-  site_info_cleaned <- site_info %>% 
+  site_info_cleaned <- site_info |> 
     dplyr::select(dplyr::all_of(c("site_no", "station_nm", "lat_va", "long_va",
            "site_tp_cd", "state_cd", "county_cd", "huc_cd", 
            "nat_aqfr_cd", "aqfr_cd", "land_net_ds", "well_depth_va",
-           "alt_va", "alt_datum_cd"))) %>% 
-    dplyr::left_join(nat_aqfrs, by = "nat_aqfr_cd") %>% 
+           "alt_va", "alt_datum_cd"))) |> 
+    dplyr::left_join(nat_aqfrs, by = "nat_aqfr_cd") |> 
     dplyr::left_join(dplyr::rename(local_aqfr, 
-                     local_aq = Aqfr_Name_prpr), by = "aqfr_cd") %>% 
+                     local_aq = Aqfr_Name_prpr), by = "aqfr_cd") |> 
     dplyr::mutate(state = dataRetrieval::stateCdLookup(state_cd, 
                                  outputType = "fullName"),
            county = dataRetrieval::countyCdLookup(state = state_cd,
@@ -253,18 +253,18 @@ data_available <- function(siteID){
 
   data_info <- dataRetrieval::whatNWISdata(siteNumber = siteID)
   
-  data_info_clean <- data_info %>% 
-    dplyr::group_by(data_type_cd) %>% 
+  data_info_clean <- data_info |> 
+    dplyr::group_by(data_type_cd) |> 
     dplyr::summarise(begin = min(begin_date, na.rm = TRUE),
               end = max(end_date, na.rm = TRUE),
-              count = max(count_nu, na.rm = TRUE)) %>% 
-    dplyr::ungroup() %>% 
+              count = max(count_nu, na.rm = TRUE)) |> 
+    dplyr::ungroup() |> 
     dplyr::mutate(`Data Type` = "")
   
   if("uv" %in% data_info_clean$data_type_cd){
-    uv_codes <- data_info %>% 
-      dplyr::filter(data_type_cd == "uv") %>% 
-      dplyr::group_by(parm_cd) %>% 
+    uv_codes <- data_info |> 
+      dplyr::filter(data_type_cd == "uv") |> 
+      dplyr::group_by(parm_cd) |> 
       dplyr::summarise(begin = min(begin_date, na.rm = TRUE),
                 end = max(end_date, na.rm = TRUE),
                 count = max(count_nu, na.rm = TRUE))
@@ -288,14 +288,14 @@ data_available <- function(siteID){
   
   
   if("dv" %in% data_info_clean$data_type_cd){
-    dv_codes <- data_info %>% 
-      dplyr::filter(data_type_cd == "dv") %>% 
-      dplyr::group_by(parm_cd) %>% 
+    dv_codes <- data_info |> 
+      dplyr::filter(data_type_cd == "dv") |> 
+      dplyr::group_by(parm_cd) |> 
       dplyr::summarise(begin = min(begin_date, na.rm = TRUE),
                 end = max(end_date, na.rm = TRUE),
-                count = max(count_nu, na.rm = TRUE)) %>% 
-      dplyr::ungroup() %>% 
-      dplyr::mutate(`Data Type` = dataRetrieval::read_waterdata_parameter_codes(parameter_code = parm_cd)[["parameter_name"]]) %>% 
+                count = max(count_nu, na.rm = TRUE)) |> 
+      dplyr::ungroup() |> 
+      dplyr::mutate(`Data Type` = dataRetrieval::read_waterdata_parameter_codes(parameter_code = parm_cd)[["parameter_name"]]) |> 
       dplyr::select(-parm_cd)
     
     data_info_clean$`Data Type`[data_info_clean$data_type_cd == "dv"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=', siteID, '">Daily Data</a>')
@@ -310,12 +310,12 @@ data_available <- function(siteID){
       insert_row <- rows_to_dv + 1
       
       if(rows_to_dv == 1){
-        data_info_clean_new <- data_info_clean[1,] %>% 
-          dplyr::bind_rows(dv_codes) %>% 
+        data_info_clean_new <- data_info_clean[1,] |> 
+          dplyr::bind_rows(dv_codes) |> 
           dplyr::bind_rows(data_info_clean[(rows_to_dv + nrow(dv_codes)):nrow(data_info_clean),])        
       } else {
-        data_info_clean_new <- data_info_clean[1:rows_to_dv,] %>% 
-          dplyr::bind_rows(dv_codes) %>% 
+        data_info_clean_new <- data_info_clean[1:rows_to_dv,] |> 
+          dplyr::bind_rows(dv_codes) |> 
           dplyr::bind_rows(data_info_clean[(rows_to_dv + nrow(dv_codes)):nrow(data_info_clean),])
         
         data_info_clean <- data_info_clean_new
@@ -324,7 +324,7 @@ data_available <- function(siteID){
     }
   }
   
-  data_info_clean <- data_info_clean %>% 
+  data_info_clean <- data_info_clean |> 
     dplyr::select(`Data Type`, 
            `Begin Date` = begin, 
            `End Date` = end,

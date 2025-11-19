@@ -95,10 +95,13 @@ or both types of data can be included.
 site <- "USGS-263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-                                                   parameter_code = p_code_dv,
-                                                   statistic_id = statCd,
-                                                   skipGeometry = TRUE)
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
+gw_level_dv <- L2701_example_data$Daily
 
 label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = p_code_dv)$parameter_name
 
@@ -109,8 +112,9 @@ monthly_frequency <- monthly_frequency_plot(gw_level_dv,
                                             flip = FALSE)
 monthly_frequency
 
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site,
-                skipGeometry = TRUE)
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
+gwl_data <- L2701_example_data$Discrete
 
 monthly_frequency_plot(gw_level_dv,
                        gwl_data = gwl_data,
@@ -120,45 +124,46 @@ monthly_frequency_plot(gw_level_dv,
                        flip = FALSE)
 
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-                                                 gwl_data,
-                                                 parameter_cd = "62610",
-                                                 y_axis_label = label,
-                                                 plot_title = "L2701 Groundwater Level",
-                                                 flip = TRUE)
+                                    gwl_data,
+                                    parameter_cd = "62610",
+                                    y_axis_label = label,
+                                    plot_title = "L2701 Groundwater Level",
+                                    flip = TRUE)
 monthly_frequency_flip
 
-monthly_frequency_custom_colors <- monthly_frequency_plot(gw_level_dv,
-                                                 gwl_data,
-                                                 parameter_cd = "62610",
-                                                 y_axis_label = label,
-                                                 plot_title = "L2701 Groundwater Level",
-                                                 flip = TRUE,
-                                                 percentile_colors = c(
+monthly_frequency_custom_colors <- monthly_frequency_plot(
+                                       gw_level_dv,
+                                       gwl_data,
+                                       parameter_cd = "62610",
+                                       y_axis_label = label,
+                                       plot_title = "L2701 Groundwater Level",
+                                       flip = TRUE,
+                                       percentile_colors = c(
                                                      "red",
                                                      "yellow",
                                                      "green",
                                                      "blue",
                                                      "orange"
-                                                 ))
+                                       ))
                                                  
 monthly_frequency_custom_colors
 
 monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
-                                                      gwl_data,
-                                                      parameter_cd = "62610",
-                                                      y_axis_label = label,
-                                                      plot_title = "L2701 Groundwater Level",
-                                                      flip = FALSE,
-                                                      include_edges = TRUE)
+                                      gwl_data,
+                                      parameter_cd = "62610",
+                                      y_axis_label = label,
+                                      plot_title = "L2701 Groundwater Level",
+                                      flip = FALSE,
+                                      include_edges = TRUE)
 monthly_frequency_edge_bins
 
 monthly_frequency_custom_point_sizes <- monthly_frequency_plot(gw_level_dv,
-                                                               gwl_data = gwl_data,
-                                                               parameter_cd = "62610",
-                                                               plot_title = "L2701 Groundwater Level",
-                                                               y_axis_label = label,
-                                                               median_point_size = 0.5,
-                                                               data_point_size = 3)
+                                      gwl_data = gwl_data,
+                                      parameter_cd = "62610",
+                                      plot_title = "L2701 Groundwater Level",
+                                      y_axis_label = label,
+                                      median_point_size = 0.5,
+                                      data_point_size = 3)
 monthly_frequency_custom_point_sizes 
 
 }

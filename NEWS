@@ -1,3 +1,8 @@
+HASP 1.1.0
+===========
+* Convert to new dataRetrieval USGS Waterdata API functions and format.
+* Switched to native R pipe (|>)
+
 HASP 1.0.3
 ===========
 * Fix some color options in monthly plot

@@ -81,14 +81,20 @@ Daily, discrete, or both types of data can be used.
 site <- "USGS-263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-                skipGeometry = TRUE)
+
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
+gwl_data <- L2701_example_data$Discrete
+
 site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 
-gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-                                                   parameter_code = p_code_dv,
-                                                   statistic_id = statCd,
-                                                   skipGeometry = TRUE)
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
+gw_level_dv <- L2701_example_data$Daily
 
 weekly_frequency_plot(gw_level_dv,
                       gwl_data = NULL)

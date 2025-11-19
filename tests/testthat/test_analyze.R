@@ -95,8 +95,8 @@ test_that("Filter sites", {
   
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
-  freq <- aq_data %>%
-    dplyr::group_by(site_no) %>% 
+  freq <- aq_data |> 
+    dplyr::group_by(site_no) |> 
     dplyr::summarise(nYear = length(unique(year))) 
   
   expect_true(all(freq$nYear >= 30))

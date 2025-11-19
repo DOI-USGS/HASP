@@ -63,16 +63,20 @@ Percentiles are calculated using the \code{quantile} function with "type=6".
 site <- "USGS-263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-                                                   parameter_code = p_code_dv,
-                                                   statistic_id = statCd,
-                                                   skipGeometry = TRUE)
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
+gw_level_dv <- L2701_example_data$Daily
 
 monthly_frequency <- monthly_frequency_table(gw_level_dv,
                                              NULL)
 head(monthly_frequency)
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-               skipGeometry = TRUE)
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
+gwl_data <- L2701_example_data$Discrete
 
 monthly_frequency_combo <- monthly_frequency_table(gw_level_dv = gw_level_dv,
                                              gwl_data = gwl_data,

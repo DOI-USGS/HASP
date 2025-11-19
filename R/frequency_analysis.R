@@ -4,8 +4,6 @@
 #' year/month is calculated. Then using that median, monthly stats are calculated.
 #' Percentiles are calculated using the \code{quantile} function with "type=6".
 #'
-#'
-#'
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained
 #' from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.
 #' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
@@ -44,16 +42,20 @@
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
 #' 
 #' monthly_frequency <- monthly_frequency_table(gw_level_dv,
 #'                                              NULL)
 #' head(monthly_frequency)
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#'                skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
 #'
 #' monthly_frequency_combo <- monthly_frequency_table(gw_level_dv = gw_level_dv,
 #'                                              gwl_data = gwl_data,
@@ -120,17 +122,17 @@ stats_by_interval <- function(interval,
 
   gw_level_dv$interval <- gw_level_dv[[interval]]
 
-  annual_stats <- gw_level_dv %>%
-    dplyr::group_by(year, interval) %>%
-    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
-    dplyr::group_by(interval) %>%
+  annual_stats <- gw_level_dv |>
+    dplyr::group_by(year, interval) |>
+    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) |>
+    dplyr::group_by(interval) |>
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
                      maxMed = max(median, na.rm = TRUE))
 
-  stats <- gw_level_dv %>%
-    dplyr::group_by(year, interval) %>%
-    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
-    dplyr::group_by(interval) %>%
+  stats <- gw_level_dv |>
+    dplyr::group_by(year, interval) |>
+    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) |>
+    dplyr::group_by(interval) |>
     dplyr::summarize(p5_1 = quantile(median, probs = 0.05, type = 6, na.rm = TRUE),
                      p10_1 = quantile(median, probs = 0.1, type = 6, na.rm = TRUE),
                      p25_1 = quantile(median, probs = 0.25, type = 6, na.rm = TRUE),
@@ -138,7 +140,7 @@ stats_by_interval <- function(interval,
                      p75_1 = quantile(median, probs = 0.75, type = 6, na.rm = TRUE),
                      p90_1 = quantile(median, probs = 0.9, type = 6, na.rm = TRUE),
                      p95_1 = quantile(median, probs = 0.95, type = 6, na.rm = TRUE),
-                     nYears = length(unique(year))) %>%
+                     nYears = length(unique(year))) |>
     dplyr::left_join(annual_stats, by = "interval")
 
   if (flip) {
@@ -232,10 +234,13 @@ stats_by_interval <- function(interval,
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
 #' 
 #' label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = p_code_dv)$parameter_name
 #' 
@@ -246,8 +251,9 @@ stats_by_interval <- function(interval,
 #'                                             flip = FALSE)
 #' monthly_frequency
 #'
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site,
-#'                 skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
 #'
 #' monthly_frequency_plot(gw_level_dv,
 #'                        gwl_data = gwl_data,
@@ -257,45 +263,46 @@ stats_by_interval <- function(interval,
 #'                        flip = FALSE)
 #'
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-#'                                                  gwl_data,
-#'                                                  parameter_cd = "62610",
-#'                                                  y_axis_label = label,
-#'                                                  plot_title = "L2701 Groundwater Level",
-#'                                                  flip = TRUE)
+#'                                     gwl_data,
+#'                                     parameter_cd = "62610",
+#'                                     y_axis_label = label,
+#'                                     plot_title = "L2701 Groundwater Level",
+#'                                     flip = TRUE)
 #' monthly_frequency_flip
 #'
-#' monthly_frequency_custom_colors <- monthly_frequency_plot(gw_level_dv,
-#'                                                  gwl_data,
-#'                                                  parameter_cd = "62610",
-#'                                                  y_axis_label = label,
-#'                                                  plot_title = "L2701 Groundwater Level",
-#'                                                  flip = TRUE,
-#'                                                  percentile_colors = c(
+#' monthly_frequency_custom_colors <- monthly_frequency_plot(
+#'                                        gw_level_dv,
+#'                                        gwl_data,
+#'                                        parameter_cd = "62610",
+#'                                        y_axis_label = label,
+#'                                        plot_title = "L2701 Groundwater Level",
+#'                                        flip = TRUE,
+#'                                        percentile_colors = c(
 #'                                                      "red",
 #'                                                      "yellow",
 #'                                                      "green",
 #'                                                      "blue",
 #'                                                      "orange"
-#'                                                  ))
+#'                                        ))
 #'                                                  
 #' monthly_frequency_custom_colors
 #' 
 #' monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
-#'                                                       gwl_data,
-#'                                                       parameter_cd = "62610",
-#'                                                       y_axis_label = label,
-#'                                                       plot_title = "L2701 Groundwater Level",
-#'                                                       flip = FALSE,
-#'                                                       include_edges = TRUE)
+#'                                       gwl_data,
+#'                                       parameter_cd = "62610",
+#'                                       y_axis_label = label,
+#'                                       plot_title = "L2701 Groundwater Level",
+#'                                       flip = FALSE,
+#'                                       include_edges = TRUE)
 #' monthly_frequency_edge_bins
 #' 
 #' monthly_frequency_custom_point_sizes <- monthly_frequency_plot(gw_level_dv,
-#'                                                                gwl_data = gwl_data,
-#'                                                                parameter_cd = "62610",
-#'                                                                plot_title = "L2701 Groundwater Level",
-#'                                                                y_axis_label = label,
-#'                                                                median_point_size = 0.5,
-#'                                                                data_point_size = 3)
+#'                                       gwl_data = gwl_data,
+#'                                       parameter_cd = "62610",
+#'                                       plot_title = "L2701 Groundwater Level",
+#'                                       y_axis_label = label,
+#'                                       median_point_size = 0.5,
+#'                                       data_point_size = 3)
 #' monthly_frequency_custom_point_sizes 
 #' 
 monthly_frequency_plot <- function(gw_level_dv,
@@ -366,8 +373,8 @@ monthly_frequency_plot <- function(gw_level_dv,
 
   # set up default configurations for plot elements
   # Set up the plot data for the percentile ranges (rectangle geometry)
-  site_statistics_pivot <- site_statistics %>%
-    dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
+  site_statistics_pivot <- site_statistics |>
+    dplyr::select(-month, -nYears, -minMed, -maxMed) |>
     tidyr::pivot_longer(cols = -plot_month,
                         names_to = "name",
                         values_to = "value")
@@ -406,8 +413,8 @@ monthly_frequency_plot <- function(gw_level_dv,
   # updates if the edges are to be included on the plot
   if (include_edges) {
     # alternative pivot to include min/max values
-    site_statistics_pivot <- site_statistics %>%
-      dplyr::select(-month, -nYears) %>%
+    site_statistics_pivot <- site_statistics |>
+      dplyr::select(-month, -nYears) |>
       tidyr::pivot_longer(cols = -plot_month,
                           names_to = "name",
                           values_to = "value")
@@ -441,12 +448,12 @@ monthly_frequency_plot <- function(gw_level_dv,
   plot_list <- data.frame()
 
   for (i in seq_along(cols)) {
-    plot_data <- site_statistics_pivot %>%
-      dplyr::filter(name %in% cols[[i]]) %>%
+    plot_data <- site_statistics_pivot |>
+      dplyr::filter(name %in% cols[[i]]) |>
       tidyr::pivot_wider(id_cols = plot_month,
                          names_from = name,
-                         values_from = value) %>%
-      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
+                         values_from = value) |>
+      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) |>
       dplyr::mutate(group = groups[i])
 
     plot_list <- dplyr::bind_rows(plot_list, plot_data)
@@ -595,17 +602,21 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
 #'
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv,
 #'                                            NULL)
 #' head(weekly_frequency)
 #'
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#'                                  skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
 #'
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv,
 #'                                            gwl_data,
@@ -693,14 +704,20 @@ weekly_frequency_table <- function(gw_level_dv,
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#'                 skipGeometry = TRUE)
+#' 
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
+#' 
 #' site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
 #' 
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
 #'
 #' weekly_frequency_plot(gw_level_dv,
 #'                       gwl_data = NULL)
@@ -764,7 +781,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   }
 
   # The last year of groundwater level measurements will plot
-  gw_level_plot <- gw_level_dv %>%
+  gw_level_plot <- gw_level_dv |>
     dplyr::filter(Date >= plot_start)
 
   # Add the first day of the week to the site_statistics table for plotting
@@ -777,8 +794,8 @@ weekly_frequency_plot <- function(gw_level_dv,
                                       by = "week")
 
   # Set up the plot data for the percentile ranges (rectangle geometry)
-  site_statistics_pivot <- site_statistics %>%
-    dplyr::select(-week, -nYears, -minMed, -maxMed, -week_start) %>%
+  site_statistics_pivot <- site_statistics |>
+    dplyr::select(-week, -nYears, -minMed, -maxMed, -week_start) |>
     tidyr::pivot_longer(cols = -plot_week,
                         names_to = "name",
                         values_to = "value")
@@ -788,37 +805,37 @@ weekly_frequency_plot <- function(gw_level_dv,
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
   plot_list <- data.frame()
   for (i in seq_along(cols)) {
-    plot_data <- site_statistics_pivot %>%
-      dplyr::filter(name %in% cols[[i]]) %>%
-      tidyr::pivot_wider(id_cols = plot_week, names_from = name, values_from = value) %>%
-      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
+    plot_data <- site_statistics_pivot |>
+      dplyr::filter(name %in% cols[[i]]) |>
+      tidyr::pivot_wider(id_cols = plot_week, names_from = name, values_from = value) |>
+      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) |>
       dplyr::mutate(group = groups[i])
     plot_list <- dplyr::bind_rows(plot_list, plot_data)
   }
 
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- plot_list %>%
+  site_statistics_plot <- plot_list |>
     dplyr::mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
            plot_week_last = plot_week + 7)
 
   # The median value will plot in the middle of the month
-  site_statistics_med <- site_statistics %>%
+  site_statistics_med <- site_statistics |>
     dplyr::mutate(plot_week_med = plot_week + 3,
-           group = "Historical weekly median") %>%
-    dplyr::select(plot_week_med, p50, group) %>%
+           group = "Historical weekly median") |>
+    dplyr::select(plot_week_med, p50, group) |>
     dplyr::rename(x = plot_week_med, y = p50)
 
-  data_points <- gw_level_plot %>%
+  data_points <- gw_level_plot |>
     dplyr::mutate(gw_code = ifelse(grepl("Approved", Approve), "Approved", "Provisional"),
-           group = sprintf("%s daily value", gw_code)) %>%
+           group = sprintf("%s daily value", gw_code)) |>
     dplyr::rename(x = Date,
-           y = Value) %>%
+           y = Value) |>
     dplyr::select(x, y, group)
 
-  point_data <- dplyr::bind_rows(site_statistics_med, data_points) %>%
+  point_data <- dplyr::bind_rows(site_statistics_med, data_points) |>
     dplyr::mutate(group = factor(group,
                           levels = c("Historical weekly median",
                                      "Approved daily value",
@@ -992,13 +1009,17 @@ weekly_frequency_plot <- function(gw_level_dv,
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
 #'
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#'             skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
 #'
 #' daily_gwl_plot(gw_level_dv,
 #'                NULL,
@@ -1068,8 +1089,8 @@ daily_gwl_plot <- function(gw_level_dv,
   gw_level_dv$J <- as.numeric(format(gw_level_dv$Date,
                                      format = "%j"))
 
-  historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] %>%
-    dplyr::group_by(J) %>%
+  historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] |>
+    dplyr::group_by(J) |>
     dplyr::summarize(max = max(Value, na.rm = TRUE),
                      middle = historical_function(Value, na.rm = TRUE),
                      min = min(Value, na.rm = TRUE))
@@ -1100,18 +1121,18 @@ daily_gwl_plot <- function(gw_level_dv,
   buffer <- stats::setNames(data.frame(buffer_dates, buffer_j),
                             c("Date", "J"))
 
-  plot_data <- gw_level_dv %>%
-    dplyr::right_join(buffer, by = c("Date", "J")) %>%
-    dplyr::left_join(historical_stats, by = "J") %>%
+  plot_data <- gw_level_dv |>
+    dplyr::right_join(buffer, by = c("Date", "J")) |>
+    dplyr::left_join(historical_stats, by = "J") |>
     dplyr::mutate(group = "Approved Daily\nMin & Max")
 
-  line_data <- plot_data %>%
-    dplyr::select(Date, Approve, Value, middle) %>%
-    tidyr::pivot_longer(-Date:-Approve) %>%
+  line_data <- plot_data |>
+    dplyr::select(Date, Approve, Value, middle) |>
+    tidyr::pivot_longer(-Date:-Approve) |>
     dplyr::mutate(group = ifelse(name == "Value",
                           ifelse(Approve == "A", "Approved daily value", "Provisional daily value"),
-                          historical_name)) %>%
-    dplyr::select(-Approve, -name) %>%
+                          historical_name)) |>
+    dplyr::select(-Approve, -name) |>
     dplyr::filter(!is.na(value))
 
   line_data$group <- ordered(line_data$group,
@@ -1206,16 +1227,21 @@ daily_gwl_plot <- function(gw_level_dv,
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                   parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                   skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
+#' 
 #' daily_frequency_table(gw_level_dv,
 #'                       NULL,
 #'                       parameter_cd = "62610")
 #'
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#'                                  skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
 #'                                  
 #' daily_frequency_table(gw_level_dv,
 #'                       gwl_data,
@@ -1243,8 +1269,8 @@ daily_frequency_table <- function(gw_level_dv,
   historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ]
   historical_stats$DOY <- as.numeric(format(historical_stats$Date, "%j"))
 
-  historical_stats <- historical_stats %>%
-    dplyr::group_by(DOY) %>%
+  historical_stats <- historical_stats |>
+    dplyr::group_by(DOY) |>
     dplyr::summarize(max = max(Value, na.rm = TRUE),
               mean = mean(Value, na.rm = TRUE),
               min = min(Value, na.rm = TRUE),
@@ -1291,15 +1317,22 @@ daily_frequency_table <- function(gw_level_dv,
 #' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
-#'                                                    parameter_code = p_code_dv,
-#'                                                    statistic_id = statCd,
-#'                                                    skipGeometry = TRUE)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
+#' 
 #' daily_gwl_summary(gw_level_dv,
 #'                   gwl_data = NULL,
 #'                   parameter_cd = p_code_dv)
 #'
-#' gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
+#' gwl_data <- L2701_example_data$Discrete
+#' 
 #' daily_gwl_summary(gw_level_dv,
 #'                   gwl_data = gwl_data,
 #'                   parameter_cd = p_code_dv)
