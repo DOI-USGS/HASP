@@ -247,15 +247,85 @@ data_available <- function(siteID){
   data_info <- dataRetrieval::read_waterdata_ts_meta(monitoring_location_id = siteID,
                                                      skipGeometry = TRUE)
   
-  data_info_clean <- data_info |> 
-    dplyr::select(`Data Type` = computation_period_identifier, 
-                  parameter_name, 
-                  parameter_code,
-                  statistic_id,
-                  `Begin Date` = begin,
-                  `End Date` = end,
-                  time_series_id) 
+  data_info_clean <- data_info[, c("computation_period_identifier",
+                                   "parameter_name", 
+                                   "parameter_code",
+                                   "statistic_id",
+                                   "begin",
+                                   "end")]
+  
+  names(data_info_clean)[names(data_info_clean) == "computation_period_identifier"] <- "Data Type"
+  names(data_info_clean)[names(data_info_clean) == "begin"] <- "Begin Date"
+  names(data_info_clean)[names(data_info_clean) == "end"] <- "End Date"
+
+  field_info <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID,
+                                                                 skipGeometry = TRUE)
+  if(nrow(field_info) > 0){
+
+    inventory <- stats::aggregate(time ~ parameter_code,
+                           data = field_info,
+                           FUN = min)
+    names(inventory)[2] <- c("Begin Date")
+    
+    inventory2 <- stats::aggregate(time ~ parameter_code,
+                           data = field_info,
+                           FUN = max)
+    names(inventory2)[2] <- c("End Date")
+    
+    inventory <- merge(inventory, inventory2, by = "parameter_code")
+    inventory$`Data Type` <- "Field"
+    inventory$statistic_id <- ""
+    
+    pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(inventory$parameter_code))
+    pcodes <- pcodes[, c("parameter_code", "parameter_name")]
+    
+    inventory <- merge(inventory, pcodes, by = "parameter_code")
+    
+    inventory <- inventory[, names(data_info_clean)]
+    
+    data_info_clean <- data_info_clean |> 
+      rbind(inventory)
+  }
+
+  what_qw <- dataRetrieval::summarize_waterdata_samples(monitoringLocationIdentifier = siteID)
+  
+  if(nrow(what_qw) > 0){
+
+    characteristics <- dataRetrieval::check_waterdata_sample_params("characteristics")
+    characteristics <- characteristics[, c("characteristicNameUserSupplied",
+                                           "parameterCode")]
+    names(characteristics) <- c("parameter_name",
+                                "parameter_code")
+    characteristics <- characteristics[!is.na(characteristics$parameter_code), ]
+    characteristics <- aggregate(parameter_code ~ parameter_name,
+                           data = characteristics,
+                           FUN = paste0, collapse = ", ")
+    
+    
+    what_qw_cleaned <- what_qw[, c("characteristicUserSupplied",
+                                   "firstActivity",
+                                   "mostRecentActivity")]
+    names(what_qw_cleaned) <- c("parameter_name",
+                                "Begin Date",
+                                "End Date")
+    what_qw_cleaned$`Data Type` <- "Discrete Samples"
+      
+    what_qw_cleaned <- merge(what_qw_cleaned, 
+                             characteristics,
+                             by = "parameter_name")
+    
+    what_qw_cleaned$statistic_id <- ""
+    
+    data_info_clean <- data_info_clean |> 
+      rbind(what_qw_cleaned)
+  }
+  
+  data_info_clean$`Begin Date` <- as.Date(data_info_clean$`Begin Date`)
+  data_info_clean$`End Date` <- as.Date(data_info_clean$`End Date`)
   
   return(data_info_clean)
   
 }
+
+
+

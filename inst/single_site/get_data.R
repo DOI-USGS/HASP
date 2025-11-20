@@ -2,7 +2,7 @@ rawData_data <- reactiveValues(daily_data = NULL,
                                example_data = FALSE,
                                gwl_data = NULL,
                                qw_data = NULL,
-                               p_code_dv = dataRetrieval::read_waterdata_parameter_codes(parameter_code = "62610"),
+                               p_code_dv = pcode_info[pcode_info$parameter_code == "62610", ],
                                stat_cd = "00001",
                                available_data = NULL,
                                site_meta = NULL,
@@ -36,14 +36,14 @@ observeEvent(input$get_data_avail,{
                      type = "error")
   }
   
-  rawData_data$available_data <- data_available(site_id)
+  data_avail <- data_available(site_id)
+  rawData_data$available_data <- data_avail
   rawData_data$site_meta <-  site_info
-  
-  pcodes_dv <- dataRetrieval::read_waterdata_ts_meta(monitoring_location_id = site_id, 
-                                                     computation_period_identifier = "Daily")
 
-  rawData_data$p_code_dv <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(pcodes_dv$parameter_code))
-  rawData_data$stat_cd <- unique(pcodes_dv$statistic_id)
+  pcodes_dv <- data_avail[data_avail$`Data Type` == "Daily", ]
+
+  rawData_data$p_code_dv <- pcodes_dv
+  rawData_data$stat_cd <- unique(data_avail$statistic_id[data_avail$`Data Type` == "Daily"])
   
 })
 
@@ -56,7 +56,7 @@ observeEvent(input$example_data,{
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
 
-  rawData_data$p_code_dv <-  dataRetrieval::read_waterdata_parameter_codes(parameter_code = "62610")
+  rawData_data$p_code_dv <-  pcode_info[pcode_info$parameter_code == "62610", ]
   
   rawData_data$stat_cd <- "00001"
   rawData_data$p_code_qw <- unique(HASP::L2701_example_data$QW$CharacteristicName)
@@ -77,9 +77,7 @@ observeEvent(input$get_data_qw, {
   
   site_id <- input$siteID
   site_info <- site_summary(site_id)
-  
-  rawData_data$available_data <- data_available(site_id)
-  
+
   showNotification("Loading QW", 
                    duration = NULL, id = "load3")
   
@@ -98,17 +96,6 @@ observeEvent(input$get_data_dv, {
   rawData_data$example_data <- FALSE
   
   site_id <- input$siteID
-  site_info <- site_summary(site_id)
-  
-  rawData_data$available_data <- data_available(site_id)
-  
-  pcodes_dv <- dataRetrieval::read_waterdata_ts_meta(monitoring_location_id = site_id, 
-                                                     computation_period_identifier = "Daily", 
-                                                     skipGeometry = TRUE)
-
-  rawData_data$p_code_dv <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = pcodes_dv$parameter_code)
-  rawData_data$stat_cd <- unique(pcodes_dv$statistic_id)
-  rawData_data$site_meta <-  site_info
 
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
@@ -123,8 +110,8 @@ observeEvent(input$get_data_dv, {
                      duration = NULL, id = "load")
 
     rawData_data$daily_data <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site_id, 
-                                                                   parameter_code = pcodes_dv$parameter_code, 
-                                                                   statistic_id = unique(pcodes_dv$statistic_id), 
+                                                                   parameter_code = input$pcode, 
+                                                                   statistic_id = input$statcd, 
                                                                    skipGeometry = TRUE)
     
     
@@ -138,8 +125,6 @@ observeEvent(input$get_data_ground, {
   
   site_id <- input$siteID
 
-  rawData_data$available_data <- data_available(site_id)
-  
   site_info <- site_summary(site_id)
 
   if(!any(grepl("GW", site_info$site_type_code))){

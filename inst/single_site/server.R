@@ -6,6 +6,8 @@ library(tidyr)
 
 source("modules.R",local=TRUE)
 
+pcode_info <- dataRetrieval::read_waterdata_parameter_codes()
+
 shinyServer(function(input, output, session) {
   
   source("get_data.R",local=TRUE)$value

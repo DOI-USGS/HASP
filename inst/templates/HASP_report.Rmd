@@ -39,27 +39,7 @@ site_metadata <- site_summary(siteID, markdown = type == "html")
 ```{r whatData}
 data_info <- data_available(siteID)
 
-gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID, skipGeometry = TRUE)
-
-inventory <- gwl_data |> 
-  group_by(parameter_code) |> 
-  summarise(`Begin Date` = min(time),
-            `End Date` = max(time)) |> 
-  ungroup() |> 
-  mutate(`Data Type` = "Field") 
-
-pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(inventory$parameter_code))
-
-inventory <- inventory |> 
-  left_join(select(pcodes, parameter_code, parameter_name),
-            by = "parameter_code")
-  
-data_inventory <- data_info |> 
-  select(-time_series_id) |> 
-  bind_rows(inventory)
-  
-
-kable(data_inventory)
+kable(data_info)
 ```
 
 
@@ -72,7 +52,8 @@ available_statCds <- unique(data_info$statistic_id[data_info$`Data Type` == "Dai
 
 pCode_info <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = available_pcodes)
 parameterCd <- pCode_info$parameter_code[1]
-
+statCd <- data_info$statistic_id[data_info$`Data Type` == "Daily" &
+                                  data_info$parameter_code == parameterCd]
 yaxis <- pCode_info$parameter_name[1]
 
 flip <- parameterCd == "72019"
@@ -80,17 +61,23 @@ flip <- parameterCd == "72019"
 # Daily data:
 if(nrow(pCode_info) > 0){
   gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = siteID,
-                                                     parameter_code = available_pcodes,
-                                                     statistic_id = available_statCds, skipGeometry = TRUE)
+                                                     parameter_code = parameterCd,
+                                                     statistic_id = statCd,
+                                                     skipGeometry = TRUE)
 } else {
   gw_level_dv <-  L2701_example_data$Daily
   gw_level_dv <- gw_level_dv[-1:-nrow(gw_level_dv),]
 }
 
 # Field GWL measured:
-if(nrow(gwl_data) == 0){
+available_pcodes_f <- unique(data_info$parameter_code[data_info$`Data Type` == "Field"])
+
+# Field GWL measured:
+if(length(available_pcodes_f) == 0){
   gwl_data <-  L2701_example_data$Discrete
   gwl_data <- gwl_data[-1:-nrow(gwl_data),]
+} else {
+  gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID)
 }
 ```
 
