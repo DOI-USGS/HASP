@@ -296,10 +296,10 @@ monthly_frequency_plot <- function(gw_level_dv,
     plot_end <- as.Date(plot_range[2])
     plot_start <- as.Date(plot_range[1])
   } else if (plot_range == "Past year") {
-    plot_end <- last_day(date) + 1
+    plot_end <- last_day(Sys.Date()) + 1
     plot_start <- first_day(plot_end - 363)
   } else if (plot_range == "Calendar year") {
-    calendar_year <- format(date, format = "%Y")
+    calendar_year <- format(Sys.Date(), format = "%Y")
     plot_end <- as.Date(paste0(calendar_year, "-12-31"))
     plot_start <- as.Date(paste0(calendar_year, "-01-01"))
   } else {
@@ -685,10 +685,10 @@ weekly_frequency_plot <- function(gw_level_dv,
     plot_end <- as.Date(plot_range[2])
     plot_start <- as.Date(plot_range[1])
   } else if (plot_range == "Past year") {
-    plot_end <- last_day(date) + 1
+    plot_end <- last_day(Sys.Date()) + 1
     plot_start <- first_day(plot_end - 363)
   } else if (plot_range == "Calendar year") {
-    calendar_year <- format(date, format = "%Y")
+    calendar_year <- format(Sys.Date(), format = "%Y")
     plot_end <- as.Date(paste0(calendar_year, "-12-31"))
     plot_start <- as.Date(paste0(calendar_year, "-01-01"))
   } else {
