@@ -5,8 +5,8 @@ test_that("Kendall Seasonal Trend", {
   gw_level_data <- L2701_example_data$Discrete
     
   less_data <- dplyr::filter(gw_level_data,
-                             time > as.Date("2010-01-01"),
-                             time < as.Date("2014-01-01"))
+                             time > as.POSIXct("2010-01-01"),
+                             time < as.POSIXct("2014-01-01"))
   
   test1 <- trend_test(NULL,
                      gwl_data = gw_level_data,
