@@ -116,6 +116,14 @@ monthly_frequency_plot(gw_level_dv,
                        plot_title = "L2701 Groundwater Level",
                        y_axis_label = label,
                        flip = FALSE)
+                       
+monthly_frequency_plot(gw_level_dv,
+                       gwl_data = gwl_data,
+                       parameter_cd = "62610",
+                       plot_title = "L2701 Groundwater Level",
+                       y_axis_label = label,
+                       plot_range = c("2023-10-01", "2024-09-30"),
+                       flip = FALSE)
 
 monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
                                     gwl_data,

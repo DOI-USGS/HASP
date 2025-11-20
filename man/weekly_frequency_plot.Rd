@@ -80,8 +80,6 @@ statCd <- "00001"
 #                                  skipGeometry = TRUE)
 gwl_data <- L2701_example_data$Discrete
 
-site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
-
 # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
 #                                                    parameter_code = p_code_dv,
 #                                                    statistic_id = statCd,
@@ -92,6 +90,11 @@ gw_level_dv <- L2701_example_data$Daily
 
 weekly_frequency_plot(gw_level_dv,
                       gwl_data = NULL)
+                      
+weekly_frequency_plot(gw_level_dv,
+                      gwl_data = gwl_data,
+                      parameter_cd = "62610",
+                      plot_range = c("2023-10-01", "2024-09-30"))
 
 weekly_frequency_plot(gw_level_dv,
                       gwl_data = gwl_data,

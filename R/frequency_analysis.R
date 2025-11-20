@@ -213,6 +213,14 @@ stats_by_interval <- function(interval,
 #'                        plot_title = "L2701 Groundwater Level",
 #'                        y_axis_label = label,
 #'                        flip = FALSE)
+#'                        
+#' monthly_frequency_plot(gw_level_dv,
+#'                        gwl_data = gwl_data,
+#'                        parameter_cd = "62610",
+#'                        plot_title = "L2701 Groundwater Level",
+#'                        y_axis_label = label,
+#'                        plot_range = c("2023-10-01", "2024-09-30"),
+#'                        flip = FALSE)
 #'
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
 #'                                     gwl_data,
@@ -283,7 +291,20 @@ monthly_frequency_plot <- function(gw_level_dv,
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
 
-  plot_range <- match.arg(plot_range)
+  # Find the bounds of the plot
+  if(length(plot_range) == 2){
+    plot_end <- as.Date(plot_range[2])
+    plot_start <- as.Date(plot_range[1])
+  } else if (plot_range == "Past year") {
+    plot_end <- last_day(date) + 1
+    plot_start <- first_day(plot_end - 363)
+  } else if (plot_range == "Calendar year") {
+    calendar_year <- format(date, format = "%Y")
+    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
+    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
+  } else {
+    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
+  }
 
   date <- max(c(gw_level_dv$Date,
                 gwl_data$Date),
@@ -298,16 +319,6 @@ monthly_frequency_plot <- function(gw_level_dv,
                                              value_col = c("Value", "Value"),
                                              approved_col = c("Approve", "Approve"),
                                              flip = flip)
-
-  # Find the bounds of the plot.
-  if (plot_range == "Past year") {
-    plot_end <- last_day(date) + 1
-    plot_start <- first_day(plot_end - 363)
-  } else if (plot_range == "Calendar year") {
-    calendar_year <- as.POSIXlt(date)$year + 1900
-    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
-    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
-  }
 
   # The last year of groundwater level measurements will plot
   gw_level_dv <- dplyr::bind_rows(gw_level_dv,
@@ -609,8 +620,6 @@ weekly_frequency_table <- function(gw_level_dv,
 #' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
 #' 
-#' site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
-#' 
 #' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
 #' #                                                    parameter_code = p_code_dv,
 #' #                                                    statistic_id = statCd,
@@ -621,6 +630,11 @@ weekly_frequency_table <- function(gw_level_dv,
 #'
 #' weekly_frequency_plot(gw_level_dv,
 #'                       gwl_data = NULL)
+#'                       
+#' weekly_frequency_plot(gw_level_dv,
+#'                       gwl_data = gwl_data,
+#'                       parameter_cd = "62610",
+#'                       plot_range = c("2023-10-01", "2024-09-30"))
 #'
 #' weekly_frequency_plot(gw_level_dv,
 #'                       gwl_data = gwl_data,
@@ -654,15 +668,11 @@ weekly_frequency_plot <- function(gw_level_dv,
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
 
-  plot_range <- match.arg(plot_range, choices = c("Past year",
-                                                  "Calendar year"),
-                          several.ok = FALSE)
-
   date <- max(c(gw_level_dv$Date,
                 gwl_data$Date),
               na.rm = TRUE)
 
-  # Calculate the percentiles
+  # Calculate the percentiles on all the data
   site_statistics <- weekly_frequency_table(gw_level_dv,
                                             gwl_data,
                                             date_col = c("Date", "Date"),
@@ -671,18 +681,24 @@ weekly_frequency_plot <- function(gw_level_dv,
                                             flip = flip)
 
   # Find the bounds of the plot
-  if (plot_range == "Past year") {
+  if(length(plot_range) == 2){
+    plot_end <- as.Date(plot_range[2])
+    plot_start <- as.Date(plot_range[1])
+  } else if (plot_range == "Past year") {
     plot_end <- last_day(date) + 1
     plot_start <- first_day(plot_end - 363)
   } else if (plot_range == "Calendar year") {
     calendar_year <- format(date, format = "%Y")
     plot_end <- as.Date(paste0(calendar_year, "-12-31"))
     plot_start <- as.Date(paste0(calendar_year, "-01-01"))
+  } else {
+    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
   }
 
   # The last year of groundwater level measurements will plot
   gw_level_plot <- gw_level_dv |>
-    dplyr::filter(Date >= plot_start)
+    dplyr::filter(Date >= plot_start,
+                  Date <= plot_end)
 
   # Add the first day of the week to the site_statistics table for plotting
   plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
