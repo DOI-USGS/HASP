@@ -4,35 +4,7 @@
 #' year/month is calculated. Then using that median, monthly stats are calculated.
 #' Percentiles are calculated using the \code{quantile} function with "type=6".
 #'
-#'
-#'
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-#' data frame with a date, value, and approval columns. Using the convention:
-#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-#' or sl_lev_va (representing value) will allow defaults to work.
-#' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
+#' @inheritParams daily_gwl_summary
 #' @param flip logical. If \code{TRUE}, flips labels so that the lower numbers
 #' are in the higher percentages. Default is \code{TRUE}.
 #'
@@ -45,19 +17,26 @@
 #'
 #' @examples
 #'
-#' # site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
+#' 
 #' monthly_frequency <- monthly_frequency_table(gw_level_dv,
-#'                                              NULL,
-#'                                              parameter_cd = "62610")
+#'                                              NULL)
 #' head(monthly_frequency)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
 #'
-#' monthly_frequency_combo <- monthly_frequency_table(gw_level_dv,
-#'                                              gwl_data,
+#' monthly_frequency_combo <- monthly_frequency_table(gw_level_dv = gw_level_dv,
+#'                                              gwl_data = gwl_data,
 #'                                              parameter_cd = "62610")
 #' head(monthly_frequency_combo)
 #' monthly_flip <- monthly_frequency_table(gw_level_dv,
@@ -68,10 +47,9 @@
 monthly_frequency_table <- function(gw_level_dv,
                                     gwl_data,
                                     parameter_cd = NA,
-                                    date_col = NA,
-                                    value_col = NA,
-                                    approved_col = NA,
-                                    stat_cd = NA,
+                                    date_col = c("time", "time"),
+                                    value_col = c("value", "value"),
+                                    approved_col = c("approval_status", "approval_status"),
                                     flip = FALSE) {
 
   monthly_stats <- stats_by_interval(interval = "month",
@@ -81,7 +59,6 @@ monthly_frequency_table <- function(gw_level_dv,
                                      date_col = date_col,
                                      value_col = value_col,
                                      approved_col = approved_col,
-                                     stat_cd = stat_cd,
                                      flip = flip)
 
   return(monthly_stats)
@@ -96,7 +73,6 @@ stats_by_interval <- function(interval,
                               date_col = NA,
                               value_col = NA,
                               approved_col = NA,
-                              stat_cd = NA,
                               flip = FALSE) {
 
   interval <- match.arg(interval,
@@ -108,8 +84,7 @@ stats_by_interval <- function(interval,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col,
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
@@ -117,7 +92,7 @@ stats_by_interval <- function(interval,
   gw_level_dv <- dplyr::bind_rows(gw_level_dv,
                                   gwl_data)
 
-  gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv$Approve), ]
+  gw_level_dv <- gw_level_dv[grepl("Approved", gw_level_dv$Approve), ]
 
   gw_level_dv$year <- as.POSIXlt(gw_level_dv$Date)$year + 1900
   gw_level_dv$month <- as.POSIXlt(gw_level_dv$Date)$mon + 1
@@ -125,17 +100,17 @@ stats_by_interval <- function(interval,
 
   gw_level_dv$interval <- gw_level_dv[[interval]]
 
-  annual_stats <- gw_level_dv %>%
-    dplyr::group_by(year, interval) %>%
-    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
-    dplyr::group_by(interval) %>%
+  annual_stats <- gw_level_dv |>
+    dplyr::group_by(year, interval) |>
+    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) |>
+    dplyr::group_by(interval) |>
     dplyr::summarize(minMed = min(median, na.rm = TRUE),
                      maxMed = max(median, na.rm = TRUE))
 
-  stats <- gw_level_dv %>%
-    dplyr::group_by(year, interval) %>%
-    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) %>%
-    dplyr::group_by(interval) %>%
+  stats <- gw_level_dv |>
+    dplyr::group_by(year, interval) |>
+    dplyr::summarize(median = stats::median(Value, na.rm = TRUE)) |>
+    dplyr::group_by(interval) |>
     dplyr::summarize(p5_1 = quantile(median, probs = 0.05, type = 6, na.rm = TRUE),
                      p10_1 = quantile(median, probs = 0.1, type = 6, na.rm = TRUE),
                      p25_1 = quantile(median, probs = 0.25, type = 6, na.rm = TRUE),
@@ -143,7 +118,7 @@ stats_by_interval <- function(interval,
                      p75_1 = quantile(median, probs = 0.75, type = 6, na.rm = TRUE),
                      p90_1 = quantile(median, probs = 0.9, type = 6, na.rm = TRUE),
                      p95_1 = quantile(median, probs = 0.95, type = 6, na.rm = TRUE),
-                     nYears = length(unique(year))) %>%
+                     nYears = length(unique(year))) |>
     dplyr::left_join(annual_stats, by = "interval")
 
   if (flip) {
@@ -176,50 +151,12 @@ stats_by_interval <- function(interval,
   return(stats)
 }
 
-#' Plot monthly frequency analysis
+#' Plot monthly frequency plot
 #'
 #' This plot uses calculations from \code{monthly_frequency_table}. Daily, discrete,
 #' or both types of data can be included.
 #'
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-#' data frame with a date, value, and approval columns. Using the convention:
-#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-#' or sl_lev_va (representing value) will allow defaults to work.
-#' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
-#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
-#' last year of data, or "Calendar year" to use the current calendar year, beginning
-#' in January.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
-#' @param plot_title the title to use on the plot.
-#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
-#' @param y_axis_label the label used for the y-axis of the plot.
-#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
-#' Default is \code{TRUE}.
-#' @param percentile_colors Optional argument to provide a vector of 5 or 7 colors
-#' used to fill the percentile bars in order from lowest percentile bin to the
-#' highest percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
-#' include_edges parameter is set to TRUE, then this vector must be 7 colors long.
+#' @inheritParams weekly_frequency_plot
 #' @param include_edges Optional argument to toggle on the "edge bins" min-5 and 95-max on the plot.
 #' Default is FALSE which does not plot those bins.
 #' @param median_point_size Optional argument to specify the size of the median point markers
@@ -236,20 +173,28 @@ stats_by_interval <- function(interval,
 #'
 #' @examples
 #'
-#' # site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
-#' label <- dataRetrieval::readNWISpCode(p_code_dv)[["parameter_nm"]]
+#' 
+#' label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = p_code_dv)$parameter_name
+#' 
 #' monthly_frequency <- monthly_frequency_plot(gw_level_dv,
 #'                                             gwl_data = NULL,
-#'                                             parameter_cd = "62610",
 #'                                             plot_title = "L2701 Groundwater Level",
 #'                                             y_axis_label = label,
 #'                                             flip = FALSE)
 #' monthly_frequency
 #'
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
 #'
 #' monthly_frequency_plot(gw_level_dv,
@@ -258,56 +203,64 @@ stats_by_interval <- function(interval,
 #'                        plot_title = "L2701 Groundwater Level",
 #'                        y_axis_label = label,
 #'                        flip = FALSE)
+#'                        
+#' monthly_frequency_plot(gw_level_dv,
+#'                        gwl_data = gwl_data,
+#'                        parameter_cd = "62610",
+#'                        plot_title = "L2701 Groundwater Level",
+#'                        y_axis_label = label,
+#'                        plot_range = c("2023-10-01", "2024-09-30"),
+#'                        flip = FALSE)
 #'
 #' monthly_frequency_flip <- monthly_frequency_plot(gw_level_dv,
-#'                                                  gwl_data,
-#'                                                  parameter_cd = "62610",
-#'                                                  y_axis_label = label,
-#'                                                  plot_title = "L2701 Groundwater Level",
-#'                                                  flip = TRUE)
+#'                                     gwl_data,
+#'                                     parameter_cd = "62610",
+#'                                     y_axis_label = label,
+#'                                     plot_title = "L2701 Groundwater Level",
+#'                                     flip = TRUE)
 #' monthly_frequency_flip
 #'
-#' monthly_frequency_custom_colors <- monthly_frequency_plot(gw_level_dv,
-#'                                                  gwl_data,
-#'                                                  parameter_cd = "62610",
-#'                                                  y_axis_label = label,
-#'                                                  plot_title = "L2701 Groundwater Level",
-#'                                                  flip = TRUE,
-#'                                                  percentile_colors = c(
+#' monthly_frequency_custom_colors <- monthly_frequency_plot(
+#'                                        gw_level_dv,
+#'                                        gwl_data,
+#'                                        parameter_cd = "62610",
+#'                                        y_axis_label = label,
+#'                                        plot_title = "L2701 Groundwater Level",
+#'                                        flip = TRUE,
+#'                                        percentile_colors = c(
 #'                                                      "red",
 #'                                                      "yellow",
 #'                                                      "green",
 #'                                                      "blue",
 #'                                                      "orange"
-#'                                                  ))
+#'                                        ))
 #'                                                  
 #' monthly_frequency_custom_colors
 #' 
 #' monthly_frequency_edge_bins <- monthly_frequency_plot(gw_level_dv,
-#'                                                       gwl_data,
-#'                                                       parameter_cd = "62610",
-#'                                                       y_axis_label = label,
-#'                                                       plot_title = "L2701 Groundwater Level",
-#'                                                       flip = FALSE,
-#'                                                       include_edges = TRUE)
+#'                                       gwl_data,
+#'                                       parameter_cd = "62610",
+#'                                       y_axis_label = label,
+#'                                       plot_title = "L2701 Groundwater Level",
+#'                                       flip = FALSE,
+#'                                       include_edges = TRUE)
 #' monthly_frequency_edge_bins
 #' 
 #' monthly_frequency_custom_point_sizes <- monthly_frequency_plot(gw_level_dv,
-#'                                                                gwl_data = gwl_data,
-#'                                                                parameter_cd = "62610",
-#'                                                                plot_title = "L2701 Groundwater Level",
-#'                                                                y_axis_label = label,
-#'                                                                median_point_size = 0.5,
-#'                                                                data_point_size = 3)
+#'                                       gwl_data = gwl_data,
+#'                                       parameter_cd = "62610",
+#'                                       plot_title = "L2701 Groundwater Level",
+#'                                       y_axis_label = label,
+#'                                       median_point_size = 0.5,
+#'                                       data_point_size = 3)
 #' monthly_frequency_custom_point_sizes 
 #' 
 monthly_frequency_plot <- function(gw_level_dv,
                                    gwl_data,
                                    parameter_cd = NA,
-                                   date_col = NA,
-                                   value_col = NA,
-                                   approved_col = NA,
-                                   stat_cd = NA,
+                                   date_col = c("time", "time"),
+                                   value_col = c("value", "value"),
+                                   approved_col = c("approval_status", "approval_status"),
                                    plot_title = "",
                                    subtitle = "U.S. Geological Survey",
                                    plot_range = c("Past year"),
@@ -323,19 +276,15 @@ monthly_frequency_plot <- function(gw_level_dv,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col,
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
-
-  plot_range <- match.arg(plot_range)
-
-  date <- max(c(gw_level_dv$Date,
-                gwl_data$Date),
-              na.rm = TRUE)
-
-
+  
+  full_range <- range(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
+  date <- max(full_range, na.rm = TRUE)
+  plot_ranges <- get_range(plot_range, full_range)
+  
   # Calculate the percentiles
   site_statistics <- monthly_frequency_table(gw_level_dv,
                                              gwl_data,
@@ -345,25 +294,15 @@ monthly_frequency_plot <- function(gw_level_dv,
                                              approved_col = c("Approve", "Approve"),
                                              flip = flip)
 
-  # Find the bounds of the plot.
-  if (plot_range == "Past year") {
-    plot_end <- last_day(date) + 1
-    plot_start <- first_day(plot_end - 363)
-  } else if (plot_range == "Calendar year") {
-    calendar_year <- as.POSIXlt(date)$year + 1900
-    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
-    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
-  }
-
   # The last year of groundwater level measurements will plot
   gw_level_dv <- dplyr::bind_rows(gw_level_dv,
                                   gwl_data)
 
-  gw_level_dv <- gw_level_dv[gw_level_dv$Date >= plot_start &
-                               gw_level_dv$Date <= plot_end, ]
+  gw_level_dv <- gw_level_dv[gw_level_dv$Date >= plot_ranges$plot_start &
+                               gw_level_dv$Date <= plot_ranges$plot_end, ]
 
   # Add the first day of the month to the site_statistics table for plotting
-  plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
+  plot_month <- seq(as.Date(plot_ranges$plot_start), length = 12, by = "1 month")
   plot_month_lookup <- data.frame(plot_month = plot_month,
                                   month = as.POSIXlt(plot_month)$mon + 1)
   site_statistics <- dplyr::left_join(site_statistics,
@@ -371,8 +310,8 @@ monthly_frequency_plot <- function(gw_level_dv,
 
   # set up default configurations for plot elements
   # Set up the plot data for the percentile ranges (rectangle geometry)
-  site_statistics_pivot <- site_statistics %>%
-    dplyr::select(-month, -nYears, -minMed, -maxMed) %>%
+  site_statistics_pivot <- site_statistics |>
+    dplyr::select(-month, -nYears, -minMed, -maxMed) |>
     tidyr::pivot_longer(cols = -plot_month,
                         names_to = "name",
                         values_to = "value")
@@ -391,7 +330,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   # custom colors and shapes
   if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
-  } else if (is.na(percentile_colors) == FALSE) {
+  } else if (!is.na(percentile_colors)) {
     warning(
       paste0(
         "percentile_colors argument was provided but was invalid,",
@@ -411,8 +350,8 @@ monthly_frequency_plot <- function(gw_level_dv,
   # updates if the edges are to be included on the plot
   if (include_edges) {
     # alternative pivot to include min/max values
-    site_statistics_pivot <- site_statistics %>%
-      dplyr::select(-month, -nYears) %>%
+    site_statistics_pivot <- site_statistics |>
+      dplyr::select(-month, -nYears) |>
       tidyr::pivot_longer(cols = -plot_month,
                           names_to = "name",
                           values_to = "value")
@@ -446,12 +385,12 @@ monthly_frequency_plot <- function(gw_level_dv,
   plot_list <- data.frame()
 
   for (i in seq_along(cols)) {
-    plot_data <- site_statistics_pivot %>%
-      dplyr::filter(name %in% cols[[i]]) %>%
+    plot_data <- site_statistics_pivot |>
+      dplyr::filter(name %in% cols[[i]]) |>
       tidyr::pivot_wider(id_cols = plot_month,
                          names_from = name,
-                         values_from = value) %>%
-      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
+                         values_from = value) |>
+      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) |>
       dplyr::mutate(group = groups[i])
 
     plot_list <- dplyr::bind_rows(plot_list, plot_data)
@@ -491,16 +430,6 @@ monthly_frequency_plot <- function(gw_level_dv,
   point_sizes <- c("Monthly median" = median_point_size,
                    "Data point" = data_point_size)
 
-  # Create the plot labels
-  start_year <- as.POSIXlt(plot_start)$year + 1900
-  end_year <- as.POSIXlt(plot_end)$year + 1900
-  if (start_year == end_year) {
-    x_label <- as.character(start_year)
-  } else {
-    x_label <- paste(start_year, end_year, sep = " - ")
-  }
-  y_label <- y_axis_label
-
   # Plot
   plot_out <- ggplot() +
     geom_rect(data = site_statistics_plot,
@@ -537,11 +466,11 @@ monthly_frequency_plot <- function(gw_level_dv,
                        breaks = names(point_colors)) +
     scale_size_manual(values = point_sizes,
                       guide = "none") + 
-    scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
+    scale_x_date(limits = c(plot_ranges$plot_start, plot_ranges$plot_end + 1), expand = c(0, 0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
-    hasp_framework(x_label = x_label,
-                   y_label = y_label,
+    hasp_framework(x_label = plot_ranges$x_label,
+                   y_label = y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(axis.ticks.x = element_blank()) +
@@ -563,35 +492,7 @@ monthly_frequency_plot <- function(gw_level_dv,
 #' data. The median of each year/week combo is calculated, then overall weekly
 #' statistics are calculated off of that median.
 #'
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-#' data frame with a date, value, and approval columns. Using the convention:
-#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-#' or sl_lev_va (representing value) will allow defaults to work.
-#' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
-#' @param flip logical. If \code{TRUE}, flips labels so that the lower numbers
-#' are in the higher percentages. Default is \code{TRUE}.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
+#' @inheritParams monthly_frequency_table
 #'
 #' @return a data frame of weekly frequency analysis
 #'
@@ -599,34 +500,40 @@ monthly_frequency_plot <- function(gw_level_dv,
 #'
 #' @examples
 #'
-#' # site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
+#'
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv,
-#'                                            NULL,
-#'                                            parameter_cd = "62610")
+#'                                            NULL)
 #' head(weekly_frequency)
 #'
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
 #'
 #' weekly_frequency <- weekly_frequency_table(gw_level_dv,
 #'                                            gwl_data,
 #'                                            parameter_cd = "62610")
-#' weekly_frequency
+#' head(weekly_frequency)
 #' weekly_flip <- weekly_frequency_table(gw_level_dv,
 #'                                       gwl_data,
 #'                                       parameter_cd = "62610",
 #'                                       flip = TRUE)
-#' weekly_flip
+#' head(weekly_flip)
 weekly_frequency_table <- function(gw_level_dv,
                                    gwl_data,
                                    parameter_cd = NA,
-                                   date_col = NA,
-                                   value_col = NA,
-                                   approved_col = NA,
-                                   stat_cd = NA,
+                                   date_col = c("time", "time"),
+                                   value_col = c("value", "value"),
+                                   approved_col = c("approval_status", "approval_status"),
                                    flip = FALSE) {
 
   weekly_stats <- stats_by_interval(interval = "week",
@@ -636,7 +543,6 @@ weekly_frequency_table <- function(gw_level_dv,
                                      date_col = date_col,
                                      value_col = value_col,
                                      approved_col = approved_col,
-                                     stat_cd = stat_cd,
                                      flip = flip)
 
   weekly_stats$week_start <- format(as.Date(paste(weekly_stats$week - 1, 1, sep = "-"),
@@ -646,46 +552,20 @@ weekly_frequency_table <- function(gw_level_dv,
 
 }
 
-#' Plot weekly frequency analysis
+#' Plot weekly frequency plot
 #'
 #' Weekly statistics are calculated using the \code{weekly_frequency_table} function.
 #' Daily, discrete, or both types of data can be used.
 #'
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-#' data frame with a date, value, and approval columns. Using the convention:
-#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-#' or sl_lev_va (representing value) will allow defaults to work.
-#' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.
-#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
+#' @inheritParams monthly_frequency_table
+#' @param plot_range the time frame to use for the plot. Use "Past year" (default) to see the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
-#' in January.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
+#' in January. Or specify two dates representing the start and end of the plot.
+#' If the first date is NA, it will start at the earliest record, 
+#' if the second date is NA, it will end at the latest record.
 #' @param plot_title the title to use on the plot
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
-#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
-#' Default is \code{FALSE}.
 #' @param percentile_colors Optional argument to provide a vector of 5 colors
 #' used to fill the percentile bars in order from lowest percentile bin to the
 #' highest percentile bin. Default behavior (NA) is to use legacy plot colors.
@@ -698,18 +578,29 @@ weekly_frequency_table <- function(gw_level_dv,
 #'
 #' @examples
 #'
-#' # site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
-#' gw_level_dv <- L2701_example_data$Daily
-#' weekly_frequency_plot(gw_level_dv,
-#'                       gwl_data = NULL,
-#'                       date_col = "Date",
-#'                       value_col = "X_62610_00001",
-#'                       approved_col = "X_62610_00001_cd")
-#'
+#' 
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
+#' 
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
+#' gw_level_dv <- L2701_example_data$Daily
+#'
+#' weekly_frequency_plot(gw_level_dv,
+#'                       gwl_data = NULL)
+#'                       
+#' weekly_frequency_plot(gw_level_dv,
+#'                       gwl_data = gwl_data,
+#'                       parameter_cd = "62610",
+#'                       plot_range = c("2023-10-01", "2024-09-30"))
 #'
 #' weekly_frequency_plot(gw_level_dv,
 #'                       gwl_data = gwl_data,
@@ -723,10 +614,9 @@ weekly_frequency_table <- function(gw_level_dv,
 weekly_frequency_plot <- function(gw_level_dv,
                                   gwl_data,
                                   parameter_cd = NA,
-                                  date_col = NA,
-                                  value_col = NA,
-                                  approved_col = NA,
-                                  stat_cd = NA,
+                                  date_col = c("time", "time"),
+                                  value_col = c("value", "value"),
+                                  approved_col = c("approval_status", "approval_status"),
                                   plot_range = "Past year",
                                   plot_title = "",
                                   subtitle = "U.S. Geological Survey",
@@ -739,21 +629,16 @@ weekly_frequency_plot <- function(gw_level_dv,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col,
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
-
-  plot_range <- match.arg(plot_range, choices = c("Past year",
-                                                  "Calendar year"),
-                          several.ok = FALSE)
 
   date <- max(c(gw_level_dv$Date,
                 gwl_data$Date),
               na.rm = TRUE)
 
-  # Calculate the percentiles
+  # Calculate the percentiles on all the data
   site_statistics <- weekly_frequency_table(gw_level_dv,
                                             gwl_data,
                                             date_col = c("Date", "Date"),
@@ -761,22 +646,17 @@ weekly_frequency_plot <- function(gw_level_dv,
                                             approved_col = c("Approve", "Approve"),
                                             flip = flip)
 
-  # Find the bounds of the plot
-  if (plot_range == "Past year") {
-    plot_end <- last_day(date) + 1
-    plot_start <- first_day(plot_end - 363)
-  } else if (plot_range == "Calendar year") {
-    calendar_year <- format(date, format = "%Y")
-    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
-    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
-  }
+  full_range <- range(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
+  date <- max(full_range, na.rm = TRUE)
+  plot_ranges <- get_range(plot_range, full_range)
 
   # The last year of groundwater level measurements will plot
-  gw_level_plot <- gw_level_dv %>%
-    dplyr::filter(Date >= plot_start)
+  gw_level_plot <- gw_level_dv |>
+    dplyr::filter(Date >= plot_ranges$plot_start,
+                  Date <= plot_ranges$plot_end)
 
   # Add the first day of the week to the site_statistics table for plotting
-  plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
+  plot_week <- seq(as.Date(plot_ranges$plot_start), length = 52, by = "1 week")
   plot_week_lookup <- data.frame(plot_week = plot_week,
                                  week = as.POSIXlt(plot_week)$yday %/% 7 + 1)
 
@@ -785,8 +665,8 @@ weekly_frequency_plot <- function(gw_level_dv,
                                       by = "week")
 
   # Set up the plot data for the percentile ranges (rectangle geometry)
-  site_statistics_pivot <- site_statistics %>%
-    dplyr::select(-week, -nYears, -minMed, -maxMed, -week_start) %>%
+  site_statistics_pivot <- site_statistics |>
+    dplyr::select(-week, -nYears, -minMed, -maxMed, -week_start) |>
     tidyr::pivot_longer(cols = -plot_week,
                         names_to = "name",
                         values_to = "value")
@@ -796,37 +676,37 @@ weekly_frequency_plot <- function(gw_level_dv,
   groups <- c("5 - 10", "10 - 25", "25 - 75", "75 - 90", "90 - 95")
   plot_list <- data.frame()
   for (i in seq_along(cols)) {
-    plot_data <- site_statistics_pivot %>%
-      dplyr::filter(name %in% cols[[i]]) %>%
-      tidyr::pivot_wider(id_cols = plot_week, names_from = name, values_from = value) %>%
-      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) %>%
+    plot_data <- site_statistics_pivot |>
+      dplyr::filter(name %in% cols[[i]]) |>
+      tidyr::pivot_wider(id_cols = plot_week, names_from = name, values_from = value) |>
+      dplyr::rename(ymin = cols[[i]][1], ymax = cols[[i]][2]) |>
       dplyr::mutate(group = groups[i])
     plot_list <- dplyr::bind_rows(plot_list, plot_data)
   }
 
   # Make the group an ordered factor so the legend has the correct order
   # and add the last day of the month to draw the rectangles
-  site_statistics_plot <- plot_list %>%
+  site_statistics_plot <- plot_list |>
     dplyr::mutate(group = factor(group,
                           levels = groups,
                           ordered = TRUE),
            plot_week_last = plot_week + 7)
 
   # The median value will plot in the middle of the month
-  site_statistics_med <- site_statistics %>%
+  site_statistics_med <- site_statistics |>
     dplyr::mutate(plot_week_med = plot_week + 3,
-           group = "Historical weekly median") %>%
-    dplyr::select(plot_week_med, p50, group) %>%
+           group = "Historical weekly median") |>
+    dplyr::select(plot_week_med, p50, group) |>
     dplyr::rename(x = plot_week_med, y = p50)
 
-  data_points <- gw_level_plot %>%
-    dplyr::mutate(gw_code = ifelse(grepl("A", Approve), "Approved", "Provisional"),
-           group = sprintf("%s daily value", gw_code)) %>%
+  data_points <- gw_level_plot |>
+    dplyr::mutate(gw_code = ifelse(grepl("Approved", Approve), "Approved", "Provisional"),
+           group = sprintf("%s daily value", gw_code)) |>
     dplyr::rename(x = Date,
-           y = Value) %>%
+           y = Value) |>
     dplyr::select(x, y, group)
 
-  point_data <- dplyr::bind_rows(site_statistics_med, data_points) %>%
+  point_data <- dplyr::bind_rows(site_statistics_med, data_points) |>
     dplyr::mutate(group = factor(group,
                           levels = c("Historical weekly median",
                                      "Approved daily value",
@@ -841,7 +721,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
   }
-  else if (is.na(percentile_colors) == FALSE) {
+  else if (!is.na(percentile_colors)) {
     warning(paste0("percentile_colors argument was provided but was invalid,",
                    " should be a vector of length 5 in which each item in",
                    " the vector represents a color."))
@@ -860,19 +740,8 @@ weekly_frequency_plot <- function(gw_level_dv,
   point_shapes <- point_shapes[as.character(unique(point_data$group))]
   point_colors <- point_colors[as.character(unique(point_data$group))]
 
-  # Create the plot labels
-  year_start <- as.POSIXlt(plot_start)$year + 1900
-  year_end <- as.POSIXlt(plot_end)$year + 1900
-
-  if (year_start == year_end) {
-    x_label <- as.character(year_start)
-  } else {
-    x_label <- paste(year_start, year_end, sep = " - ")
-  }
-  y_label <- y_axis_label
-
   # Create the month breaks
-  month_start <- seq(as.Date(plot_start), length = 12, by = "1 month")
+  month_start <- seq(as.Date(plot_ranges$plot_start), length = 12, by = "1 month")
   month_breaks <- mid_month(month_start)
   month_labels <- month.abb[as.POSIXlt(month_breaks)$mon + 1]
 
@@ -910,9 +779,9 @@ weekly_frequency_plot <- function(gw_level_dv,
                                  "10 - 25",
                                  "5 - 10"),
                       name = "Percentile") +
-    scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
+    scale_x_date(limits = c(plot_ranges$plot_start, plot_ranges$plot_end + 1), expand = c(0, 0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_label,
+    hasp_framework(plot_ranges$x_label, y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(axis.ticks.x = element_blank(),
@@ -944,55 +813,16 @@ weekly_frequency_plot <- function(gw_level_dv,
 
 }
 
-#' Plot recent data
+#' Plot daily data
 #'
 #' Calculates daily statistics based on all approved data.
 #' Daily, discrete, or both types are included.
 #' Historic median or mean are plotted based on all of the approved data.
 #'
-#' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-#' data frame with a date, value, and approval columns. Using the convention:
-#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-#' or sl_lev_va (representing value) will allow defaults to work.
-#' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
-#' @param start_date Date to start plot. If \code{NA} (which is the default),
-#' the plot will start 2 years before the most recent value.
-#' @param end_date Date to end plot. If \code{NA} (which is the default),
-#' the plot will end with the latest measurement.
+#' @inheritParams weekly_frequency_plot
 #' @param historical_stat the summary statistic to use for middle line of the plot. Either
 #' "mean" or "median."
 #' @param month_breaks a logical indicating whether to use monthly breaks for the plot
-#' @param plot_title the title to use on the plot
-#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
-#' @param y_axis_label the label to use for the y axis
-#' @param flip logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
-#' Default is \code{FALSE}.
-#' @return a ggplot object with a ribbon indicating the historical daily range,
-#' the historical daily mean or median, and approved and provisional
-#' daily data for the last two years
 #'
 #' @export
 #'
@@ -1000,17 +830,23 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'
 #' @examples
 #'
-#' site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
 #'
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
 #'
 #' daily_gwl_plot(gw_level_dv,
 #'                NULL,
-#'                parameter_cd = "62610",
 #'                plot_title = "Groundwater Level",
 #'                historical_stat = "median")
 #'
@@ -1025,29 +861,20 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'                parameter_cd = "62610",
 #'                plot_title = "Groundwater Level",
 #'                month_breaks = TRUE,
-#'                start_date = "2020-10-01",
+#'                plot_range = c("2020-10-01", "2021-06-01"),
 #'                historical_stat = "median")
 #'
-#' daily_gwl_plot(gw_level_dv, gwl_data,
-#'                parameter_cd = "62610",
-#'                plot_title = "Groundwater Level",
-#'                month_breaks = TRUE,
-#'                start_date = "2018-10-01",
-#'                end_date = "2020-10-01",
-#'                historical_stat = "median")
 #'
 daily_gwl_plot <- function(gw_level_dv,
                            gwl_data,
                            parameter_cd = NA,
-                           date_col = NA,
-                           value_col = NA,
-                           approved_col = NA,
-                           stat_cd = NA,
-                           start_date = NA,
-                           end_date = NA,
+                           date_col = c("time", "time"),
+                           value_col = c("value", "value"),
+                           approved_col = c("approval_status", "approval_status"),
                            historical_stat = "mean",
-                           month_breaks = FALSE,
+                           month_breaks = TRUE,
                            plot_title = "",
+                           plot_range = "Past year",
                            subtitle = "U.S. Geological Survey",
                            y_axis_label = "",
                            flip = FALSE) {
@@ -1057,8 +884,7 @@ daily_gwl_plot <- function(gw_level_dv,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col,
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
@@ -1079,50 +905,47 @@ daily_gwl_plot <- function(gw_level_dv,
   gw_level_dv$J <- as.numeric(format(gw_level_dv$Date,
                                      format = "%j"))
 
-  historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] %>%
-    dplyr::group_by(J) %>%
+  historical_stats <- gw_level_dv[grepl("Approved", gw_level_dv$Approve), ] |>
+    dplyr::group_by(J) |>
     dplyr::summarize(max = max(Value, na.rm = TRUE),
                      middle = historical_function(Value, na.rm = TRUE),
                      min = min(Value, na.rm = TRUE))
 
-  # Pull the last two years of data & join with the historical data
-
-  if (is.na(end_date)) {
-    end_date <- max(c(gw_level_dv$Date), na.rm = TRUE)
+  full_range <- range(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
+  date <- max(full_range, na.rm = TRUE)
+  plot_ranges <- get_range(plot_range, full_range)
+  
+  if (month_breaks) {
+    x_label <- paste(format(plot_ranges$plot_start, "%B %Y"),
+                     "to",
+                     format(plot_ranges$plot_end, "%B %Y"))
+    x_breaks <- mid_month(seq.Date(plot_ranges$plot_start, 
+                                   plot_ranges$plot_end, by = "1 month"))
+    x_tick_labels <- format(x_breaks, format = "%b")
   } else {
-    end_date <- as.Date(end_date)
+    x_label <- "Date"
+    x_breaks <- seq.Date(plot_ranges$plot_start, plot_ranges$plot_end, by = "year")
+    x_tick_labels <- format(x_breaks, format = "%Y")
   }
-
-  if (is.na(start_date)) {
-    plot_start_year <- as.numeric(format(end_date, format = "%Y")) - 2
-    plot_start <- as.Date(paste(plot_start_year,
-                                format(end_date, format = "%m-%d"),
-                                sep = "-"))
-  } else {
-    plot_start <- as.Date(start_date)
-  }
-
-
-  # add a 10 day buffer following the most recent value
-  plot_end <- end_date + as.difftime(10, units = "days")
-  buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
+  
+  buffer_dates <- seq.Date(plot_ranges$plot_start, plot_ranges$plot_end, by = "day")[-1]
   buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
   buffer_j <- as.numeric(format(buffer_dates, "%j"))
   buffer <- stats::setNames(data.frame(buffer_dates, buffer_j),
                             c("Date", "J"))
 
-  plot_data <- gw_level_dv %>%
-    dplyr::right_join(buffer, by = c("Date", "J")) %>%
-    dplyr::left_join(historical_stats, by = "J") %>%
+  plot_data <- gw_level_dv |>
+    dplyr::right_join(buffer, by = c("Date", "J")) |>
+    dplyr::left_join(historical_stats, by = "J") |>
     dplyr::mutate(group = "Approved Daily\nMin & Max")
 
-  line_data <- plot_data %>%
-    dplyr::select(Date, Approve, Value, middle) %>%
-    tidyr::pivot_longer(-Date:-Approve) %>%
+  line_data <- plot_data |>
+    dplyr::select(Date, Approve, Value, middle) |>
+    tidyr::pivot_longer(-Date:-Approve) |>
     dplyr::mutate(group = ifelse(name == "Value",
-                          ifelse(Approve == "A", "Approved daily value", "Provisional daily value"),
-                          historical_name)) %>%
-    dplyr::select(-Approve, -name) %>%
+                          ifelse(Approve == "Approved", "Approved daily value", "Provisional daily value"),
+                          historical_name)) |>
+    dplyr::select(-Approve, -name) |>
     dplyr::filter(!is.na(value))
 
   line_data$group <- ordered(line_data$group,
@@ -1138,20 +961,6 @@ daily_gwl_plot <- function(gw_level_dv,
   names(line_colors)[1] <- historical_name
   ribbon_colors <- c("Approved Daily\nMin & Max" = "lightskyblue1")
 
-  if (month_breaks) {
-    x_label <- paste(format(plot_start, "%B %Y"),
-                     "to",
-                     format(plot_end, "%B %Y"))
-    x_breaks <- mid_month(seq.Date(plot_start, plot_end, by = "month"))
-    x_tick_labels <- substr(format(x_breaks, format = "%B"), 1, 1)
-  } else {
-    x_label <- "Date"
-    x_breaks <- seq.Date(plot_start, end_date, by = "year")
-    x_tick_labels <- format(x_breaks, format = "%Y")
-  }
-
-  y_label <- y_axis_label
-
   plot_out <- ggplot() +
     geom_ribbon(data = plot_data,
                 aes(x = Date, ymin = min, ymax = max, fill = group)) +
@@ -1159,19 +968,22 @@ daily_gwl_plot <- function(gw_level_dv,
               aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "EXPLANATION") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    hasp_framework(x_label, y_label,
+    hasp_framework(x_label, y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(aspect.ratio = NULL) +
-    scale_x_date(limits = c(plot_start, plot_end),
+    scale_x_date(limits = c(plot_ranges$plot_start, plot_ranges$plot_end),
                  expand = c(0, 0),
-                 breaks = x_breaks, labels = x_tick_labels) +
+                 breaks = x_breaks, 
+                 labels = x_tick_labels) +
     guides(color = guide_legend(order = 1),
            fill = guide_legend(order = 2))
 
   if (month_breaks) {
     plot_out <- plot_out +
-      geom_vline(xintercept = seq.Date(plot_start, plot_end, by = "month"),
+      geom_vline(xintercept = seq.Date(plot_ranges$plot_start, 
+                                       plot_ranges$plot_end,
+                                       by = "month"),
                  color = "grey80") +
       theme(axis.ticks.x = element_blank())
 
@@ -1191,24 +1003,7 @@ daily_gwl_plot <- function(gw_level_dv,
 #' Calculates the historical max, mean, minimum, and number of available points
 #' for each day of the year
 #'
-#' @param gw_level_dv data frame, daily groundwater level data
-#' from \code{readNWISdv}
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this
-#' can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
-#' @param approved_col name of column to get provisional/approved status.
-#'
+#' @inheritParams daily_gwl_summary
 #' @return a data frame giving the max, mean, min, and number of available
 #' days of data for each day of the year.
 #'
@@ -1216,32 +1011,41 @@ daily_gwl_plot <- function(gw_level_dv,
 #'
 #' @examples
 #'
-#' # site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
+#' 
 #' daily_frequency_table(gw_level_dv,
 #'                       NULL,
 #'                       parameter_cd = "62610")
 #'
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
+#'                                  
 #' daily_frequency_table(gw_level_dv,
 #'                       gwl_data,
 #'                       parameter_cd = "62610")
 daily_frequency_table <- function(gw_level_dv,
                                   gwl_data,
                                   parameter_cd = NA,
-                                  date_col = NA, value_col = NA,
-                                  approved_col = NA, stat_cd = NA) {
+                                  date_col = c("time", "time"),
+                                  value_col = c("value", "value"),
+                                  approved_col = c("approval_status", "approval_status")) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv,
                            gwl_data = gwl_data,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col,
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
@@ -1252,8 +1056,8 @@ daily_frequency_table <- function(gw_level_dv,
   historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ]
   historical_stats$DOY <- as.numeric(format(historical_stats$Date, "%j"))
 
-  historical_stats <- historical_stats %>%
-    dplyr::group_by(DOY) %>%
+  historical_stats <- historical_stats |>
+    dplyr::group_by(DOY) |>
     dplyr::summarize(max = max(Value, na.rm = TRUE),
               mean = mean(Value, na.rm = TRUE),
               min = min(Value, na.rm = TRUE),
@@ -1265,34 +1069,26 @@ daily_frequency_table <- function(gw_level_dv,
 #' Summary table of daily data
 #'
 #' @param gw_level_dv data frame, daily groundwater level data. Often obtained
-#' from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.
-#' @param gwl_data data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-#' data frame with a date, value, and approval columns. Using the convention:
-#' lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-#' or sl_lev_va (representing value) will allow defaults to work.
+#' from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.
+#' @param gwl_data data frame returned from \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+#' data frame with a date, value, and approval columns. 
 #' Use \code{NULL} for no discrete data.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd
-#' can be used to define the value_col. If the data doesn't come directly from
-#' NWIS services, this can be set to \code{NA},and this argument will be ignored.
-#' @param date_col the name of the date column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the date
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param value_col the name of the value column. The default is \code{NA},
-#' in which case, the code will try to get the column name automatically based on NWIS
-#' naming conventions. If both gw_level_dv and gwl_data data frames
-#' require custom column names, the first value of this input defines the value
-#' column for gw_level_dv, and the second defines gwl_data.
-#' @param approved_col the name of the column to get provisional/approved status.
-#' The default is \code{NA}, in which case, the code will try to get the column name
-#' automatically based on NWIS naming conventions. If both gw_level_dv and
-#' gwl_data data frames require custom column names, the first value of this
-#' input defines the approval column for gw_level_dv, and the second defines gwl_data.#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd
-#' can be used to help define the value_col.
-#'
+#' @param parameter_cd Can be used to filter data if the data frame has a 
+#' "parameter_code" column. The default is \code{NA},
+#' which will not do any filtering. If the gwl_data and gw_level_dv need different
+#' parameter code filtering, use a vector of 2 parameter codes. The first one will filter the
+#' gw_level_dv data frame, the second will filter the gwl_data data frame.
+#' @param date_col the name of the time columns. The first value is associated
+#' with the gw_level_dv input, and the second value is associated with the gwl_data
+#' input. The default is \code{c("time", "time")}.
+#' @param value_col the name of the value columns. The first value is associated
+#' with the gw_level_dv input, and the second value is associated with the gwl_data
+#' input. The default is \code{c("value", "value")}.
+#' @param approved_col the name of the column to get provisional/approved status. 
+#' The first value is associated
+#' with the gw_level_dv input, and the second value is associated with the gwl_data
+#' input. The default is \code{c("approval_status", "approval_status")}.
+#' It is expected that these columns will have only "Approved" or "Provisional".
 #' @return a summary table giving the period of record, completeness
 #' and percentile values
 #'
@@ -1300,34 +1096,41 @@ daily_frequency_table <- function(gw_level_dv,
 #'
 #' @examples
 #'
-#' # site <- "263819081585801"
+#' site <- "USGS-263819081585801"
 #' p_code_dv <- "62610"
 #' statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
+#' 
 #' daily_gwl_summary(gw_level_dv,
 #'                   gwl_data = NULL,
 #'                   parameter_cd = p_code_dv)
 #'
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
+#' 
 #' daily_gwl_summary(gw_level_dv,
 #'                   gwl_data = gwl_data,
 #'                   parameter_cd = p_code_dv)
 daily_gwl_summary <- function(gw_level_dv,
                               gwl_data,
                               parameter_cd = NA,
-                              date_col = NA,
-                              value_col = NA,
-                              approved_col = NA,
-                              stat_cd = NA) {
+                              date_col = c("time", "time"),
+                              value_col = c("value", "value"),
+                              approved_col = c("approval_status", "approval_status")) {
 
   data_list <- set_up_data(gw_level_dv = gw_level_dv,
                            gwl_data = gwl_data,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col,
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
@@ -1338,7 +1141,7 @@ daily_gwl_summary <- function(gw_level_dv,
   gw_level_dv$gw_level <- gw_level_dv$Value
   gw_level_dv$gw_level_cd <- gw_level_dv$Approve
 
-  gw_level_dv <- gw_level_dv[grepl("A", gw_level_dv$gw_level_cd), ]
+  gw_level_dv <- gw_level_dv[grepl("Approved", gw_level_dv$gw_level_cd), ]
 
   begin_date <- min(gw_level_dv$Date, na.rm = TRUE)
   end_date <- max(gw_level_dv$Date, na.rm = TRUE)
@@ -1369,93 +1172,4 @@ daily_gwl_summary <- function(gw_level_dv,
 
 }
 
-#' Find the first day of the month for a given date
-#'
-#' @param date a vector of dates
-#'
-#' @return the first day of the month that given dates fall in
-#' @export
-#'
-#' @examples
-#' date <- as.Date("2020-12-28")
-#' first_day(date)
-#'
-first_day <- function(date) {
 
-  date <- as.POSIXlt(date)
-
-  first_day_month <- as.Date(paste(
-    date$year + 1900,
-    date$mon + 1,
-    1,
-    sep = "-"
-  ))
-
-  return(first_day_month)
-
-}
-
-#' Find the last day of the month for a given date
-#'
-#' @param date a vector of dates
-#'
-#' @return the last day of the month that given dates fall in
-#' @export
-#' @examples
-#' date <- as.Date("2020-12-28")
-#' last_day(date)
-#' last_day("2020-02-15")
-#' last_day("2019-02-15")
-#' last_day(c("2020-12-28", "2020-02-15", "2019-02-15"))
-last_day <- function(date) {
-
-  date <- as.POSIXlt(date)
-
-  year <- date$year + 1900
-  month <- date$mon + 1
-
-  is_leap <- as.numeric((year %% 4 == 0 & year %% 100 != 0) |
-                          year %% 400 == 0)
-
-  total_day <- c(31, 28,
-                 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-
-  last_day_month <- as.Date(paste(
-    year,
-    month,
-    total_day[month],
-    sep = "-"
-  ))
-
-  if (any(is_leap & month == 2)) {
-    last_day_month[is_leap & month == 2] <- as.Date(paste(year[is_leap & month == 2],
-                                                          "02-29",
-                                                          sep = "-"))
-  }
-
-
-  return(last_day_month)
-
-}
-
-
-#' Find the middle of the month for a given date
-#'
-#' @param date a vector of dates
-#'
-#' @return the middle day of the month the given dates fall in
-#' @export
-#' @examples
-#' date <- as.Date("2020-12-28")
-#' mid_month(date)
-#' mid_month(c("2019-02-15", "2020-03-08", "2010-06-01"))
-mid_month <- function(date) {
-
-  last_days <- last_day(date)
-  first_days <- first_day(date)
-
-  mid <- first_days + difftime(last_days, first_days) / 2
-
-  return(mid)
-
-}

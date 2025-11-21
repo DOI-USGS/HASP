@@ -43,7 +43,7 @@ This page merges information from USGS Groundwater Watch website and USGS Water 
 ```{r siteInfo, results='asis'}
 library(HASP)
 
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 site_metadata <- site_summary(siteID, markdown = TRUE)
 ```
 
@@ -60,24 +60,26 @@ Using `dataRetrieval` code to get the data for this site:
 
 ```{r getData, eval=TRUE}
 library(dataRetrieval)
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
 # Daily data:
-gw_level_dv <- readNWISdv(siteID,
-                          parameterCd,
-                          statCd = statCd)
+gw_level_dv <- read_waterdata_daily(monitoring_location_id = siteID,
+                                    parameter_code = parameterCd,
+                                    statistic_id = statCd,
+                                    skipGeometry = TRUE)
 
 # Field measured:
-gwl_data <- readNWISgwl(siteID)
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID,
+                                                             skipGeometry = TRUE)
 
 # Water quality data:
 cl_sc <- c("Chloride", "Specific conductance")
-qw_data <- readWQPqw(siteNumbers = paste0("USGS-", siteID),
+qw_data <- readWQPqw(siteNumbers = siteID,
                      parameterCd = cl_sc)
 
 plot_title <- "L -2701\n263819081585801"
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = parameterCd)$parameter_name
 
 ```
 
@@ -121,7 +123,7 @@ daily_gwl_plot(gw_level_dv,
 ```{r dailySummary}
 daily_summary_table <- daily_gwl_summary(gw_level_dv, 
                                          gwl_data,
-                                         parameter_cd = parameterCd) %>%
+                                         parameter_cd = parameterCd) |> 
   select("Begin Date" = begin_date,
          "End Date" = end_date,
          "Days" = days,
@@ -146,9 +148,8 @@ gwl_plot_field(gwl_data,
 
 
 ```{r fieldTable}
-siteField <- gwl_data %>% 
-  rename(value = sl_lev_va) %>% 
-  site_data_summary() 
+siteField <- gwl_data |> 
+  site_data_summary(site_col = "monitoring_location_id") 
 
 kable(siteField, digits = 1)
 
@@ -161,7 +162,7 @@ kable(siteField, digits = 1)
 
 
 ```{r dvPlot}
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm
+y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = parameterCd)$parameter_name
 
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
@@ -174,9 +175,8 @@ gwl_plot_all(gw_level_dv,
 
 
 ```{r dailyTable}
-siteDaily <- gw_level_dv %>% 
-  rename(value = X_62610_00001) %>% 
-  site_data_summary() %>% 
+siteDaily <- gw_level_dv |> 
+  site_data_summary() |> 
   select(Minimum = min_site, 	
          `1st` = p25, 
          Median = p50,
@@ -200,12 +200,12 @@ qw_plot(qw_data, plot_title = plot_title)
 
 
 ```{r chloride_trend}
-cl_trend <- trend_test(NULL,
+cl_trend <- trend_test(gw_level_dv = NULL,
                       gwl_data = dplyr::filter(qw_data, 
                    CharacteristicName == "Chloride"), 
-                     approved_col = "ResultStatusIdentifier",
-                     date_col = "ActivityStartDateTime",
-                     value_col = "ResultMeasureValue")
+                     approved_col = c(NA, "ResultStatusIdentifier"),
+                     date_col = c(NA, "ActivityStartDateTime"),
+                     value_col = c(NA, "ResultMeasureValue"))
 kable(cl_trend, digits = 3)
 ```
 

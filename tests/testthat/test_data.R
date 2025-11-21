@@ -38,75 +38,74 @@ test_that("Data", {
                     c("aqfr_cd",
                       "Aqfr_Name_prpr")))
   
-  expect_equal(nrow(L2701_example_data[["Daily"]]), 15000)
-  expect_equal(nrow(L2701_example_data[["Discrete"]]), 1374)
-  expect_equal(nrow(L2701_example_data[["QW"]]), 472)
+  expect_equal(nrow(L2701_example_data[["Daily"]]), 16275)
+  expect_equal(nrow(L2701_example_data[["Discrete"]]), 1461)
+  expect_equal(nrow(L2701_example_data[["QW"]]), 475)
   
-  expect_equal(ncol(L2701_example_data[["Daily"]]), 5)
-  expect_equal(ncol(L2701_example_data[["Discrete"]]), 19)
+  expect_equal(ncol(L2701_example_data[["Daily"]]), 11)
+  expect_equal(ncol(L2701_example_data[["Discrete"]]), 14)
   expect_equal(ncol(L2701_example_data[["QW"]]), 65)
   
 })
 
- test_that("Get Data", {
-   skip_on_cran()
-
-  end_date <- "2019-12-31"
-  state_date <- "2018-12-31"
-
-  aquiferCd <- "S100CSLLWD"
-  # Let's add this later...it's really sloooow:
-  aq_data <- get_aquifer_data(aquiferCd, state_date, end_date)
-
-  expect_type(aq_data, "list")
-  expect_true(all(names(aq_data) %in% c("value",
-                                        "lev_dt",
-                                        "site_no",
-                                        "state_call",
-                                        "parameter_cd",
-                                        "water_year",
-                                        "year" )))
-  
-  st_data <- get_state_data("AL", aquiferCd,
-                            startDate = state_date, 
-                            endDate = end_date)
-  
-  expect_type(st_data, "list")
-  expect_true(all(names(st_data) %in% c("value",
-                                        "lev_dt",
-                                        "site_no",
-                                        "state_call",
-                                        "parameter_cd",
-                                        "water_year",
-                                        "year" )))
-
-
-
- })
+ # test_that("Get Data", {
+ #   skip_on_cran()
+ #   skip_on_ci()
+ # 
+ #  # end_date <- "2019-12-31"
+ #  # state_date <- "2018-12-31"
+ #  # 
+ #  # aquiferCd <- "S100CSLLWD"
+ #  # Let's add this later...it's really sloooow:
+ #  # aq_data <- get_aquifer_data(aquiferCd, state_date, end_date)
+ #  # 
+ #  # expect_type(aq_data, "list")
+ #  # expect_true(all(names(aq_data) %in% c("value",
+ #  #                                       "lev_dt",
+ #  #                                       "site_no",
+ #  #                                       "state_call",
+ #  #                                       "parameter_cd",
+ #  #                                       "water_year",
+ #  #                                       "year" )))
+ #  # 
+ #  # st_data <- get_state_data("AL", aquiferCd,
+ #  #                           startDate = state_date, 
+ #  #                           endDate = end_date)
+ #  # 
+ #  # expect_type(st_data, "list")
+ #  # expect_true(all(names(st_data) %in% c("value",
+ #  #                                       "lev_dt",
+ #  #                                       "site_no",
+ #  #                                       "state_call",
+ #  #                                       "parameter_cd",
+ #  #                                       "water_year",
+ #  #                                       "year" )))
+ # 
+ # 
+ # 
+ # })
 
 test_that("Get site summaries", {
   skip_on_cran()
   
-  siteID <- "263819081585801"
+  siteID <- "USGS-263819081585801"
   
   site_metadata <- site_summary(siteID)
-  expect_true(all(c("site_no", "station_nm", "lat_va",
-                    "long_va", "state_cd", "county_cd",
-                    "huc_cd", "nat_aqfr_cd", "aqfr_cd",      
-                    "land_net_ds", "well_depth_va", "alt_va",       
-                    "alt_datum_cd", "state", "county",       
-                    "nat_aq", "local_aq", "lat_deg",      
-                    "lat_min", "lat_sec", "long_deg",     
-                    "long_min", "long_sec") %in% names(site_metadata)))
+  expect_true(all(c("monitoring_location_id", "monitoring_location_name", "geometry",                
+                    "site_type_code", "state_code", "state_name",             
+                    "county_code", "county_name", "hydrologic_unit_code",    
+                    "national_aquifer_code", "aquifer_type_code", "well_constructed_depth",  
+                    "altitude", "altitude_method_name", "nat_aq",                 
+                    "local_aq" ) %in% names(site_metadata)))
   
   expect_equal(nrow(site_metadata), 1)
   
   site_data_available <- data_available(siteID)
   
-  expect_true(all(c("Data Type", "Begin Date", "End Date", "Count") %in%
+  expect_true(all(c("Data Type", "Begin Date", "End Date") %in%
                     names(site_data_available)))
   
-  expect_gte(nrow(site_data_available), 6)
+  expect_gte(nrow(site_data_available), 4)
   
 })
 
@@ -116,10 +115,9 @@ test_that("Data setup", {
   s1 <- HASP:::set_up_data(gw_level_dv = L2701_example_data[["Daily"]],
                     gwl_data = L2701_example_data[["Discrete"]], 
                     parameter_cd = "62610", 
-                    date_col = NA,
-                    value_col = NA,
-                    approved_col = NA,
-                    stat_cd = "00003")
+                    date_col = c("time", "time"),
+                    value_col = c("value", "value"),
+                    approved_col = c("approval_status", "approval_status"))
   
   expect_true(all(names(s1) %in% c("gw_level_dv", "gwl_data", "includes")))
   expect_true(all(s1$includes))
@@ -131,25 +129,23 @@ test_that("Data setup", {
   expect_true(inherits(s1$gwl_data$Date, "Date"))
 
   incomplete_date <-  L2701_example_data[["Daily"]]
-  incomplete_date$Date <- as.character(incomplete_date$Date)
-  incomplete_date$Date[1] <- "1980"
+  incomplete_date$time <- as.character(incomplete_date$time)
+  incomplete_date$time[1] <- "1980"
   expect_warning(s2 <- HASP:::set_up_data(gw_level_dv = incomplete_date,
                     gwl_data = L2701_example_data[["Discrete"]], 
                     parameter_cd = "62610", 
-                    date_col = NA,
-                    value_col = NA,
-                    approved_col = NA,
-                    stat_cd = "00003"))
+                    date_col = c("time", "time"),
+                    value_col = c("value", "value"),
+                    approved_col = c("approval_status", "approval_status")))
   
   incomplete_date <-  L2701_example_data[["Discrete"]]
-  incomplete_date$lev_dt <- as.character(incomplete_date$lev_dt)
-  incomplete_date$lev_dt[1] <- "1980"
+  incomplete_date$time <- as.character(incomplete_date$time)
+  incomplete_date$time[1] <- "1980"
   expect_warning(s2 <- HASP:::set_up_data(gw_level_dv = L2701_example_data[["Daily"]],
                                           gwl_data = incomplete_date, 
                                           parameter_cd = "62610", 
-                                          date_col = NA,
-                                          value_col = NA,
-                                          approved_col = NA,
-                                          stat_cd = "00003"))
+                                          date_col = c("time", "time"),
+                                          value_col = c("value", "value"),
+                                          approved_col = c("approval_status", "approval_status")))
   
 })

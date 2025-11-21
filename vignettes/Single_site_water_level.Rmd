@@ -47,65 +47,43 @@ https://fl.water.usgs.gov/mapper/waterlevel_site_info.php?site=263819081585801
 ```{r siteInfo, results='asis'}
 library(HASP)
 
-siteID <- "263819081585801"
-site_metadata <- site_summary(siteID, markdown = TRUE)
+# siteID <- "263819081585801"
+# site_metadata <- site_summary(siteID, markdown = TRUE)
 ```
 
 </td><td>
 
 ```{r whatData}
-data_info <- data_available(siteID)
-kable(data_info)
+# data_info <- data_available(siteID)
+# kable(data_info)
 ```
 
 </td></tr> </table>
 
 ## Get data using dataRetrieval
 
-
-<table>
-<tr><td>
-
 Using `dataRetrieval` code to get the data for this site:
 
 ```{r getData, eval=TRUE}
 library(dataRetrieval)
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 parameterCd <- "62610"
 statCd <- "00001"
 # Daily data:
-gw_level_dv <- readNWISdv(siteID,
-                          parameterCd,
-                          statCd = statCd)
+gw_level_dv <- read_waterdata_daily(monitoring_location_id = siteID,
+                                    parameter_code = parameterCd,
+                                    statistic_id = statCd, 
+                                    skipGeometry = TRUE)
 
 # Field GWL measured:
-gwl_data <- readNWISgwl(siteID)
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID,
+                                                             skipGeometry = TRUE)
 
 site_title <- "L -2701\n263819081585801"
 
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = parameterCd)$parameter_name
 
 ```
-
-</td><td>
-
-Using the example data provided in the package:
-
-```{r getDataReal, eval=FALSE}
-siteID <- "263819081585801"
-parameterCd <- "62610"
-statCd <- "00001"
-
-# Daily
-gw_level_dv <-  L2701_example_data$Daily
-# Field
-gwl_data <- L2701_example_data$Discrete
-
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
-
-```
-
-</td></tr> </table>
 
 ## Water Level Data and Analysis
 
@@ -177,8 +155,7 @@ gwl_plot_all(gw_level_dv, gwl_data,
 Summary statistics for maximum daily water level measurements:
 
 ```{r siteStatsDaily}
-siteDV <- site_data_summary(gw_level_dv,
-                            value_col = "X_62610_00001") 
+siteDV <- site_data_summary(gw_level_dv) 
 
 kable(siteDV, digits = 1)
 
@@ -188,9 +165,9 @@ Results of trend analysis on maximum daily water levels:
 
 ```{r trendTableDaily}
 
-trend_result <- trend_test(gw_level_dv, 
-                          NULL,
-                          parameter_cd = parameterCd)
+trend_result <- trend_test(gw_level_dv = gw_level_dv, 
+                           gwl_data = NULL,
+                           parameter_cd = parameterCd)
 kable(trend_result, digits = 1)
 
 
@@ -217,9 +194,8 @@ gwl_plot_all(NULL, gwl_data,
 Summary statistics for manual water level measurements
 
 ```{r manualTable}
-quantiles <- gwl_data %>% 
-  rename(value = sl_lev_va) %>% 
-  site_data_summary() 
+quantiles <- gwl_data |> 
+  site_data_summary(site_col = "monitoring_location_id") 
 
 kable(quantiles, digits = 1)
 

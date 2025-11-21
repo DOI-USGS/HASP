@@ -7,7 +7,7 @@ format_2 <- function(x){
 test_that("Site summaries", {
   aquifer_data <- aquifer_data
   aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
-  summary_info2 <- site_data_summary(aquifer_data)
+  summary_info2 <- site_data_summary(aquifer_data, site_col = "site_no")
 
   expect_type(summary_info2, "list")
   
@@ -50,9 +50,9 @@ test_that("QW summaries", {
                                      "Third quartile (mg/l)",                          
                                      "Number of samples")))
   
-  expect_true(all(x$Result == c("1978-09-06", "52", "2021-04-27", "119", "",          
-                                  "", "14", "119", "60.8", "54",        
-                                  "58", "68", "80")))
+  expect_true(all(x$Result == c("1978-09-06", "52", "2022-05-18", "72", "",          
+                                  "", "14", "119", "60.9", "54",        
+                                  "58", "68", "81")))
   
   y <- qw_summary(qw_data, 
                   CharacteristicName = "Specific conductance",
@@ -65,9 +65,9 @@ test_that("QW summaries", {
                                    "Median (uS/cm @25C)", "Third quartile (uS/cm @25C)",     
                                    "Number of samples")))
   
-  expect_true(all(y$Result == c("1979-05-09", "580", "2021-04-27", "761", "176",       
-                                "785", "552", "544", "560", "569",       
-                                "392")))
+  expect_true(all(y$Result == c("1979-05-09", "580", "2022-05-18", "606", "176",       
+                                "785", "553", "544", "560", "569",       
+                                "394")))
   
   
 })
@@ -95,8 +95,8 @@ test_that("Filter sites", {
   
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
-  freq <- aq_data %>%
-    dplyr::group_by(site_no) %>% 
+  freq <- aq_data |> 
+    dplyr::group_by(site_no) |> 
     dplyr::summarise(nYear = length(unique(year))) 
   
   expect_true(all(freq$nYear >= 30))

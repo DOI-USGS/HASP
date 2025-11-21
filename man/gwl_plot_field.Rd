@@ -9,9 +9,9 @@ gwl_plot_field(
   gwl_data,
   plot_title = "",
   parameter_cd = NA,
-  date_col = "lev_dt",
-  value_col = NA,
-  approved_col = "lev_age_cd",
+  date_col = "time",
+  value_col = "value",
+  approved_col = "approval_status",
   flip = TRUE,
   y_label = "",
   subtitle = "U.S. Geological Survey"
@@ -21,10 +21,9 @@ gwl_plot_all(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = NA,
-  value_col = NA,
-  approved_col = NA,
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   y_label = "",
   subtitle = "U.S. Geological Survey",
   plot_title = "",
@@ -36,48 +35,42 @@ gwl_plot_all(
 )
 }
 \arguments{
-\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or 
-data frame with a date, value, and approval columns. Using the convention:
-lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-or sl_lev_va (representing value) will allow defaults to work.
+\item{gwl_data}{data frame returned from \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+data frame with a date, value, and approval columns. 
 Use \code{NULL} for no discrete data.}
 
 \item{plot_title}{character, title for plot.}
 
-\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd 
-can be used to define the value_col. If the data doesn't come directly from
-NWIS services, this can be set to \code{NA},and this argument will be ignored.}
+\item{parameter_cd}{Can be used to filter data if the data frame has a 
+"parameter_code" column. The default is \code{NA},
+which will not do any filtering. If the gwl_data and gw_level_dv need different
+parameter code filtering, use a vector of 2 parameter codes. The first one will filter the
+gw_level_dv data frame, the second will filter the gwl_data data frame.}
 
-\item{date_col}{the name of the date column. The default is \code{NA},
-in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames 
-require custom column names, the first value of this input defines the date
-column for gw_level_dv, and the second defines gwl_data.}
+\item{date_col}{the name of the time columns. The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("time", "time")}.}
 
-\item{value_col}{the name of the value column. The default is \code{NA},
-in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames 
-require custom column names, the first value of this input defines the value
-column for gw_level_dv, and the second defines gwl_data.}
+\item{value_col}{the name of the value columns. The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("value", "value")}.}
 
-\item{approved_col}{the name of the column to get provisional/approved status.
-The default is \code{NA}, in which case, the code will try to get the column name
-automatically based on NWIS naming conventions. If both gw_level_dv and
-gwl_data data frames require custom column names, the first value of this 
-input defines the approval column for gw_level_dv, and the second defines gwl_data.}
+\item{approved_col}{the name of the column to get provisional/approved status. 
+The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("approval_status", "approval_status")}.
+It is expected that these columns will have only "Approved" or "Provisional".}
 
-\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
-Default is \code{TRUE}.}
+\item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers
+are in the higher percentages. Default is \code{TRUE}.}
 
-\item{y_label}{character for y-axis label. Consider using \code{\link[dataRetrieval]{readNWISpCode}} for USGS parameter_nm.}
+\item{y_label}{character for y-axis label. Consider using 
+\code{\link[dataRetrieval]{read_waterdata_parameter_codes}} for USGS parameter_name.}
 
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
-\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained 
-from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
-
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd 
-can be used to help define the value_col.}
+\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
+from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
 \item{add_trend}{logical. Uses \code{trend_test}.}
 
@@ -95,60 +88,73 @@ Function to create the field groundwater level data plot.
 }
 \examples{
 
-# site <- "263819081585801"
-# gwl_data <- dataRetrieval::readNWISgwl(site)
-
-# Using package example data:
+site <- "USGS-263819081585801"
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
 gwl_data <- L2701_example_data$Discrete
-plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+
+pcodes <- dataRetrieval::read_waterdata_parameter_codes(
+            parameter_code = unique(gwl_data$parameter_code)
+          )
+
 gwl_plot_field(gwl_data, 
-               plot_title = plot_title, 
+               plot_title = "L2701_example", 
                parameter_cd = "62610",
                flip = FALSE,
-               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+               y_label = pcodes$parameter_name[pcodes$parameter_code == "62610"])
+               
 gwl_plot_field(gwl_data, 
-               plot_title = plot_title,
-               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62611"], 
+               plot_title = "L2701_example",
+               y_label = pcodes$parameter_name[pcodes$parameter_code == "62611"], 
                parameter_cd = "62611",
                flip = FALSE)
+               
 gwl_plot_field(gwl_data,  
-               plot_title = plot_title,
-               y_label = pcodes$parameter_nm[pcodes$parameter_cd == "72019"], 
+               plot_title = "L2701_example",
+               y_label = pcodes$parameter_name[pcodes$parameter_code == "72019"], 
                parameter_cd = "72019",
                flip = TRUE)
-# site <- "263819081585801"
-parameterCd <- "62610"
-# statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, statCd = statCd)
-# Using package example data:
+               
+site <- "USGS-263819081585801"
+p_code_dv <- "62610"
+statCd <- "00001"
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
 gw_level_dv <- L2701_example_data$Daily
-gwl_data <- L2701_example_data$Discrete
-plot_title <- attr(gwl_data, "siteInfo")[["station_nm"]]
-pcodes <- dataRetrieval::readNWISpCode(unique(gwl_data$parameter_cd))
+
+site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = site)
+
+plot_title <- site_info$monitoring_location_name
+pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = p_code_dv)
 
 gwl_plot_all(gw_level_dv, 
              NULL, 
-             parameter_cd = "62610",
              plot_title = plot_title,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             y_label = pcodes$parameter_name,
              flip = TRUE) 
+
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
+gwl_data <- L2701_example_data$Discrete
 
 gwl_plot_all(gw_level_dv, 
              gwl_data, 
              parameter_cd = "62610",
              plot_title = plot_title,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
-             add_trend = TRUE,
+             y_label = pcodes$parameter_name,
+             add_trend = FALSE,
              flip = FALSE)
-             
-             
+
 gwl_plot_all(gw_level_dv,
              gwl_data,
              parameter_cd = "62610",
-             n_years = c(5, 10, 20),
+             n_years = c(5, 20),
              POR_trend = TRUE,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             y_label = pcodes$parameter_name,
              plot_title = plot_title,
              add_trend = TRUE)
              
@@ -156,13 +162,13 @@ gwl_plot_all(NULL,
              gwl_data, 
              parameter_cd = "62610",
              plot_title = plot_title, 
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"])
+             y_label = pcodes$parameter_name)
 
 gwl_plot_all(NULL, 
              gwl_data, 
              parameter_cd = "62610",
              plot_title = plot_title,
-             y_label = pcodes$parameter_nm[pcodes$parameter_cd == "62610"],
+             y_label = pcodes$parameter_name,
              add_trend = TRUE)
 
 }

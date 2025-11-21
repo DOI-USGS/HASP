@@ -21,7 +21,7 @@
 #' @import ggplot2
 #' @examples 
 #' 
-#' # site <- "263819081585801"
+#' # site <- "USGS-263819081585801"
 #' # parameterCd <- c("00095","90095","00940","99220")
 #' # site_data <- dataRetrieval::readWQPqw(site, 
 #' #                                        parameterCd)
@@ -96,9 +96,9 @@ trend_plot <- function(qw_data, plot_title,
   
   trend_results <- trend_test(gw_level_dv = NULL,
                               gwl_data = qw_sub,
-                              date_col = "ActivityStartDate",
-                              value_col = "ResultMeasureValue", 
-                              approved_col = "condition",
+                              date_col = c(NA, "ActivityStartDate"),
+                              value_col = c(NA, "ResultMeasureValue"), 
+                              approved_col = c(NA, "condition"),
                               n_years = n_years,
                               POR_trend = POR_trend)
   
@@ -173,8 +173,8 @@ create_segs <- function(trend_results,
   }
   POR <- as.character(diff(range(decimalDate(as.Date(x[[date_col]])))))
               
-  df_seg <- trend_results %>%
-    dplyr::rename(years = test) %>%
+  df_seg <- trend_results |>
+    dplyr::rename(years = test) |>
     dplyr::mutate(n_year = as.numeric(dplyr::if_else(grepl("-year trend", years), 
                                           gsub("-year trend", "", years),
                                           POR)),
@@ -183,7 +183,7 @@ create_segs <- function(trend_results,
                                                 units = "days"),
                                origin = "1970-01-01"),
                   y1 = decimalDate(x1) * slope + intercept,
-                  y2 = decimalDate(x2) * slope + intercept) %>%
+                  y2 = decimalDate(x2) * slope + intercept) |>
     dplyr::filter(!is.na(y2),
                   trend != "Not significant")
     # dplyr::mutate(x2 = decimalDate(x2),

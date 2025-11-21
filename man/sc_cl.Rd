@@ -51,17 +51,19 @@ and combination plots and tables for a single site.
 }
 \examples{
 
-# site <- "263819081585801"
+# site <- "USGS-263819081585801"
 # parameterCd <- c("00095","90095","00940","99220")
 # site_data <- dataRetrieval::readWQPqw(site, 
 #                                        parameterCd)
 # Using package example data:
 qw_data <- L2701_example_data$QW
-plot_title <- paste(attr(qw_data, "siteInfo")[["station_nm"]], ": Specific Conductance vs Chloride")
+plot_title <- paste("USGS-263819081585801",
+ ": Specific Conductance vs Chloride")
 Sc_Cl_plot(qw_data, plot_title)
 
 sc_cl <- Sc_Cl_table(qw_data)
-plot_title <- attr(qw_data, "siteInfo")[["station_nm"]]
+plot_title <- paste("USGS-263819081585801",
+ ": Specific Conductance vs Chloride")
 qw_plot(qw_data, plot_title, CharacteristicName = "Chloride")
 qw_plot(qw_data, plot_title, CharacteristicName = "Specific conductance")
 qw_plot(qw_data,

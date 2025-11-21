@@ -4,7 +4,7 @@
 \alias{site_data_summary}
 \title{site_data_summary}
 \usage{
-site_data_summary(x, value_col = "value", site_col = "site_no")
+site_data_summary(x, value_col = "value", site_col = "monitoring_location_id")
 }
 \arguments{
 \item{x}{data frame}
@@ -23,5 +23,5 @@ take the summaries
 \examples{
 aquifer_data <- aquifer_data
 aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
-summary_info <- site_data_summary(aquifer_data)
+summary_info <- site_data_summary(aquifer_data, site_col = "site_no")
 }

@@ -2,7 +2,7 @@ rawData_data <- reactiveValues(daily_data = NULL,
                                example_data = FALSE,
                                gwl_data = NULL,
                                qw_data = NULL,
-                               p_code_dv = dataRetrieval::readNWISpCode("62610"),
+                               p_code_dv = pcode_info[pcode_info$parameter_code == "62610", ],
                                stat_cd = "00001",
                                available_data = NULL,
                                site_meta = NULL,
@@ -31,19 +31,19 @@ observeEvent(input$get_data_avail,{
   
   site_info <- site_summary(site_id)
   
-  if(!any(grepl("GW", site_info$site_tp_cd))){
+  if(!any(grepl("GW", site_info$site_type_code))){
     showNotification("The site is not identified as a groundwater site.", 
                      type = "error")
   }
   
-  rawData_data$available_data <- data_available(site_id)
+  data_avail <- data_available(site_id)
+  rawData_data$available_data <- data_avail
   rawData_data$site_meta <-  site_info
-  
-  pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
-    filter(!is.na(parm_cd))
 
-  rawData_data$p_code_dv <- dataRetrieval::readNWISpCode(pcodes_dv$parm_cd)
-  rawData_data$stat_cd <- unique(pcodes_dv$stat_cd)
+  pcodes_dv <- data_avail[data_avail$`Data Type` == "Daily", ]
+
+  rawData_data$p_code_dv <- pcodes_dv
+  rawData_data$stat_cd <- unique(data_avail$statistic_id[data_avail$`Data Type` == "Daily"])
   
 })
 
@@ -55,16 +55,16 @@ observeEvent(input$example_data,{
   rawData_data$daily_data <- HASP::L2701_example_data$Daily
   rawData_data$gwl_data <- HASP::L2701_example_data$Discrete
   rawData_data$qw_data <- HASP::L2701_example_data$QW
-  
-  rawData_data$p_code_dv <-  dataRetrieval::readNWISpCode("62610")
+
+  rawData_data$p_code_dv <-  pcode_info[pcode_info$parameter_code == "62610", ]
   
   rawData_data$stat_cd <- "00001"
-  rawData_data$p_code_qw <- unique(qw_data$CharacteristicName)
+  rawData_data$p_code_qw <- unique(HASP::L2701_example_data$QW$CharacteristicName)
 
-  rawData_data$available_data <- data_available("263819081585801")
-  rawData_data$site_meta <- site_summary("263819081585801")
+  rawData_data$available_data <- data_available("USGS-263819081585801")
+  rawData_data$site_meta <- site_summary("USGS-263819081585801")
   
-  updateTextInput(session, "siteID", value = "263819081585801")
+  updateTextInput(session, "siteID", value = "USGS-263819081585801")
   
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
@@ -77,9 +77,7 @@ observeEvent(input$get_data_qw, {
   
   site_id <- input$siteID
   site_info <- site_summary(site_id)
-  
-  rawData_data$available_data <- data_available(site_id)
-  
+
   showNotification("Loading QW", 
                    duration = NULL, id = "load3")
   
@@ -98,32 +96,23 @@ observeEvent(input$get_data_dv, {
   rawData_data$example_data <- FALSE
   
   site_id <- input$siteID
-  site_info <- site_summary(site_id)
-  
-  rawData_data$available_data <- data_available(site_id)
-  
-  pcodes_dv <- dataRetrieval::whatNWISdata(siteNumber = site_id, service = "dv") %>% 
-    filter(!is.na(parm_cd))
-
-  rawData_data$p_code_dv <- dataRetrieval::readNWISpCode(pcodes_dv$parm_cd)
-  rawData_data$stat_cd <- unique(pcodes_dv$stat_cd)
-  rawData_data$site_meta <-  site_info
 
   shinyAce::updateAceEditor(session, 
                             editorId = "get_data_code", 
                             value = setup() )
   
-  if(!any(grepl("Daily Data", rawData_data$available_data$`Data Type`))) {
+  if(!any(grepl("Daily", rawData_data$available_data$`Data Type`))) {
     showNotification("This site doesn't have any daily data available",
                      type = "error")
     rawData_data$daily_data <- NULL
   } else {
     showNotification("Loading Daily Groundwater Data", 
                      duration = NULL, id = "load")
-    
-    rawData_data$daily_data <- dataRetrieval::readNWISdv(site_id, 
-                                                         pcodes_dv$parm_cd, 
-                                                         statCd = unique(pcodes_dv$stat_cd))
+
+    rawData_data$daily_data <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site_id, 
+                                                                   parameter_code = input$pcode, 
+                                                                   statistic_id = input$statcd, 
+                                                                   skipGeometry = TRUE)
     
     
     removeNotification(id = "load")
@@ -136,11 +125,9 @@ observeEvent(input$get_data_ground, {
   
   site_id <- input$siteID
 
-  rawData_data$available_data <- data_available(site_id)
-  
   site_info <- site_summary(site_id)
 
-  if(!any(grepl("GW", site_info$site_tp_cd))){
+  if(!any(grepl("GW", site_info$site_type_code))){
     showNotification("The site is not identified as a groundwater site.", 
                      type = "error")
   }
@@ -152,7 +139,8 @@ observeEvent(input$get_data_ground, {
   showNotification("Loading Discrete Groundwater Data", 
                    duration = NULL, id = "load2")
   
-  rawData_data$gwl_data <- dataRetrieval::readNWISgwl(site_id)
+  rawData_data$gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site_id, 
+                                                                            skipGeometry = TRUE)
   
   removeNotification(id = "load2")
 
@@ -198,8 +186,8 @@ stat_cd <- reactive({
 observe({
   choices_dv <- p_code_dv()
 
-  updateRadioButtons(session, inputId = "pcode",choiceNames = choices_dv$parameter_nm,
-                    choiceValues = choices_dv$parameter_cd, selected = choices_dv$parameter_cd[1])
+  updateRadioButtons(session, inputId = "pcode",choiceNames = choices_dv$parameter_name,
+                    choiceValues = choices_dv$parameter_code, selected = choices_dv$parameter_code[1])
 })
 
 observe({
@@ -209,15 +197,4 @@ observe({
                      choices = choices_st, selected = choices_st[1])
 })
 
-observe({
-  gwl_data <- gwlData()
-  
-  if(all(is.na(gwl_data$sl_lev_va))){
-    updateRadioButtons(session, inputId = "gwl_vals", selected = "lev_va")
-  }
-  
-  if(all(is.na(gwl_data$lev_va))){
-    updateRadioButtons(session, inputId = "gwl_vals", selected = "sl_lev_va")
-  }
 
-})

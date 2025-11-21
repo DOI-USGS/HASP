@@ -14,8 +14,8 @@
 #' 
 theme_gwl <- function(base_family = "", ...){
   
-  spacing_1 <- c(0.3, 0.3, 0.3, 0.3)
-  spacing_2 <- c(-0.1, -0.1, -0.1, -0.10)
+  spacing_1 <- c(0.03)
+  spacing_2 <- c(-0.01)
   
   theme_bw(base_family = base_family, ...) +
     theme(
@@ -23,10 +23,10 @@ theme_gwl <- function(base_family = "", ...){
       plot.title = element_text(hjust = 0.5, size = 9),
       axis.ticks.length = unit(-0.05, "in"),
       plot.subtitle = element_text(color = "darkgreen", size = 8),
-      axis.text.x = element_text(margin=unit(spacing_1, units = "cm")),
-      axis.title.x = element_text(margin=unit(spacing_2, units = "cm")),
-      axis.text.y = element_text(margin=unit(spacing_1, units = "cm")),
-      axis.title.y = element_text(margin=unit(spacing_2, units = "cm")), 
+      axis.text.x = element_text(margin = margin(t = spacing_1, r = 0, b = 0, l = 0, unit = "cm")),
+      axis.title.x = element_text(margin = margin(t = spacing_2, r = 0, b = 0, l = 0, unit = "cm")),
+      axis.text.y = element_text(margin = margin(t = 0, r = spacing_1, b = 0, l = 0, unit = "cm")),
+      axis.title.y = element_text(margin = margin(t = 0, r = spacing_2, b = 0, l = 0, unit = "cm")), 
       plot.caption = element_text(hjust = 1, size = 8),
       legend.direction = "vertical",
       legend.box = "horoizontal",

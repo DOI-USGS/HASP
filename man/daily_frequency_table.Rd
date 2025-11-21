@@ -8,36 +8,38 @@ daily_frequency_table(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = NA,
-  value_col = NA,
-  approved_col = NA,
-  stat_cd = NA
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status")
 )
 }
 \arguments{
-\item{gw_level_dv}{data frame, daily groundwater level data
-from \code{readNWISdv}}
+\item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
+from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
-\item{gwl_data}{data frame returned from dataRetrieval::readNWISgwl, or
-data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-approval code), and a column representing the measured value (either lev_va,
-sl_lev_va, or value).}
+\item{gwl_data}{data frame returned from \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+data frame with a date, value, and approval columns. 
+Use \code{NULL} for no discrete data.}
 
-\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd
-can be used to define the value_col.
- If the data doesn't come directly from NWIS services, this
-can be set to \code{NA},and this argument will be ignored.}
+\item{parameter_cd}{Can be used to filter data if the data frame has a 
+"parameter_code" column. The default is \code{NA},
+which will not do any filtering. If the gwl_data and gw_level_dv need different
+parameter code filtering, use a vector of 2 parameter codes. The first one will filter the
+gw_level_dv data frame, the second will filter the gwl_data data frame.}
 
-\item{date_col}{the heading of the date column. The default is \code{NA},
-which the code will try to get the column name automatically.}
+\item{date_col}{the name of the time columns. The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("time", "time")}.}
 
-\item{value_col}{name of value column. The default is \code{NA},
-which the code will try to get the column name automatically.}
+\item{value_col}{the name of the value columns. The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("value", "value")}.}
 
-\item{approved_col}{name of column to get provisional/approved status.}
-
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
-can be used to help define the value_col.}
+\item{approved_col}{the name of the column to get provisional/approved status. 
+The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("approval_status", "approval_status")}.
+It is expected that these columns will have only "Approved" or "Provisional".}
 }
 \value{
 a data frame giving the max, mean, min, and number of available
@@ -49,16 +51,25 @@ for each day of the year
 }
 \examples{
 
-# site <- "263819081585801"
+site <- "USGS-263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
 gw_level_dv <- L2701_example_data$Daily
+
 daily_frequency_table(gw_level_dv,
                       NULL,
                       parameter_cd = "62610")
 
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
 gwl_data <- L2701_example_data$Discrete
+                                 
 daily_frequency_table(gw_level_dv,
                       gwl_data,
                       parameter_cd = "62610")

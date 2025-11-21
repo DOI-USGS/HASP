@@ -56,14 +56,16 @@ Using `dataRetrieval` code to get the data for this site:
 
 ```{r getData, eval=TRUE}
 library(dataRetrieval)
-siteID <- "295204099340201"
+siteID <- "USGS-295204099340201"
 parameterCd <- "62610"
 statCd <- "00001"
 # Daily data:
-gw_level_dv <- readNWISdv(siteID, parameterCd, statCd = statCd)
+gw_level_dv <- read_waterdata_daily(monitoring_location_id = siteID,
+                                    parameter_code =  parameterCd,
+                                    statistic_id = statCd)
 
 # Field GWL measured:
-gwl_data <- readNWISgwl(siteID)
+gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID, skipGeometry = TRUE)
 ```
 
 ## Making and Customizing Plots
@@ -78,7 +80,7 @@ statistics plot.
 site_title <- "L -2701\n295204099340201"
 
 # set the ylabel
-y_label <- dataRetrieval::readNWISpCode(parameterCd)$parameter_nm 
+y_label <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = parameterCd)$parameter_name
 
 # make the plot using the HASP function
 monthly_frequency_plot(gw_level_dv, 

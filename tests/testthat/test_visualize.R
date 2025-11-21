@@ -53,10 +53,7 @@ test_that("SC Chloride graphs and table", {
   expect_error(Sc_Cl_table(site_data[,c("ActivityStartDateTime")]))
   
   qw_plot_out <- qw_plot(site_data, "hi!")
-  expect_true(all(c(c("data", "layers", "scales",     
-                      "mapping", "theme", "coordinates",
-                      "facet","plot_env", "labels")) %in%
-                    names(qw_plot_out)))
+  expect_true(is_ggplot(qw_plot_out))
   
 })
 
@@ -113,11 +110,6 @@ test_that("Weekly frequency plot", {
   expect_true(all(c("plot_week", "x", "y", "ymin", "group", "plot_week_last") %in%
                     plot_data_elements))
   
-  plot <- weekly_frequency_plot(L2701_example_data$Daily,
-                                L2701_example_data$Discrete,
-                                date_col = c("Date", "lev_dt"),
-                                value_col = c("X_62610_00001", "sl_lev_va"),
-                                approved_col = c("X_62610_00001_cd", "lev_status_cd"))
   
 })
 
@@ -132,10 +124,7 @@ test_that("Field gwl plot", {
                         parameter_cd = "62610",
                         plot_title = "title")
 
-  expect_true(all(c("data", "layers", "scales",     
-                    "mapping", "theme", "coordinates",
-                    "facet","plot_env", "labels") %in%
-                    names(plot2)))
+  expect_true(is_ggplot(plot2))
   
   plot_with_trend <- gwl_plot_all(dv, gwl_data, 
                                   plot_title = "title",
@@ -167,9 +156,6 @@ test_that("Daily gwl plot", {
   
   plot1 <- daily_gwl_plot(gw_daily, 
                           NULL,
-                          date_col = "Date",
-                          value_col = "X_62610_00001",
-                          approved_col = "X_62610_00001_cd",
                           historical_stat = "mean",
                           month_breaks = TRUE,
                           plot_title = plot_title)
@@ -182,7 +168,6 @@ test_that("Daily gwl plot", {
   plot2 <- daily_gwl_plot(gw_daily, 
                           gw_discrete,
                           parameter_cd = "62610",
-                          stat_cd = "00001",
                           historical_stat = "median",
                           month_breaks = FALSE,
                           plot_title = plot_title)
@@ -205,14 +190,12 @@ test_that("Daily gwl plot", {
   
   plot4 <- daily_gwl_plot(gw_daily, 
                           gw_discrete,
-                          date_col = c("Date",
-                                       "lev_dt"),
-                          value_col = c("X_62610_00001",
-                                        "sl_lev_va"),
-                          approved_col = c("X_62610_00001_cd",
-                                           "lev_status_cd"),
-                          start_date = "2018-10-01",
-                          end_date = "2020-10-01",
+                          parameter_cd = "62610",
+                          date_col = c("time", "time"),
+                          value_col = c("value", "value"),
+                          approved_col = c("approval_status",
+                                           "approval_status"),
+                          plot_range = c("2018-10-01", "2020-10-01"),
                           historical_stat = "mean",
                           month_breaks = TRUE,
                           plot_title = plot_title)

@@ -15,6 +15,6 @@ site_summary(siteID, markdown = FALSE)
 Get station summary information
 }
 \examples{
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 site_metadata <- site_summary(siteID)
 }
