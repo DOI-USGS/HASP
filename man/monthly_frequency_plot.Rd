@@ -2,7 +2,7 @@
 % Please edit documentation in R/frequency_analysis.R
 \name{monthly_frequency_plot}
 \alias{monthly_frequency_plot}
-\title{Plot monthly frequency analysis}
+\title{Plot monthly frequency plot}
 \usage{
 monthly_frequency_plot(
   gw_level_dv,
@@ -48,23 +48,22 @@ with the gw_level_dv input, and the second value is associated with the gwl_data
 input. The default is \code{c("approval_status", "approval_status")}.
 It is expected that these columns will have only "Approved" or "Provisional".}
 
-\item{plot_title}{the title to use on the plot.}
+\item{plot_title}{the title to use on the plot}
 
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
-\item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
+\item{plot_range}{the time frame to use for the plot. Use "Past year" (default) to see the
 last year of data, or "Calendar year" to use the current calendar year, beginning
-in January.}
+in January. Or specify two dates representing the start and end of the plot.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 
 \item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers
 are in the higher percentages. Default is \code{TRUE}.}
 
-\item{percentile_colors}{Optional argument to provide a vector of 5 or 7 colors
+\item{percentile_colors}{Optional argument to provide a vector of 5 colors
 used to fill the percentile bars in order from lowest percentile bin to the
-highest percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
-include_edges parameter is set to TRUE, then this vector must be 7 colors long.}
+highest percentile bin. Default behavior (NA) is to use legacy plot colors.}
 
 \item{include_edges}{Optional argument to toggle on the "edge bins" min-5 and 95-max on the plot.
 Default is FALSE which does not plot those bins.}

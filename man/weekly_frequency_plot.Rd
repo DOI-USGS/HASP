@@ -2,7 +2,7 @@
 % Please edit documentation in R/frequency_analysis.R
 \name{weekly_frequency_plot}
 \alias{weekly_frequency_plot}
-\title{Plot weekly frequency analysis}
+\title{Plot weekly frequency plot}
 \usage{
 weekly_frequency_plot(
   gw_level_dv,
@@ -45,9 +45,9 @@ with the gw_level_dv input, and the second value is associated with the gwl_data
 input. The default is \code{c("approval_status", "approval_status")}.
 It is expected that these columns will have only "Approved" or "Provisional".}
 
-\item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
+\item{plot_range}{the time frame to use for the plot. Use "Past year" (default) to see the
 last year of data, or "Calendar year" to use the current calendar year, beginning
-in January.}
+in January. Or specify two dates representing the start and end of the plot.}
 
 \item{plot_title}{the title to use on the plot}
 

@@ -151,22 +151,12 @@ stats_by_interval <- function(interval,
   return(stats)
 }
 
-#' Plot monthly frequency analysis
+#' Plot monthly frequency plot
 #'
 #' This plot uses calculations from \code{monthly_frequency_table}. Daily, discrete,
 #' or both types of data can be included.
 #'
-#' @inheritParams monthly_frequency_table
-#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
-#' last year of data, or "Calendar year" to use the current calendar year, beginning
-#' in January.
-#' @param plot_title the title to use on the plot.
-#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
-#' @param y_axis_label the label used for the y-axis of the plot.
-#' @param percentile_colors Optional argument to provide a vector of 5 or 7 colors
-#' used to fill the percentile bars in order from lowest percentile bin to the
-#' highest percentile bin. Default behavior (\code{NA}) is to use legacy plot colors. If 
-#' include_edges parameter is set to TRUE, then this vector must be 7 colors long.
+#' @inheritParams weekly_frequency_plot
 #' @param include_edges Optional argument to toggle on the "edge bins" min-5 and 95-max on the plot.
 #' Default is FALSE which does not plot those bins.
 #' @param median_point_size Optional argument to specify the size of the median point markers
@@ -306,10 +296,16 @@ monthly_frequency_plot <- function(gw_level_dv,
     stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
   }
 
-  date <- max(c(gw_level_dv$Date,
-                gwl_data$Date),
-              na.rm = TRUE)
-
+  # Create the plot labels
+  start_year <- as.POSIXlt(plot_start)$year + 1900
+  end_year <- as.POSIXlt(plot_end)$year + 1900
+  if (start_year == end_year) {
+    x_label <- as.character(start_year)
+  } else {
+    x_label <- paste(start_year, end_year, sep = " - ")
+  }
+  
+  date <- max(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
 
   # Calculate the percentiles
   site_statistics <- monthly_frequency_table(gw_level_dv,
@@ -356,7 +352,7 @@ monthly_frequency_plot <- function(gw_level_dv,
   # custom colors and shapes
   if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
-  } else if (is.na(percentile_colors) == FALSE) {
+  } else if (!is.na(percentile_colors)) {
     warning(
       paste0(
         "percentile_colors argument was provided but was invalid,",
@@ -456,16 +452,6 @@ monthly_frequency_plot <- function(gw_level_dv,
   point_sizes <- c("Monthly median" = median_point_size,
                    "Data point" = data_point_size)
 
-  # Create the plot labels
-  start_year <- as.POSIXlt(plot_start)$year + 1900
-  end_year <- as.POSIXlt(plot_end)$year + 1900
-  if (start_year == end_year) {
-    x_label <- as.character(start_year)
-  } else {
-    x_label <- paste(start_year, end_year, sep = " - ")
-  }
-  y_label <- y_axis_label
-
   # Plot
   plot_out <- ggplot() +
     geom_rect(data = site_statistics_plot,
@@ -506,7 +492,7 @@ monthly_frequency_plot <- function(gw_level_dv,
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
     hasp_framework(x_label = x_label,
-                   y_label = y_label,
+                   y_label = y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(axis.ticks.x = element_blank()) +
@@ -588,15 +574,15 @@ weekly_frequency_table <- function(gw_level_dv,
 
 }
 
-#' Plot weekly frequency analysis
+#' Plot weekly frequency plot
 #'
 #' Weekly statistics are calculated using the \code{weekly_frequency_table} function.
 #' Daily, discrete, or both types of data can be used.
 #'
 #' @inheritParams monthly_frequency_table
-#' @param plot_range the time frame to use for the plot. Either "Past year" to use the
+#' @param plot_range the time frame to use for the plot. Use "Past year" (default) to see the
 #' last year of data, or "Calendar year" to use the current calendar year, beginning
-#' in January.
+#' in January. Or specify two dates representing the start and end of the plot.
 #' @param plot_title the title to use on the plot
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @param y_axis_label the label used for the y-axis of the plot.
@@ -694,6 +680,16 @@ weekly_frequency_plot <- function(gw_level_dv,
   } else {
     stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
   }
+  
+  # Create the plot labels
+  year_start <- as.POSIXlt(plot_start)$year + 1900
+  year_end <- as.POSIXlt(plot_end)$year + 1900
+  
+  if (year_start == year_end) {
+    x_label <- as.character(year_start)
+  } else {
+    x_label <- paste(year_start, year_end, sep = " - ")
+  }
 
   # The last year of groundwater level measurements will plot
   gw_level_plot <- gw_level_dv |>
@@ -766,7 +762,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   if (length(percentile_colors) >= 5) {
     color_list <- percentile_colors
   }
-  else if (is.na(percentile_colors) == FALSE) {
+  else if (!is.na(percentile_colors)) {
     warning(paste0("percentile_colors argument was provided but was invalid,",
                    " should be a vector of length 5 in which each item in",
                    " the vector represents a color."))
@@ -784,17 +780,6 @@ weekly_frequency_plot <- function(gw_level_dv,
 
   point_shapes <- point_shapes[as.character(unique(point_data$group))]
   point_colors <- point_colors[as.character(unique(point_data$group))]
-
-  # Create the plot labels
-  year_start <- as.POSIXlt(plot_start)$year + 1900
-  year_end <- as.POSIXlt(plot_end)$year + 1900
-
-  if (year_start == year_end) {
-    x_label <- as.character(year_start)
-  } else {
-    x_label <- paste(year_start, year_end, sep = " - ")
-  }
-  y_label <- y_axis_label
 
   # Create the month breaks
   month_start <- seq(as.Date(plot_start), length = 12, by = "1 month")
@@ -837,7 +822,7 @@ weekly_frequency_plot <- function(gw_level_dv,
                       name = "Percentile") +
     scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_label,
+    hasp_framework(x_label, y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(axis.ticks.x = element_blank(),
@@ -869,26 +854,16 @@ weekly_frequency_plot <- function(gw_level_dv,
 
 }
 
-#' Plot recent data
+#' Plot daily data
 #'
 #' Calculates daily statistics based on all approved data.
 #' Daily, discrete, or both types are included.
 #' Historic median or mean are plotted based on all of the approved data.
 #'
-#' @inheritParams monthly_frequency_table
-#' @param start_date Date to start plot. If \code{NA} (which is the default),
-#' the plot will start 2 years before the most recent value.
-#' @param end_date Date to end plot. If \code{NA} (which is the default),
-#' the plot will end with the latest measurement.
+#' @inheritParams weekly_frequency_plot
 #' @param historical_stat the summary statistic to use for middle line of the plot. Either
 #' "mean" or "median."
 #' @param month_breaks a logical indicating whether to use monthly breaks for the plot
-#' @param plot_title the title to use on the plot
-#' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
-#' @param y_axis_label the label to use for the y axis
-#' @return a ggplot object with a ribbon indicating the historical daily range,
-#' the historical daily mean or median, and approved and provisional
-#' daily data for the last two years
 #'
 #' @export
 #'
@@ -927,16 +902,9 @@ weekly_frequency_plot <- function(gw_level_dv,
 #'                parameter_cd = "62610",
 #'                plot_title = "Groundwater Level",
 #'                month_breaks = TRUE,
-#'                start_date = "2020-10-01",
+#'                plot_range = c("2020-10-01", "2021-06-01"),
 #'                historical_stat = "median")
 #'
-#' daily_gwl_plot(gw_level_dv, gwl_data,
-#'                parameter_cd = "62610",
-#'                plot_title = "Groundwater Level",
-#'                month_breaks = TRUE,
-#'                start_date = "2018-10-01",
-#'                end_date = "2020-10-01",
-#'                historical_stat = "median")
 #'
 daily_gwl_plot <- function(gw_level_dv,
                            gwl_data,
@@ -944,11 +912,10 @@ daily_gwl_plot <- function(gw_level_dv,
                            date_col = c("time", "time"),
                            value_col = c("value", "value"),
                            approved_col = c("approval_status", "approval_status"),
-                           start_date = NA,
-                           end_date = NA,
                            historical_stat = "mean",
-                           month_breaks = FALSE,
+                           month_breaks = TRUE,
                            plot_title = "",
+                           plot_range = "Past year",
                            subtitle = "U.S. Geological Survey",
                            y_axis_label = "",
                            flip = FALSE) {
@@ -979,32 +946,42 @@ daily_gwl_plot <- function(gw_level_dv,
   gw_level_dv$J <- as.numeric(format(gw_level_dv$Date,
                                      format = "%j"))
 
-  historical_stats <- gw_level_dv[grepl("A", gw_level_dv$Approve), ] |>
+  historical_stats <- gw_level_dv[grepl("Approved", gw_level_dv$Approve), ] |>
     dplyr::group_by(J) |>
     dplyr::summarize(max = max(Value, na.rm = TRUE),
                      middle = historical_function(Value, na.rm = TRUE),
                      min = min(Value, na.rm = TRUE))
 
-  # Pull the last two years of data & join with the historical data
-
-  if (is.na(end_date)) {
-    end_date <- max(c(gw_level_dv$Date), na.rm = TRUE)
+  # Find the bounds of the plot
+  if(length(plot_range) == 2){
+    plot_end <- as.Date(plot_range[2])
+    plot_start <- as.Date(plot_range[1])
+    if(plot_start > plot_end){
+      stop("Starting plot date must be before ending plot date.")
+    }
+  } else if (plot_range == "Past year") {
+    plot_end <- last_day(Sys.Date()) + 1
+    plot_start <- first_day(plot_end - 363)
+  } else if (plot_range == "Calendar year") {
+    calendar_year <- format(Sys.Date(), format = "%Y")
+    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
+    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
   } else {
-    end_date <- as.Date(end_date)
+    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
   }
 
-  if (is.na(start_date)) {
-    plot_start_year <- as.numeric(format(end_date, format = "%Y")) - 2
-    plot_start <- as.Date(paste(plot_start_year,
-                                format(end_date, format = "%m-%d"),
-                                sep = "-"))
+  if (month_breaks) {
+    x_label <- paste(format(plot_start, "%B %Y"),
+                     "to",
+                     format(plot_end, "%B %Y"))
+    x_breaks <- mid_month(seq.Date(plot_start, plot_end, by = "1 month"))
+    x_tick_labels <- format(x_breaks, format = "%b")
   } else {
-    plot_start <- as.Date(start_date)
+    x_label <- "Date"
+    x_breaks <- seq.Date(plot_start, plot_end, by = "year")
+    x_tick_labels <- format(x_breaks, format = "%Y")
   }
-
-
-  # add a 10 day buffer following the most recent value
-  plot_end <- end_date + as.difftime(10, units = "days")
+  
   buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
   buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
   buffer_j <- as.numeric(format(buffer_dates, "%j"))
@@ -1020,7 +997,7 @@ daily_gwl_plot <- function(gw_level_dv,
     dplyr::select(Date, Approve, Value, middle) |>
     tidyr::pivot_longer(-Date:-Approve) |>
     dplyr::mutate(group = ifelse(name == "Value",
-                          ifelse(Approve == "A", "Approved daily value", "Provisional daily value"),
+                          ifelse(Approve == "Approved", "Approved daily value", "Provisional daily value"),
                           historical_name)) |>
     dplyr::select(-Approve, -name) |>
     dplyr::filter(!is.na(value))
@@ -1038,20 +1015,6 @@ daily_gwl_plot <- function(gw_level_dv,
   names(line_colors)[1] <- historical_name
   ribbon_colors <- c("Approved Daily\nMin & Max" = "lightskyblue1")
 
-  if (month_breaks) {
-    x_label <- paste(format(plot_start, "%B %Y"),
-                     "to",
-                     format(plot_end, "%B %Y"))
-    x_breaks <- mid_month(seq.Date(plot_start, plot_end, by = "month"))
-    x_tick_labels <- substr(format(x_breaks, format = "%B"), 1, 1)
-  } else {
-    x_label <- "Date"
-    x_breaks <- seq.Date(plot_start, end_date, by = "year")
-    x_tick_labels <- format(x_breaks, format = "%Y")
-  }
-
-  y_label <- y_axis_label
-
   plot_out <- ggplot() +
     geom_ribbon(data = plot_data,
                 aes(x = Date, ymin = min, ymax = max, fill = group)) +
@@ -1059,13 +1022,14 @@ daily_gwl_plot <- function(gw_level_dv,
               aes(x = Date, y = value, color = group)) +
     scale_color_manual(values = line_colors, name = "EXPLANATION") +
     scale_fill_manual(values = ribbon_colors, name = "") +
-    hasp_framework(x_label, y_label,
+    hasp_framework(x_label, y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(aspect.ratio = NULL) +
     scale_x_date(limits = c(plot_start, plot_end),
                  expand = c(0, 0),
-                 breaks = x_breaks, labels = x_tick_labels) +
+                 breaks = x_breaks, 
+                 labels = x_tick_labels) +
     guides(color = guide_legend(order = 1),
            fill = guide_legend(order = 2))
 
@@ -1258,93 +1222,4 @@ daily_gwl_summary <- function(gw_level_dv,
 
 }
 
-#' Find the first day of the month for a given date
-#'
-#' @param date a vector of dates
-#'
-#' @return the first day of the month that given dates fall in
-#' @export
-#'
-#' @examples
-#' date <- as.Date("2020-12-28")
-#' first_day(date)
-#'
-first_day <- function(date) {
 
-  date <- as.POSIXlt(date)
-
-  first_day_month <- as.Date(paste(
-    date$year + 1900,
-    date$mon + 1,
-    1,
-    sep = "-"
-  ))
-
-  return(first_day_month)
-
-}
-
-#' Find the last day of the month for a given date
-#'
-#' @param date a vector of dates
-#'
-#' @return the last day of the month that given dates fall in
-#' @export
-#' @examples
-#' date <- as.Date("2020-12-28")
-#' last_day(date)
-#' last_day("2020-02-15")
-#' last_day("2019-02-15")
-#' last_day(c("2020-12-28", "2020-02-15", "2019-02-15"))
-last_day <- function(date) {
-
-  date <- as.POSIXlt(date)
-
-  year <- date$year + 1900
-  month <- date$mon + 1
-
-  is_leap <- as.numeric((year %% 4 == 0 & year %% 100 != 0) |
-                          year %% 400 == 0)
-
-  total_day <- c(31, 28,
-                 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-
-  last_day_month <- as.Date(paste(
-    year,
-    month,
-    total_day[month],
-    sep = "-"
-  ))
-
-  if (any(is_leap & month == 2)) {
-    last_day_month[is_leap & month == 2] <- as.Date(paste(year[is_leap & month == 2],
-                                                          "02-29",
-                                                          sep = "-"))
-  }
-
-
-  return(last_day_month)
-
-}
-
-
-#' Find the middle of the month for a given date
-#'
-#' @param date a vector of dates
-#'
-#' @return the middle day of the month the given dates fall in
-#' @export
-#' @examples
-#' date <- as.Date("2020-12-28")
-#' mid_month(date)
-#' mid_month(c("2019-02-15", "2020-03-08", "2010-06-01"))
-mid_month <- function(date) {
-
-  last_days <- last_day(date)
-  first_days <- first_day(date)
-
-  mid <- first_days + difftime(last_days, first_days) / 2
-
-  return(mid)
-
-}

@@ -297,7 +297,7 @@ data_available <- function(siteID){
     names(characteristics) <- c("parameter_name",
                                 "parameter_code")
     characteristics <- characteristics[!is.na(characteristics$parameter_code), ]
-    characteristics <- aggregate(parameter_code ~ parameter_name,
+    characteristics <- stats::aggregate(parameter_code ~ parameter_name,
                            data = characteristics,
                            FUN = paste0, collapse = ", ")
     

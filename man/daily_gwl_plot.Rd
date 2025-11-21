@@ -2,7 +2,7 @@
 % Please edit documentation in R/frequency_analysis.R
 \name{daily_gwl_plot}
 \alias{daily_gwl_plot}
-\title{Plot recent data}
+\title{Plot daily data}
 \usage{
 daily_gwl_plot(
   gw_level_dv,
@@ -11,11 +11,10 @@ daily_gwl_plot(
   date_col = c("time", "time"),
   value_col = c("value", "value"),
   approved_col = c("approval_status", "approval_status"),
-  start_date = NA,
-  end_date = NA,
   historical_stat = "mean",
-  month_breaks = FALSE,
+  month_breaks = TRUE,
   plot_title = "",
+  plot_range = "Past year",
   subtitle = "U.S. Geological Survey",
   y_axis_label = "",
   flip = FALSE
@@ -47,12 +46,6 @@ with the gw_level_dv input, and the second value is associated with the gwl_data
 input. The default is \code{c("approval_status", "approval_status")}.
 It is expected that these columns will have only "Approved" or "Provisional".}
 
-\item{start_date}{Date to start plot. If \code{NA} (which is the default),
-the plot will start 2 years before the most recent value.}
-
-\item{end_date}{Date to end plot. If \code{NA} (which is the default),
-the plot will end with the latest measurement.}
-
 \item{historical_stat}{the summary statistic to use for middle line of the plot. Either
 "mean" or "median."}
 
@@ -60,17 +53,16 @@ the plot will end with the latest measurement.}
 
 \item{plot_title}{the title to use on the plot}
 
+\item{plot_range}{the time frame to use for the plot. Use "Past year" (default) to see the
+last year of data, or "Calendar year" to use the current calendar year, beginning
+in January. Or specify two dates representing the start and end of the plot.}
+
 \item{subtitle}{character. Sub-title for plot, default is "U.S. Geological Survey".}
 
-\item{y_axis_label}{the label to use for the y axis}
+\item{y_axis_label}{the label used for the y-axis of the plot.}
 
 \item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers
 are in the higher percentages. Default is \code{TRUE}.}
-}
-\value{
-a ggplot object with a ribbon indicating the historical daily range,
-the historical daily mean or median, and approved and provisional
-daily data for the last two years
 }
 \description{
 Calculates daily statistics based on all approved data.
@@ -110,15 +102,8 @@ daily_gwl_plot(gw_level_dv,
                parameter_cd = "62610",
                plot_title = "Groundwater Level",
                month_breaks = TRUE,
-               start_date = "2020-10-01",
+               plot_range = c("2020-10-01", "2021-06-01"),
                historical_stat = "median")
 
-daily_gwl_plot(gw_level_dv, gwl_data,
-               parameter_cd = "62610",
-               plot_title = "Groundwater Level",
-               month_breaks = TRUE,
-               start_date = "2018-10-01",
-               end_date = "2020-10-01",
-               historical_stat = "median")
 
 }

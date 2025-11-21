@@ -195,8 +195,7 @@ test_that("Daily gwl plot", {
                           value_col = c("value", "value"),
                           approved_col = c("approval_status",
                                            "approval_status"),
-                          start_date = "2018-10-01",
-                          end_date = "2020-10-01",
+                          plot_range = c("2018-10-01", "2020-10-01"),
                           historical_stat = "mean",
                           month_breaks = TRUE,
                           plot_title = plot_title)
