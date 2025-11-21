@@ -35,11 +35,11 @@ More information can be found here:
 ```{r setupData, echo=FALSE}
 
 
-summary_aquifers_disp <- summary_aquifers %>% 
+summary_aquifers_disp <- summary_aquifers |> 
   select(long_name, aquiferCd=nat_aqfr_cd)
 
-kable(summary_aquifers_disp) %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+kable(summary_aquifers_disp) |>
+  kable_styling(bootstrap_options = c("striped", "hover")) |> 
   column_spec(1, width = "50em")
 
 ```

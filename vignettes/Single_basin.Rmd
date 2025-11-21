@@ -24,15 +24,7 @@ library(leaflet)
 
 # Introduction
 
-More information can be found here:
-<https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html>
-
-<https://groundwaterwatch.usgs.gov/composite/help/compositewaterlevels_helpdocument_7-7-2016.htm>
-
-
 # Basin and Range basin-fill aquifers
-
-see <https://groundwaterwatch.usgs.gov/compositeaquifers.asp?ncd=BRF>.
 
 ## Get Data
 

@@ -159,13 +159,13 @@ map_hydro_data <- function(x, num_years, parameter_cd = "72019"){
   
   map_data <- prep_map_data(x)
 
-  map <- leaflet::leaflet(data = map_data) %>%
-    leaflet::addProviderTiles("CartoDB.Positron") %>%
+  map <- leaflet::leaflet(data = map_data) |>
+    leaflet::addProviderTiles("CartoDB.Positron") |>
     leaflet::addCircleMarkers(lat = ~dec_lat_va, lng = ~dec_long_va,
                                radius = 3,
                                fillOpacity = 1,
                                popup = ~popup,
-                               stroke = FALSE) %>% 
+                               stroke = FALSE) |> 
     leaflet::fitBounds(~min(dec_long_va), ~min(dec_lat_va),
                        ~max(dec_long_va), ~max(dec_lat_va)) 
   

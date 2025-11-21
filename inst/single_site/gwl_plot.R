@@ -16,31 +16,12 @@ col_stuff <- reactive({
   includes_dv <- !is.null(dv_data)
   includes_both <- includes_gwl & includes_dv
   
-  y_label <- dataRetrieval::readNWISpCode(input$pcode)$parameter_nm
+  y_label <- pcode_info$parameter_name[pcode_info$parameter_code == input$parameter_code] 
   
-  if(includes_both){
-    date_col = c("Date", "lev_dt")
-    value_col = c(paste("X",  input$pcode, input$statcd, sep = "_"),
-                  input$gwl_vals)
-    approved_col = c(paste("X",  input$pcode, input$statcd, "cd", sep = "_"),
-                     "lev_age_cd") 
-    
-  } else if(includes_dv){
-    date_col = "Date"
-    value_col = paste("X",  input$pcode, input$statcd, sep = "_")
-    approved_col = paste("X",  input$pcode, input$statcd, "cd", sep = "_")
-  } else if(includes_gwl){
-    date_col = "lev_dt"
-    value_col = input$gwl_vals
-    approved_col = "lev_age_cd" 
-    if("sl_datum_cd" %in% names(gwl_data)){
-      datum <- unique(gwl_data$sl_datum_cd)
-      y_label <- sprintf("Elevation above %s, feet", datum)
-    } else {
-      y_label <- "Elevation"
-    }
-    
-  }
+  date_col = c("time", "time")
+  value_col = c("value", "value")
+  approved_col = c("approval_status", "approval_status") 
+  
   
   return(list(date_col = date_col,
               value_col = value_col,
@@ -90,7 +71,7 @@ gwl_table <- reactive({
   val_col <- columns$value_col[1]
   gwl_tab <-  site_data_summary(dvData(),
                                 value_col = val_col,
-                                site_col = "site_no") 
+                                site_col = "monitoring_location_id") 
   
   gwl_tab <- gwl_tab[,-1]
   names(gwl_tab) <- gsub("_site", "", names(gwl_tab))
@@ -102,7 +83,7 @@ gwl_table <- reactive({
                               colnames = '',
                               options = list(dom = 'tB',
                                              ordering = FALSE,
-                                             buttons = c('csv'))) %>% 
+                                             buttons = c('csv'))) |> 
     DT::formatSignif(1, digits = 3)
   
   return(gwl_tab_DT)
@@ -125,7 +106,6 @@ flip <- ', input$flip_plot,'
 gwl_plot <-  gwl_plot_all(gw_level_dv, 
                           gwl_data, 
                           parameter_cd = "', p_code_dv,'",
-                          stat_cd = "', input$statcd,'",
                           y_label = y_label,
                           plot_title = plot_title,
                           flip = flip,
@@ -161,12 +141,11 @@ week_plot <- reactive({
   plot_title <- paste(attr(dv_data, "siteInfo")[["station_nm"]],
                       attr(dv_data, "siteInfo")[["site_no"]], sep = "\n")
   
-  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  y_label <- pcode_info$parameter_name[pcode_info$parameter_code == input$parameter_code] 
   
     week_plot <-  weekly_frequency_plot(dv_data, 
                                         gwl_data,
                                         parameter_cd = p_code_dv,
-                                        stat_cd = stat_cd,
                                         plot_title = plot_title, 
                                         y_axis_label = y_label,
                                         flip = input$flip_plot) 
@@ -186,8 +165,7 @@ week_table_df <- reactive({
 
   week_tab <-  weekly_frequency_table(dvData(), gwlData(),
                                       parameter_cd = p_code_dv,
-                                      stat_cd = stat_cd,
-                                      flip = input$flip_plot) %>% 
+                                      flip = input$flip_plot) |> 
     select("Week" = week,
            "Lowest<br>median" = minMed,
            "10th" = p10,
@@ -204,7 +182,7 @@ week_table <- reactive({
   
   week_tab_DT <- DT::datatable(week_table_df(), 
                                rownames = FALSE, escape = FALSE,
-                               options = list(dom = 'tp')) %>% 
+                               options = list(dom = 'tp')) |> 
     DT::formatSignif(c(-1, -9), digits = 3)
   
   return(week_tab_DT)
@@ -222,7 +200,6 @@ flip <- ', input$flip_plot,'
 week_plot <-  weekly_frequency_plot(gw_level_dv,  
                                     gwl_data,
                                     parameter_cd = "', p_code_dv,'",
-                                    stat_cd = "', stat_cd, '"
                                     plot_title = plot_title,
                                     flip = flip)
 week_plot
@@ -230,7 +207,6 @@ week_plot
 week_table <- weekly_frequency_table(gw_level_dv,
                                      gwl_data,
                                      parameter_cd = "', p_code_dv,'",
-                                     stat_cd = "', stat_cd, '"
                                      flip = flip)
 
 # To save:
@@ -253,19 +229,16 @@ year2_plot <- reactive({
 
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
-  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  y_label <- pcode_info$parameter_name[pcode_info$parameter_code == input$parameter_code] 
   year2_graph <-  daily_gwl_plot(dvData(), 
                                  gwlData(),
                                  parameter_cd = p_code_dv,
-                                 stat_cd = stat_cd,
                                  plot_title = plot_title,
                                  historical_stat = "mean",
                                  month_breaks = TRUE, 
                                  y_axis_label = y_label,
                                  flip = input$flip_plot)
  
-  
-  
   return(year2_graph)
   
 })
@@ -279,8 +252,7 @@ year2_table_df <- reactive({
 
   daily_tab <-  daily_frequency_table(dvData(),
                                       gwlData(),
-                                      parameter_cd = p_code_dv,
-                                      stat_cd = stat_cd) %>%
+                                      parameter_cd = p_code_dv) |> 
     rename("DOY" = DOY,
            "Maximum" = max,
            "Mean" = mean,
@@ -293,7 +265,7 @@ year2_table <- reactive({
   
   daily_tab_DT <- DT::datatable(year2_table_df(), 
                                 rownames = FALSE,
-                               options = list(dom = 'tp')) %>% 
+                               options = list(dom = 'tp')) |>  
     DT::formatSignif(c(2:4), digits = 3)
   
   return(daily_tab_DT)
@@ -312,7 +284,6 @@ flip <- ', input$flip_plot, '
 year2_plot <-  daily_gwl_plot(gw_level_dv, 
                               gwl_data,
                               parameter_cd = "', p_code_dv, '",
-                              stat_cd = "', stat_cd, '"
                               plot_title = plot_title,
                               historical_stat = "mean",
                               flip = flip,
@@ -321,8 +292,7 @@ year2_plot
 
 daily_frequencies <- daily_frequency_table(gw_level_dv,
                                            gwl_data,
-                                           parameter_cd = "', p_code_dv, '"
-                                           stat_cd = "', stat_cd, '")
+                                           parameter_cd = "', p_code_dv, '")
 # To save:
 # Fiddle with height and width (in inches) for best results:
 # Change file name extension to save as png.
@@ -344,12 +314,11 @@ month_plot <- reactive({
   plot_title <- paste(attr(dvData(), "siteInfo")[["station_nm"]],
                       attr(dvData(), "siteInfo")[["site_no"]], sep = "\n")
   
-  y_label <- dataRetrieval::readNWISpCode(p_code_dv)$parameter_nm
+  y_label <- pcode_info$parameter_name[pcode_info$parameter_code == input$parameter_code] 
   
   month_plot <-  monthly_frequency_plot(dvData(), 
                                         gwlData(),
                                         parameter_cd = p_code_dv,
-                                        stat_cd = stat_cd,
                                         plot_title = plot_title, 
                                         y_axis_label = y_label,
                                         flip = input$flip_plot)
@@ -368,10 +337,9 @@ month_table_df <- reactive({
   month_tab <-  monthly_frequency_table(dvData(), 
                                         gwlData(),
                                         parameter_cd = p_code_dv,
-                                        stat_cd = stat_cd,
-                                        flip = input$flip_plot) %>%
-    select(month, minMed, p25, p50, p75, maxMed, nYears) %>%
-    mutate(month = month.abb[month]) %>%
+                                        flip = input$flip_plot) |>
+    select(month, minMed, p25, p50, p75, maxMed, nYears) |>
+    mutate(month = month.abb[month]) |>
     rename("Month" = month,
            "Lowest<br>median" = minMed,
            "25th" = p25,
@@ -387,7 +355,7 @@ month_table <- reactive({
   month_tab_DT <- DT::datatable(month_table_df(), 
                                 rownames = FALSE, escape = FALSE,
                                 options = list(dom = 't',
-                                               pageLength = 12)) %>% 
+                                               pageLength = 12)) |> 
     DT::formatSignif(c(2:6), digits = 3)
   
   return(month_tab_DT)
@@ -404,16 +372,14 @@ flip <- ', input$flip_plot, '
 
 month_plot <-  monthly_frequency_plot(gw_level_dv,  
                                       gwl_data,
-                                      parameter_cd = "', p_code_dv,'"
-                                      stat_cd = "', stat_cd, '"
+                                      parameter_cd = "', p_code_dv,'",
                                       plot_title = plot_title,
                                       flip = flip)
 month_plot
 
 month_frequencies <- monthly_frequency_table(gw_level_dv,  
                                              gwl_data,
-                                             parameter_cd = "', p_code_dv,'"
-                                             stat_cd = "', stat_cd, '"
+                                             parameter_cd = "', p_code_dv,'",
                                              flip = flip)
 # To save:
 # Fiddle with height and width (in inches) for best results:

@@ -32,15 +32,13 @@ type <- "{{{ output_type }}}"
 
 site_metadata <- site_summary(siteID, markdown = type == "html")
 
-pcodes <- dataRetrieval::whatNWISdata(siteNumber = siteID,
-                                      service = c("gw", "dv")) 
-  
 ```
 
 
 
 ```{r whatData}
 data_info <- data_available(siteID)
+
 kable(data_info)
 ```
 
@@ -49,45 +47,37 @@ kable(data_info)
 library(dataRetrieval)
 
 # Figure out what data to retrieve
-available_pcodes <- unique(pcodes$parm_cd[pcodes$data_type_cd == "dv"])
-available_statCds <- unique(pcodes$stat_cd[pcodes$data_type_cd == "dv"])
+available_pcodes <- unique(data_info$parameter_code[data_info$`Data Type` == "Daily"])
+available_statCds <- unique(data_info$statistic_id[data_info$`Data Type` == "Daily"])
 
-# Use the parameter with the highest count
-# This can be changed and then r
-parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
-                                      max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "dv")])
-
-statCd <- pcodes$stat_cd[which(pcodes$count_nu ==
-                                      max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "dv")][1]
-
-if(length(parameterCd) == 0){
-  parameterCd <- unique(pcodes$parm_cd[which(pcodes$count_nu ==
-                                      max(pcodes$count_nu,na.rm = TRUE) & 
-                                      pcodes$data_type_cd == "gw")])[1]
-}
-
-pCode_info <- dataRetrieval::readNWISpCode(parameterCd)
-yaxis <- pCode_info$parameter_nm
+pCode_info <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = available_pcodes)
+parameterCd <- pCode_info$parameter_code[1]
+statCd <- data_info$statistic_id[data_info$`Data Type` == "Daily" &
+                                  data_info$parameter_code == parameterCd]
+yaxis <- pCode_info$parameter_name[1]
 
 flip <- parameterCd == "72019"
 
 # Daily data:
-if(any(pcodes$data_type_cd == "dv")){
-  gw_level_dv <- dataRetrieval::readNWISdv(siteID,
-                            available_pcodes,
-                            statCd = available_statCds)
+if(nrow(pCode_info) > 0){
+  gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = siteID,
+                                                     parameter_code = parameterCd,
+                                                     statistic_id = statCd,
+                                                     skipGeometry = TRUE)
 } else {
-  gw_level_dv <-  L2701_example_data$Discrete
+  gw_level_dv <-  L2701_example_data$Daily
   gw_level_dv <- gw_level_dv[-1:-nrow(gw_level_dv),]
 }
+
 # Field GWL measured:
-if(any(pcodes$data_type_cd == "gw")){
-  gwl_data <- dataRetrieval::readNWISgwl(siteID)
-} else {
+available_pcodes_f <- unique(data_info$parameter_code[data_info$`Data Type` == "Field"])
+
+# Field GWL measured:
+if(length(available_pcodes_f) == 0){
   gwl_data <-  L2701_example_data$Discrete
   gwl_data <- gwl_data[-1:-nrow(gwl_data),]
+} else {
+  gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID)
 }
 ```
 
@@ -99,7 +89,6 @@ if(any(pcodes$data_type_cd == "gw")){
 monthly_frequency_plot(gw_level_dv,
                        gwl_data,
                        parameter_cd = parameterCd,
-                       stat_cd = statCd, 
                        plot_title = siteID, 
                        flip = flip,
                        y_axis_label = yaxis)
@@ -112,12 +101,11 @@ monthly_frequency_plot(gw_level_dv,
 month_table <- monthly_frequency_table(gw_level_dv,
                                        gwl_data,
                                        parameter_cd = parameterCd,
-                                       stat_cd = statCd,
                                        flip = flip)
 
 if(type == "html"){
-  knitr::kable(month_table, digits = 1) %>%
-      kableExtra::kable_styling()%>%
+  knitr::kable(month_table, digits = 1) |> 
+      kableExtra::kable_styling() |>
       kableExtra::row_spec(as.integer(strftime(Sys.Date(), format = "%m")),
                            bold = TRUE,
                            hline_after = TRUE)
@@ -135,7 +123,6 @@ if(type == "html"){
 weekly_frequency_plot(gw_level_dv, 
                       gwl_data,
                       parameter_cd = parameterCd, 
-                      stat_cd = statCd,
                       plot_title = siteID,
                       flip = flip,
                       y_axis_label = yaxis)
@@ -151,7 +138,6 @@ Weekly frequency analysis of daily maximum water level record. Only showing the 
 weekly_table <- weekly_frequency_table(gw_level_dv, 
                                        gwl_data, 
                                        parameter_cd = parameterCd, 
-                                       stat_cd = statCd,
                                        flip = flip) 
 
 todays_week <- as.integer(strftime(Sys.Date(), format = "%V"))
@@ -160,8 +146,8 @@ if(any(centered_index <= 0)){
   centered_index[centered_index <= 0] <- centered_index[centered_index <= 0] + nrow(weekly_table)
 }
 if(type == "html"){
-  knitr::kable(weekly_table[centered_index,], digits = 1) %>%
-      kableExtra::kable_styling()%>%
+  knitr::kable(weekly_table[centered_index,], digits = 1) |>
+      kableExtra::kable_styling() |>
       kableExtra::row_spec(5,
                            bold = TRUE,
                            hline_after = TRUE)
@@ -181,7 +167,6 @@ if(nrow(gw_level_dv) > 0){
                  gwl_data,
                  parameter_cd = parameterCd,
                  plot_title = siteID,
-                 stat_cd = statCd,
                  flip = flip,
                  historical_stat = "mean",
                  month_breaks = TRUE,
@@ -199,8 +184,7 @@ Statistics of maximum *daily* water level record (DOY = day of year). Only showi
 if(nrow(gw_level_dv) > 0){
   daily_table <- daily_frequency_table(gw_level_dv, 
                                        NULL,
-                                       parameter_cd = parameterCd,
-                                       stat_cd = statCd) 
+                                       parameter_cd = parameterCd) 
   
   todays_day <- as.POSIXlt(Sys.Date())$yday
   centered_day <- (todays_day-4):(todays_day + 5)
@@ -210,8 +194,8 @@ if(nrow(gw_level_dv) > 0){
   }
   
   if(type == "html"){
-    knitr::kable(daily_table[centered_day,]) %>%
-        kableExtra::kable_styling()%>%
+    knitr::kable(daily_table[centered_day,]) |>
+        kableExtra::kable_styling() |>
         kableExtra::row_spec(5,
                              bold = TRUE,
                              hline_after = TRUE)
@@ -232,7 +216,6 @@ gwl_plot_all(gw_level_dv,
              NULL, 
              y_label = yaxis,
              parameter_cd = parameterCd, 
-             stat_cd = statCd,
              flip = flip,
              plot_title = siteID,
              add_trend = TRUE)
@@ -248,13 +231,12 @@ if(nrow(gw_level_dv) > 0){
 
   siteDV <- daily_gwl_summary(gw_level_dv,
                               NULL,
-                              parameter_cd = parameterCd,
-                              stat_cd = statCd) 
+                              parameter_cd = parameterCd) 
   
   site_out <- knitr::kable(t(siteDV), digits = 1)
   
   if(type == "html"){
-    site_out <- site_out %>%
+    site_out <- site_out |>
     kableExtra::kable_styling(full_width = FALSE)
   }
   
@@ -273,14 +255,13 @@ if(nrow(gw_level_dv) > 0){
                            parameter_cd = parameterCd,
                            date_col = NA, 
                            value_col = NA,
-                           approved_col = NA,
-                           stat_cd = statCd)
+                           approved_col = NA)
   
   gw_level_dv1 <- data_list$gw_level_dv
   gwl_data1 <- data_list$gwl_data
   
-  all_data <- gw_level_dv1 %>%
-    dplyr::bind_rows(gwl_data1) %>%
+  all_data <- gw_level_dv1 |>
+    dplyr::bind_rows(gwl_data1) |>
     dplyr::filter(grepl("A", Approve))
 
   trend_results <- trend_test(all_data,
@@ -317,14 +298,13 @@ Summary statistics for manual water level measurements
 
 ```{r manualTable}
 
-quantiles <- gwl_data %>% 
-  rename(value = sl_lev_va) %>% 
+quantiles <- gwl_data |> 
   site_data_summary() 
 
 q_out <- knitr::kable(t(quantiles), digits = 1)
 
 if(type == "html"){
-  q_out <- q_out %>%
+  q_out <- q_out |>
   kableExtra::kable_styling(full_width = FALSE)
 }
 

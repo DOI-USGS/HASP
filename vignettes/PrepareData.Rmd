@@ -81,9 +81,9 @@ The water-quality plots are less flexible, they require the data frame to have c
 ```{r}
 library(dplyr)
 
-qw_data <- qw_data %>% 
+qw_data <- qw_data |>  
   rename(ActivityStartDateTime = Date, 
-         ResultMeasureValue = Value) %>%  
+         ResultMeasureValue = Value) |> 
   mutate(CharacteristicName = case_when(parameter %in% 
                                           c("99220", "00940") ~ "Chloride",
                                         parameter %in% 
@@ -92,7 +92,7 @@ qw_data <- qw_data %>%
 Sc_Cl_plot(qw_data = qw_data, 
            "External Data")
 
-trend_plot(qw_data, 
+trend_plot(qw_data = qw_data, 
            plot_title = "External Data")
 
 ```

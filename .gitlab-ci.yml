@@ -1,3 +1,5 @@
+image: ${CI_REGISTRY_IMAGE}:latest
+
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
@@ -27,6 +29,7 @@ variables:
   CONNECT_SERVER: $CONNECT_SERVER
   GITHUB_PAT: $GITHUB_PAT
   PAGES_OUTDIR: "$CI_PROJECT_DIR/public"
+  API_USGS_PAT: $API_USGS_PAT
 
 build-image:
   stage: build
@@ -34,10 +37,6 @@ build-image:
   services:
   - name: ${DEVOPS_REGISTRY}usgs/docker:20-dind
     alias: docker
-  rules:
-    - changes:
-      - docker/Dockerfile
-      - .gitlab-ci.yml
   script:
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest || true
@@ -52,7 +51,6 @@ build-image:
 
 buildcheck:
   stage: check
-  image: ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build-image
   script:
@@ -65,7 +63,6 @@ buildcheck:
 
 unittests:
   stage: test
-  image: ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build-image
     - buildcheck
@@ -81,7 +78,6 @@ unittests:
         
 covertests:
   stage: test
-  image: ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build-image
     - buildcheck
@@ -97,7 +93,6 @@ covertests:
 
 pages:
   stage: end
-  image: ${CI_REGISTRY_IMAGE}:latest
   only: 
     - main
   script:

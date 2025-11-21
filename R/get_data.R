@@ -16,7 +16,7 @@
 #'
 #' aquiferCd <- "S100CSLLWD"
 #' \donttest{
-#' aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
+#' # aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
 #' }
 get_aquifer_data <- function(aquiferCd, startDate, endDate, 
                              parameter_cd = "72019"){
@@ -45,9 +45,9 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
     if(inherits(state_data, "error")) next
     
     if(!all(is.na(state_data$site_no))){
-      state_data_sites <- dataRetrieval::readNWISsite(unique(state_data$site_no))
+      state_data_sites <- attr(state_data, "siteInfo")
       
-      state_data_sites <- state_data_sites %>% 
+      state_data_sites <- state_data_sites |> 
         dplyr::select(station_nm, site_no, dec_lat_va, dec_long_va)
       
       aquifer_data <- dplyr::bind_rows(aquifer_data, state_data)
@@ -81,8 +81,8 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 #' aquiferCd <- "S100CSLLWD"
 #'
 #' \donttest{
-#' st_data <- get_state_data("WI", aquiferCd,
-#'                           start_date, end_date)
+#' # st_data <- get_state_data("WI", aquiferCd,
+#' #                           start_date, end_date)
 #' }
 get_state_data <- function(state, aquiferCd, 
                            startDate, endDate, 
@@ -102,21 +102,26 @@ get_state_data <- function(state, aquiferCd,
                          endDate = endDate,
                          aquiferCd = aquiferCd)
   
+  site_info <- dataRetrieval::whatNWISdata(stateCd = state, 
+                                            startDate= startDate,
+                                            endDate = endDate,
+                                           service = "gwlevels")
+  
   if(nrow(levels) + nrow(levels_dv) == 0){
     return(data.frame())
   }
 
   if(nrow(levels) > 0){
 
-    state_data <- levels %>% 
-      dplyr::filter(lev_age_cd == "A") %>% 
-      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) %>%
+    state_data <- levels |> 
+      dplyr::filter(lev_age_cd == "A") |> 
+      dplyr::select(lev_dt, site_no, parameter_cd, lev_va, sl_lev_va) |>
       dplyr::mutate(value = dplyr::case_when(is.na(lev_va) ~ sl_lev_va,
                                              TRUE ~ lev_va),
                     state_call = state,
                     year = as.integer(format(as.Date(lev_dt), "%Y")),
                     water_year = water_year(lev_dt),
-                    lev_dt = as.Date(lev_dt)) %>%
+                    lev_dt = as.Date(lev_dt)) |>
       dplyr::select(-lev_va, -sl_lev_va)
     
   } else {
@@ -125,7 +130,7 @@ get_state_data <- function(state, aquiferCd,
   
   if(nrow(levels_dv) > 0){
 
-    state_dv <- levels_dv %>% 
+    state_dv <- levels_dv |> 
       dplyr::mutate(year = as.numeric(format(dateTime, "%Y")),
                     water_year = water_year(dateTime),
                     dateTime = as.character(as.Date(dateTime)),
@@ -138,17 +143,17 @@ get_state_data <- function(state, aquiferCd,
                               "state_call", "lev_dt"))
     names(state_dv)[cds] <- sprintf("%s_value", names(state_dv)[cds])
     
-    state_dv <- state_dv %>%
+    state_dv <- state_dv |>
       tidyr::pivot_longer(cols = c(-agency_cd, -site_no, -water_year,
                                    -dateTime, -tz_cd, -year,
                                    -state_call, -lev_dt), 
                    names_to = c("pcode", ".value"),
-                   names_pattern = "(.+)_(.+)") %>%
+                   names_pattern = "(.+)_(.+)") |>
       dplyr::mutate(pcode = gsub("X_", "", pcode),
-                    pcode = substr(pcode, 1, 5)) %>%
+                    pcode = substr(pcode, 1, 5)) |>
       dplyr::rename(lev_status_cd = cd,
-                    parameter_cd = pcode) %>%
-      dplyr::filter(lev_status_cd == "A") %>%
+                    parameter_cd = pcode) |>
+      dplyr::filter(lev_status_cd == "A") |>
       dplyr::select(-dateTime, -tz_cd, -agency_cd, -lev_status_cd)
       
   } else {
@@ -157,6 +162,11 @@ get_state_data <- function(state, aquiferCd,
   
   state_data_tots <- dplyr::bind_rows(state_data, 
                                state_dv)
+  
+  site_info <- site_info |> 
+    dplyr::filter(site_no %in% unique(state_data_tots$site_no))
+  
+  attr(state_data_tots, "siteInfo") <- site_info
   
   return(state_data_tots)
 }
@@ -170,61 +180,54 @@ get_state_data <- function(state, aquiferCd,
 #' @export
 #'
 #' @examples 
-#' siteID <- "263819081585801"
+#' siteID <- "USGS-263819081585801"
 #' site_metadata <- site_summary(siteID)
 site_summary <- function(siteID, markdown = FALSE){
 
-  site_info <- dataRetrieval::readNWISsite(siteID)
+  site_info <- dataRetrieval::read_waterdata_monitoring_location(monitoring_location_id = siteID)
   
-  if(!any(grepl("GW", site_info$site_tp_cd))){
+  if(!any(grepl("GW", site_info$site_type_code))){
     warning("Site is not identified as a groundwater site")
     return(site_info)
   }
   
   end_of_line <- ifelse(markdown, "<br/>", "\n\n")
   
-  nat_aqfrs <- nat_aqfr_state %>% 
-    dplyr::select(dplyr::all_of(c("nat_aqfr_cd", "long_name"))) %>% 
+  nat_aqfrs <- nat_aqfr_state |> 
+    dplyr::select(dplyr::all_of(c("nat_aqfr_cd", "long_name"))) |> 
     dplyr::distinct()
   
   names(nat_aqfrs)[names(nat_aqfrs) == "long_name"] <- "nat_aq"
   
-  site_info_cleaned <- site_info %>% 
-    dplyr::select(dplyr::all_of(c("site_no", "station_nm", "lat_va", "long_va",
-           "site_tp_cd", "state_cd", "county_cd", "huc_cd", 
-           "nat_aqfr_cd", "aqfr_cd", "land_net_ds", "well_depth_va",
-           "alt_va", "alt_datum_cd"))) %>% 
-    dplyr::left_join(nat_aqfrs, by = "nat_aqfr_cd") %>% 
+  site_info_cleaned <- site_info |> 
+    dplyr::select(dplyr::all_of(c("monitoring_location_id", 
+                                  "monitoring_location_name", 
+                                  "geometry",
+                                  "site_type_code", 
+                                  "state_code", 
+                                  "state_name",
+                                  "county_code",
+                                  "county_name",
+                                  "hydrologic_unit_code", 
+                                  "national_aquifer_code", 
+                                  "aquifer_type_code", 
+                                  "well_constructed_depth",
+                                  "altitude", 
+                                  "altitude_method_name"))) |> 
+    dplyr::left_join(nat_aqfrs, by = c("national_aquifer_code" = "nat_aqfr_cd")) |> 
     dplyr::left_join(dplyr::rename(local_aqfr, 
-                     local_aq = Aqfr_Name_prpr), by = "aqfr_cd") %>% 
-    dplyr::mutate(state = dataRetrieval::stateCdLookup(state_cd, 
-                                 outputType = "fullName"),
-           county = dataRetrieval::countyCdLookup(state = state_cd,
-                                   county = county_cd,
-                                   outputType = "fullName"),
-           lat_deg = substr(lat_va, start = 1, stop = 2),
-           lat_min = substr(lat_va, start = 3, stop = 4),
-           lat_sec = substr(lat_va, start = 5, stop = 6),
-           long_deg = substr(long_va, start = 1, stop = 2),
-           long_min = substr(long_va, start = 3, stop = 4),
-           long_sec = substr(long_va, start = 5, stop = 6))
+                     local_aq = Aqfr_Name_prpr), 
+                     by = c("aquifer_type_code" = "aqfr_cd")) 
   
-  cat(site_info_cleaned$site_no, site_info_cleaned$station_nm, end_of_line)
+  cat(site_info_cleaned$monitoring_location_id, site_info_cleaned$monitoring_location_name, end_of_line)
 
-  cat("Latitude: ", site_info_cleaned$lat_deg, "deg",
-      site_info_cleaned$lat_min, "'",
-      site_info_cleaned$lat_sec, '"', end_of_line)
-  cat("Longitude: ", site_info_cleaned$long_deg, "deg",
-      site_info_cleaned$long_min, "'",
-      site_info_cleaned$long_sec, '"', end_of_line)
-  cat(site_info_cleaned$county, ",", site_info_cleaned$state, end_of_line)
-  cat("Hydrologic Unit: ", site_info_cleaned$huc_cd, end_of_line)
-  cat("Well depth: ", site_info_cleaned$well_depth_va, " feet",end_of_line)
-  cat("Land surface altitude: ", site_info_cleaned$alt_va, " feet above", site_info_cleaned$alt_datum_cd , end_of_line)
+  cat(site_info_cleaned$county_name, ",", site_info_cleaned$state_name, end_of_line)
+  cat("Hydrologic Unit: ", site_info_cleaned$hydrologic_unit_code, end_of_line)
+  cat("Well depth: ", site_info_cleaned$well_constructed_depth, " feet",end_of_line)
+  cat("Land surface altitude: ", site_info_cleaned$altitude, site_info_cleaned$altitude_method_name , end_of_line)
   cat('Well completed in : "', site_info_cleaned$nat_aq,'" (',
-      site_info_cleaned$nat_aqfr_cd, ") national aquifer.", end_of_line, sep = "")
-  cat('Well completed in : "', site_info_cleaned$local_aq,'" (',
-      site_info_cleaned$aqfr_cd, ") local aquifer.",end_of_line, sep = "")
+      site_info_cleaned$national_aquifer_code, ") national aquifer.", end_of_line, sep = "")
+
   return(site_info_cleaned)
 }
 
@@ -237,89 +240,92 @@ site_summary <- function(siteID, markdown = FALSE){
 #' @export
 #'
 #' @examples 
-#' siteID <- "263819081585801"
+#' siteID <- "USGS-263819081585801"
 #' site_data_available <- data_available(siteID)
 data_available <- function(siteID){
 
-  data_info <- dataRetrieval::whatNWISdata(siteNumber = siteID)
+  data_info <- dataRetrieval::read_waterdata_ts_meta(monitoring_location_id = siteID,
+                                                     skipGeometry = TRUE)
   
-  data_info_clean <- data_info %>% 
-    dplyr::group_by(data_type_cd) %>% 
-    dplyr::summarise(begin = min(begin_date, na.rm = TRUE),
-              end = max(end_date, na.rm = TRUE),
-              count = max(count_nu, na.rm = TRUE)) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::mutate(`Data Type` = "")
+  data_info_clean <- data_info[, c("computation_period_identifier",
+                                   "parameter_name", 
+                                   "parameter_code",
+                                   "statistic_id",
+                                   "begin",
+                                   "end")]
   
-  if("uv" %in% data_info_clean$data_type_cd){
-    uv_codes <- data_info %>% 
-      dplyr::filter(data_type_cd == "uv") %>% 
-      dplyr::group_by(parm_cd) %>% 
-      dplyr::summarise(begin = min(begin_date, na.rm = TRUE),
-                end = max(end_date, na.rm = TRUE),
-                count = max(count_nu, na.rm = TRUE))
-    #TODO: add something similar to dv
-    data_info_clean$count[data_info_clean$data_type_cd == "uv"] <- NA
-    data_info_clean$`Data Type`[data_info_clean$data_type_cd == "uv"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/uv?site_no=', siteID, '">Current / Historical Observations</a>')
+  names(data_info_clean)[names(data_info_clean) == "computation_period_identifier"] <- "Data Type"
+  names(data_info_clean)[names(data_info_clean) == "begin"] <- "Begin Date"
+  names(data_info_clean)[names(data_info_clean) == "end"] <- "End Date"
+
+  field_info <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = siteID,
+                                                                 skipGeometry = TRUE)
+  if(nrow(field_info) > 0){
+
+    inventory <- stats::aggregate(time ~ parameter_code,
+                           data = field_info,
+                           FUN = min)
+    names(inventory)[2] <- c("Begin Date")
     
+    inventory2 <- stats::aggregate(time ~ parameter_code,
+                           data = field_info,
+                           FUN = max)
+    names(inventory2)[2] <- c("End Date")
+    
+    inventory <- merge(inventory, inventory2, by = "parameter_code")
+    inventory$`Data Type` <- "Field"
+    inventory$statistic_id <- ""
+    
+    pcodes <- dataRetrieval::read_waterdata_parameter_codes(parameter_code = unique(inventory$parameter_code))
+    pcodes <- pcodes[, c("parameter_code", "parameter_name")]
+    
+    inventory <- merge(inventory, pcodes, by = "parameter_code")
+    
+    inventory <- inventory[, names(data_info_clean)]
+    
+    data_info_clean <- data_info_clean |> 
+      rbind(inventory)
   }
+
+  what_qw <- dataRetrieval::summarize_waterdata_samples(monitoringLocationIdentifier = siteID)
   
-  if("gw" %in% data_info_clean$data_type_cd){
-    data_info_clean$`Data Type`[data_info_clean$data_type_cd == "gw"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/gwlevels?site_no=', siteID, '">Field groundwater-level measurements</a>')
-  }
-  
-  if("ad" %in% data_info_clean$data_type_cd){
-    data_info_clean$`Data Type`[data_info_clean$data_type_cd == "ad"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/wys_rpt?site_no=', siteID, '">Water-Year Summary</a>')    
-  }
-  
-  if("qw" %in% data_info_clean$data_type_cd){
-    data_info_clean$`Data Type`[data_info_clean$data_type_cd == "qw"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/qwdata?site_no=', siteID, '">Field/Lab water-quality samples</a>')  
-  }
-  
-  
-  if("dv" %in% data_info_clean$data_type_cd){
-    dv_codes <- data_info %>% 
-      dplyr::filter(data_type_cd == "dv") %>% 
-      dplyr::group_by(parm_cd) %>% 
-      dplyr::summarise(begin = min(begin_date, na.rm = TRUE),
-                end = max(end_date, na.rm = TRUE),
-                count = max(count_nu, na.rm = TRUE)) %>% 
-      dplyr::ungroup() %>% 
-      dplyr::mutate(`Data Type` = dataRetrieval::readNWISpCode(parm_cd)[["parameter_nm"]]) %>% 
-      dplyr::select(-parm_cd)
+  if(nrow(what_qw) > 0){
+
+    characteristics <- dataRetrieval::check_waterdata_sample_params("characteristics")
+    characteristics <- characteristics[, c("characteristicNameUserSupplied",
+                                           "parameterCode")]
+    names(characteristics) <- c("parameter_name",
+                                "parameter_code")
+    characteristics <- characteristics[!is.na(characteristics$parameter_code), ]
+    characteristics <- stats::aggregate(parameter_code ~ parameter_name,
+                           data = characteristics,
+                           FUN = paste0, collapse = ", ")
     
-    data_info_clean$`Data Type`[data_info_clean$data_type_cd == "dv"] <-  paste0('<a href="https://nwis.waterdata.usgs.gov/nwis/dv?site_no=', siteID, '">Daily Data</a>')
     
-    data_info_clean$begin[data_info_clean$data_type_cd == "dv"] <- NA
-    data_info_clean$end[data_info_clean$data_type_cd == "dv"] <- NA
-    data_info_clean$count[data_info_clean$data_type_cd == "dv"] <- NA
-    
-    rows_to_dv <- which(data_info_clean$data_type_cd == "dv")
-    
-    if(length(rows_to_dv) > 0){
-      insert_row <- rows_to_dv + 1
+    what_qw_cleaned <- what_qw[, c("characteristicUserSupplied",
+                                   "firstActivity",
+                                   "mostRecentActivity")]
+    names(what_qw_cleaned) <- c("parameter_name",
+                                "Begin Date",
+                                "End Date")
+    what_qw_cleaned$`Data Type` <- "Discrete Samples"
       
-      if(rows_to_dv == 1){
-        data_info_clean_new <- data_info_clean[1,] %>% 
-          dplyr::bind_rows(dv_codes) %>% 
-          dplyr::bind_rows(data_info_clean[(rows_to_dv + nrow(dv_codes)):nrow(data_info_clean),])        
-      } else {
-        data_info_clean_new <- data_info_clean[1:rows_to_dv,] %>% 
-          dplyr::bind_rows(dv_codes) %>% 
-          dplyr::bind_rows(data_info_clean[(rows_to_dv + nrow(dv_codes)):nrow(data_info_clean),])
-        
-        data_info_clean <- data_info_clean_new
-      }
-      
-    }
+    what_qw_cleaned <- merge(what_qw_cleaned, 
+                             characteristics,
+                             by = "parameter_name")
+    
+    what_qw_cleaned$statistic_id <- ""
+    
+    data_info_clean <- data_info_clean |> 
+      rbind(what_qw_cleaned)
   }
   
-  data_info_clean <- data_info_clean %>% 
-    dplyr::select(`Data Type`, 
-           `Begin Date` = begin, 
-           `End Date` = end,
-           Count = count)
+  data_info_clean$`Begin Date` <- as.Date(data_info_clean$`Begin Date`)
+  data_info_clean$`End Date` <- as.Date(data_info_clean$`End Date`)
   
   return(data_info_clean)
   
 }
+
+
+

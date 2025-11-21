@@ -4,7 +4,7 @@
 \alias{monthly_mean}
 \title{Monthly mean}
 \usage{
-monthly_mean(x, date_col = "Date", value_col = "X_62610_00001")
+monthly_mean(x, date_col = "time", value_col = "value")
 }
 \arguments{
 \item{x}{data.frame}
@@ -19,17 +19,18 @@ and create a new date that is the midpoint of each month.
 }
 \examples{
 
-# site <- "263819081585801"
-parameterCd <- "62610"
+# site <- "USGS-263819081585801"
+p_code_dv <- "62610"
 # statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, 
-#                                           statCd = statCd)
-# Using package example data:
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
 gw_level_dv <- L2701_example_data$Daily
 
 site_statistics <- monthly_frequency_table(gw_level_dv, 
                                            NULL,
-                                           parameter_cd = parameterCd)
+                                           parameter_cd = p_code_dv)
 
 gw_monthly <- monthly_mean(gw_level_dv)
 

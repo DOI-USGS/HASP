@@ -6,18 +6,7 @@
 #' For data that is at least on a daily interval, the \link[rkt]{rkt} function
 #' is used. For periodic data, the \link[EnvStats]{kendallTrendTest} is used.
 #' 
-#' @param gw_level_dv daily groundwater level data frame. Often obtained from from \code{readNWISdv}
-#' @param gwl_data data frame returned from dataRetrieval::readNWISgwl, or 
-#' data frame with mandatory columns lev_dt (representing date), lev_age_cd (representing
-#' approval code), and a column representing the measured value (either lev_va,
-#' sl_lev_va, or value).
-#' @param date_col the heading of the date column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param value_col name of value column. The default is \code{NA},
-#' which the code will try to get the column name automatically.
-#' @param approved_col name of column to get provisional/approved status.
-#' @param stat_cd If data in gw_level_dv comes from NWIS, the stat_cd 
-#' can be used to help define the value_col.
+#' @inheritParams monthly_frequency_table
 #' @param days_required_per_month integer. Number of days required per month
 #' to include in the trend test. Default is 14. 
 #' @param n_years integer. This is the number of years to calculate the trend on.
@@ -28,10 +17,6 @@
 #' total record, a trend will not be calculated.
 #' @param POR_trend a logical indicating whether to include a trend test
 #' for the full period of record. Default is \code{TRUE}.
-#' @param parameter_cd If data in gw_level_dv comes from NWIS, the parameter_cd 
-#' can be used to define the value_col.
-#'  If the data doesn't come directly from NWIS services, this 
-#' can be set to \code{NA},and this argument will be ignored.
 #' @importFrom stats as.formula
 #' @return a data frame of test results from 5 and 20 year Kendall Seasonal Trend test
 #' 
@@ -39,12 +24,21 @@
 #' 
 #' @examples 
 #' 
-#' # site <- "263819081585801"
-#' # gw_level_data <- dataRetrieval::readNWISgwl(site)
+#' site <- "USGS-263819081585801"
+#' p_code_dv <- "62610"
+#' statCd <- "00001"
 #' 
 #' # Using package example data:
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#' #                                  skipGeometry = TRUE)
 #' gwl_data <- L2701_example_data$Discrete
 #'                         
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
+#' #
+#'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
 #' 
 #' trend_test(gw_level_dv,
@@ -75,10 +69,9 @@ trend_test <- function(gw_level_dv,
                        gwl_data,
                        n_years = 10,
                        parameter_cd = NA,
-                       date_col = NA,
-                       value_col = NA,
-                       approved_col = NA,
-                       stat_cd = NA,
+                       date_col = c("time", "time"),
+                       value_col = c("value", "value"),
+                       approved_col = c("approval_status", "approval_status"),
                        pctComplete = 0.5,
                        days_required_per_month = 14,
                        POR_trend = TRUE) {
@@ -88,8 +81,7 @@ trend_test <- function(gw_level_dv,
                            parameter_cd = parameter_cd,
                            date_col = date_col,
                            value_col = value_col, 
-                           approved_col = approved_col,
-                           stat_cd = stat_cd)
+                           approved_col = approved_col)
   
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
@@ -97,14 +89,14 @@ trend_test <- function(gw_level_dv,
   only_periodic <- nrow(gw_level_dv) == 0
   
   gwl <- dplyr::bind_rows(gw_level_dv,
-                          gwl_data) %>%
+                          gwl_data) |>
     dplyr::mutate(year = as.numeric(format(Date, "%Y")),
                   month = as.numeric(format(Date, "%m")),
-                  doy = as.numeric(format(Date, "%j"))) %>%
-    dplyr::group_by(year, month) %>%
+                  doy = as.numeric(format(Date, "%j"))) |>
+    dplyr::group_by(year, month) |>
     dplyr::summarize(monthlyMean = mean(Value, na.rm = TRUE),
-                     ndays = length(doy)) %>% 
-    dplyr::ungroup() %>%
+                     ndays = length(doy)) |> 
+    dplyr::ungroup() |>
     dplyr::mutate(midMonth = as.Date(sprintf("%s-%s-15", year, month)),
                   decYear = decimalDate(midMonth),
                   gap = decYear - dplyr::lag(decYear) >= 1000)  #this gets rid of nonsense first value
@@ -168,7 +160,7 @@ trend_test <- function(gw_level_dv,
         
       } else {
         
-        last_n <- last_n %>% 
+        last_n <- last_n |> 
           dplyr::filter(ndays > !!days_required_per_month)
         
         # Perform the seasonal Kendall Trend Test on the ten-year data set using 
@@ -318,36 +310,37 @@ trend_test <- function(gw_level_dv,
 #' @export
 #' @examples 
 #' 
-#' # site <- "263819081585801"
-#' parameterCd <- "62610"
+#' # site <- "USGS-263819081585801"
+#' p_code_dv <- "62610"
 #' # statCd <- "00001"
-#' # gw_level_dv <- dataRetrieval::readNWISdv(site, parameterCd, 
-#' #                                           statCd = statCd)
-#' # Using package example data:
+#' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#' #                                                    parameter_code = p_code_dv,
+#' #                                                    statistic_id = statCd,
+#' #                                                    skipGeometry = TRUE)
 #' gw_level_dv <- L2701_example_data$Daily
 #' 
 #' site_statistics <- monthly_frequency_table(gw_level_dv, 
 #'                                            NULL,
-#'                                            parameter_cd = parameterCd)
+#'                                            parameter_cd = p_code_dv)
 #' 
 #' gw_monthly <- monthly_mean(gw_level_dv)
 #' 
 monthly_mean <- function(x,
-                         date_col = "Date",
-                         value_col = "X_62610_00001"){
+                         date_col = "time",
+                         value_col = "value"){
   
   days_in_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
   
   x$result <- x[[value_col]]
   x$date <- x[[date_col]]
   
-  monthly_mean <- x %>% 
+  monthly_mean <- x |> 
     dplyr::mutate(month = as.numeric(format(date, "%m")),
-           year = as.numeric(format(date, "%Y"))) %>% 
-    dplyr::group_by(year, month) %>% 
+           year = as.numeric(format(date, "%Y"))) |> 
+    dplyr::group_by(year, month) |> 
     dplyr::summarize(mean_va = mean(result, na.rm = TRUE), # should user get to pick median?
-              n_days = dplyr::n()) %>% 
-    dplyr::ungroup() %>% 
+              n_days = dplyr::n()) |> 
+    dplyr::ungroup() |> 
     dplyr::mutate(mid_date = as.Date(paste(year, month, 15, sep = "-")))
     
   return(monthly_mean)
@@ -363,7 +356,7 @@ enough_data <- function(x,
   if(por){
     monthlyMeansLast_n <- x
   } else {
-    monthlyMeansLast_n <- x %>%
+    monthlyMeansLast_n <- x |>
       dplyr::filter(year >= n_years)
   }
   
@@ -413,6 +406,7 @@ decimalDate <- function(rawData){
   startYear <- as.POSIXct(paste0(year,"-01-01 00:00"))
   endYear <- as.POSIXct(paste0(year+1,"-01-01 00:00"))
   
-  DecYear <- year + as.numeric(difftime(dateTime, startYear, units = "secs"))/as.numeric(difftime(endYear, startYear, units = "secs"))
+  DecYear <- year + as.numeric(difftime(dateTime, startYear, units = "secs")) / 
+    as.numeric(difftime(endYear, startYear, units = "secs"))
   return(DecYear)
 }

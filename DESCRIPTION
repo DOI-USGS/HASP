@@ -1,7 +1,7 @@
 Package: HASP
 Type: Package
 Title: Hydrologic AnalySis Package
-Version: 1.0.3
+Version: 1.0.4.9000
 Authors@R: c(person("Laura", "DeCicco", 
                      role = c("aut", "cre"),
                      email = "ldecicco@usgs.gov",
@@ -19,8 +19,7 @@ Authors@R: c(person("Laura", "DeCicco",
                      email = "chopkins@usgs.gov",
                      comment=c(ORCID="0000-0003-3207-7267")),
              person("Lindsay", "Platt", 
-                     role = c("ctr"),
-                     email = "lplatt@usgs.gov"),
+                     role = c("ctr")),
              person("Tara", "Root",
                     role = "ctr"))
 Description: Data aggregation and plotting of USGS groundwater level data.
@@ -31,9 +30,9 @@ Copyright: This software is in the public domain because it contains materials
     official USGS copyright policy at
     https://www.usgs.gov/visual-id/credit_usgs.html#copyright
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
-    dataRetrieval,
+    dataRetrieval (>= 2.7.21),
     dplyr,
     tidyr,
     ggplot2,
@@ -45,8 +44,8 @@ Imports:
     whisker,
     xfun,
     usethis,
-    magrittr,
-    EnvStats
+    EnvStats,
+    stats
 Suggests:
     testthat,
     knitr,
@@ -67,4 +66,4 @@ BuildVignettes: true
 LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3

@@ -13,6 +13,6 @@ data_available(siteID)
 Get station summary information
 }
 \examples{
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 site_data_available <- data_available(siteID)
 }

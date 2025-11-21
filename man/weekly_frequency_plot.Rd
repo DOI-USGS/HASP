@@ -2,16 +2,15 @@
 % Please edit documentation in R/frequency_analysis.R
 \name{weekly_frequency_plot}
 \alias{weekly_frequency_plot}
-\title{Plot weekly frequency analysis}
+\title{Plot weekly frequency plot}
 \usage{
 weekly_frequency_plot(
   gw_level_dv,
   gwl_data,
   parameter_cd = NA,
-  date_col = NA,
-  value_col = NA,
-  approved_col = NA,
-  stat_cd = NA,
+  date_col = c("time", "time"),
+  value_col = c("value", "value"),
+  approved_col = c("approval_status", "approval_status"),
   plot_range = "Past year",
   plot_title = "",
   subtitle = "U.S. Geological Survey",
@@ -22,42 +21,37 @@ weekly_frequency_plot(
 }
 \arguments{
 \item{gw_level_dv}{data frame, daily groundwater level data. Often obtained
-from \code{\link[dataRetrieval]{readNWISdv}}. Use \code{NULL} for no daily data.}
+from \code{\link[dataRetrieval]{read_waterdata_daily}}. Use \code{NULL} for no daily data.}
 
-\item{gwl_data}{data frame returned from  \code{\link[dataRetrieval]{readNWISgwl}}, or
-data frame with a date, value, and approval columns. Using the convention:
-lev_dt (representing date), lev_age_cd (representing approval code), and lev_va
-or sl_lev_va (representing value) will allow defaults to work.
+\item{gwl_data}{data frame returned from \code{\link[dataRetrieval]{read_waterdata_field_measurements}}, or
+data frame with a date, value, and approval columns. 
 Use \code{NULL} for no discrete data.}
 
-\item{parameter_cd}{If data in gw_level_dv comes from NWIS, the parameter_cd
-can be used to define the value_col. If the data doesn't come directly from
-NWIS services, this can be set to \code{NA},and this argument will be ignored.}
+\item{parameter_cd}{Can be used to filter data if the data frame has a 
+"parameter_code" column. The default is \code{NA},
+which will not do any filtering. If the gwl_data and gw_level_dv need different
+parameter code filtering, use a vector of 2 parameter codes. The first one will filter the
+gw_level_dv data frame, the second will filter the gwl_data data frame.}
 
-\item{date_col}{the name of the date column. The default is \code{NA},
-in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames
-require custom column names, the first value of this input defines the date
-column for gw_level_dv, and the second defines gwl_data.}
+\item{date_col}{the name of the time columns. The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("time", "time")}.}
 
-\item{value_col}{the name of the value column. The default is \code{NA},
-in which case, the code will try to get the column name automatically based on NWIS
-naming conventions. If both gw_level_dv and gwl_data data frames
-require custom column names, the first value of this input defines the value
-column for gw_level_dv, and the second defines gwl_data.}
+\item{value_col}{the name of the value columns. The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("value", "value")}.}
 
-\item{approved_col}{the name of the column to get provisional/approved status.
-The default is \code{NA}, in which case, the code will try to get the column name
-automatically based on NWIS naming conventions. If both gw_level_dv and
-gwl_data data frames require custom column names, the first value of this
-input defines the approval column for gw_level_dv, and the second defines gwl_data.}
+\item{approved_col}{the name of the column to get provisional/approved status. 
+The first value is associated
+with the gw_level_dv input, and the second value is associated with the gwl_data
+input. The default is \code{c("approval_status", "approval_status")}.
+It is expected that these columns will have only "Approved" or "Provisional".}
 
-\item{stat_cd}{If data in gw_level_dv comes from NWIS, the stat_cd
-can be used to help define the value_col.}
-
-\item{plot_range}{the time frame to use for the plot. Either "Past year" to use the
+\item{plot_range}{the time frame to use for the plot. Use "Past year" (default) to see the
 last year of data, or "Calendar year" to use the current calendar year, beginning
-in January.}
+in January. Or specify two dates representing the start and end of the plot.
+If the first date is NA, it will start at the earliest record, 
+if the second date is NA, it will end at the latest record.}
 
 \item{plot_title}{the title to use on the plot}
 
@@ -65,8 +59,8 @@ in January.}
 
 \item{y_axis_label}{the label used for the y-axis of the plot.}
 
-\item{flip}{logical. If \code{TRUE}, flips the y axis so that the smallest number is on top.
-Default is \code{FALSE}.}
+\item{flip}{logical. If \code{TRUE}, flips labels so that the lower numbers
+are in the higher percentages. Default is \code{TRUE}.}
 
 \item{percentile_colors}{Optional argument to provide a vector of 5 colors
 used to fill the percentile bars in order from lowest percentile bin to the
@@ -82,18 +76,29 @@ Daily, discrete, or both types of data can be used.
 }
 \examples{
 
-# site <- "263819081585801"
+site <- "USGS-263819081585801"
 p_code_dv <- "62610"
 statCd <- "00001"
-# gw_level_dv <- dataRetrieval::readNWISdv(site, p_code_dv, statCd = statCd)
-gw_level_dv <- L2701_example_data$Daily
-weekly_frequency_plot(gw_level_dv,
-                      gwl_data = NULL,
-                      date_col = "Date",
-                      value_col = "X_62610_00001",
-                      approved_col = "X_62610_00001_cd")
 
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
+#                                  skipGeometry = TRUE)
 gwl_data <- L2701_example_data$Discrete
+
+# gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
+#                                                    parameter_code = p_code_dv,
+#                                                    statistic_id = statCd,
+#                                                    skipGeometry = TRUE)
+#
+                                                    
+gw_level_dv <- L2701_example_data$Daily
+
+weekly_frequency_plot(gw_level_dv,
+                      gwl_data = NULL)
+                      
+weekly_frequency_plot(gw_level_dv,
+                      gwl_data = gwl_data,
+                      parameter_cd = "62610",
+                      plot_range = c("2023-10-01", "2024-09-30"))
 
 weekly_frequency_plot(gw_level_dv,
                       gwl_data = gwl_data,

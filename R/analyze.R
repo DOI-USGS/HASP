@@ -14,10 +14,10 @@
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' aquifer_data <- aquifer_data[aquifer_data$parameter_cd == "72019", ]
-#' summary_info <- site_data_summary(aquifer_data)
+#' summary_info <- site_data_summary(aquifer_data, site_col = "site_no")
 site_data_summary <- function(x,
                               value_col = "value",
-                              site_col = "site_no"){
+                              site_col = "monitoring_location_id"){
 
   site_no <- value <- ".dplyr"
   
@@ -68,7 +68,7 @@ prep_map_data <- function(x ){
 
   sites <- attr(x, "siteInfo")
   
-  map_data <- sites %>%
+  map_data <- sites |>
     dplyr::mutate(popup = paste0('<b><a href="https://waterdata.usgs.gov/monitoring-location/',
                               site_no,'">',
                               site_no,"</a></b><br/>
@@ -76,7 +76,7 @@ prep_map_data <- function(x ){
              <tr><td>Name:</td><td>",
                               station_nm,
                               '</td></tr>
-             </table>')) %>% 
+             </table>')) |> 
     dplyr::filter(!is.na(dec_lat_va))
   
   return(map_data)
@@ -123,10 +123,10 @@ filter_sites <- function(x,
     return(data.frame())
   }
   
-  pick_sites <- pick_sites %>%
-    dplyr::filter(!is.na(value)) %>% 
-    dplyr::group_by(site_no, year) %>% 
-    dplyr::summarize(n_meas = dplyr::n()) %>% 
+  pick_sites <- pick_sites |>
+    dplyr::filter(!is.na(value)) |> 
+    dplyr::group_by(site_no, year) |> 
+    dplyr::summarize(n_meas = dplyr::n()) |> 
     dplyr::ungroup() 
 
   
@@ -154,11 +154,11 @@ filter_sites <- function(x,
   }
   
   tots <- expand.grid(year = start_year:end_year,
-              site_no = unique(pick_sites$site_no), stringsAsFactors = FALSE) %>% 
+              site_no = unique(pick_sites$site_no), stringsAsFactors = FALSE) |> 
     data.frame()
   
-  pick_sites_comp <- pick_sites %>% 
-    dplyr::right_join(tots, by = c("year", "site_no")) %>% 
+  pick_sites_comp <- pick_sites |> 
+    dplyr::right_join(tots, by = c("year", "site_no")) |> 
     dplyr::filter(year >= start_year,
                   year <= end_year)
   
@@ -172,21 +172,21 @@ filter_sites <- function(x,
     warning("No sites had a complete data set")
   }
   
-  pick_sites_comp_sum <- pick_sites_comp %>% 
-    dplyr::filter(site_no %in% sites_complete) %>% 
-    dplyr::group_by(site_no) %>% 
-    dplyr::summarise(n_years = length(unique(year))) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::filter(n_years >= !!num_years) %>% 
+  pick_sites_comp_sum <- pick_sites_comp |> 
+    dplyr::filter(site_no %in% sites_complete) |> 
+    dplyr::group_by(site_no) |> 
+    dplyr::summarise(n_years = length(unique(year))) |> 
+    dplyr::ungroup() |> 
+    dplyr::filter(n_years >= !!num_years) |> 
     dplyr::pull(site_no)
     
-  aquifer_data <- x %>% 
-    dplyr::filter(site_no %in% pick_sites_comp_sum) %>% 
+  aquifer_data <- x |> 
+    dplyr::filter(site_no %in% pick_sites_comp_sum) |> 
     dplyr::filter(year >= start_year,
            year <= end_year)
   
   if("siteInfo" %in% names(attributes(x))){
-    siteInfo <- attr(x, "siteInfo") %>% 
+    siteInfo <- attr(x, "siteInfo") |> 
       dplyr::filter(site_no %in% pick_sites_comp_sum)
     
     attr(aquifer_data, "siteInfo") <- siteInfo    
@@ -228,18 +228,18 @@ composite_data <- function(x, num_years, parameter_cd){
   
   n_sites <- length(unique(x$site_no))
   
-  composite <- x %>% 
-    dplyr::group_by(year, site_no) %>% 
-    dplyr::summarize(med_site = stats::median(value, na.rm = TRUE)) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::distinct(year, site_no, med_site) %>% 
-    dplyr::group_by(year) %>% 
+  composite <- x |> 
+    dplyr::group_by(year, site_no) |> 
+    dplyr::summarize(med_site = stats::median(value, na.rm = TRUE)) |> 
+    dplyr::ungroup() |> 
+    dplyr::distinct(year, site_no, med_site) |> 
+    dplyr::group_by(year) |> 
     dplyr::summarise(mean = mean(med_site, na.rm = TRUE),
               median = stats::median(med_site, na.rm = TRUE),
-              n_sites_year = length(unique(site_no))) %>% 
-    dplyr::filter(n_sites_year == {{n_sites}}) %>%
-    dplyr::select(-n_sites_year) %>% 
-    tidyr::pivot_longer(c("mean", "median")) %>% 
+              n_sites_year = length(unique(site_no))) |> 
+    dplyr::filter(n_sites_year == {{n_sites}}) |>
+    dplyr::select(-n_sites_year) |> 
+    tidyr::pivot_longer(c("mean", "median")) |> 
     dplyr::mutate(name = factor(name, 
                          levels = c("median","mean"),
                          labels = c("Median",
@@ -253,8 +253,6 @@ composite_data <- function(x, num_years, parameter_cd){
 #' Composite normalized hydrograph data
 #'
 #' Create normalized composite data
-#' 
-#' Information can be found here: \url{https://groundwaterwatch.usgs.gov/composite/help/CompositeGroundwaterLevelHelpDocument.docx.html}
 #' 
 #' @param x aquifer data
 #' @param num_years integer number of years required
@@ -280,27 +278,28 @@ normalized_data <- function(x, num_years, parameter_cd = "72019"){
                     num_years = num_years, 
                     parameter_cd = parameter_cd)
   n_sites <- length(unique(x$site_no))
-  year_summaries <- site_data_summary(x)
+  year_summaries <- site_data_summary(x, 
+                                      value_col = "value", site_col = "site_no")
   
-  norm_composite <- x %>% 
-    dplyr::group_by(year, site_no) %>% 
-    dplyr::mutate(med_site = stats::median(value, na.rm = TRUE)) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::distinct(year, site_no, med_site) %>% 
-    dplyr::group_by(site_no) %>% 
+  norm_composite <- x |> 
+    dplyr::group_by(year, site_no) |> 
+    dplyr::mutate(med_site = stats::median(value, na.rm = TRUE)) |> 
+    dplyr::ungroup() |> 
+    dplyr::distinct(year, site_no, med_site) |> 
+    dplyr::group_by(site_no) |> 
     dplyr::mutate(max_med = max(med_site, na.rm = TRUE),
            min_med = min(med_site, na.rm = TRUE),
-           mean_med = mean(med_site, na.rm = TRUE)) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::mutate(x_norm = -1*(med_site - mean_med)/(max_med - min_med)) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::group_by(year) %>% 
+           mean_med = mean(med_site, na.rm = TRUE)) |> 
+    dplyr::ungroup() |> 
+    dplyr::mutate(x_norm = -1*(med_site - mean_med)/(max_med - min_med)) |> 
+    dplyr::ungroup() |> 
+    dplyr::group_by(year) |> 
     dplyr::summarise(mean = mean(x_norm, na.rm = TRUE),
               median = stats::median(x_norm, na.rm = TRUE),
-              n_sites_year = length(unique(site_no))) %>% 
-    dplyr::filter(!n_sites_year < {{n_sites}}) %>% 
-    dplyr::select(-n_sites_year) %>% 
-    tidyr::pivot_longer(c("mean", "median")) %>% 
+              n_sites_year = length(unique(site_no))) |> 
+    dplyr::filter(!n_sites_year < {{n_sites}}) |> 
+    dplyr::select(-n_sites_year) |> 
+    tidyr::pivot_longer(c("mean", "median")) |> 
     dplyr::mutate(name = factor(name, 
                          levels = c("median","mean"),
                          labels = c("Median",
@@ -332,7 +331,8 @@ water_year <- function(x){
     x[grep("^(\\d{4}-\\d{2}$)", x)] <- paste0(x[grep("^(\\d{4}-\\d{2}$)", x)],"-01")
     
     if(length(grep("^(\\d{4}$)", x)) > 0){
-      message("Calendar year being reported as water year in row(s) ", paste(grep("^(\\d{4}$)", x), collapse = ", "))
+      message("Calendar year being reported as water year in row(s) ", 
+              paste(grep("^(\\d{4}$)", x), collapse = ", "))
       # this one is less legit...maybe USGS only reports in water years?
       x[grep("^(\\d{4}$)", x)] <- paste0(x[grep("^(\\d{4}$)", x)],"-01-01")
     }
