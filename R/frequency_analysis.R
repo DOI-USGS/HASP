@@ -280,33 +280,11 @@ monthly_frequency_plot <- function(gw_level_dv,
 
   gw_level_dv <- data_list$gw_level_dv
   gwl_data <- data_list$gwl_data
-
-  # Find the bounds of the plot
-  if(length(plot_range) == 2){
-    plot_end <- as.Date(plot_range[2])
-    plot_start <- as.Date(plot_range[1])
-  } else if (plot_range == "Past year") {
-    plot_end <- last_day(Sys.Date()) + 1
-    plot_start <- first_day(plot_end - 363)
-  } else if (plot_range == "Calendar year") {
-    calendar_year <- format(Sys.Date(), format = "%Y")
-    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
-    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
-  } else {
-    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
-  }
-
-  # Create the plot labels
-  start_year <- as.POSIXlt(plot_start)$year + 1900
-  end_year <- as.POSIXlt(plot_end)$year + 1900
-  if (start_year == end_year) {
-    x_label <- as.character(start_year)
-  } else {
-    x_label <- paste(start_year, end_year, sep = " - ")
-  }
   
-  date <- max(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
-
+  full_range <- range(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
+  date <- max(full_range, na.rm = TRUE)
+  plot_ranges <- get_range(plot_range, full_range)
+  
   # Calculate the percentiles
   site_statistics <- monthly_frequency_table(gw_level_dv,
                                              gwl_data,
@@ -320,11 +298,11 @@ monthly_frequency_plot <- function(gw_level_dv,
   gw_level_dv <- dplyr::bind_rows(gw_level_dv,
                                   gwl_data)
 
-  gw_level_dv <- gw_level_dv[gw_level_dv$Date >= plot_start &
-                               gw_level_dv$Date <= plot_end, ]
+  gw_level_dv <- gw_level_dv[gw_level_dv$Date >= plot_ranges$plot_start &
+                               gw_level_dv$Date <= plot_ranges$plot_end, ]
 
   # Add the first day of the month to the site_statistics table for plotting
-  plot_month <- seq(as.Date(plot_start), length = 12, by = "1 month")
+  plot_month <- seq(as.Date(plot_ranges$plot_start), length = 12, by = "1 month")
   plot_month_lookup <- data.frame(plot_month = plot_month,
                                   month = as.POSIXlt(plot_month)$mon + 1)
   site_statistics <- dplyr::left_join(site_statistics,
@@ -488,10 +466,10 @@ monthly_frequency_plot <- function(gw_level_dv,
                        breaks = names(point_colors)) +
     scale_size_manual(values = point_sizes,
                       guide = "none") + 
-    scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
+    scale_x_date(limits = c(plot_ranges$plot_start, plot_ranges$plot_end + 1), expand = c(0, 0),
                  breaks = mid_month(plot_month),
                  labels = month.abb[as.POSIXlt(plot_month)$mon + 1]) +
-    hasp_framework(x_label = x_label,
+    hasp_framework(x_label = plot_ranges$x_label,
                    y_label = y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
@@ -666,38 +644,17 @@ weekly_frequency_plot <- function(gw_level_dv,
                                             approved_col = c("Approve", "Approve"),
                                             flip = flip)
 
-  # Find the bounds of the plot
-  if(length(plot_range) == 2){
-    plot_end <- as.Date(plot_range[2])
-    plot_start <- as.Date(plot_range[1])
-  } else if (plot_range == "Past year") {
-    plot_end <- last_day(Sys.Date()) + 1
-    plot_start <- first_day(plot_end - 363)
-  } else if (plot_range == "Calendar year") {
-    calendar_year <- format(Sys.Date(), format = "%Y")
-    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
-    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
-  } else {
-    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
-  }
-  
-  # Create the plot labels
-  year_start <- as.POSIXlt(plot_start)$year + 1900
-  year_end <- as.POSIXlt(plot_end)$year + 1900
-  
-  if (year_start == year_end) {
-    x_label <- as.character(year_start)
-  } else {
-    x_label <- paste(year_start, year_end, sep = " - ")
-  }
+  full_range <- range(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
+  date <- max(full_range, na.rm = TRUE)
+  plot_ranges <- get_range(plot_range, full_range)
 
   # The last year of groundwater level measurements will plot
   gw_level_plot <- gw_level_dv |>
-    dplyr::filter(Date >= plot_start,
-                  Date <= plot_end)
+    dplyr::filter(Date >= plot_ranges$plot_start,
+                  Date <= plot_ranges$plot_end)
 
   # Add the first day of the week to the site_statistics table for plotting
-  plot_week <- seq(as.Date(plot_start), length = 52, by = "1 week")
+  plot_week <- seq(as.Date(plot_ranges$plot_start), length = 52, by = "1 week")
   plot_week_lookup <- data.frame(plot_week = plot_week,
                                  week = as.POSIXlt(plot_week)$yday %/% 7 + 1)
 
@@ -782,7 +739,7 @@ weekly_frequency_plot <- function(gw_level_dv,
   point_colors <- point_colors[as.character(unique(point_data$group))]
 
   # Create the month breaks
-  month_start <- seq(as.Date(plot_start), length = 12, by = "1 month")
+  month_start <- seq(as.Date(plot_ranges$plot_start), length = 12, by = "1 month")
   month_breaks <- mid_month(month_start)
   month_labels <- month.abb[as.POSIXlt(month_breaks)$mon + 1]
 
@@ -820,9 +777,9 @@ weekly_frequency_plot <- function(gw_level_dv,
                                  "10 - 25",
                                  "5 - 10"),
                       name = "Percentile") +
-    scale_x_date(limits = c(plot_start, plot_end + 1), expand = c(0, 0),
+    scale_x_date(limits = c(plot_ranges$plot_start, plot_ranges$plot_end + 1), expand = c(0, 0),
                  breaks = month_breaks, labels = month_labels) +
-    hasp_framework(x_label, y_axis_label,
+    hasp_framework(plot_ranges$x_label, y_axis_label,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(axis.ticks.x = element_blank(),
@@ -952,37 +909,24 @@ daily_gwl_plot <- function(gw_level_dv,
                      middle = historical_function(Value, na.rm = TRUE),
                      min = min(Value, na.rm = TRUE))
 
-  # Find the bounds of the plot
-  if(length(plot_range) == 2){
-    plot_end <- as.Date(plot_range[2])
-    plot_start <- as.Date(plot_range[1])
-    if(plot_start > plot_end){
-      stop("Starting plot date must be before ending plot date.")
-    }
-  } else if (plot_range == "Past year") {
-    plot_end <- last_day(Sys.Date()) + 1
-    plot_start <- first_day(plot_end - 363)
-  } else if (plot_range == "Calendar year") {
-    calendar_year <- format(Sys.Date(), format = "%Y")
-    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
-    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
-  } else {
-    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
-  }
-
+  full_range <- range(c(gw_level_dv$Date, gwl_data$Date), na.rm = TRUE)
+  date <- max(full_range, na.rm = TRUE)
+  plot_ranges <- get_range(plot_range, full_range)
+  
   if (month_breaks) {
-    x_label <- paste(format(plot_start, "%B %Y"),
+    x_label <- paste(format(plot_ranges$plot_start, "%B %Y"),
                      "to",
-                     format(plot_end, "%B %Y"))
-    x_breaks <- mid_month(seq.Date(plot_start, plot_end, by = "1 month"))
+                     format(plot_ranges$plot_end, "%B %Y"))
+    x_breaks <- mid_month(seq.Date(plot_ranges$plot_start, 
+                                   plot_ranges$plot_end, by = "1 month"))
     x_tick_labels <- format(x_breaks, format = "%b")
   } else {
     x_label <- "Date"
-    x_breaks <- seq.Date(plot_start, plot_end, by = "year")
+    x_breaks <- seq.Date(plot_ranges$plot_start, plot_ranges$plot_end, by = "year")
     x_tick_labels <- format(x_breaks, format = "%Y")
   }
   
-  buffer_dates <- seq.Date(plot_start, plot_end, by = "day")[-1]
+  buffer_dates <- seq.Date(plot_ranges$plot_start, plot_ranges$plot_end, by = "day")[-1]
   buffer_dates <- buffer_dates[buffer_dates <= Sys.Date()]
   buffer_j <- as.numeric(format(buffer_dates, "%j"))
   buffer <- stats::setNames(data.frame(buffer_dates, buffer_j),
@@ -1026,7 +970,7 @@ daily_gwl_plot <- function(gw_level_dv,
                    plot_title = plot_title,
                    subtitle = subtitle) +
     theme(aspect.ratio = NULL) +
-    scale_x_date(limits = c(plot_start, plot_end),
+    scale_x_date(limits = c(plot_ranges$plot_start, plot_ranges$plot_end),
                  expand = c(0, 0),
                  breaks = x_breaks, 
                  labels = x_tick_labels) +
@@ -1035,7 +979,9 @@ daily_gwl_plot <- function(gw_level_dv,
 
   if (month_breaks) {
     plot_out <- plot_out +
-      geom_vline(xintercept = seq.Date(plot_start, plot_end, by = "month"),
+      geom_vline(xintercept = seq.Date(plot_ranges$plot_start, 
+                                       plot_ranges$plot_end,
+                                       by = "month"),
                  color = "grey80") +
       theme(axis.ticks.x = element_blank())
 

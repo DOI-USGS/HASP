@@ -43,7 +43,7 @@ This page merges information from USGS Groundwater Watch website and USGS Water 
 ```{r siteInfo, results='asis'}
 library(HASP)
 
-siteID <- "263819081585801"
+siteID <- "USGS-263819081585801"
 site_metadata <- site_summary(siteID, markdown = TRUE)
 ```
 

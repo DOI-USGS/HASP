@@ -88,3 +88,58 @@ mid_month <- function(date) {
   return(mid)
   
 }
+
+
+#' Get range 
+#'
+#' @param plot_range the time frame to use for the plot. Use "Past year" (default) to see the
+#' last year of data, or "Calendar year" to use the current calendar year, beginning
+#' in January. Or specify two dates representing the start and end of the plot.
+#' @param full_range the full time range of the data.
+#' 
+#' @return list of plot_start, plot_end, label
+#' @export
+#' @examples
+#' full_range <- c("2000-01-01", "2025-10-01")
+#' get_range("Past year", full_range)
+#' get_range("Calendar year", full_range)
+#' get_range(c("2024-10-01", "2025-06-01"), full_range)
+#' get_range(c(NA, "2020-01-01"), full_range)
+#' get_range(c("2020-01-01", NA), full_range)
+get_range <- function(plot_range, full_range){
+  
+  # Find the bounds of the plot
+  if(length(plot_range) == 2){
+    plot_end <- as.Date(plot_range[2])
+    plot_start <- as.Date(plot_range[1])
+  } else if (plot_range == "Past year") {
+    plot_end <- last_day(Sys.Date()) + 1
+    plot_start <- first_day(plot_end - 363)
+  } else if (plot_range == "Calendar year") {
+    calendar_year <- format(Sys.Date(), format = "%Y")
+    plot_end <- as.Date(paste0(calendar_year, "-12-31"))
+    plot_start <- as.Date(paste0(calendar_year, "-01-01"))
+  } else {
+    stop("plot_range must be 2 dates or 'Past year' or 'Calendar year'")
+  }
+  
+  if(is.na(plot_start)){
+    plot_start <- full_range[1]
+  }
+  
+  if(is.na(plot_end)){
+    plot_end <- full_range[2]
+  }
+  
+  # Create the plot labels
+  start_year <- as.POSIXlt(plot_start)$year + 1900
+  end_year <- as.POSIXlt(plot_end)$year + 1900
+  if (start_year == end_year) {
+    x_label <- as.character(start_year)
+  } else {
+    x_label <- paste(start_year, end_year, sep = " - ")
+  }
+  return(list(plot_start = plot_start,
+              plot_end = plot_end,
+              x_label = x_label))
+}
