@@ -94,4 +94,5 @@ reference:
       - water_year
       - filter_sites
       - monthly_mean 
+      - get_range
       - HASP-package 
