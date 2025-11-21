@@ -30,7 +30,9 @@ Default is 10. This can be a vector of years.}
 
 \item{parameter_cd}{Can be used to filter data if the data frame has a 
 "parameter_code" column. The default is \code{NA},
-which will not do any filtering.}
+which will not do any filtering. If the gwl_data and gw_level_dv need different
+parameter code filtering, use a vector of 2 parameter codes. The first one will filter the
+gw_level_dv data frame, the second will filter the gwl_data data frame.}
 
 \item{date_col}{the name of the time columns. The first value is associated
 with the gw_level_dv input, and the second value is associated with the gwl_data

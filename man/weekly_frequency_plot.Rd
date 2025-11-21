@@ -29,7 +29,9 @@ Use \code{NULL} for no discrete data.}
 
 \item{parameter_cd}{Can be used to filter data if the data frame has a 
 "parameter_code" column. The default is \code{NA},
-which will not do any filtering.}
+which will not do any filtering. If the gwl_data and gw_level_dv need different
+parameter code filtering, use a vector of 2 parameter codes. The first one will filter the
+gw_level_dv data frame, the second will filter the gwl_data data frame.}
 
 \item{date_col}{the name of the time columns. The first value is associated
 with the gw_level_dv input, and the second value is associated with the gwl_data
@@ -47,7 +49,9 @@ It is expected that these columns will have only "Approved" or "Provisional".}
 
 \item{plot_range}{the time frame to use for the plot. Use "Past year" (default) to see the
 last year of data, or "Calendar year" to use the current calendar year, beginning
-in January. Or specify two dates representing the start and end of the plot.}
+in January. Or specify two dates representing the start and end of the plot.
+If the first date is NA, it will start at the earliest record, 
+if the second date is NA, it will end at the latest record.}
 
 \item{plot_title}{the title to use on the plot}
 

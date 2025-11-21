@@ -321,18 +321,11 @@ set_up_data <- function(gw_level_dv,
     
     checkmate::assert_string(value_col_per)
     
-    if(is.na(parameter_cd)){
-      if("parameter_code" %in% names(gwl_data)){
-        pcodes <- unique(gwl_data$parameter_code)
-        for(i in pcodes){
-          if(grepl(i, value_col[1])){
-            parameter_cd <- i
-          }
-        }
-      }
+    if(!is.na(parameter_cd) & length(parameter_cd) == 1){
+      parameter_cd <- c(parameter_cd, parameter_cd)
     }
-    
-    gwl_data <- filter_pcode(gwl_data, parameter_cd)
+      
+    gwl_data <- filter_pcode(gwl_data, parameter_cd[2])
     
     needed_cols <- c(date_col_per, value_col_per, approved_col_per)
     checkmate::assertNames(names(gwl_data), must.include = needed_cols)
@@ -374,6 +367,7 @@ set_up_data <- function(gw_level_dv,
     needed_cols <- c(date_col_dv, value_col_dv, approved_dv)
     checkmate::assertNames(names(gw_level_dv), must.include = needed_cols)
     
+    gw_level_dv <- filter_pcode(gw_level_dv, parameter_cd[1])
     
     if(!all(c(date_col_dv, value_col_dv, approved_dv) %in% names(gw_level_dv))){
       stop("gw_level_dv data frame doesn't include all specified columns")
