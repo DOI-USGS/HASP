@@ -12,8 +12,7 @@
 #' @examples
 #' 
 #' site <- "USGS-263819081585801"
-#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#' #                                  skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site)
 #' gwl_data <- L2701_example_data$Discrete
 #' 
 #' pcodes <- dataRetrieval::read_waterdata_parameter_codes(
@@ -81,9 +80,7 @@ gwl_plot_field <- function(gwl_data,
 #' statCd <- "00001"
 #' # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
 #' #                                                    parameter_code = p_code_dv,
-#' #                                                    statistic_id = statCd,
-#' #                                                    skipGeometry = TRUE)
-#' #
+#' #                                                    statistic_id = statCd)
 #'                                                     
 #' gw_level_dv <- L2701_example_data$Daily
 #'
@@ -98,8 +95,7 @@ gwl_plot_field <- function(gwl_data,
 #'              y_label = pcodes$parameter_name,
 #'              flip = TRUE) 
 #' 
-#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#' #                                  skipGeometry = TRUE)
+#' # gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site)
 #' gwl_data <- L2701_example_data$Discrete
 #' 
 #' gwl_plot_all(gw_level_dv, 
@@ -345,7 +341,15 @@ set_up_data <- function(gw_level_dv,
     gwl_data$year <- as.numeric(format(gwl_data[["Date"]], "%Y")) + 
       as.numeric(format(gwl_data[["Date"]], "%j"))/365 
     
+    if("geometry" %in% names(gwl_data)){
+      gwl_data$geometry <- NULL
+      attr(gwl_data, "class") <- "data.frame"
+      attr(gwl_data, "sf_column") <- NULL      
+    }
+    
     gwl_data <- gwl_data[, c("year", "Date", "Value", "Approve")]
+
+    
   } else {
     gwl_data <- data.frame(year = numeric(),
                            Date = as.Date(character()),
@@ -387,6 +391,12 @@ set_up_data <- function(gw_level_dv,
     gw_level_dv$Value <- as.numeric(gw_level_dv[[value_col_dv]])
     gw_level_dv$Approve <- gw_level_dv[[approved_dv]]
 
+    if("geometry" %in% names(gw_level_dv)){
+      gw_level_dv$geometry <- NULL
+      attr(gw_level_dv, "class") <- "data.frame"
+      attr(gw_level_dv, "sf_column") <- NULL      
+    }
+    
     gw_level_dv <- gw_level_dv[, c("Date", "Value", "Approve")]
     
   } else {

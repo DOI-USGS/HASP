@@ -89,8 +89,7 @@ Function to create the field groundwater level data plot.
 \examples{
 
 site <- "USGS-263819081585801"
-# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#                                  skipGeometry = TRUE)
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site)
 gwl_data <- L2701_example_data$Discrete
 
 pcodes <- dataRetrieval::read_waterdata_parameter_codes(
@@ -120,9 +119,7 @@ p_code_dv <- "62610"
 statCd <- "00001"
 # gw_level_dv <- dataRetrieval::read_waterdata_daily(monitoring_location_id = site,
 #                                                    parameter_code = p_code_dv,
-#                                                    statistic_id = statCd,
-#                                                    skipGeometry = TRUE)
-#
+#                                                    statistic_id = statCd)
                                                     
 gw_level_dv <- L2701_example_data$Daily
 
@@ -137,8 +134,7 @@ gwl_plot_all(gw_level_dv,
              y_label = pcodes$parameter_name,
              flip = TRUE) 
 
-# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site, 
-#                                  skipGeometry = TRUE)
+# gwl_data <- dataRetrieval::read_waterdata_field_measurements(monitoring_location_id = site)
 gwl_data <- L2701_example_data$Discrete
 
 gwl_plot_all(gw_level_dv, 
