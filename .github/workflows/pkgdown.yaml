@@ -44,6 +44,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@473c68190595b311a74f208fba61a8d8c0d4c247
         with:
           extra-packages: |
+            any::pkgdown,
             any::testthat,
             any::knitr,
             any::kableExtra,
@@ -59,7 +60,9 @@ jobs:
             any::rmarkdown
             local::.
           needs: website
-
+      - name: Create public directory
+        run: |
+          mkdir public
       - name: Build site
         run: |
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
