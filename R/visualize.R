@@ -2,7 +2,7 @@
 #'
 #' Create composite hydrograph plot
 #' 
-#' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+#' @param x aquifer data frame. Requires at least 3 columns: "monitoring_location_id", "year",
 #' and "value".
 #' @param num_years integer number of years required. If \code{NA}, the 
 #' analysis will default to the range of the data in x.
@@ -34,7 +34,7 @@ plot_composite_data <- function(x,
                                 plot_title = "",
                                 subtitle = "U.S. Geological Survey"){
 
-  if(!all(c("site_no", "year", "value") %in% names(x))){
+  if(!all(c("monitoring_location_id", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
   }
   
@@ -103,7 +103,7 @@ plot_normalized_data <- function(x,
                                  plot_title = "",
                                  subtitle = "U.S. Geological Survey"){
   
-  if(!all(c("site_no", "year", "value") %in% names(x))){
+  if(!all(c("monitoring_location_id", "year", "value") %in% names(x))){
     stop("Not all required columns are provided")
   }
   
@@ -161,13 +161,10 @@ map_hydro_data <- function(x, num_years, parameter_cd = "72019"){
 
   map <- leaflet::leaflet(data = map_data) |>
     leaflet::addProviderTiles("CartoDB.Positron") |>
-    leaflet::addCircleMarkers(lat = ~dec_lat_va, lng = ~dec_long_va,
-                               radius = 3,
-                               fillOpacity = 1,
-                               popup = ~popup,
-                               stroke = FALSE) |> 
-    leaflet::fitBounds(~min(dec_long_va), ~min(dec_lat_va),
-                       ~max(dec_long_va), ~max(dec_lat_va)) 
+    leaflet::addCircleMarkers(radius = 3,
+                              fillOpacity = 1,
+                              popup = ~popup,
+                              stroke = FALSE) 
   
   return(map)
   

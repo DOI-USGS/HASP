@@ -4,26 +4,36 @@
 \alias{get_aquifer_data}
 \title{get_aquifer_data}
 \usage{
-get_aquifer_data(aquiferCd, startDate, endDate, parameter_cd = "72019")
+get_aquifer_data(
+  aquiferCd,
+  startDate,
+  endDate,
+  parameter_cd = "72019",
+  statistic_cd = "00003"
+)
 }
 \arguments{
-\item{aquiferCd}{character. To see valid aquifer codes, see the included data
-frame \code{local_aqfr}.}
+\item{aquiferCd}{character. To see valid aquifer codes, see
+\code{\link[dataRetrieval:read_waterdata_metadata]{dataRetrieval::read_waterdata_metadata()}}
+\code{aquifer_codes <- dataRetrieval::read_waterdata_metadata("national-aquifer-codes")}.}
 
 \item{startDate}{date or string. Beginning date of when to pull data.}
 
 \item{endDate}{date of string  Ending date to pull data.}
 
 \item{parameter_cd}{5-digit character USGS parameter code.}
+
+\item{statistic_cd}{5-digit character USGS daily statistics code. Default is "00008",}
 }
 \description{
 Get USGS data based on aquiferCd
 }
 \examples{
-end_date <- "2021-01-01"
-start_date <- "1989-12-31"
-
-aquiferCd <- "S100CSLLWD"
+end_date <- "2025-01-01"
+start_date <- "2010-01-01"
+parameter_cd = "72019"
+statistic_cd = "00003"
+aquiferCd <- "N100BSNRGB"
 \donttest{
 # aq_data <- get_aquifer_data(aquiferCd, start_date, end_date)
 }

@@ -13,7 +13,7 @@ plot_composite_data(
 )
 }
 \arguments{
-\item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
+\item{x}{aquifer data frame. Requires at least 3 columns: "monitoring_location_id", "year",
 and "value".}
 
 \item{num_years}{integer number of years required. If \code{NA}, the 

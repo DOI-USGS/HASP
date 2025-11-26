@@ -59,7 +59,8 @@ Suggests:
     shinycssloaders,
     shinydashboard,
     openxlsx,
-    rmarkdown
+    rmarkdown,
+    targets
 BugReports: https://code.usgs.gov/water/stats/hasp/-/issues
 VignetteBuilder: knitr
 BuildVignettes: true

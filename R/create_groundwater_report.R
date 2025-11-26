@@ -49,8 +49,9 @@ create_groundwater_report <- function(siteID,
   save_as <- file.path(report_path, paste0(report_name, ".Rmd"))
   new <- usethis::write_over(save_as, template_contents)
 
-  usethis::edit_file(save_as)
-  
+  if (new) {
+    usethis::edit_file(save_as)
+  }
   
 }
 

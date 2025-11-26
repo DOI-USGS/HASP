@@ -19,7 +19,7 @@ site_data_summary <- function(x,
                               value_col = "value",
                               site_col = "monitoring_location_id"){
 
-  site_no <- value <- ".dplyr"
+  monitoring_location_id <- value <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
@@ -112,11 +112,11 @@ filter_sites <- function(x,
   
   if(nrow(x) == 0) stop("No data")
   
-  if(!all(c("site_no", "year", "value") %in% names(x))) stop("Missing columns")
+  if(!all(c("monitoring_location_id", "year", "value", "parameter_code") %in% names(x))) stop("Missing columns")
 
-  lev_va <- site_no <- year <- value <- n_years <- ".dplyr"
+  lev_va <- monitoring_location_id <- year <- value <- n_years <- ".dplyr"
 
-  pick_sites <- x[x$parameter_cd == parameter_cd, ]
+  pick_sites <- x[x$parameter_code == parameter_cd, ]
   
   if(nrow(pick_sites) == 0){
     warning("No data with requested parameter code.")
@@ -125,7 +125,7 @@ filter_sites <- function(x,
   
   pick_sites <- pick_sites |>
     dplyr::filter(!is.na(value)) |> 
-    dplyr::group_by(site_no, year) |> 
+    dplyr::group_by(monitoring_location_id, year) |> 
     dplyr::summarize(n_meas = dplyr::n()) |> 
     dplyr::ungroup() 
 
@@ -154,16 +154,16 @@ filter_sites <- function(x,
   }
   
   tots <- expand.grid(year = start_year:end_year,
-              site_no = unique(pick_sites$site_no), stringsAsFactors = FALSE) |> 
+                      monitoring_location_id = unique(pick_sites$monitoring_location_id), stringsAsFactors = FALSE) |> 
     data.frame()
   
   pick_sites_comp <- pick_sites |> 
-    dplyr::right_join(tots, by = c("year", "site_no")) |> 
+    dplyr::right_join(tots, by = c("year", "monitoring_location_id")) |> 
     dplyr::filter(year >= start_year,
                   year <= end_year)
   
-  sites_incomplete <- unique(pick_sites_comp$site_no[is.na(pick_sites_comp$n_meas)])
-  sites_complete <- unique(pick_sites_comp$site_no)
+  sites_incomplete <- unique(pick_sites_comp$monitoring_location_id[is.na(pick_sites_comp$n_meas)])
+  sites_complete <- unique(pick_sites_comp$monitoring_location_id)
   sites_complete <- sites_complete[!sites_complete %in% sites_incomplete]
   
   # If no sites are complete...we could walk back until there are some 
@@ -173,25 +173,18 @@ filter_sites <- function(x,
   }
   
   pick_sites_comp_sum <- pick_sites_comp |> 
-    dplyr::filter(site_no %in% sites_complete) |> 
-    dplyr::group_by(site_no) |> 
+    dplyr::filter(monitoring_location_id %in% sites_complete) |> 
+    dplyr::group_by(monitoring_location_id) |> 
     dplyr::summarise(n_years = length(unique(year))) |> 
     dplyr::ungroup() |> 
     dplyr::filter(n_years >= !!num_years) |> 
-    dplyr::pull(site_no)
+    dplyr::pull(monitoring_location_id)
     
   aquifer_data <- x |> 
-    dplyr::filter(site_no %in% pick_sites_comp_sum) |> 
+    dplyr::filter(monitoring_location_id %in% pick_sites_comp_sum) |> 
     dplyr::filter(year >= start_year,
            year <= end_year)
   
-  if("siteInfo" %in% names(attributes(x))){
-    siteInfo <- attr(x, "siteInfo") |> 
-      dplyr::filter(site_no %in% pick_sites_comp_sum)
-    
-    attr(aquifer_data, "siteInfo") <- siteInfo    
-  }
-   
   return(aquifer_data)
   
 }
@@ -214,11 +207,11 @@ filter_sites <- function(x,
 #' 
 composite_data <- function(x, num_years, parameter_cd){
   
-  year <- site_no <- n_sites_year <- med_site <- value <- name <- ".dplyr"
+  year <- monitoring_location_id <- n_sites_year <- med_site <- value <- name <- ".dplyr"
   
   if(nrow(x) == 0) stop("No data")
   
-  if(!all(c("site_no", "year", "value") %in% names(x))) stop("Missing columns")
+  if(!all(c("monitoring_location_id", "year", "value") %in% names(x))) stop("Missing columns")
 
   x <- filter_sites(x, num_years, parameter_cd = parameter_cd)
   
@@ -226,19 +219,19 @@ composite_data <- function(x, num_years, parameter_cd){
     stop("No data ")
   }
   
-  n_sites <- length(unique(x$site_no))
+  n_sites <- length(unique(x$monitoring_location_id))
   
   composite <- x |> 
-    dplyr::group_by(year, site_no) |> 
+    dplyr::group_by(year, monitoring_location_id) |> 
     dplyr::summarize(med_site = stats::median(value, na.rm = TRUE)) |> 
     dplyr::ungroup() |> 
-    dplyr::distinct(year, site_no, med_site) |> 
+    dplyr::distinct(year, monitoring_location_id, med_site) |> 
     dplyr::group_by(year) |> 
     dplyr::summarise(mean = mean(med_site, na.rm = TRUE),
               median = stats::median(med_site, na.rm = TRUE),
-              n_sites_year = length(unique(site_no))) |> 
+              n_sites_year = length(unique(monitoring_location_id))) |> 
     dplyr::filter(n_sites_year == {{n_sites}}) |>
-    dplyr::select(-n_sites_year) |> 
+    dplyr::select(-n_sites_year) |>
     tidyr::pivot_longer(c("mean", "median")) |> 
     dplyr::mutate(name = factor(name, 
                          levels = c("median","mean"),
@@ -268,7 +261,7 @@ normalized_data <- function(x, num_years, parameter_cd = "72019"){
 
   if(nrow(x) == 0) stop("No data")
   
-  if(!all(c("site_no", "year", "value") %in% names(x))) stop("Missing columns")
+  if(!all(c("monitoring_location_id", "year", "value", "parameter_code") %in% names(x))) stop("Missing columns")
 
   if(nrow(x) == 0){
     stop("No data")
@@ -277,16 +270,17 @@ normalized_data <- function(x, num_years, parameter_cd = "72019"){
   x <- filter_sites(x,
                     num_years = num_years, 
                     parameter_cd = parameter_cd)
-  n_sites <- length(unique(x$site_no))
+  n_sites <- length(unique(x$monitoring_location_id))
   year_summaries <- site_data_summary(x, 
-                                      value_col = "value", site_col = "site_no")
+                                      value_col = "value", 
+                                      site_col = "monitoring_location_id")
   
   norm_composite <- x |> 
-    dplyr::group_by(year, site_no) |> 
+    dplyr::group_by(year, monitoring_location_id) |> 
     dplyr::mutate(med_site = stats::median(value, na.rm = TRUE)) |> 
     dplyr::ungroup() |> 
-    dplyr::distinct(year, site_no, med_site) |> 
-    dplyr::group_by(site_no) |> 
+    dplyr::distinct(year, monitoring_location_id, med_site) |> 
+    dplyr::group_by(monitoring_location_id) |> 
     dplyr::mutate(max_med = max(med_site, na.rm = TRUE),
            min_med = min(med_site, na.rm = TRUE),
            mean_med = mean(med_site, na.rm = TRUE)) |> 
@@ -296,7 +290,7 @@ normalized_data <- function(x, num_years, parameter_cd = "72019"){
     dplyr::group_by(year) |> 
     dplyr::summarise(mean = mean(x_norm, na.rm = TRUE),
               median = stats::median(x_norm, na.rm = TRUE),
-              n_sites_year = length(unique(site_no))) |> 
+              n_sites_year = length(unique(monitoring_location_id))) |> 
     dplyr::filter(!n_sites_year < {{n_sites}}) |> 
     dplyr::select(-n_sites_year) |> 
     tidyr::pivot_longer(c("mean", "median")) |> 
