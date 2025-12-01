@@ -4,7 +4,7 @@
 \alias{prep_map_data}
 \title{prep_map_data}
 \usage{
-prep_map_data(x)
+prep_map_data(sites)
 }
 \arguments{
 \item{x}{aquifer data}

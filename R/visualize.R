@@ -153,12 +153,16 @@ plot_normalized_data <- function(x,
 #' 
 #' map_data <- map_hydro_data(aquifer_data, num_years)
 #' map_data
-map_hydro_data <- function(x, num_years, parameter_cd = "72019"){
+map_hydro_data <- function(x, site_info, num_years, parameter_cd = "72019"){
   
   x <- filter_sites(x, num_years, parameter_cd = parameter_cd)
   
-  map_data <- prep_map_data(x)
-
+  site_info <- site_info |> 
+    dplyr::filter(monitoring_location_id %in% unique(x$monitoring_location_id))
+  
+  map_data <- prep_map_data(site_info)
+  leaflet_crs <- "+proj=longlat +datum=WGS84"
+  
   map <- leaflet::leaflet(data = map_data) |>
     leaflet::addProviderTiles("CartoDB.Positron") |>
     leaflet::addCircleMarkers(radius = 3,

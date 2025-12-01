@@ -4,7 +4,7 @@
 \alias{map_hydro_data}
 \title{Map data used in composite hydrographs}
 \usage{
-map_hydro_data(x, num_years, parameter_cd = "72019")
+map_hydro_data(x, site_info, num_years, parameter_cd = "72019")
 }
 \arguments{
 \item{x}{aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",

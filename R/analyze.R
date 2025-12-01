@@ -59,25 +59,21 @@ site_data_summary <- function(x,
 #' @examples 
 #' aquifer_data <- aquifer_data
 #' map_info <- prep_map_data(aquifer_data)
-prep_map_data <- function(x ){
+prep_map_data <- function(sites){
 
   
-  if(nrow(x) == 0) stop("No data")
-  
-  if(!("siteInfo" %in% names(attributes(x)))) stop("Missing site attributes")
-
-  sites <- attr(x, "siteInfo")
+  if(nrow(sites) == 0) stop("No data")
   
   map_data <- sites |>
     dplyr::mutate(popup = paste0('<b><a href="https://waterdata.usgs.gov/monitoring-location/',
-                              site_no,'">',
-                              site_no,"</a></b><br/>
+                              monitoring_location_id,'">',
+                              monitoring_location_id,"</a></b><br/>
              <table>
              <tr><td>Name:</td><td>",
-                              station_nm,
+                              monitoring_location_name,
                               '</td></tr>
              </table>')) |> 
-    dplyr::filter(!is.na(dec_lat_va))
+    dplyr::filter(!is.na(geometry))
   
   return(map_data)
   

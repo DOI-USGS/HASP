@@ -45,7 +45,7 @@ create_targets_script <- function(national_aquifer_cd,
   new <- usethis::write_over(file_name, template_contents)
   
   if (new) {
-    usethis::edit_file(save_as)
+    usethis::edit_file(file_name)
   }
   
   
