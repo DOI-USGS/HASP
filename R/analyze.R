@@ -61,10 +61,11 @@ site_data_summary <- function(x,
 #' map_info <- prep_map_data(aquifer_data)
 prep_map_data <- function(sites){
 
-  monitoring_location_id <- monitoring_location_name
   if(nrow(sites) == 0) stop("No data")
   
-  map_data <- sites <- geometry <- ".dplyr"
+  monitoring_location_id <- monitoring_location_name <- geometry <- ".dplyr"
+  
+  map_data <- sites |> 
     dplyr::mutate(popup = paste0('<b><a href="https://waterdata.usgs.gov/monitoring-location/',
                               monitoring_location_id,'">',
                               monitoring_location_id,"</a></b><br/>

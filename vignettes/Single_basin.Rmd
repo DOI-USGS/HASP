@@ -30,7 +30,7 @@ library(leaflet)
 
 First step, create a _targets.R file using `create_targets_script`:
 
-```{r setupData, echo=FALSE}
+```{r setupData, echo=TRUE, eval=FALSE}
 library(HASP)
 library(targets)
 
@@ -84,6 +84,12 @@ tar_load(site_info)
 ```
 
 ```{r loadPackageData, eval=TRUE, echo=FALSE}
+library(HASP)
+library(targets)
+
+aquifer_long_name <- "Basin and Range basin-fill aquifers"
+
+aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == aquifer_long_name]
 aquifer_data <- aquifer_data
 site_info <- site_info
 
