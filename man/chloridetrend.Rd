@@ -17,7 +17,7 @@ trend_plot(
 )
 }
 \arguments{
-\item{qw_data}{data frame returned from dataRetrieval::readWQPqw,
+\item{qw_data}{data frame returned from \code{\link[dataRetrieval]{readWQPqw}} 
 must include columns ActivityStartDateTime, CharacteristicName, result_va}
 
 \item{plot_title}{character title for plot}

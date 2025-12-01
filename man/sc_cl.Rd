@@ -24,8 +24,8 @@ qw_plot(
 qw_summary(qw_data, CharacteristicName, norm_range = NA)
 }
 \arguments{
-\item{qw_data}{data frame returned from dataRetrieval::readWQPqw,
-must include columns sample_dt, parm_cd, result_va}
+\item{qw_data}{data frame returned from \code{\link[dataRetrieval]{readWQPqw}},
+must include columns "ActivityStartDateTime", "CharacteristicName", and "ResultMeasureValue"}
 
 \item{plot_title}{character title for plot}
 

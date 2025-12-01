@@ -142,6 +142,7 @@ plot_normalized_data <- function(x,
 #' 
 #' @param x aquifer data frame. Requires at least 3 columns. Two are required "site_no", "year",
 #' and "value".
+#' @param site_info data frame from \code{\link[dataRetrieval]{read_waterdata_monitoring_location}}
 #' @param num_years integer number of years required
 #' @param parameter_cd character, 5-digit parameter code, default is "72019".
 #' @return leaflet object
@@ -149,9 +150,10 @@ plot_normalized_data <- function(x,
 #' @export
 #' @examples 
 #' aquifer_data <- aquifer_data
+#' site_info <- site_info
 #' num_years <- 30
 #' 
-#' map_data <- map_hydro_data(aquifer_data, num_years)
+#' map_data <- map_hydro_data(aquifer_data, site_info, num_years)
 #' map_data
 map_hydro_data <- function(x, site_info, num_years, parameter_cd = "72019"){
   

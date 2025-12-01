@@ -3,8 +3,8 @@
 #' Functions to create the individual chloride, specific conductance, 
 #' and combination plots and tables for a single site.
 #'
-#' @param qw_data data frame returned from dataRetrieval::readWQPqw,
-#' must include columns sample_dt, parm_cd, result_va
+#' @param qw_data data frame returned from \code{\link[dataRetrieval]{readWQPqw}},
+#' must include columns "ActivityStartDateTime", "CharacteristicName", and "ResultMeasureValue"
 #' @param plot_title character title for plot
 #' @param subtitle character. Sub-title for plot, default is "U.S. Geological Survey".
 #' @rdname sc_cl

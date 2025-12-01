@@ -7,7 +7,7 @@
 prep_map_data(sites)
 }
 \arguments{
-\item{x}{aquifer data}
+\item{sites}{aquifer data}
 }
 \value{
 data frame
