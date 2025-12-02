@@ -78,18 +78,13 @@ get_aquifer_data <- function(aquiferCd, startDate, endDate,
 #' @param parameter_cd 5-digit character USGS parameter code. Default is "72019".
 #' @export
 #'
-#' @examples 
-#' end_date <- "2021-01-01"
-#' start_date <- "1989-12-31"
-#' aquiferCd <- "S100CSLLWD"
-#'
-#' \donttest{
-#' # st_data <- get_state_data("WI", aquiferCd,
-#' #                           start_date, end_date)
-#' }
 get_state_data <- function(state, aquiferCd, 
                            startDate, endDate, 
                            parameter_cd = "72019"){
+  
+  .Deprecated(new = "create_targets_script",
+              package = "HASP", 
+              msg = "NWIS servers are slated for decommission. Consider migrating to create_targets_script for composite aquifer data pulls.")
   
   levels <- dataRetrieval::readNWISdata(stateCd = state, 
                                         service = "gwlevels",

@@ -73,15 +73,15 @@ test_that("QW summaries", {
 })
 
 test_that("Map info", {
-  aquifer_data <- aquifer_data
-  map_info <- prep_map_data(aquifer_data)
+  site_info <- site_info
+  map_info <- prep_map_data(site_info)
   
-  expect_true(all(c("popup","station_nm", 
-                "dec_long_va", "dec_lat_va") %in% 
+  expect_true(all(c("popup","monitoring_location_id", 
+                "geometry") %in% 
                 names(map_info)))
   
   expect_equal(map_info$popup[1],
-               "<b><a href=\"https://waterdata.usgs.gov/monitoring-location/312127110073101\">312127110073101</a></b><br/>\n             <table>\n             <tr><td>Name:</td><td>D-24-22 08DBA1 [PLS-LI]</td></tr>\n             </table>")
+               "<b><a href=\"https://waterdata.usgs.gov/monitoring-location/AZ014-314322110030901\">AZ014-314322110030901</a></b><br/>\n             <table>\n             <tr><td>Name:</td><td>D-20-22 01CAA</td></tr>\n             </table>")
   
 })
 
@@ -96,7 +96,7 @@ test_that("Filter sites", {
   expect_true(nrow(aquifer_data) > nrow(aq_data))
   
   freq <- aq_data |> 
-    dplyr::group_by(site_no) |> 
+    dplyr::group_by(monitoring_location_id) |> 
     dplyr::summarise(nYear = length(unique(year))) 
   
   expect_true(all(freq$nYear >= 30))

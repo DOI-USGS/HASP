@@ -13,6 +13,7 @@ HASP_*.tar.gz
 orig_scripts/
 DISCLAIMER.md
 ^docs$
+^docker$
 ^Meta$
 code.json
 travis.yml

@@ -21,13 +21,3 @@ frame \code{local_aqfr}.}
 \description{
 Get USGS data based for a single state with specific aquifer codes.
 }
-\examples{
-end_date <- "2021-01-01"
-start_date <- "1989-12-31"
-aquiferCd <- "S100CSLLWD"
-
-\donttest{
-# st_data <- get_state_data("WI", aquiferCd,
-#                           start_date, end_date)
-}
-}

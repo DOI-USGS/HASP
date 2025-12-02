@@ -16,7 +16,7 @@ data frame
 Get map info
 }
 \examples{
-aquifer_data <- aquifer_data
-map_info <- prep_map_data(aquifer_data)
+site_info <- site_info
+map_info <- prep_map_data(site_info)
 }
 \keyword{internal}
