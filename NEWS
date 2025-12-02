@@ -2,6 +2,7 @@ HASP 1.1.0
 ===========
 * Convert to new dataRetrieval USGS Waterdata API functions and format.
 * Switched to native R pipe (|>)
+* Added a function to create a targets workflow for composite aquifers
 
 HASP 1.0.3
 ===========
