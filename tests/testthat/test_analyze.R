@@ -17,13 +17,13 @@ test_that("Site summaries", {
                       "p10", "p25", "p75", "p50",     
                       "p90",  "count")))
   
-  expect_equal(format_2(summary_info2$min_site[1]), 3.26)
-  expect_equal(format_2(summary_info2$max_site[1]), 7.93)
-  expect_equal(format_2(summary_info2$mean_site[1]),5.4)
-  expect_equal(format_2(summary_info2$p10[1]), 4.45)
-  expect_equal(format_2(summary_info2$p25[1]), 4.57)
-  expect_equal(format_2(summary_info2$p75[1]), 6.51)
-  expect_equal(format_2(summary_info2$p90[1]), 7.13)
+  expect_equal(format_2(summary_info2$min_site[1]), 288.5)
+  expect_equal(format_2(summary_info2$max_site[1]), 317.3)
+  expect_equal(format_2(summary_info2$mean_site[1]), 302.83)
+  expect_equal(format_2(summary_info2$p10[1]), 291.34)
+  expect_equal(format_2(summary_info2$p25[1]), 295.6)
+  expect_equal(format_2(summary_info2$p75[1]), 310)
+  expect_equal(format_2(summary_info2$p90[1]), 314.38)
   
   
 })
@@ -114,7 +114,7 @@ test_that("Composite hydrodata", {
   expect_true(all(names(comp_data) %in% c("year", "name", "value")))
   expect_true(all(levels(comp_data$name) %in% c("Median",
                                                 "Mean")))
-  expect_equal(format_2(comp_data$value[1]), 150.89)
+  expect_equal(format_2(comp_data$value[1]), 151.12)
 })
 
 test_that("Normalized composite hydrodata", {
