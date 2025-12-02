@@ -28,49 +28,83 @@ library(leaflet)
 
 ## Get Data
 
+First step, create a _targets.R file using `create_targets_script`:
 
-```{r setupData, echo=FALSE}
+```{r setupData, echo=TRUE, eval=FALSE}
 library(HASP)
+library(targets)
 
 aquifer_long_name <- "Basin and Range basin-fill aquifers"
 
 aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == aquifer_long_name]
 
-states <- unlist(summary_aquifers$states[summary_aquifers$long_name == aquifer_long_name])
-
-cat("Aquifer code: ", aquiferCd)
-cat("In states: ", paste(states, collapse = ", ") )
+create_targets_script(national_aquifer_cd = aquiferCd,
+                      parameter_cd = "72019",
+                      statistic_cd = "00003",
+                      start_date = "1988-10-01",
+                      end_date = "2021-01-01",
+                      file_name = "_targets.R")
 
 
 ```
 
-```{r dataRetrival, eval=FALSE, echo=TRUE}
+Once the _targets.R file is created, run:
+
+```{r echo=TRUE, eval=FALSE}
+library(targets)
+tar_make()
+```
+
+A long-running pipeline will begin. 
+
+If everything DIDN'T go well, perhaps you exceeded your allotted requests to the API, perhaps there was a timeout, re-run the pipeline:
+
+```{r echo=TRUE, eval=FALSE}
+tar_make()
+```
+
+If everything DOES goes well, you will see this at the end:
+
+```
+✔ dv_measurements completed [2m 40.2s, 2.98 MB]                     
++ dv_levels dispatched                                              
+✔ dv_levels completed [10ms, 1.59 MB]                                 
++ aquifer_data dispatched                                             
+✔ aquifer_data completed [10.3s, 3.58 MB]                            
++ site_info dispatched                                               
+✔ site_info completed [50ms, 474.56 kB]                              
+✔ ended pipeline [3m 12.5s, 165 completed, 305 skipped] 
+```
+
+Once the pipeline completes, load the `aquifer_data` and `site_info` into your workspace using `tar_load`:
+
+```{r dataRetrival_sample, eval=FALSE, echo=TRUE}
+tar_load(aquifer_data)
+tar_load(site_info)
+```
+
+```{r loadPackageData, eval=TRUE, echo=FALSE}
 library(HASP)
-end_date <- "2019-12-31"
-state_date <- "1989-12-31"
 
-aquifer_data <- get_aquifer_data(aquiferCd, 
-                                 state_date, 
-                                 end_date)
+aquifer_long_name <- "Basin and Range basin-fill aquifers"
 
-```
-
-```{r dataRetrival_sample, eval=TRUE, echo=FALSE}
+aquiferCd <- summary_aquifers$nat_aqfr_cd[summary_aquifers$long_name == aquifer_long_name]
 aquifer_data <- aquifer_data
+site_info <- site_info
+
 ```
 
 ## Map It
 
-```{r mapIt, echo=TRUE}
-
-map <- map_hydro_data(aquifer_data, 30)
+```{r mapIt, echo=TRUE, eval=TRUE}
+map <- map_hydro_data(aquifer_data, site_info, 30)
 map
 
 ```
 
 ## Composite
 
-```{r graphIt, echo=TRUE}
+```{r graphIt, echo=TRUE, eval=TRUE}
 
 plot_composite_data(aquifer_data, 30) +
     ggtitle(label = aquifer_long_name)
@@ -80,7 +114,7 @@ plot_composite_data(aquifer_data, 30) +
 
 ## Normalized Composite
 
-```{r norm, echo=TRUE}
+```{r norm, echo=TRUE, eval=TRUE}
 
 plot_normalized_data(aquifer_data, 30) +
   ggtitle(label = aquifer_long_name)

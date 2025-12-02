@@ -3,12 +3,14 @@
 \docType{data}
 \name{aquifer_data}
 \alias{aquifer_data}
+\alias{site_info}
 \title{Example aquifer data}
 \description{
 Example data representing Basin and Range basin-fill aquifers (N100BSNRGB).
 }
 \examples{
 head(aquifer_data)
+head(site_info)
 }
 \keyword{data}
 \keyword{quality}

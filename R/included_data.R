@@ -35,6 +35,17 @@ NULL
 #' @examples 
 #' head(aquifer_data)
 NULL
+
+#' Site information for aquifer data included
+#' 
+#' @name site_info
+#' @rdname sampleData
+#' @docType data
+#' @keywords water quality data
+#' @examples 
+#' head(site_info)
+NULL
+
 # Example to get the data:
 # start_date <- "1988-10-01"
 # end_date <- "2021-01-01"

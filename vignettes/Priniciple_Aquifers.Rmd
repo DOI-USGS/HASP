@@ -36,7 +36,7 @@ More information can be found here:
 
 
 summary_aquifers_disp <- summary_aquifers |> 
-  select(long_name, aquiferCd=nat_aqfr_cd)
+  dplyr::select(long_name, aquiferCd=nat_aqfr_cd)
 
 kable(summary_aquifers_disp) |>
   kable_styling(bootstrap_options = c("striped", "hover")) |> 

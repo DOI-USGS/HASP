@@ -4,10 +4,10 @@
 \alias{prep_map_data}
 \title{prep_map_data}
 \usage{
-prep_map_data(x)
+prep_map_data(sites)
 }
 \arguments{
-\item{x}{aquifer data}
+\item{sites}{aquifer data}
 }
 \value{
 data frame
@@ -16,7 +16,7 @@ data frame
 Get map info
 }
 \examples{
-aquifer_data <- aquifer_data
-map_info <- prep_map_data(aquifer_data)
+site_info <- site_info
+map_info <- prep_map_data(site_info)
 }
 \keyword{internal}

@@ -2,6 +2,7 @@ context("Visualize Data")
 
 test_that("Composite Graphs", {
   aquifer_data <- aquifer_data
+  site_info <- site_info
   num_years <- 30
  
   comp_data <- plot_composite_data(aquifer_data,  num_years, 
@@ -21,9 +22,10 @@ test_that("Composite Graphs", {
   
 test_that("Map", {
   aquifer_data <- aquifer_data
+  site_info <- site_info
   num_years <- 30
   
-  map <- map_hydro_data(aquifer_data, num_years, parameter_cd = "72019")
+  map <- map_hydro_data(aquifer_data, site_info, num_years, parameter_cd = "72019")
   
   expect_true(all(class(map) %in% c("leaflet","htmlwidget")))
 
