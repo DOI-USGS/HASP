@@ -85,7 +85,6 @@ tar_load(site_info)
 
 ```{r loadPackageData, eval=TRUE, echo=FALSE}
 library(HASP)
-library(targets)
 
 aquifer_long_name <- "Basin and Range basin-fill aquifers"
 
