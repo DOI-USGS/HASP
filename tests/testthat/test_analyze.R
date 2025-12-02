@@ -7,7 +7,7 @@ format_2 <- function(x){
 test_that("Site summaries", {
   aquifer_data <- aquifer_data
   aquifer_data <- aquifer_data[aquifer_data$parameter_code == "72019", ]
-  summary_info2 <- site_data_summary(aquifer_data, site_col = "site_no")
+  summary_info2 <- site_data_summary(aquifer_data)
 
   expect_type(summary_info2, "list")
   
